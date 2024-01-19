@@ -1511,19 +1511,40 @@ if (group.includes("early")) {      // EARLY condition
   var completion_url = 'https://app.prolific.co/submissions/complete?cc=C1AH5EU5';
   var finish_msg = 'All done! Click <a href="' + completion_url + '">here</a> to be returned to Prolific and receive your payment.';
 
+
+  function downloadJSON(data, filename) {
+    var blob = new Blob([data], {type: 'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+
   jsPsych.init({
     timeline: timeline,
     preload_images: images,
     on_finish: function() {
       var result = jsPsych.data.get().json();
+      //JSON data submission
       jatos.submitResultData(result, function() {
           document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p><br><br><br>' +
           finish_msg +
           '</p></div></div>')
+
+      // Local JSON download, calls downloadJSON function
+      downloadJSON(jsonData, 'experiment_data.json');
+
         });
       }
     });
   })
+
+
+
 
   } else if (runJatos === false) {
     var subject_id = jsPsych.data.getURLVariable('Subject_id');
