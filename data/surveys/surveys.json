@@ -1,0 +1,17 @@
+{
+    "cfi": {
+      "prompt": "CFI prompt here...",
+      "questions": [
+        {"prompt": "Question 1 text...", "name": "item1", "labels": ["label1", "label2"], "required": true},
+        // other questions...
+      ]
+    },
+    "htq": {
+      // HTQ survey data...
+    },
+    "audit": {
+      // AUDIT survey data...
+    }
+    // other surveys...
+  }
+  
