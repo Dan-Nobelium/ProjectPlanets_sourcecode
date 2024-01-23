@@ -502,7 +502,7 @@
       phase: 'consent'
     },
 	}
-	// timeline.push(consent_block);
+	timeline.push(consent_block);
 
   // demographics
   var demographics_block = {
@@ -513,7 +513,7 @@
       phase: 'demographics'
     }
   };
-  // timeline.push(demographics_block);
+  timeline.push(demographics_block);
 
   // ----- questionnaires ----- 
   var cfi_catch_flag = false;
@@ -530,7 +530,7 @@
       phase: 'instructions'
     }
     };
-  // timeline.push(preques_ins_block); 
+  timeline.push(preques_ins_block); 
 
   // CFI
   var cfi_block = {
@@ -578,7 +578,7 @@
       console.log(cfi_catch_flag); //can delete afterwards
     }
   };
-  // timeline.push(cfi_block);
+  timeline.push(cfi_block);
 
   // HTQ
   var htq_block = {
@@ -603,7 +603,7 @@
       phase: 'ques_htq'
     }
   };
-  // timeline.push(htq_block);
+  timeline.push(htq_block);
 
   // AUDIT
   var audit_block = {
@@ -646,7 +646,7 @@
       console.log(catchcorrect); //can delete afterwards
     }
   };
-  // timeline.push(audit_block);
+  timeline.push(audit_block);
 
   // questionnaires end ----
 
@@ -688,7 +688,7 @@
       return !catchcorrect //skip if correct
     }
   }
-  // timeline.push(conditional_splash_catch);
+  timeline.push(conditional_splash_catch);
 
   // ----------*instruction phase*-----------
   //----------------------------------------------------------------------------
@@ -759,7 +759,7 @@
           return !instructioncorrect // stop looping if correct
       }
   }
-	// timeline.push(loop_node);
+	timeline.push(loop_node);
 
   // success trial
   var successtrial = {
@@ -768,7 +768,7 @@
     choices: ['Click here to start Phase 1'],
     stimulus: '<center>Well done!</center>'
   };
-	// timeline.push(successtrial);
+	timeline.push(successtrial);
 
   //----------------------------------------------------------------------------
   // ----- Phase 1 -----
@@ -832,7 +832,7 @@
 				phase: 'phase1'
 			}
 		}
-		// timeline.push(block_noship);
+		timeline.push(block_noship);
 
 		// valence check p1
     var valence_p1 = {
@@ -931,11 +931,11 @@
     }
   };
 
-		// timeline.push(valence_p1);
-		// timeline.push(infer_p1_A);
-		// timeline.push(infer_p1_B);
-    // timeline.push(slider_p1_q1);
-    // timeline.push(slider_p1_q2);
+		timeline.push(valence_p1);
+		timeline.push(infer_p1_A);
+		timeline.push(infer_p1_B);
+    timeline.push(slider_p1_q1);
+    timeline.push(slider_p1_q2);
 	}
 
 
@@ -954,7 +954,7 @@
       phase: 'instructions'
     }
   };
-  // timeline.push(phase2_ins_block);
+  timeline.push(phase2_ins_block);
 
 	// Generate list of shield appearances
 	// copy a planet with ship version from noship
@@ -1035,14 +1035,14 @@
               return !contingenciescorrect // stop looping if correct
           }
       }
-			// timeline.push(block6loop_node);
+			timeline.push(block6loop_node);
     }
 
       var block_ship = {
         timeline: [planet_ship],
         repetitions: nTrialspBlk
       }
-      // timeline.push(block_ship);
+      timeline.push(block_ship);
 
     // value check p2
     var valence_p2 = {
@@ -1196,13 +1196,13 @@
       }
     };
 
-		// timeline.push(valence_p2);
-		// timeline.push(infer_p2_A);
-		// timeline.push(infer_p2_B);
-		// timeline.push(infer_p2_ship1);
-		// timeline.push(infer_p2_ship2);
-    // timeline.push(slider_p2_q1);
-    // timeline.push(slider_p2_q2);
+		timeline.push(valence_p2);
+		timeline.push(infer_p2_A);
+		timeline.push(infer_p2_B);
+		timeline.push(infer_p2_ship1);
+		timeline.push(infer_p2_ship2);
+    timeline.push(slider_p2_q1);
+    timeline.push(slider_p2_q2);
 	}
 }
 
@@ -1275,14 +1275,14 @@ if (group.includes("early")) {      // EARLY condition
               return !contingenciescorrect // stop looping if correct
           }
       }
-			// timeline.push(block6loop_node);
+			timeline.push(block6loop_node);
     }
 
 		var block_ship = {
 			timeline: [planet_ship],
 			repetitions: nTrialspBlk
 		}
-		// timeline.push(block_ship);
+		timeline.push(block_ship);
 
     // value check p2
     var valence_p2 = {
@@ -1436,13 +1436,13 @@ if (group.includes("early")) {      // EARLY condition
       }
     };
 
-		// timeline.push(valence_p2);
-		// timeline.push(infer_p2_A);
-		// timeline.push(infer_p2_B);
-		// timeline.push(infer_p2_ship1);
-		// timeline.push(infer_p2_ship2);
-    // timeline.push(slider_p2_q1);
-    // timeline.push(slider_p2_q2);
+		timeline.push(valence_p2);
+		timeline.push(infer_p2_A);
+		timeline.push(infer_p2_B);
+		timeline.push(infer_p2_ship1);
+		timeline.push(infer_p2_ship2);
+    timeline.push(slider_p2_q1);
+    timeline.push(slider_p2_q2);
 	}
 }
 
@@ -1462,7 +1462,7 @@ if (group.includes("early")) {      // EARLY condition
       phase: 'debrief'
     }
   };
-  // timeline.push(debrief_block);
+  timeline.push(debrief_block);
 
   var contact_block = {
     type: 'survey-text',
