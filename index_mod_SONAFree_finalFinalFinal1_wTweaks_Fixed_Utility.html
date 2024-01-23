@@ -486,7 +486,7 @@
 
 
   // force full screen
-  // timeline.push(
+  timeline.push(
     {
       type: 'fullscreen',
       fullscreen_mode: true
@@ -1478,7 +1478,18 @@ if (group.includes("early")) {      // EARLY condition
       phase: 'contact'
     }
   };
-  // timeline.push(contact_block);
+  timeline.push(contact_block);
+
+  function downloadJSON(data, filename) {
+    var blob = new Blob([data], {type: 'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
 
   //----------------------------------------------------------------------------
   // start experiment
@@ -1512,16 +1523,7 @@ if (group.includes("early")) {      // EARLY condition
   var finish_msg = 'All done! Click <a href="' + completion_url + '">here</a> to be returned to Prolific and receive your payment.';
 
 
-  function downloadJSON(data, filename) {
-    var blob = new Blob([data], {type: 'application/json'});
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
+
 
 
   jsPsych.init({
@@ -1572,6 +1574,8 @@ if (group.includes("early")) {      // EARLY condition
         preload_images: images,
         on_finish: function() {
           var result = jsPsych.data.get().json();
+                // Local JSON download, calls downloadJSON function
+      downloadJSON(jsonData, 'experiment_data.json');
         }
       });
     }
