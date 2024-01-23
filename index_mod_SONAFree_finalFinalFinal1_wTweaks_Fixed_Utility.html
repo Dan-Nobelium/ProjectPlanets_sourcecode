@@ -650,17 +650,17 @@
 
   // questionnaires end ----
 
-  //var exit_page = {
-    //type: 'html-button-response',
-    //choices:['Click here to exit the experiment'],
-    //stimulus: '<center>Your response has been recorded. Unfortunately, you do not meet the inclusion criteria for this study. We thank you for your interest in participating in the experiment.</center>',
-    //on_finish: function(daa) {
-      //jsPsych.endExperiment('The experiment ends. You may exit by closing the window.');
-    //}
-  //}
-  //if ((cfi_catch_flag == true && audit_catch_flag == true) || (cfi_catch_flag == true) || (audit_catch_flag == true)) {
-    //// timeline.push(exit_page);
-  //}
+  var exit_page = {
+    type: 'html-button-response',
+    choices:['Click here to exit the experiment'],
+    stimulus: '<center>Your response has been recorded. Unfortunately, you do not meet the inclusion criteria for this study. We thank you for your interest in participating in the experiment.</center>',
+    on_finish: function(daa) {
+      jsPsych.endExperiment('The experiment ends. You may exit by closing the window.');
+    }
+  }
+  if ((cfi_catch_flag == true && audit_catch_flag == true) || (cfi_catch_flag == true) || (audit_catch_flag == true)) {
+    timeline.push(exit_page);
+  }
 
 
   // NEW: catch Qs - define a page for incorrect responses
