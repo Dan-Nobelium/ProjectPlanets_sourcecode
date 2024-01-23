@@ -1,9 +1,133 @@
 {
     "cfi": {
-      "prompt": "CFI prompt here...",
+      "prompt": "Please rate how much you agree with the following statements. There are no right or wrong answers.",
       "questions": [
-        {"prompt": "Question 1 text...", "name": "item1", "labels": ["label1", "label2"], "required": true},
-        // other questions...
+        {
+          "prompt": "I am good at \"sizing up\" situations.",
+          "name": "item1",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I have a hard time making decisions when faced with difficult situations.",
+          "name": "item2",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I consider multiple options making a decision.",
+          "name": "item3",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "When I encounter difficult situations, I feel like I am losing control.",
+          "name": "item4",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I like to look at difficult situations from many different angles.",
+          "name": "item5",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I seek additional information not immediately available before attributing causes to behaviour.",
+          "name": "item6",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "Select the left-most option, strongly disagree, for this question.",
+          "name": "catch",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "When encountering difficult situations, I become so stressed that I cannot think of a way to resolve the situation.",
+          "name": "item7",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I try to think about things from another person’s point of view.",
+          "name": "item8",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I find it troublesome that there are so many different ways to deal with difficult situations.",
+          "name": "item9",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I am good at putting myself in others’ shoes.",
+          "name": "item10",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "When I encounter difficult situations, I just don’t know what to do.",
+          "name": "item11",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "It is important to look at difficult situations from many angles.",
+          "name": "item12",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "When in difficult situations, I consider multiple options before deciding how to behave.",
+          "name": "item13",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I often look at a situation from different viewpoints.",
+          "name": "item14",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I am capable of overcoming the difficulties in life that I face.",
+          "name": "item15",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I consider all the available facts and information when attributing causes to behaviour.",
+          "name": "item16",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I feel I have no power to change things in difficult situations.",
+          "name": "item17",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "When I encounter difficult situations, I stop and try to think of several ways to resolve it.",
+          "name": "item18",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I can think of more than one way to resolve a difficult situation I’m confronted with.",
+          "name": "item19",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        },
+        {
+          "prompt": "I consider multiple options before responding to difficult situations.",
+          "name": "item20",
+          "labels": ["strongly disagree", "disagree", "somewhat disagree", "neutral", "somewhat agree", "agree", "strongly agree"],
+          "required": true
+        }
       ]
     },
     "htq": {
