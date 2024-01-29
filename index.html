@@ -1,35 +1,62 @@
-<!DOCTYPE html>
-<html>
-  <head>
-  	<title>Planets and Pirates</title> 
-    <script src="jspsych-6.1.0/jspsych.js"></script>
-  	<link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
-    <script src="jspsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
-  	<script src="jspsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
-    <script src="jspsych-6.1.0/plugins/jspsych-survey-html-form.js"></script>
-    <script src="jspsych-6.1.0/plugins/jspsych-instructions.js"></script>
-    <script src="jspsych-6.1.0/plugins/jspsych-survey-multi-choice.js"></script>
-  	<script src="jspsych-6.1.0/plugins/jspsych-image-keyboard-response.js"></script>
-  	<script src="jspsych-6.1.0/plugins/planet-response.js"></script>
-    <script src="jspsych-6.1.0/plugins/jspsych-valence-check-3.js"></script>
-    <script src="jspsych-6.1.0/plugins/jspsych-valence-check-6.js"></script>
-    <script src="jspsych-6.1.0/plugins/jspsych-inference-check-1.js"></script>
-    <script src="jspsych-6.1.0/plugins/jspsych-inference-check-4.js"></script>
-    <script src="jspsych-6.1.0/plugins/jspsych-survey-likert.js"></script>
-    <script src="jspsych-6.1.0/plugins/jspsych-survey-text.js"></script>
-    <script src="jspsych-6.1.0/plugins/jspsych-html-slider-response.js"></script>
-    <script src="jatos.js"></script>
-    <script src="https://jatos.org/jatos.js"></script>
-  <!-- import survey data -->
-  <script src="data/surveys/surveys.json"></script>
-  <script>
-    const surveysJson = JSON.parse(document.querySelector('#surveys').innerHTML);
-    console.log(surveysJson);
-  </script>
-  </head>
-  <body>
+<!doctype html>
+<html lang="en">
 
-  </body>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Moral Decision Making Task</title>
+
+    <!-- Import CSS -->
+    <link rel="stylesheet" href="./styles.css">
+
+    <!-- Import JS Modules -->
+    <script src="./utils.js"></script>
+    <script src="./config.js"></script>
+    <script src="./instructions.js"></script>
+    <script src="./questions.js"></script>
+    <script src="./questionnaires.js"></script>
+    <script src="./phase1.js"></script>
+    <script src="./phase2.js"></script>
+
+    <!-- Load necessary plugins -->
+    <script src="./jspsych-6.1.0/jspsych.js"></script>
+    <script src="./jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+    <script src="./jspsych-6.1.0/plugins/jspsych-instructions.js"></script>
+    <script src="./jspsych-6.1.0/plugins/jspsych-survey-html-form.js"></script>
+    <script src="./jspsych-6.1.0/plugins/jspsych-html-slider-response.js"></script>
+
+    <script>
+        /** Main Script Initialization **/
+
+        async function initializeApp() {
+            await jsPsych.init({
+                display_element: document.getElementById('main'),
+                on_interaction_locked: function () {
+                    document.addEventListener('mouseup', mouseUnlockHandler);
+                    document.addEventListener('keydown', keyboardUnlockHandler);
+                },
+                on_interaction_unlocked: function () {
+                    document.removeEventListener('mouseup', mouseUnlockHandler);
+                    document.removeEventListener('keydown', keyboardUnlockHandler);
+                }
+            });
+        }
+
+        function mouseUnlockHandler() {
+            jsPsych.pluginAPI.cancelKeyboardResponse();
+        }
+
+        function keyboardUnlockHandler() {
+            jsPsych.pluginAPI.cancelKeyboardResponse();
+        }
+
+        initializeApp();
+    </script>
+</head>
+
+<body>
+    <div id="main"></div>
+</body>
 
 </html>
-
