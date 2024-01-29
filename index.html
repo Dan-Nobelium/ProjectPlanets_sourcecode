@@ -72,7 +72,7 @@
 	var continuousResp = true;
 	var nBlocks_p1 = 2;
 	var nBlocks_p2 = 4;
-  var block_duration = 180 * 1000; // in milliseconds (3 mins)
+  var block_duration = 180 * 1; // in milliseconds (3 mins)
   var iti = 1000;
   var inf_stim_height = 80;
   var inf_slider_width = 500;
@@ -632,7 +632,7 @@
   //introloop.push(gen_ins_block);
 
   // define instruction check block
-  var instructioncorrect = false;
+  var instructioncorrect = true; //was false
   var instruction_check = {
     type: "survey-multi-choice",
     preamble: ["<p align='center'><b>Check your knowledge before you begin!</b></p>"],
@@ -650,7 +650,7 @@
       }
     }
   }
-  introloop.push(instruction_check);
+  //introloop.push(instruction_check);
 
   // define a page for the incorrect response
   var showsplash = true;
@@ -849,11 +849,11 @@
     }
   };
 
-		timeline.push(valence_p1);
-		timeline.push(infer_p1_A);
-		timeline.push(infer_p1_B);
-    timeline.push(slider_p1_q1);
-    timeline.push(slider_p1_q2);
+	// 	timeline.push(valence_p1);
+	// 	timeline.push(infer_p1_A);
+	// 	timeline.push(infer_p1_B);
+    // timeline.push(slider_p1_q1);
+    // timeline.push(slider_p1_q2);
 	}
 
 
@@ -906,7 +906,7 @@
 			block6loop.push(cont_instructions);
 
       // contingency knowledge quiz
-      var contingenciescorrect = false;
+      var contingenciescorrect = true; //was false
       var contingencies_check = {
         type: "survey-multi-choice",
         preamble: [
@@ -1354,13 +1354,13 @@ if (group.includes("early")) {      // EARLY condition
       }
     };
 
-		timeline.push(valence_p2);
-		timeline.push(infer_p2_A);
-		timeline.push(infer_p2_B);
-		timeline.push(infer_p2_ship1);
-		timeline.push(infer_p2_ship2);
-    timeline.push(slider_p2_q1);
-    timeline.push(slider_p2_q2);
+	// 	timeline.push(valence_p2);
+	// 	timeline.push(infer_p2_A);
+	// 	timeline.push(infer_p2_B);
+	// 	timeline.push(infer_p2_ship1);
+	// 	timeline.push(infer_p2_ship2);
+    // timeline.push(slider_p2_q1);
+    // timeline.push(slider_p2_q2);
 	}
 }
 
@@ -1398,16 +1398,7 @@ if (group.includes("early")) {      // EARLY condition
   };
   timeline.push(contact_block);
 
-//   function downloadJSON(data, filename) {
-//     var blob = new Blob([data], {type: 'application/json'});
-//     var a = document.createElement('a');
-//     a.href = URL.createObjectURL(blob);
-//     a.download = filename;
-//     a.style.display = 'none';
-//     document.body.appendChild(a);
-//     a.click();
-//     document.body.removeChild(a);
-// }
+
 
   //----------------------------------------------------------------------------
   // start experiment
