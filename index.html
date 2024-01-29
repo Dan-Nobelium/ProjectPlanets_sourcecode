@@ -1,62 +1,113 @@
-<!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Moral Decision Making Task</title>
-
-    <!-- Import CSS -->
-    <link rel="stylesheet" href="./styles.css">
-
-    <!-- Import JS Modules -->
-    <script src="./utils.js"></script>
-    <script src="./config.js"></script>
-    <script src="./instructions.js"></script>
-    <script src="./questions.js"></script>
-    <script src="./questionnaires.js"></script>
-    <script src="./phase1.js"></script>
-    <script src="./phase2.js"></script>
-
-    <!-- Load necessary plugins -->
-    <script src="./jspsych-6.1.0/jspsych.js"></script>
-    <script src="./jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
-    <script src="./jspsych-6.1.0/plugins/jspsych-instructions.js"></script>
-    <script src="./jspsych-6.1.0/plugins/jspsych-survey-html-form.js"></script>
-    <script src="./jspsych-6.1.0/plugins/jspsych-html-slider-response.js"></script>
-
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Planets and Pirates</title>
+    <script src="jspsych-6.1.0/jspsych.js"></script>
+    <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="jspsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-survey-html-form.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-instructions.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-survey-multi-choice.js"></script>
+    <script src="jspsych-6.1.0/plugins/planet-response.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-valence-check-3.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-valence-check-6.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-inference-check-1.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-inference-check-4.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-survey-likert.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-survey-text.js"></script>
+    <script src="jspsych-6.1.0/plugins/jspsych-html-slider-response.js"></script>
+    <script src="jatos.js"></script>
+    <script src="https://jatos.org/jatos.js"></script>
+  </head>
+  <body>
     <script>
-        /** Main Script Initialization **/
+      const group = jsPsych.randomization.sampleWithoutReplacement(['early_0.1', 'early_0.4', 'late_0.1', 'late_0.4'])[0];
+      const sample = jsPsych.randomization.sampleWithoutReplacement(['ProA', 'others'])[0];
+      const pun_planet_sides = [0, 1];
+      const pun_planet_side = jsPsych.randomization.sampleWithoutReplacement(pun_planet_sides)[0];
+      const stim_list = jsPsych.randomization.repeat(['img/bluep.png', 'img/orangep.png'], 1);
+      const ship_list = jsPsych.randomization.repeat(['img/ship1.png', 'img/ship2.png'], 1);
 
-        async function initializeApp() {
-            await jsPsych.init({
-                display_element: document.getElementById('main'),
-                on_interaction_locked: function () {
-                    document.addEventListener('mouseup', mouseUnlockHandler);
-                    document.addEventListener('keydown', keyboardUnlockHandler);
-                },
-                on_interaction_unlocked: function () {
-                    document.removeEventListener('mouseup', mouseUnlockHandler);
-                    document.removeEventListener('keydown', keyboardUnlockHandler);
-                }
-            });
+      const pun_planet = stim_list[pun_planet_side].substring(4).slice(0, -5);
+      const unpun_planet = stim_list[1 - pun_planet_side].substring(4).slice(0, -5);
+      const pun_ship = ship_list[pun_planet_side].substring(8).slice(0, -4);
+      const unpun_ship = ship_list[1 - pun_planet_side].substring(8).slice(0, -4);
+
+      const planet_layout = pun_planet_side === '0' ? ['left', 'right'] : ['right', 'left'];
+
+      jsPsych.init({
+        timeline: [
+          {
+            type: 'fullscreen',
+            fullscreen_mode: true
+          },
+          {
+            type: 'html-button-response',
+            stimulus: '<p>Welcome to the experiment!</p><p>Read the information sheet carefully.</p>',
+            choices: ['Continue'],
+            data: {
+              phase: 'consent'
+            }
+          },
+          {
+            type: 'survey-html-form',
+            preamble: '<p><b>Demographics Questionnaire</b></p>',
+            html: `<p>Gender: ${['male', 'female', 'other'].map((option, idx) => `<input type="radio" name="gender" value="${option}" required />${option}`).join('&nbsp;&nbsp;')}</p><p>Age: <input name="age" type="text" required /></p><p>Native Language: <input name="language" type="text" required /></p>`,
+            data: {
+              phase: 'demographics'
+            }
+          },
+          {
+            type: 'instructions',
+            pages: [
+              '<p>EXPERIMENT PHASE BEGINS</p><p>Read all instructions carefully and click on the buttons to go forward or back. Scroll down if necessary.</p>'
+            ],
+            allow_keys: false,
+            show_clickable_nav: true,
+            post_trial_gap: 1000,
+            data: {
+              phase: 'instructions'
+            }
+          },
+          {
+            type: 'planet-response',
+            stimulus: stim_list,
+            stimulus_select: 'img/selectring.png',
+            prompt: ['Planet A', 'Planet B'],
+            ship_stimulus: ship_list,
+            show_ship: false,
+            ship_attack_damage: 100,
+            ship_hostile_idx: pun_planet_side,
+            block_duration: 180 * 1000,
+            reset_planet_wait: 1000,
+            shield_charging_time: 3000,
+            ship_attack_time: 6000,
+            feedback_duration: 2500,
+            probability_trade: [[0.5], [0.5]],
+            probability_ship: [[0.1], [0.1]],
+            probability_shield: [[0.5], [0.5]],
+            data: {
+              phase: 'phase1',
+              block_type: 'planet_noship',
+              block_number: 0,
+              trial_number: 0
+            },
+            on_start: function (trial) {
+              trial.data.points = 0;
+              trial.data.block_number = 0;
+              trial.data.trial_number = 0;
+            },
+            on_finish: function (data) {
+              data.points_total = data.points;
+            }
+          },
+        ],
+        on_finish: function () {
+          var result = jsPsych.data.get().json();
+          // Submit your data here
         }
-
-        function mouseUnlockHandler() {
-            jsPsych.pluginAPI.cancelKeyboardResponse();
-        }
-
-        function keyboardUnlockHandler() {
-            jsPsych.pluginAPI.cancelKeyboardResponse();
-        }
-
-        initializeApp();
+      });
     </script>
-</head>
-
-<body>
-    <div id="main"></div>
-</body>
-
+  </body>
 </html>
