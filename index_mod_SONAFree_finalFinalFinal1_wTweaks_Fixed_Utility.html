@@ -1486,16 +1486,16 @@ if (group.includes("early")) {      // EARLY condition
   };
   timeline.push(contact_block);
 
-  function downloadJSON(data, filename) {
-    var blob = new Blob([data], {type: 'application/json'});
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
+//   function downloadJSON(data, filename) {
+//     var blob = new Blob([data], {type: 'application/json'});
+//     var a = document.createElement('a');
+//     a.href = URL.createObjectURL(blob);
+//     a.download = filename;
+//     a.style.display = 'none';
+//     document.body.appendChild(a);
+//     a.click();
+//     document.body.removeChild(a);
+// }
 
   //----------------------------------------------------------------------------
   // start experiment
@@ -1543,8 +1543,8 @@ if (group.includes("early")) {      // EARLY condition
           finish_msg +
           '</p></div></div>')
 
-      // Local JSON download, calls downloadJSON function
-      downloadJSON(jsonData, 'experiment_data.json');
+      // // Local JSON download, calls downloadJSON function
+      // downloadJSON(jsonData, 'experiment_data.json');
 
         });
       }
