@@ -41,19 +41,19 @@
 
 /**
  * Saves jsPsych data as a JSON file.
- * @param {object} resultFailedAttCheck - jsPsych data object.
+ * @param {object} outputData - jsPsych data object.
  * @example
  * // Example usage:
  * // Obtain jsPsych data using get() method
- * var resultFailedAttCheck = jsPsych.data.get().json();
+ * var outputData = jsPsych.data.get().json();
  * // Pass the data to the saveJsPsychDataAsJson() function
- * saveJsPsychDataAsJson(resultFailedAttCheck);
+ * saveJsPsychDataAsJson(outputData);
  */
- async function saveJsPsychDataAsJson(resultFailedAttCheck) {
+ async function saveJsPsychDataAsJson(outputData) {
   try {
-    const jsonData = JSON.stringify(resultFailedAttCheck);
+    const jsonData = JSON.stringify(outputData);
     const blob = new Blob([jsonData], {type: "application/json"});
-    saveAs(blob, "user_data.json");
+    saveAs(blob, "user_dataTEST.json");
   } catch (error) {
     console.error("An error occurred:", error);
   }
@@ -105,7 +105,7 @@
   let continuousResp = true;
   const nBlocks_p1 = 2;
   const nBlocks_p2 = 4;
-  const block_duration = 180 * 10; // in milliseconds (3 mins)
+  const block_duration = 180 * 5; // in milliseconds (3 mins)
   const iti = 1000;
   const inf_stim_height = 80;
   const inf_slider_width = 500;
@@ -599,7 +599,7 @@
       console.log(catchcorrect); //can delete afterwards
     }
   };
-  timeline.push(audit_block);
+  //timeline.push(audit_block);
 
   // questionnaires end ----
 
@@ -648,7 +648,7 @@
     }
   }
   
-  timeline.push(conditional_splash_catch);
+  //timeline.push(conditional_splash_catch);
 
   // ----------*instruction phase*-----------
   //----------------------------------------------------------------------------
@@ -1186,7 +1186,7 @@ if (group.includes("early")) {      // EARLY condition
 					phase: 'instruct contingencies'
 				}
 			};
-			block6loop.push(cont_instructions);
+			//block6loop.push(cont_instructions);
 
       // contingency knowledge quiz
       var contingenciescorrect = false;
@@ -1210,7 +1210,7 @@ if (group.includes("early")) {      // EARLY condition
           phase: 'contingency quiz'
         }
       }
-      block6loop.push(contingencies_check);
+      //block6loop.push(contingencies_check);
 
       // define a page for the incorrect response
       var showsplash = true;
@@ -1227,7 +1227,7 @@ if (group.includes("early")) {      // EARLY condition
               return !contingenciescorrect // skip if correct
           }
       }
-      block6loop.push(block6conditional_splash);
+      //block6loop.push(block6conditional_splash);
 
       // add all to loop node and push to timeline
       var block6loop_node = {
@@ -1488,22 +1488,7 @@ if (group.includes("early")) {      // EARLY condition
     preload_images: images,
     on_finish: function() {
       var result = jsPsych.data.get().json();
-         // Save JSON data to a variable
-      var jsonData = result;
 
-          // Output JSON data to the console
-          console.log(jsonData);
-
-          // Download JSON data as a file
-          function downloadJSON(data, fileName) {
-            var blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
-            saveAs(blob, fileName + ".json");
-          }
-
-          // Call the downloadJSON function with appropriate arguments
-          downloadJSON(jsonData, 'experiment_data');
-
-      
       
       jatos.submitResultData(result, function() {
           document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p><br><br><br>' +
@@ -1547,26 +1532,30 @@ if (group.includes("early")) {      // EARLY condition
           var result = jsPsych.data.get().json();
                 // Local JSON download, calls downloadJSON function
                 
-      downloadJSON(jsonData, 'experiment_data.json');
+      // downloadJSON(jsonData, 'experiment_data.json');
         }
       });
       
     }
+
+
+    
   // Save JSON data to a variable
   var jsonData = jsPsych.data.get().json();
 
-  // Output JSON data to the console
-  console.log(jsonData);
+// Output JSON data to the console
+console.log(jsonData);
 
-  // Download JSON data as a file
-  function downloadJSON(data, fileName) {
-    var blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
-    saveAs(blob, fileName + ".json");
-  }
+// Call the saveJsPsychDataAsJson() function with appropriate arguments
+saveJsPsychDataAsJson(jsonData, 'experiment_data');
 
-  // Call the downloadJSON function with appropriate arguments
-  downloadJSON(jsonData, 'experiment_data');
+
+  // // Call the downloadJSON function with appropriate arguments
+  // downloadJSON(jsonData, 'experiment_data');
   
+    // const outputData = jsPsych.data.get().json();
+    // saveJsPsychDataAsJson(outputData);
+    // console.log(outputData);
 	
   </script>
 </html>
