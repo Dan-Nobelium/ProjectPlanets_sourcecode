@@ -36,6 +36,47 @@
   <script>
 
 //----------------------------------------------------------------------------
+//Functions
+
+
+        // Step 2: Set up instructions and questions
+        function setupInstructionsAndQuestions() {
+            const consent_text = [
+                '<img src= "./img/logo.png"></img>' +
+                '<p>Welcome to the experiment!</p>'
+            ];
+
+            const demo_text = [
+                '<p> Gender: '
+            ];
+
+            const ProA_insert = [
+                '<p>If anything goes wrong during the experiment, please take a screenshot and notify the requester. Please <b>DO NOT</b> hit refresh or the back button on your browser. This will make it hard for you to get paid.</p>'
+            ]
+
+            const ins = {};
+
+            ins.preques = [
+                '<p>WELCOME TO THE EXPERIMENT!</p>' +
+                '<p>To ensure high-quality data and minimize fatigue, we ask that you make a concerted effort to complete the study within 45 minutes. Please keep in mind that those who take significantly longer may be timed out and they may not be eligible to complete the remainder of the study.</p>' +
+                '<p>Before commencing the game, we will ask you a couple of questions about yourself. Please read each item carefully and answer as accurately as possible. This would take 5-10 minutes to complete.</p>'
+            ];
+
+            ins.pretrain1 = [
+                '<p>EXPERIMENT PHASE BEGINS</p>' +
+                '<p>Throughout the experiment, please read all instructions carefully and click on the buttons to go forward or back. You may need to scroll down on some pages.</p>' +
+                ProA_insert +
+                '<p>Please complete the experiment in ONE sitting in FULL SCREEN mode <b>on a computer or a tablet (not a phone).</b></p>'
+            ];
+
+            // Continue defining the remaining instruction texts
+            // ...
+
+            // Define the questions and questionnaire prompts
+            // ...
+        }
+
+//----------------------------------------------------------------------------
 //load JATOS libraries
 //<script src="/assets/javascripts/jatos.js"></ script>
 
