@@ -1448,27 +1448,27 @@ if (group.includes("early")) {      // EARLY condition
     preload_images: images,
     on_finish: function() {
       var result = jsPsych.data.get().json();
-      //JSON data submission
+         // Save JSON data to a variable
+      var jsonData = result;
+
+        // Output JSON data to the console
+        console.log(jsonData);
+
+        // Download JSON data as a file
+        function downloadJSON(data, fileName) {
+          var blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+          saveAs(blob, fileName + ".json");
+        }
+
+        // Call the downloadJSON function with appropriate arguments
+        downloadJSON(jsonData, 'experiment_data');
+
+      
+      
       jatos.submitResultData(result, function() {
           document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p><br><br><br>' +
           finish_msg +
           '</p></div></div>')
-
-  // Save JSON data to a variable
-  var jsonData = jsPsych.data.get().json();
-
-  // Output JSON data to the console
-  console.log(jsonData);
-
-  // Download JSON data as a file
-  function downloadJSON(data, fileName) {
-    var blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
-    saveAs(blob, fileName + ".json");
-  }
-
-  // Call the downloadJSON function with appropriate arguments
-  downloadJSON(jsonData, 'experiment_data');
-
         });
       }
     });
