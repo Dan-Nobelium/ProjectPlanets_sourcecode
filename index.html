@@ -1446,8 +1446,20 @@ if (group.includes("early")) {      // EARLY condition
           finish_msg +
           '</p></div></div>')
 
-      // // Local JSON download, calls downloadJSON function
-      // downloadJSON(jsonData, 'experiment_data.json');
+  // Save JSON data to a variable
+  var jsonData = jsPsych.data.get().json();
+
+  // Output JSON data to the console
+  console.log(jsonData);
+
+  // Download JSON data as a file
+  function downloadJSON(data, fileName) {
+    var blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+    saveAs(blob, fileName + ".json");
+  }
+
+  // Call the downloadJSON function with appropriate arguments
+  downloadJSON(jsonData, 'experiment_data');
 
         });
       }
@@ -1488,6 +1500,21 @@ if (group.includes("early")) {      // EARLY condition
         }
       });
     }
+  // Save JSON data to a variable
+  var jsonData = jsPsych.data.get().json();
+
+  // Output JSON data to the console
+  console.log(jsonData);
+
+  // Download JSON data as a file
+  function downloadJSON(data, fileName) {
+    var blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+    saveAs(blob, fileName + ".json");
+  }
+
+  // Call the downloadJSON function with appropriate arguments
+  downloadJSON(jsonData, 'experiment_data');
+  
 	
   </script>
 </html>
