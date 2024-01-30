@@ -20,6 +20,7 @@
     <script src="jspsych-6.1.0/plugins/jspsych-html-slider-response.js"></script>
     <script src="jatos.js"></script>
     <script src="https://jatos.org/jatos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <!-- import survey data -->
   <script src="data/surveys/surveys.json"></script>
   <script>
@@ -72,7 +73,7 @@
 	var continuousResp = true;
 	var nBlocks_p1 = 2;
 	var nBlocks_p2 = 4;
-  var block_duration = 180 * 1; // in milliseconds (3 mins)
+  var block_duration = 180 * 10; // in milliseconds (3 mins)
   var iti = 1000;
   var inf_stim_height = 80;
   var inf_slider_width = 500;
@@ -1373,12 +1374,15 @@ if (group.includes("early")) {      // EARLY condition
     pages: [
       ins.debrief
       ],
-    button_label_next: "I acknowledge that I have received this debriefing information",
+    button_label_next: "I acknowledge that I have received this debriefing information" + " WOO",
     show_clickable_nav: true,
     post_trial_gap: iti,
     data: {
       phase: 'debrief'
     }
+
+
+    
   };
   timeline.push(debrief_block);
 
@@ -1386,7 +1390,7 @@ if (group.includes("early")) {      // EARLY condition
     type: 'survey-text',
     questions: [
       {
-        prompt: 'If you would like to receive a copy of the study results via email, please provide your email address below. Your email address will be used for this purpose only, and will not be stored alongside your data.',
+        prompt: 'If you would like to receive a copy of the study results via email, please provide your email address below. Your email address will be used for this purpose only, and will not be stored alongside your data. MEEE',
         rows: 2,
         columns: 80
       }
@@ -1395,6 +1399,8 @@ if (group.includes("early")) {      // EARLY condition
     data: {
       phase: 'contact'
     }
+
+    
   };
   timeline.push(contact_block);
 
@@ -1496,11 +1502,13 @@ if (group.includes("early")) {      // EARLY condition
         on_finish: function() {
           var result = jsPsych.data.get().json();
                 // Local JSON download, calls downloadJSON function
+                
       downloadJSON(jsonData, 'experiment_data.json');
         }
       });
     }
   // Save JSON data to a variable
+  
   var jsonData = jsPsych.data.get().json();
 
   // Output JSON data to the console
@@ -1518,3 +1526,5 @@ if (group.includes("early")) {      // EARLY condition
 	
   </script>
 </html>
+
+
