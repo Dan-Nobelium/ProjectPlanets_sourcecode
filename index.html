@@ -38,6 +38,14 @@
 //----------------------------------------------------------------------------
 //Functions
 //----------------------------------------------------------------------------
+
+//downloads JSON
+function downloadJsonData(dataset, fileName) {
+  const jsonString = JSON.stringify(dataset.json());
+  const blob = new Blob([jsonString], { type: "application/json" });
+  saveAs(blob, `${fileName}.json`);
+}
+
 //load JATOS libraries
 //<script src="/assets/javascripts/jatos.js"></ script>
 
@@ -578,10 +586,11 @@
       console.log(catchcorrect); //can delete afterwards
     }
   };
-  //timeline.push(audit_block);
+  timeline.push(audit_block);
 
   // questionnaires end ----
 
+  // Define exit page
   var exit_page = {
     type: 'html-button-response',
     choices:['Click here to exit the experiment'],
@@ -606,11 +615,19 @@
     stimulus: '<center>Your response has been recorded. Unfortunatly, you do not meet the inclusion criteria for this study. We thank you for your interest in participating in the experiment.</center>',
     on_finish: function(data) {
         var resultFailedAttCheck = jsPsych.data.get().json();
-        jatos.submitResultData(resultFailedAttCheck, function() {
-          document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p><br><br><br>' +
-          failedAttCheck_msg +
-          '</p></div></div>')
-    });
+    //     jatos.submitResultData(resultFailedAttCheck, function() {
+    //       document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p><br><br><br>' +
+    //       failedAttCheck_msg +
+    //       '</p></div></div>')
+    // });
+          // Convert the jsPsych data to a JSON string
+          var jsonData = JSON.stringify(resultFailedAttCheck);
+
+          // Create a Blob object with the contentType set to application/json
+          var blob = new Blob([jsonData], {type: "application/json"});
+
+          // Save the Blob object as a JSON file
+          saveAs(blob, "user_data.json");
   }}
   
   // NEW:push it to a conditional code that only shows splash screen if one or more of the responses was wrong
@@ -620,7 +637,8 @@
       return !catchcorrect //skip if correct
     }
   }
-  //timeline.push(conditional_splash_catch);
+  
+  timeline.push(conditional_splash_catch);
 
   // ----------*instruction phase*-----------
   //----------------------------------------------------------------------------
