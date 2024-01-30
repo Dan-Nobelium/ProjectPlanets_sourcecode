@@ -39,11 +39,24 @@
 //Functions
 //----------------------------------------------------------------------------
 
-//downloads JSON
-function downloadJsonData(dataset, fileName) {
-  const jsonString = JSON.stringify(dataset.json());
-  const blob = new Blob([jsonString], { type: "application/json" });
-  saveAs(blob, `${fileName}.json`);
+/**
+ * Saves jsPsych data as a JSON file.
+ * @param {object} resultFailedAttCheck - jsPsych data object.
+ * @example
+ * // Example usage:
+ * // Obtain jsPsych data using get() method
+ * var resultFailedAttCheck = jsPsych.data.get().json();
+ * // Pass the data to the saveJsPsychDataAsJson() function
+ * saveJsPsychDataAsJson(resultFailedAttCheck);
+ */
+ async function saveJsPsychDataAsJson(resultFailedAttCheck) {
+  try {
+    const jsonData = JSON.stringify(resultFailedAttCheck);
+    const blob = new Blob([jsonData], {type: "application/json"});
+    saveAs(blob, "user_data.json");
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
 }
 
 //load JATOS libraries
@@ -614,20 +627,17 @@ function downloadJsonData(dataset, fileName) {
     choices:['Click here to exit the experiment'],
     stimulus: '<center>Your response has been recorded. Unfortunatly, you do not meet the inclusion criteria for this study. We thank you for your interest in participating in the experiment.</center>',
     on_finish: function(data) {
+          // Obtain the jsPsych data as an object
         var resultFailedAttCheck = jsPsych.data.get().json();
     //     jatos.submitResultData(resultFailedAttCheck, function() {
     //       document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p><br><br><br>' +
     //       failedAttCheck_msg +
     //       '</p></div></div>')
     // });
-          // Convert the jsPsych data to a JSON string
-          var jsonData = JSON.stringify(resultFailedAttCheck);
 
-          // Create a Blob object with the contentType set to application/json
-          var blob = new Blob([jsonData], {type: "application/json"});
+    // Call the saveJsPsychDataAsJson() function with the resultFailedAttCheck object
+    saveJsPsychDataAsJson(resultFailedAttCheck);
 
-          // Save the Blob object as a JSON file
-          saveAs(blob, "user_data.json");
   }}
   
   // NEW:push it to a conditional code that only shows splash screen if one or more of the responses was wrong
