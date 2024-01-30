@@ -915,6 +915,9 @@
       phase: 'instructions'
     }
   };
+
+
+  
   timeline.push(phase2_ins_block);
 
 	// Generate list of shield appearances
@@ -1504,58 +1507,57 @@ if (group.includes("early")) {      // EARLY condition
 
   }
   
-   else if (runJatos === false) {
-    var subject_id = jsPsych.data.getURLVariable('Subject_id');
-    //var study_id = jsPsych.data.getURLVariable('Study_id');
-    //var session_id = jsPsych.data.getURLVariable('Session_id');
-    if (subject_id === undefined) {
-        subject_id = null;
-    }
 
-    jsPsych.data.addProperties({
-     subject_id: subject_id,
-     //study_id: study_id,
-     //session_id: session_id,
-     group: group,
-     sample: sample,
-     pun_planet_side: pun_planet_side,
-     pun_planet: stim_list[pun_planet_side],
-     pun_ship: ship_list[pun_planet_side],
-     nBlocks_p1: nBlocks_p1,
-     nBlocks_p2: nBlocks_p2
+  else if (runJatos === false) {
+  var subject_id = jsPsych.data.getURLVariable('Subject_id');
+  if (subject_id === undefined) {
+    subject_id = null;
+  }
+
+  jsPsych.data.addProperties({
+    subject_id: subject_id,
+    group: group,
+    sample: sample,
+    pun_planet_side: pun_planet_side,
+    pun_planet: stim_list[pun_planet_side],
+    pun_ship: ship_list[pun_planet_side],
+    nBlocks_p1: nBlocks_p1,
+    nBlocks_p2: nBlocks_p2
   });
-  
-    jsPsych.init({
-        timeline: timeline,
-        preload_images: images,
-        on_finish: function() {
-          var result = jsPsych.data.get().json();
-                // Local JSON download, calls downloadJSON function
-                
-      // downloadJSON(jsonData, 'experiment_data.json');
-        }
+
+  jsPsych.init({
+    timeline: timeline,
+    preload_images: images,
+    on_finish: function() {
+      var result = jsPsych.data.get().json();
+
+      // Move this line down from outside jsPsych.init()
+      var jsonData = jsPsych.data.get().json();
+
+      // Output JSON data to the console
+      console.log(jsonData);
+
+      // Call the saveJsPsychDataAsJson() function with appropriate arguments
+      saveJsPsychDataAsJson(jsonData, 'experiment_data');
+
+      jatos.submitResultData(result, function() {
+        document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p>' +
+        finish_msg +
+        '</p></div></div>')
       });
-      
     }
+  });
+}
 
-
-    
-  // Save JSON data to a variable
-  var jsonData = jsPsych.data.get().json();
-
+//-----JSON EXPORT BLOCK----//
+/* No need to repeat these lines, as moving the jsonData extraction solves the problem */
+// Save JSON data to a variable
+// var jsonData = jsPsych.data.get().json();
 // Output JSON data to the console
-console.log(jsonData);
-
+// console.log(jsonData);
 // Call the saveJsPsychDataAsJson() function with appropriate arguments
-saveJsPsychDataAsJson(jsonData, 'experiment_data');
+// saveJsPsychDataAsJson(jsonData, 'experiment_data');
 
-
-  // // Call the downloadJSON function with appropriate arguments
-  // downloadJSON(jsonData, 'experiment_data');
-  
-    // const outputData = jsPsych.data.get().json();
-    // saveJsPsychDataAsJson(outputData);
-    // console.log(outputData);
 	
   </script>
 </html>
