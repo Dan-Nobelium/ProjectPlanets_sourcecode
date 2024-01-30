@@ -18,23 +18,11 @@
     <script src="jspsych-6.1.0/plugins/jspsych-survey-likert.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-survey-text.js"></script>
     <script src="jspsych-6.1.0/plugins/jspsych-html-slider-response.js"></script>
-    <!--  <script src="jatos.js"></script> -->
- 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-  <!-- import survey data 
-    <script src="data/surveys/surveys.json"></script>
-  <script>
-    const surveysJson = JSON.parse(document.querySelector('#surveys').innerHTML);
-    console.log(surveysJson);
-  </script>
-  -->
-
+    <!--  <script src="jatos.js"></script> -->
   </head>
-  <body>
 
-  </body>
   <script>
-
 //----------------------------------------------------------------------------
 //Functions
 //----------------------------------------------------------------------------
@@ -1540,11 +1528,11 @@ if (group.includes("early")) {      // EARLY condition
       // Call the saveJsPsychDataAsJson() function with appropriate arguments
       saveJsPsychDataAsJson(jsonData, 'experiment_data');
 
-      jatos.submitResultData(result, function() {
-        document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p>' +
-        finish_msg +
-        '</p></div></div>')
-      });
+      // jatos.submitResultData(result, function() {
+      //   document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p>' +
+      //   finish_msg +
+      //   '</p></div></div>')
+      // });
     }
   });
 }
