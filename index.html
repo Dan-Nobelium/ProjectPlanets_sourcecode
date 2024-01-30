@@ -44,13 +44,13 @@
 // toggle on/off for dev
   const runJatos = false;
 
+/* 
 //----------------------------------------------------------------------------
-/* Experiment Parameters
-
-Randomises the participant's group and sample. Also sets up the randomised
-position of the punished planet, left-right assignment of planets and ships,
-global variables, and the images list.
-*/
+// Experiment Parameters
+//----------------------------------------------------------------------------
+  Randomises the participant's group and sample. Also sets up the randomised
+  position of the punished planet, left-right assignment of planets and ships,
+  global variables, and the images list. */
 
   var groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];
   let group = "" + jsPsych.randomization.sampleWithReplacement(groups, 1) + "";
@@ -121,8 +121,9 @@ global variables, and the images list.
     'img/arrow.jpg', 'img/blank_lose.jpg', 'img/blank_arrow.jpg'
   ];
 
-  //----------------------------------------------------------------------------
-  /* instructions text */
+//----------------------------------------------------------------------------
+// Instructions Text
+//----------------------------------------------------------------------------
 
   consent_text = [
   '<img src= "./img/logo.png"></img>' +
