@@ -632,7 +632,7 @@
       phase: 'instructions'
     }
   };
-  //introloop.push(gen_ins_block);
+  introloop.push(gen_ins_block);
 
   // define instruction check block
   var instructioncorrect = true; //was false
@@ -857,6 +857,7 @@
 	// 	timeline.push(infer_p1_B);
     // timeline.push(slider_p1_q1);
     // timeline.push(slider_p1_q2);
+    
 	}
 
 
@@ -1451,17 +1452,17 @@ if (group.includes("early")) {      // EARLY condition
          // Save JSON data to a variable
       var jsonData = result;
 
-        // Output JSON data to the console
-        console.log(jsonData);
+          // Output JSON data to the console
+          console.log(jsonData);
 
-        // Download JSON data as a file
-        function downloadJSON(data, fileName) {
-          var blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
-          saveAs(blob, fileName + ".json");
-        }
+          // Download JSON data as a file
+          function downloadJSON(data, fileName) {
+            var blob = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
+            saveAs(blob, fileName + ".json");
+          }
 
-        // Call the downloadJSON function with appropriate arguments
-        downloadJSON(jsonData, 'experiment_data');
+          // Call the downloadJSON function with appropriate arguments
+          downloadJSON(jsonData, 'experiment_data');
 
       
       
@@ -1510,7 +1511,6 @@ if (group.includes("early")) {      // EARLY condition
       });
     }
   // Save JSON data to a variable
-  
   var jsonData = jsPsych.data.get().json();
 
   // Output JSON data to the console
