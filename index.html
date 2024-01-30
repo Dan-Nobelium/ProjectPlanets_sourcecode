@@ -54,44 +54,45 @@ global variables, and the images list.
 
   var groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];
   let group = "" + jsPsych.randomization.sampleWithReplacement(groups, 1) + "";
-  var samples = ["ProA", "others"];
+
+
+  // Participant Sample Selection
+  const samples = ["ProA", "others"];
   let sample = samples[0];
+
   //var completion_code = (Math.floor(Math.random() * 99999) * 397).toString();
 
   // randomise position of punished planet, left-right assignment of planets and ships
   var pun_planet_sides = [0, 1]; // position of punished planet, 0 = left (planet A), 1 = right (planet B)
   let pun_planet_side = "" + jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1) + "";
 
-  let stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png'], 1);
-  let ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png'], 1);
+  // Stimulus List Initialization
+  const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png'], 1);
+  const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png'], 1);
 
-  // contingency instructions screen
-  let pun_planet = stim_list[pun_planet_side].substr(4).slice(0,-5);
-  let unpun_planet = stim_list[1-pun_planet_side].substr(4).slice(0,-5);
-  let pun_ship = ship_list[pun_planet_side].substr(8).slice(0,-4);
-  let unpun_ship = ship_list[1-pun_planet_side].substr(8).slice(0,-4);
-  if (pun_planet_side === "0") { // left
-    var planet_layout = ["left", "right"]; // punished, unpunished
-  } else if (pun_planet_side === "1") { // right
-    var planet_layout = ["right", "left"]; // punished, unpunished
-  }
+  // Contingency Instructions Screen Setup
+  const pun_planet = stim_list[pun_planet_side].substring(4).slice(0, -5);
+  const unpun_planet = stim_list[1 - pun_planet_side].substring(4).slice(0, -5);
+  const pun_ship = ship_list[pun_planet_side].substring(8).slice(0, -4);
+  const unpun_ship = ship_list[1 - pun_planet_side].substring(8).slice(0, -4);
+  const planet_layout = pun_planet_side === "0" ? ["left", "right"] : ["right", "left"];
 
-  // define global variables
-	var block_number = 0;
-	var trial_number = 0;
-	var points = 0;
-	var continuousResp = true;
-	var nBlocks_p1 = 2;
-	var nBlocks_p2 = 4;
-  var block_duration = 180 * 10; // in milliseconds (3 mins)
-  var iti = 1000;
-  var inf_stim_height = 80;
-  var inf_slider_width = 500;
-  var main_stim_height = 250;
-  var feedback_duration = 2500;
-  var rf_ship_delay = 1500;
-  var probability_trade = [[.5],[.5]];
-	var probability_shield = [[.5],[.5]];
+  // Global Variables Definition
+  let block_number = 0;
+  let trial_number = 0;
+  let points = 0;
+  let continuousResp = true;
+  const nBlocks_p1 = 2;
+  const nBlocks_p2 = 4;
+  const block_duration = 180 * 10; // in milliseconds (3 mins)
+  const iti = 1000;
+  const inf_stim_height = 80;
+  const inf_slider_width = 500;
+  const main_stim_height = 250;
+  const feedback_duration = 2500;
+  const rf_ship_delay = 1500;
+  const probability_trade = [[.5], [.5]];
+  const probability_shield = [[.5], [.5]];
 
   // manipulate response-ship Rft rate
   if (group.includes("0.1")) {
