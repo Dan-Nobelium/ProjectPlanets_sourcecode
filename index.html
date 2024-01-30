@@ -1478,7 +1478,9 @@ if (group.includes("early")) {      // EARLY condition
 
 
 
-  } else if (runJatos === false) {
+  }
+  
+   else if (runJatos === false) {
     var subject_id = jsPsych.data.getURLVariable('Subject_id');
     //var study_id = jsPsych.data.getURLVariable('Study_id');
     //var session_id = jsPsych.data.getURLVariable('Session_id');
@@ -1509,6 +1511,7 @@ if (group.includes("early")) {      // EARLY condition
       downloadJSON(jsonData, 'experiment_data.json');
         }
       });
+      
     }
   // Save JSON data to a variable
   var jsonData = jsPsych.data.get().json();
