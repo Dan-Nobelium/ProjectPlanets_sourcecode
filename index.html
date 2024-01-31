@@ -38,25 +38,73 @@ console.error("An error occurred:", error);
 }
 }
 
-// Loads instructions.json
-async function loadInstructions() {
-const rawResponse = await fetch('instruct.json');
-const content = await rawResponse.json();
-return content;
-}
+function createQuestion(questionType, config) {
+  const defaultConfig = {
+    stimulus_height: 250,
+    slider_width: 700,
+    require_movement: false,
+    data: {
+      phase: `${questionType}_q`,
+      block_number: config.blockNumber
+    }
+  };
 
-// Displays specific instruction sets in the DOM
-function displayInstructionSet(instructionSetName) {
-loadInstructions().then(instructions => {
-console.log(instructions);
-const parentElement = document.getElementById('parent-element-id');
-const instructionItems = instructions[instructionSetName];
-instructionItems.forEach(item => {
-parentElement.innerHTML += item;
-});
-});
+  switch (questionType) {
+    case 'valence':
+      return {
+        ...defaultConfig,
+        type: 'valence-check-6',
+        prompt: config.prompt,
+        stimulus_1: config.stimulusList[0],
+        stim_text_1: config.stimTextList[0],
+        stimulus_2: config.stimulusList[1],
+        stim_text_2: config.stimTextList[1],
+        stimulus_3: config.stimulusList[2],
+        stim_text_3: config.stimTextList[2],
+        stimulus_4: config.stimulusList[3],
+        stim_text_4: config.stimTextList[3],
+        stimulus_5: config.stimulusList[4],
+        stim_text_5: config.stimTextList[4],
+        stimulus_6: config.stimulusList[5],
+        stim_text_6: config.stimTextList[5],
+        labels: config.labels
+      };
+
+    case 'inference':
+      return {
+        ...defaultConfig,
+        type: 'inference-check-4',
+        main_stimulus: config.mainStimulus,
+        main_stimulus_height: config.mainStimulusHeight,
+        prompt: config.prompt,
+        stimulus_1: config.stimulusList[0],
+        stimulus_2: config.stimulusList[1],
+        stimulus_3: config.stimulusList[2],
+        stimulus_4: config.stimulusList[3],
+        stim_text_1: config.stimTextList[0],
+        stim_text_2: config.stimTextList[1],
+        stim_text_3: config.stimTextList[2],
+        stim_text_4: config.stimTextList[3],
+        slider_text_top: config.sliderTopText,
+        labels_top: config.labelsTop
+      };
+
+    case 'slider':
+      return {
+        ...defaultConfig,
+        type: 'html-slider-response',
+        prompt: config.prompt,
+        left_stimulus: config.leftStimulus,
+        left_stim_text: config.leftStimText,
+        right_stimulus: config.rightStimulus,
+        right_stim_text: config.rightStimText,
+        labels: config.labels
+      };
+
+    default:
+      throw new Error(`Invalid question type ${questionType}`);
+  }
 }
-loadInstructions()
 
 //load JATOS libraries
 //<script src="/assets/javascripts/jatos.js"></ script>
@@ -891,11 +939,11 @@ loadInstructions()
     }
   };
 
-	// 	timeline.push(valence_p1);
+    	timeline.push(valence_p1);
 	// 	timeline.push(infer_p1_A);
 	// 	timeline.push(infer_p1_B);
-    // timeline.push(slider_p1_q1);
-    // timeline.push(slider_p1_q2);
+  // timeline.push(slider_p1_q1);
+  // timeline.push(slider_p1_q2);
     
 	}
 
