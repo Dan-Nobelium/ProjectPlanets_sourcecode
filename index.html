@@ -330,49 +330,50 @@ ins.debrief = [
   /* valence & inference checks */
 
   // valence check
-  var valence_q = 'How do you feel about each of these game elements: ' +
-  '<br><br>';
+const valence_q = `How do you feel about each of these game elements: 
 
-  var val_img_p1 = [
-    {
-      stimulus: 'img/win100.png',
-      text: "Winning $100"
-    },
-    {
-      stimulus: stim_list[0],
-      text: "Planet A (left)"
-    },
-    {
-      stimulus: stim_list[1],
-      text: "Planet B (right)"
-    }
+    `;
+
+const val_img_p1 = [
+  {
+    stimulus: 'img/win100.png',
+    text: "Winning $100"
+  },
+  {
+    stimulus: stim_list[0],
+    text: "Planet A (left)"
+  },
+  {
+    stimulus: stim_list[1],
+    text: "Planet B (right)"
+  }
   ];
 
-  var val_img_p2 = [
-    {
-      stimulus: 'img/win100.png',
-      text: "Winning $100"
-    },
-    {
-      stimulus: 'img/lose.png',
-      text: "Losing $"
-    },
-    {
-      stimulus: stim_list[0],
-      text: "Planet A (left)"
-    },
-    {
-      stimulus: stim_list[1],
-      text: "Planet B (right)"
-    },
-    {
-      stimulus: 'img/ship1.png',
-      text: "Ship 1"
-    },
-    {
-      stimulus: 'img/ship2.png',
-      text: "Ship 2"
-    }
+const val_img_p2 = [
+  {
+    stimulus: 'img/win100.png',
+    text: "Winning $100"
+  },
+  {
+    stimulus: 'img/lose.png',
+    text: "Losing $"
+  },
+  {
+    stimulus: stim_list[0],
+    text: "Planet A (left)"
+  },
+  {
+    stimulus: stim_list[1],
+    text: "Planet B (right)"
+  },
+  {
+    stimulus: 'img/ship1.png',
+    text: "Ship 1"
+  },
+  {
+    stimulus: 'img/ship2.png',
+    text: "Ship 2"
+  }
   ];
 
   var valence_labels = [
