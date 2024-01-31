@@ -27,16 +27,7 @@
 //Functions
 //----------------------------------------------------------------------------
 
-/**
- * Saves jsPsych data as a JSON file.
- * @param {object} outputData - jsPsych data object.
- * @example
- * // Example usage:
- * // Obtain jsPsych data using get() method
- * var outputData = jsPsych.data.get().json();
- * // Pass the data to the saveJsPsychDataAsJson() function
- * saveJsPsychDataAsJson(outputData);
- */
+//Exports Jspsych data as a local JSON
  async function saveJsPsychDataAsJson(outputData) {
   try {
     const jsonData = JSON.stringify(outputData);
@@ -46,6 +37,22 @@
     console.error("An error occurred:", error);
   }
 }
+
+  // Function to initialize the survey app
+  async function initializeSurveyApp(surveyFileName) {
+  try {
+  // Get the survey data from the JSON file
+  const surveyData = await loadSurveyData(surveyFileName);
+
+  // Construct the survey DOM
+  buildDomElements(surveyData);
+
+  // Register the event listeners for survey events
+  registerEventListeners();
+  } catch (error) {
+  console.error("An error occurred:", error);
+  }
+  }
 
 //load JATOS libraries
 //<script src="/assets/javascripts/jatos.js"></ script>
