@@ -23,36 +23,41 @@
   </head>
 
   <script>
+    
 //----------------------------------------------------------------------------
-//Functions
+// Functions
 //----------------------------------------------------------------------------
 
-//Exports Jspsych data as a local JSON
- async function saveJsPsychDataAsJson(outputData) {
-  try {
-    const jsonData = JSON.stringify(outputData);
-    const blob = new Blob([jsonData], {type: "application/json"});
-    saveAs(blob, "user_dataTEST.json");
-  } catch (error) {
-    console.error("An error occurred:", error);
-  }
+// Exports Jspsych data as a local JSON
+async function saveJsPsychDataAsJson(outputData) {
+try {
+const jsonData = JSON.stringify(outputData);
+const blob = new Blob([jsonData], {type: "application/json"});
+saveAs(blob, "user_dataTEST.json");
+} catch (error) {
+console.error("An error occurred:", error);
+}
 }
 
-  // Function to initialize the survey app
-  async function initializeSurveyApp(surveyFileName) {
-  try {
-  // Get the survey data from the JSON file
-  const surveyData = await loadSurveyData(surveyFileName);
+// Loads instructions.json
+async function loadInstructions() {
+const rawResponse = await fetch('./instrctions.json');
+const content = await rawResponse.json();
+return content;
+}
 
-  // Construct the survey DOM
-  buildDomElements(surveyData);
+// Displays specific instruction sets in the DOM
+function displayInstructionSet(instructionSetName) {
+loadInstructions().then(instructions => {
+const parentElement = document.getElementById('parent-element-id');
+const instructionItems = instructions[instructionSetName];
+instructionItems.forEach(item => {
+parentElement.innerHTML += item;
+});
+});
+}
 
-  // Register the event listeners for survey events
-  registerEventListeners();
-  } catch (error) {
-  console.error("An error occurred:", error);
-  }
-  }
+
 
 //load JATOS libraries
 //<script src="/assets/javascripts/jatos.js"></ script>
@@ -489,7 +494,7 @@
       phase: 'consent'
     },
 	}
-	//timeline.push(consent_block);
+	timeline.push(consent_block);
 
   // demographics
   var demographics_block = {
