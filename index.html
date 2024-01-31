@@ -23,7 +23,6 @@
   </head>
 
   <script>
-    
 //----------------------------------------------------------------------------
 // Functions
 //----------------------------------------------------------------------------
@@ -41,7 +40,7 @@ console.error("An error occurred:", error);
 
 // Loads instructions.json
 async function loadInstructions() {
-const rawResponse = await fetch('./instrctions.json');
+const rawResponse = await fetch('instruct.json');
 const content = await rawResponse.json();
 return content;
 }
@@ -49,6 +48,7 @@ return content;
 // Displays specific instruction sets in the DOM
 function displayInstructionSet(instructionSetName) {
 loadInstructions().then(instructions => {
+console.log(instructions);
 const parentElement = document.getElementById('parent-element-id');
 const instructionItems = instructions[instructionSetName];
 instructionItems.forEach(item => {
@@ -56,8 +56,7 @@ parentElement.innerHTML += item;
 });
 });
 }
-
-
+loadInstructions()
 
 //load JATOS libraries
 //<script src="/assets/javascripts/jatos.js"></ script>
@@ -149,6 +148,7 @@ parentElement.innerHTML += item;
   consent_text = [
   '<img src= "./img/logo.png"></img>' +
     '<p>Welcome to the experiment!</p>'
+    
   ];
 
   demo_text = [
