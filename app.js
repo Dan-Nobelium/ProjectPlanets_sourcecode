@@ -549,7 +549,7 @@ async function saveJsPsychDataAsJson(outputData) {
           phase: 'instructions'
         }
         };
-      timeline.push(preques_ins_block); 
+      //timeline.push(preques_ins_block); 
     
       // CFI
       var cfi_block = {
@@ -578,7 +578,7 @@ async function saveJsPsychDataAsJson(outputData) {
           console.log(cfi_catch_flag); //can delete afterwards
         }
       };
-      timeline.push(cfi_block);
+      //timeline.push(cfi_block);
     
       // HTQ
       var htq_block = {
@@ -593,7 +593,7 @@ async function saveJsPsychDataAsJson(outputData) {
           phase: 'ques_htq'
         }
       };
-      timeline.push(htq_block);
+      //timeline.push(htq_block);
     
       // AUDIT
       var audit_block = {
@@ -626,7 +626,7 @@ async function saveJsPsychDataAsJson(outputData) {
           console.log(catchcorrect); //can delete afterwards
         }
       };
-      timeline.push(audit_block);
+      //timeline.push(audit_block);
     
       // questionnaires end ----
     
