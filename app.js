@@ -3,8 +3,10 @@
 // Import JS files
 //----------------------------------------------------------------------------
 
+// app.js
+import * as instructions from './instructions.js';
+console.log(instructions);
 
-import { pretrain1, pretrain2, pretrain3, ProA_insert } from './config.js';
 
 //----------------------------------------------------------------------------
 // Functions

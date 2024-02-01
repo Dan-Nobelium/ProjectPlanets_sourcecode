@@ -1,11 +1,15 @@
 // Constants
 let sample = 'your_sample_value';
 let pun_planet = 'your_pun_planet_value';
+let pun_planet_side = 'your_pun_planet_value';
 let unpun_planet = 'your_unpun_planet_value';
+let unpun_ship = 'your_pun_ship_value';
 let pun_ship = 'your_pun_ship_value';
 let planet_layout = ['your_planet_layout_value_for_0', 'your_planet_layout_value_for_1'];
 let stim_list = ['your_stim_list_values'];
 let ship_list = ['your_ship_list_values'];
+
+//Exports
 
 // Instructions Text
 export   var consent_text = `
