@@ -152,7 +152,7 @@ function createQuestion(questionType, config) {
   let continuousResp = true;
   const nBlocks_p1 = 2;
   const nBlocks_p2 = 4;
-  const block_duration = 180 * 5; // in milliseconds (3 mins)
+  const block_duration = 180 * 100; // in milliseconds (3 mins)
   const iti = 1000;
   const inf_stim_height = 80;
   const inf_slider_width = 500;
@@ -193,11 +193,20 @@ function createQuestion(questionType, config) {
 // Instructions Text
 //----------------------------------------------------------------------------
 
-  var consent_text = `
-    <img src= "./img/logo.png"></img>
-    <p>Welcome to the experiment!</p>
-    `;
+consent_text = [
+  '<img src= "./img/logo.png"></img>' +
+    '<p>Welcome to the experiment!</p>' +
+    '<p>Before you begin, please read the information sheet carefully.</p>' +
+    '<br>' +
+    '<p><b>PARTICIPANT INFORMATION STATEMENT AND CONSENT</b></p>' +
+      '<embed src="data/consent/PIS_SONA_3385.pdf" width="800px" height="2100px" />' +
+    '<p>By continuing, you are making a decision whether or not to participate. Clicking the button below indicates that, having read the information provided on the participant information sheet, you consent to the above.' +
+    '<br></p>'
+  ];
 
+
+
+    
   demo_text = [
     '<p> Gender: '
   ];
@@ -517,13 +526,19 @@ const val_img_p2 = [
   var block6loop = []
 
 
-  // force full screen
-//   timeline.push(
-//     {
-//       type: 'fullscreen',
-//       fullscreen_mode: true
-//     }
-//   );
+//force full screen
+  timeline.push(
+    {
+      type: 'fullscreen',
+      fullscreen_mode: true
+    }
+  );
+
+
+'<img src= "./img/logo.png"></img>' +
+    '<p>Welcome to the experiment!</p>'
+
+  
 
   // info statement and consent
   var consent_block = {
