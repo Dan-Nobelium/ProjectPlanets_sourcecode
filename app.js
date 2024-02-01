@@ -1,3 +1,11 @@
+
+//----------------------------------------------------------------------------
+// Import JS files
+//----------------------------------------------------------------------------
+
+
+import { pretrain1, pretrain2, pretrain3, ProA_insert } from './config.js';
+
 //----------------------------------------------------------------------------
 // Functions
 //----------------------------------------------------------------------------
@@ -13,72 +21,18 @@ async function saveJsPsychDataAsJson(outputData) {
     }
     }
     
-    function createQuestion(questionType, config) {
-      const defaultConfig = {
-        stimulus_height: 250,
-        slider_width: 700,
-        require_movement: false,
-        data: {
-          phase: `${questionType}_q`,
-          block_number: config.blockNumber
-        }
-      };
-    
-      switch (questionType) {
-        case 'valence':
-          return {
-            ...defaultConfig,
-            type: 'valence-check-6',
-            prompt: config.prompt,
-            stimulus_1: config.stimulusList[0],
-            stim_text_1: config.stimTextList[0],
-            stimulus_2: config.stimulusList[1],
-            stim_text_2: config.stimTextList[1],
-            stimulus_3: config.stimulusList[2],
-            stim_text_3: config.stimTextList[2],
-            stimulus_4: config.stimulusList[3],
-            stim_text_4: config.stimTextList[3],
-            stimulus_5: config.stimulusList[4],
-            stim_text_5: config.stimTextList[4],
-            stimulus_6: config.stimulusList[5],
-            stim_text_6: config.stimTextList[5],
-            labels: config.labels
-          };
-    
-        case 'inference':
-          return {
-            ...defaultConfig,
-            type: 'inference-check-4',
-            main_stimulus: config.mainStimulus,
-            main_stimulus_height: config.mainStimulusHeight,
-            prompt: config.prompt,
-            stimulus_1: config.stimulusList[0],
-            stimulus_2: config.stimulusList[1],
-            stimulus_3: config.stimulusList[2],
-            stimulus_4: config.stimulusList[3],
-            stim_text_1: config.stimTextList[0],
-            stim_text_2: config.stimTextList[1],
-            stim_text_3: config.stimTextList[2],
-            stim_text_4: config.stimTextList[3],
-            slider_text_top: config.sliderTopText,
-            labels_top: config.labelsTop
-          };
-    
-        case 'slider':
-          return {
-            ...defaultConfig,
-            type: 'html-slider-response',
-            prompt: config.prompt,
-            left_stimulus: config.leftStimulus,
-            left_stim_text: config.leftStimText,
-            right_stimulus: config.rightStimulus,
-            right_stim_text: config.rightStimText,
-            labels: config.labels
-          };
-    
-        default:
-          throw new Error(`Invalid question type ${questionType}`);
-      }
+    // Loads instructions text from a JSON file
+function loadInstructionsFromFile(callback) {
+
+    $.getJSON('instructions.json', function(data) {
+    const { pretrain1, pretrain2, pretrain3 } = data;
+    const ins = {
+    pretrain1: [...pretrain1],
+    pretrain2: [...pretrain2],
+    pretrain3: [...pretrain3],
+    };
+    callback(ins);
+    });
     }
     
     //load JATOS libraries
