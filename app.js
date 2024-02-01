@@ -4,8 +4,8 @@
 //----------------------------------------------------------------------------
 
 // app.js
-import * as instructions from './instructions.js';
-console.log(instructions);
+// import * as instructions from './instructions.js';
+// console.log(instructions);
 
 
 //----------------------------------------------------------------------------
