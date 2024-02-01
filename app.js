@@ -136,6 +136,14 @@ async function saveJsPsychDataAsJson(outputData) {
       const rf_ship_delay = 1500;
       const probability_trade = [[.5], [.5]];
       const probability_shield = [[.5], [.5]];
+      let ins = {
+        preques: `<p>...</p>`,
+        pretrain1: `<p>...</p>`,
+        pretrain2: `<p>...</p>`,
+        pretrain3: `<p>...</p>`,
+        instructlate: `<p>...</p>`,
+        instructearly: `<p>...</p>`,
+      };
     
       // manipulate response-ship Rft rate
       if (group.includes("0.1")) {
@@ -191,7 +199,7 @@ async function saveJsPsychDataAsJson(outputData) {
         var ProA_insert = '';
       }
     
-      var ins = {};
+
     
       ins.preques = [
         `<p>WELCOME TO THE EXPERIMENT!</p>
@@ -683,22 +691,18 @@ async function saveJsPsychDataAsJson(outputData) {
       - includes instructions, instruction check, and splash screen
       - loops continuously until participant gets questions correct */
     
-      // define general instructions
-      var gen_ins_block = {
-        type: 'instructions',
-        pages: [
-          ins.pretrain1,
-          ins.pretrain2,
-          ins.pretrain3
-          ],
-        allow_keys: false,
-        show_clickable_nav: true,
-        post_trial_gap: iti,
-        data: {
-          phase: 'instructions'
-        }
-      };
-      introloop.push(gen_ins_block);
+// define general instructions
+var gen_ins_block = {
+    type: "instructions",
+    pages: [ins.pretrain1, ins.pretrain2, ins.pretrain3],
+    allow_keys: false,
+    show_clickable_nav: true,
+    post_trial_gap: iti,
+    data: {
+      phase: "instructions",
+    },
+  };
+  introloop.push(gen_ins_block);
     
       // define instruction check block
       var instructioncorrect = true; //was false
@@ -918,7 +922,7 @@ async function saveJsPsychDataAsJson(outputData) {
         }
       };
     
-            timeline.push(valence_p1);
+            //timeline.push(valence_p1);
         // 	timeline.push(infer_p1_A);
         // 	timeline.push(infer_p1_B);
       // timeline.push(slider_p1_q1);
