@@ -3,8 +3,9 @@
 // Import JS files
 //----------------------------------------------------------------------------
 
-// import { demoText } from './instruct.js';
-// console.log(demoText);
+import { demoText } from './instruct.js';
+console.log(demoText);
+
 // app.js
 // import * as instructions from './instructions.js';
 // console.log(instructions);
@@ -86,7 +87,7 @@ async function saveJsPsychData(outputData) {
 //   }, 500);
 //   };
 
-
+//     showDemoPage()
     //load JATOS libraries
     //<script src="/assets/javascripts/jatos.js"></ script>
     
