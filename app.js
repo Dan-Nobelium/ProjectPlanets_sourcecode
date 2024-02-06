@@ -37,33 +37,39 @@
  */
 async function saveJsPsychData(outputData) {
   try {
-    // Ensure that the input is treated as an array
-    const processedOutput = Array.isArray(outputData)
-      ? outputData
-      : [outputData];
-
-    // Convert the data structure to JSON format and add whitespace
-    const jsonData = JSON.stringify(processedOutput, null, 2);
-
-    // Construct a Blob object consisting of the JSON data
-    const blob = new Blob([jsonData], { type: 'application/json' });
-
-    // Define the filename for the JSON file
-    const fileName = 'user_data.json';
-
-    // Generate a downloadable anchor element with the specified attributes
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', URL.createObjectURL(blob));
-    linkElement.setAttribute('download', fileName);
-
-    // Simulate clicking the anchor element to initiate the download
-    linkElement.style.display = 'none';
-    document.body.appendChild(linkElement);
-    linkElement.click();
-    document.body.removeChild(linkElement);
-  } catch (error) {
-    console.error('An error occurred: ', error);
+  // Ensure that the input is treated as an array
+  const processedOutput = Array.isArray(outputData)
+  ? outputData
+  : [outputData];
+  // Decode the inner JSON strings since they appear to include multiple entries
+  const decodedData = [];
+  for (const datum of processedOutput) {
+  decodedData.push(JSON.parse(datum));
   }
+
+  // Convert the data structure to JSON format and add whitespace
+  const jsonData = JSON.stringify(decodedData, null, 2);
+
+  // Construct a Blob object consisting of the JSON data
+  const blob = new Blob([jsonData], { type: 'application/json' });
+
+  // Define the filename for the JSON file
+  const fileName = 'user_data.json';
+
+  // Generate a downloadable anchor element with the specified attributes
+  const linkElement = document.createElement('a');
+  linkElement.setAttribute('href', URL.createObjectURL(blob));
+  linkElement.setAttribute('download', fileName);
+
+  // Simulate clicking the anchor element to initiate the download
+  linkElement.style.display = 'none';
+  document.body.appendChild(linkElement);
+  linkElement.click();
+  document.body.removeChild(linkElement);
+  } catch (error) {
+  console.error('An error occurred: ', error);
+  }
+
 }
     
     // Loads instructions text from a JSON file
