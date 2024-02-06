@@ -3,6 +3,8 @@
 // Import JS files
 //----------------------------------------------------------------------------
 
+// import { demoText } from './instruct.js';
+// console.log(demoText);
 // app.js
 // import * as instructions from './instructions.js';
 // console.log(instructions);
@@ -71,23 +73,20 @@ async function saveJsPsychData(outputData) {
   }
 
 }
-    
-    // Loads instructions text from a JSON file
-function loadInstructionsFromFile(callback) {
+
+// function showDemoPage() {
+//   const divContainer = document.getElementById('content');
+//   divContainer.innerHTML = demoText;
+//   }
+  
+//   window.onload = () => {
+//   setTimeout(() => {
+//   showInstructionPage();
+//   hideLoadingScreen();
+//   }, 500);
+//   };
 
 
-
-    $.getJSON('instructions.json', function(data) {
-    const { pretrain1, pretrain2, pretrain3 } = data;
-    const ins = {
-    pretrain1: [...pretrain1],
-    pretrain2: [...pretrain2],
-    pretrain3: [...pretrain3],
-    };
-    callback(ins);
-    });
-    }
-    
     //load JATOS libraries
     //<script src="/assets/javascripts/jatos.js"></ script>
     
@@ -201,6 +200,7 @@ function loadInstructionsFromFile(callback) {
       '<p> Age: <input name="age" type="text" required/> </p>' + '<br>' +
       '<p> Native language: <input name="language" type="text" required/> </p>' + '<br>'
     ];
+    
   
     if (sample === "ProA") {
       var ProA_insert = [
