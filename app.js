@@ -40,13 +40,17 @@ async function saveJsPsychData(outputData) {
     const processedOutput = Array.isArray(outputData)
       ? outputData
       : [outputData];
-    
+
     // Convert the data structure to JSON format and add whitespace
-    const jsonData = JSON.stringify(processedOutput, null, 2);
-    
+    let jsonData = JSON.stringify(processedOutput, null, 2);
+
+    // Perform double decoding of the JSON string
+    jsonData = JSON.parse(jsonData);
+    jsonData = JSON.stringify(jsonData, null, 2);
+
     // Construct a Blob object consisting of the JSON data
     const blob = new Blob([jsonData], { type: 'application/json' });
-    
+
     // Define the filename for the JSON file
     const fileName = 'user_data.json';
 
