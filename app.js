@@ -8,23 +8,67 @@
 // console.log(instructions);
 
 
+// const rawJsonStr = jsPsych.data.get().json();
+// const rawJson = Array.isArray(rawJsonStr) ? rawJsonStr : JSON.parse(rawJsonStr);
+
+// if (!Array.isArray(rawJson)) throw Error('Expected an array in JSON format.');
+
+// const jsonBlob = new Blob([JSON.stringify(rawJson, null, 2)], {
+//   type: 'application/json',
+// });
+
+// const url = window.URL.createObjectURL(jsonBlob);
+// const fileName = 'output.json';
+// const linkElement = document.createElement('a');
+// linkElement.setAttribute('href', url);
+// linkElement.setAttribute('download', fileName);
+// document.body.appendChild(linkElement);
+// linkElement.click();
+// document.body.removeChild(linkElement);
+
 //----------------------------------------------------------------------------
 // Functions
 //----------------------------------------------------------------------------
 
-// Exports Jspsych data as a local JSON
-async function saveJsPsychDataAsJson(outputData) {
+/**
+ * Reworked function to export JSPsych data as a local JSON
+ * @param {Object|Array<Object>} outputData - Output data received from JSPsych
+ */
+async function saveJsPsychData(outputData) {
   try {
-  const jsonData = JSON.stringify(outputData);
-  const blob = new Blob([jsonData], {type: "application/json"});
-  saveAs(blob, "user_dataTEST.json");
+    // Ensure that the input is treated as an array
+    const processedOutput = Array.isArray(outputData)
+      ? outputData
+      : [outputData];
+    
+    // Convert the data structure to JSON format and add whitespace
+    const jsonData = JSON.stringify(processedOutput, null, 2);
+    
+    // Construct a Blob object consisting of the JSON data
+    const blob = new Blob([jsonData], { type: 'application/json' });
+    
+    // Define the filename for the JSON file
+    const fileName = 'user_data.json';
+
+    // Generate a downloadable anchor element with the specified attributes
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', URL.createObjectURL(blob));
+    linkElement.setAttribute('download', fileName);
+
+    // Simulate clicking the anchor element to initiate the download
+    linkElement.style.display = 'none';
+    document.body.appendChild(linkElement);
+    linkElement.click();
+    document.body.removeChild(linkElement);
   } catch (error) {
-  console.error("An error occurred:", error);
+    console.error('An error occurred: ', error);
   }
-  }
+}
     
     // Loads instructions text from a JSON file
 function loadInstructionsFromFile(callback) {
+
+
 
     $.getJSON('instructions.json', function(data) {
     const { pretrain1, pretrain2, pretrain3 } = data;
@@ -719,8 +763,8 @@ function loadInstructionsFromFile(callback) {
         //       '</p></div></div>')
         // });
     
-        // Call the saveJsPsychDataAsJson() function with the resultFailedAttCheck object
-        saveJsPsychDataAsJson(resultFailedAttCheck);
+        // Call the saveJsPsychData() function with the resultFailedAttCheck object
+        saveJsPsychData(resultFailedAttCheck);
     
       }}
       
@@ -1615,8 +1659,8 @@ var gen_ins_block = {
           // Output JSON data to the console
           console.log(jsonData);
     
-          // Call the saveJsPsychDataAsJson() function with appropriate arguments
-          saveJsPsychDataAsJson(jsonData, 'experiment_data');
+          // Call the saveJsPsychData() function with appropriate arguments
+          saveJsPsychData(jsonData, 'experiment_data');
     
           // jatos.submitResultData(result, function() {
           //   document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p>' +
