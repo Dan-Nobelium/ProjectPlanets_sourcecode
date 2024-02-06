@@ -1,24 +1,36 @@
 // Constants
-let sample = 'your_sample_value';
-let pun_planet = 'your_pun_planet_value';
-let pun_planet_side = 'your_pun_planet_value';
-let unpun_planet = 'your_unpun_planet_value';
-let unpun_ship = 'your_pun_ship_value';
-let pun_ship = 'your_pun_ship_value';
-let planet_layout = ['your_planet_layout_value_for_0', 'your_planet_layout_value_for_1'];
-let stim_list = ['your_stim_list_values'];
-let ship_list = ['your_ship_list_values'];
+const sample = 'your_sample_value';
+const pun_planet = 'your_pun_planet_value';
+const pun_planet_side = 'your_pun_planet_value';
+const unpun_planet = 'your_unpun_planet_value';
+const unpun_ship = 'your_pun_ship_value';
+const pun_ship = 'your_pun_ship_value';
+const planet_layout = ['your_planet_layout_value_for_0', 'your_planet_layout_value_for_1'];
+const stim_list = ['your_stim_list_values'];
+const ship_list = ['your_ship_list_values'];
 
-//Exports
+// Exports
 
 // Instructions Text
-export   var consent_text = `
+export const consent_text = `
 <img src= "./img/logo.png"></img>
 <p>Welcome to the experiment!</p>
+<p>Before you begin, please read the information sheet carefully.</p>
+
+
+<p><b>PARTICIPANT INFORMATION STATEMENT AND CONSENT</b></p>
+<embed src="data/consent/PIS_SONA_3385.pdf" width="800px" height="2100px" />
+<p>By continuing, you are making a decision whether or not to participate. Clicking the button below indicates that, having read the information provided on the participant information sheet, you consent to the above.</p>
+
 `;
 
-export let demo_text = [
-  '<p> Gender: '
+export const demo_text = [
+  '<p> Gender: ',
+  '<input type="radio" name="gender" value="male" required/> Male &nbsp; ',
+  '<input type="radio" name="gender" value="female" required/> Female &nbsp;',
+  '<input type="radio" name="gender" value="other" required/> Other',
+  '<p> Age: <input name="age" type="text" required/> </p>',
+  '<p> Native language: <input name="language" type="text" required/> </p>'
 ];
 
 let ProA_insert = '';
@@ -28,7 +40,7 @@ if (sample === "ProA") {
   ];
 }
 
-export let ins = {};
+export const ins = {};
 ins.preques = [
   `<p>WELCOME TO THE EXPERIMENT!</p>
     <p>To ensure high-quality data and minimise fatigue, we ask that you make a concerted effort to complete the study <b>within 45 minutes </b>. Please keep in mind that those who take significantly longer may be timed out and they may not be eligible to complete the remainder of the study. </p>
@@ -57,15 +69,15 @@ ins.pretrain3 = [
 ];
 
 // instruction check
-let Q0_text = `<b>Question 1:</b> The aim of the task is to:`;
-let Q0_answers = ["Get as many points as possible", "Battle the aliens on the planets"];
-let Q1_text = `<b>Question 2:</b> Clicking on each planet will:`;
-let Q1_answers = ["Make the planet disappear", "S sometimes result in a successful trade, earning me points"];
-let Q2_text = `<b>Question 3:</b> There will be multiple blocks in this experiment, with questions in between each block. `;
-let Q2_answers = ["FALSE", "TRUE"];
-let Q3_text = `<b>Question 4:</b> The top 10% performers at the end of the task will receive:`;
-let Q3_answers = ["An additional monetary prize", "Extra course credit"];
-let correctstring = JSON.stringify({
+const Q0_text = `<b>Question 1:</b> The aim of the task is to:`;
+const Q0_answers = ["Get as many points as possible", "Battle the aliens on the planets"];
+const Q1_text = `<b>Question 2:</b> Clicking on each planet will:`;
+const Q1_answers = ["Make the planet disappear", "Sometimes result in a successful trade, earning me points"];
+const Q2_text = `<b>Question 3:</b> There will be multiple blocks in this experiment, with questions in between each block. `;
+const Q2_answers = ["FALSE", "TRUE"];
+const Q3_text = `<b>Question 4:</b> The top 10% performers at the end of the task will receive:`;
+const Q3_answers = ["An additional monetary prize", "Extra course credit"];
+const correctstring = JSON.stringify({
   Q0: Q0_answers[0],
   Q1: Q1_answers[1],
   Q2: Q2_answers[1],
@@ -73,19 +85,19 @@ let correctstring = JSON.stringify({
 });
 
 // contingency check
-let Q0_cont_text = `<b>Question 1:</b> Which (pirate) ship leads to attacks?`;
-let Q0_cont_answers = ['Ship Type 1', 'Ship Type 2'];
-let Q1_cont_text = `<b>Question 2:</b> Which planet has been attracting pirate ships?`;
-let Q1_cont_answers = [`The ${pun_planet} planet (${planet_layout[0]} side)`, `The ${unpun_planet} planet (${planet_layout[1]} side)`];
-// let Q2_cont_text = `<b>Question 3:</b> Which ship has the "${pun_planet}" planet (${planet_layout[0]} side) been attracting?`;
-// let Q2_cont_answers = ['Ship Type 1', 'Ship Type 2'];
-// let Q3_cont_text = `<b>Question 4:</b> Which ship has the "${unpun_planet}" planet (${planet_layout[0]} side) been attracting?`;
-// let Q3_cont_answers = ['Ship Type 1', 'Ship Type 2'];
-let correctstring_cont = JSON.stringify({
+const Q0_cont_text = `<b>Question 1:</b> Which (pirate) ship leads to attacks?`;
+const Q0_cont_answers = ['Ship Type 1', 'Ship Type 2'];
+const Q1_cont_text = `<b>Question 2:</b> Which planet has been attracting pirate ships?`;
+const Q1_cont_answers = [`The ${pun_planet} planet (${planet_layout[0]} side)`, `The ${unpun_planet} planet (${planet_layout[1]} side)`];
+const Q2_cont_text = `<b>Question 3:</b> Which ship has the "${pun_planet}" planet (${planet_layout[0]} side) been attracting?`;
+const Q2_cont_answers = ['Ship Type 1', 'Ship Type 2'];
+const Q3_cont_text = `<b>Question 4:</b> Which ship has the "${unpun_planet}" planet (${planet_layout[0]} side) been attracting?`;
+const Q3_cont_answers = ['Ship Type 1', 'Ship Type 2'];
+const correctstring_cont = JSON.stringify({
   Q0: Q0_cont_answers[pun_ship - 1],
   Q1: Q1_cont_answers[0],
-  // Q2: Q2_cont_answers[pun_ship - 1],
-  // Q3: Q3_cont_answers[unpun_ship - 1]
+  Q2: Q2_cont_answers[pun_ship - 1],
+  Q3: Q3_cont_answers[unpun_ship - 1]
 });
 
 ins.phase2 = `
@@ -131,14 +143,25 @@ ins.pretrain1 = [
     <p>Please complete the experiment in ONE sitting in FULL SCREEN mode <b>on a computer or a tablet (not a phone).</b></p>`
 ];
 
-ins.debrief = [
-  `<p>Please confirm that you have read the debriefing questions below:</p>
+ins.debrief = `
+  <p>Please confirm that you have read the debriefing questions below:</p>
 
-    <p><b><i>What are the research questions?</i></b></p>
-    <p>Our behaviour changes in response to experienced rewards and losses. This study asks how behaviour and accompanying beliefs change when these outcomes have varying degrees of relationship to our behaviour. </p>
+  <p><b><i>What are the research questions?</i></b></p>
+  <p>Our behaviour changes in response to experienced rewards and losses. This study asks how behaviour and accompanying beliefs change when these outcomes have varying degrees of relationship to our behaviour.</p>
 
-    <!-- Remaining content follows the same pattern -->
+  <p><b><i>How does this study extend on previous research on this topic?</i></b></p>
+  <p>Existing research suggests that stronger relationships between behaviours and outcomes will influence behaviour more. For example, behaviours that earn immediate and regular rewards are more likely to be reinforced than behaviours with a weaker relationship to rewards. We extend this by examining how dependent these changes are on beliefs and personality traits.</p>
 
-    <p><b><i>Further reading:</i></b></p>
-    <p> Lovibond, P.F., & Shanks, D.R. (2002). The role of awareness in Pavlovian conditioning: Empirical evidence and theoretical implications. Journal of Experimental Psychology: Animal Behavior Processes, 28, 3. </p>`
-];
+  <p><b><i>What are some potential real-world implications of this research?</i></b></p>
+  <p>Understanding how beliefs develop with experience can help us better understand and predict adaptive/maladaptive decision-making. This understanding can lead to developing more effective strategies for improving learning and decision-making.</p>
+
+  <p><b><i>Describe a potential issue or limitation of the study (e.g., ethical, design etc.) or opportunities for future work that extends this study.</i></b></p>
+  <p>One potential issue is that participants might have prior experiences or beliefs affecting their performance in the task. Although the cover story aims to mitigate this, future studies should consider alternative ways to account for individual differences. Moreover, manipulating the cover story could serve as another way to investigate its impact on learning and decision-making processes.</p>
+
+  <p><b><i>Describe the study methodology (e.g., design, dependent/independent variables, stimulus presentation).</i></b></p>
+  <p>Participants are asked to interact with virtual objects called planets to earn reward points while avoiding penalties introduced by spaceships. By systematically varying the reinforcement schedules associated with certain actions, we examine the effects of these variations on behavioral patterns and belief formation.</p>
+
+  <p><b><i>Further Reading:</i></b></p>
+  <p>Shanks, D. R., & Lovibond, P. F. (2002). Associative Conditioning.
+ Annual Review of Neuroscience, 25(1), 39-71.</p>
+`;
