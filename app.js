@@ -31,7 +31,8 @@
 //----------------------------------------------------------------------------
 
 /**
- * Reworked function to export JSPsych data as a local JSON
+ * Saves JSPsych data as a local JSON file.
+ *
  * @param {Object|Array<Object>} outputData - Output data received from JSPsych
  */
 async function saveJsPsychData(outputData) {
@@ -42,11 +43,7 @@ async function saveJsPsychData(outputData) {
       : [outputData];
 
     // Convert the data structure to JSON format and add whitespace
-    let jsonData = JSON.stringify(processedOutput, null, 2);
-
-    // Perform double decoding of the JSON string
-    jsonData = JSON.parse(jsonData);
-    jsonData = JSON.stringify(jsonData, null, 2);
+    const jsonData = JSON.stringify(processedOutput, null, 2);
 
     // Construct a Blob object consisting of the JSON data
     const blob = new Blob([jsonData], { type: 'application/json' });
