@@ -15,11 +15,11 @@
 // Exports Jspsych data as a local JSON
 async function saveJsPsychDataAsJson(outputData) {
     try {
-    const jsonData = JSON.stringify(outputData);
-    const blob = new Blob([jsonData], {type: "application/json"});
-    saveAs(blob, "user_dataTEST.json");
-    } catch (error) {
-    console.error("An error occurred:", error);
+      const jsonData = btoa(JSON.stringify(outputData));
+      const blob = new Blob([jsonData], {type: "application/octet-stream"});
+      saveAs(blob, "user_dataTEST.json");
+      } catch (error) {
+      console.error("An error occurred:", error);
     }
     }
     
@@ -462,13 +462,13 @@ function loadInstructionsFromFile(callback) {
       var block6loop = []
     
     
-    // //force full screen
-    //   timeline.push(
-    //     {
-    //       type: 'fullscreen',
-    //       fullscreen_mode: true
-    //     }
-    //   );
+    //force full screen
+      timeline.push(
+        {
+          type: 'fullscreen',
+          fullscreen_mode: true
+        }
+      );
     
     
     '<img src= "./img/logo.png"></img>' +
@@ -485,7 +485,7 @@ function loadInstructionsFromFile(callback) {
           phase: 'consent'
         },
         }
-        // timeline.push(consent_block);
+        timeline.push(consent_block);
     
       // demographics
       var demographics_block = {
@@ -496,7 +496,7 @@ function loadInstructionsFromFile(callback) {
           phase: 'demographics'
         }
       };
-      //timeline.push(demographics_block);
+      timeline.push(demographics_block);
     
       // ----- questionnaires ----- 
       var cfi_catch_flag = false;
@@ -513,7 +513,7 @@ function loadInstructionsFromFile(callback) {
           phase: 'instructions'
         }
         };
-      //timeline.push(preques_ins_block); 
+      timeline.push(preques_ins_block); 
     
       // CFI
       var cfi_block = {
@@ -542,7 +542,7 @@ function loadInstructionsFromFile(callback) {
           console.log(cfi_catch_flag); //can delete afterwards
         }
       };
-      //timeline.push(cfi_block);
+      timeline.push(cfi_block);
     
       // HTQ
       var htq_block = {
@@ -557,7 +557,7 @@ function loadInstructionsFromFile(callback) {
           phase: 'ques_htq'
         }
       };
-      //timeline.push(htq_block);
+      timeline.push(htq_block);
     
       // AUDIT
       var audit_block = {
@@ -590,7 +590,7 @@ function loadInstructionsFromFile(callback) {
           console.log(catchcorrect); //can delete afterwards
         }
       };
-      //timeline.push(audit_block);
+      timeline.push(audit_block);
     
       // questionnaires end ----
     
@@ -639,7 +639,7 @@ function loadInstructionsFromFile(callback) {
         }
       }
       
-      //timeline.push(conditional_splash_catch);
+      timeline.push(conditional_splash_catch);
     
       // ----------*instruction phase*-----------
       //----------------------------------------------------------------------------
@@ -878,11 +878,11 @@ var gen_ins_block = {
         }
       };
     
-            //timeline.push(valence_p1);
-        // 	timeline.push(infer_p1_A);
-        // 	timeline.push(infer_p1_B);
-      // timeline.push(slider_p1_q1);
-      // timeline.push(slider_p1_q2);
+      //timeline.push(valence_p1);
+      timeline.push(infer_p1_A);
+      //timeline.push(infer_p1_B);
+      //timeline.push(slider_p1_q1);
+      //timeline.push(slider_p1_q2);
         
         }
     
@@ -1392,8 +1392,8 @@ var gen_ins_block = {
         // 	timeline.push(infer_p2_B);
         // 	timeline.push(infer_p2_ship1);
         // 	timeline.push(infer_p2_ship2);
-        // timeline.push(slider_p2_q1);
-        // timeline.push(slider_p2_q2);
+        //timeline.push(slider_p2_q1);
+        //timeline.push(slider_p2_q2);
         }
     }
     
