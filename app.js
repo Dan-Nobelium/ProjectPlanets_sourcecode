@@ -3,8 +3,8 @@
 // Import JS files
 //----------------------------------------------------------------------------
 
-import { demoText } from './instructions.js';
-console.log(demoText);
+// import * as ins from './instructions.js';
+// console.log(ins.getIns.ins.preques);
 
 //----------------------------------------------------------------------------
 // Functions
@@ -158,8 +158,7 @@ async function saveJsPsychData(outputData) {
     
   //----------------------------------------------------------------------------
   /* instructions text */
-
-  consent_text = [
+  let consent_text = [
     '<img src= "./img/logo.png"></img>' +
       '<p>Welcome to the experiment!</p>' +
       '<p>Before you begin, please read the information sheet carefully.</p>' +
@@ -170,7 +169,7 @@ async function saveJsPsychData(outputData) {
       '<br></p>'
     ];
   
-    demo_text = [
+    let demo_text = [
       '<p> Gender: ' +
       '<input type="radio" name="gender" value="male" required/> Male &nbsp; ' +
       '<input type="radio" name="gender" value="female" required/> Female &nbsp;' +
@@ -188,35 +187,6 @@ async function saveJsPsychData(outputData) {
     } else {
       var ProA_insert = '';
     }
-  
-    var ins = {};
-  
-    ins.preques = [
-      '<p>WELCOME TO THE EXPERIMENT!</p>' +
-      '<p>To ensure high-quality data and minimise fatigue, we ask that you make a concerted effort to complete the study <b>within 45 minutes </b>. Please keep in mind that those who take significantly longer may be timed out and they may not be eligible to complete the remainder of the study. </p>' +
-      '<p>Before commencing the game, we will ask you a couple of questions about yourself. Please read each item carefully and answer as accurately as possible. This would take 5-10 minutes to complete. </p>'
-    ];
-    
-    ins.pretrain1 = [
-      '<p>EXPERIMENT PHASE BEGINS</p>' +
-      '<p>Throughout the experiment, please <b>read all instructions carefully</b> and click on the buttons to go forward or back. You may need to scroll down on some pages. </p>' +
-      ProA_insert +
-      '<p>Please complete the experiment in ONE sitting in FULL SCREEN mode <b>on a computer or a tablet (not a phone).</b></p>'
-    ];
-  
-    ins.pretrain2 = [
-      '<p>In this experiment you will be playing a game over 6 blocks. </p>' +
-      '<p>In this game, you are an intergalactic trader in space. You will be situated between two planets that you can trade with. You can send a signal to each planet by clicking on them. Sometimes locals on these planets will receive the signal and be willing to trade. Each successful trade will give you points. </p>' +
-      '<p><b>Your goal is to gain as many points as possible. </b></p>'
-      // '<p><b>Note:</b> Whatever you earn in-game will be converted into real money for you at the end of the experiment. The more you earn in-game, the more you make in real life. You can earn more points by trading with both planets. </p>'
-    ];
-  
-    ins.pretrain3 = [
-      '<p>You can click on each of the planets as many times as you like. Just remember, the aim is to get as many points as possible! </p>' +
-      '<p>There are multiple blocks in this experiment. Between each block we will ask you some questions about each of the game elements. </p>' +
-      '<p>Please do your best to engage in the task and answer all questions to the best of your ability. </p>' +
-      '<p><b>There will be monetary prizes for participants with high scores (top 10% of the cohort) and <i>timely</i> answers </b>, so try do your best! </p>'
-    ];
   
     // instruction check
     var Q0_text = "<b>Question 1:</b> The aim of the task is to:";
@@ -247,6 +217,39 @@ async function saveJsPsychData(outputData) {
       // '","Q2":"' + Q1_cont_answers[parseInt(pun_ship-1)] +
       // '","Q3":"' + Q2_cont_answers[parseInt(unpun_ship-1)] +
       '"}';
+
+
+      
+    var ins = {};
+  
+    ins.preques = [
+      '<p>WELCOME TO THE EXPERIMENT!</p>' +
+      '<p>To ensure high-quality data and minimise fatigue, we ask that you make a concerted effort to complete the study <b>within 45 minutes </b>. Please keep in mind that those who take significantly longer may be timed out and they may not be eligible to complete the remainder of the study. </p>' +
+      '<p>Before commencing the game, we will ask you a couple of questions about yourself. Please read each item carefully and answer as accurately as possible. This would take 5-10 minutes to complete. </p>'
+    ];
+    
+    ins.pretrain1 = [
+      '<p>EXPERIMENT PHASE BEGINS</p>' +
+      '<p>Throughout the experiment, please <b>read all instructions carefully</b> and click on the buttons to go forward or back. You may need to scroll down on some pages. </p>' +
+      ProA_insert +
+      '<p>Please complete the experiment in ONE sitting in FULL SCREEN mode <b>on a computer or a tablet (not a phone).</b></p>'
+    ];
+  
+    ins.pretrain2 = [
+      '<p>In this experiment you will be playing a game over 6 blocks. </p>' +
+      '<p>In this game, you are an intergalactic trader in space. You will be situated between two planets that you can trade with. You can send a signal to each planet by clicking on them. Sometimes locals on these planets will receive the signal and be willing to trade. Each successful trade will give you points. </p>' +
+      '<p><b>Your goal is to gain as many points as possible. </b></p>'
+      // '<p><b>Note:</b> Whatever you earn in-game will be converted into real money for you at the end of the experiment. The more you earn in-game, the more you make in real life. You can earn more points by trading with both planets. </p>'
+    ];
+  
+    ins.pretrain3 = [
+      '<p>You can click on each of the planets as many times as you like. Just remember, the aim is to get as many points as possible! </p>' +
+      '<p>There are multiple blocks in this experiment. Between each block we will ask you some questions about each of the game elements. </p>' +
+      '<p>Please do your best to engage in the task and answer all questions to the best of your ability. </p>' +
+      '<p><b>There will be monetary prizes for participants with high scores (top 10% of the cohort) and <i>timely</i> answers </b>, so try do your best! </p>'
+    ];
+  
+
   
     ins.phase2 = [
       '<p>There have been reports of local pirates stealing from trading ships. Watch out! </p>' +
@@ -566,7 +569,7 @@ async function saveJsPsychData(outputData) {
           phase: 'consent'
         },
         }
-        //timeline.push(consent_block);
+        timeline.push(consent_block);
     
       // demographics
       var demographics_block = {
