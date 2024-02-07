@@ -3,31 +3,8 @@
 // Import JS files
 //----------------------------------------------------------------------------
 
-import { demoText } from './instruct.js';
+import { demoText } from './instructions.js';
 console.log(demoText);
-
-// app.js
-// import * as instructions from './instructions.js';
-// console.log(instructions);
-
-
-// const rawJsonStr = jsPsych.data.get().json();
-// const rawJson = Array.isArray(rawJsonStr) ? rawJsonStr : JSON.parse(rawJsonStr);
-
-// if (!Array.isArray(rawJson)) throw Error('Expected an array in JSON format.');
-
-// const jsonBlob = new Blob([JSON.stringify(rawJson, null, 2)], {
-//   type: 'application/json',
-// });
-
-// const url = window.URL.createObjectURL(jsonBlob);
-// const fileName = 'output.json';
-// const linkElement = document.createElement('a');
-// linkElement.setAttribute('href', url);
-// linkElement.setAttribute('download', fileName);
-// document.body.appendChild(linkElement);
-// linkElement.click();
-// document.body.removeChild(linkElement);
 
 //----------------------------------------------------------------------------
 // Functions
