@@ -51,33 +51,106 @@ async function saveJsPsychData(outputData) {
   }
 
 }
+// Survey handling functions
 
-// Utility function to generate a survey-likert block based on the passed config
-function generateSurveyLikert(config) {
+// Generic Likert survey data generator
+function generateGenericSurvey({ name, prompt, items, labels, catchQuestion, catchLabelIndex }) {
   return {
     type: 'survey-likert',
-    preamble: config.prompt,
-    questions: config.items.map((item, index) => ({
+    preamble: prompt,
+    questions: items.map((item, index) => ({
       prompt: item,
-      name: `item${index + 1}`,
-      labels: config.labels,
+      name: `${name}${index + 1}`,
+      labels: labels,
       required: true,
     })),
     scale_width: inf_slider_width,
     post_trial_gap: iti,
     data: {
-      phase: `ques_${config.identifier}`,
-    },
-    on_finish: function(data) {
-      if (config.hasOwnProperty('catch')) {
-        cfi_catch_flag = data.responses[config.catch] !== 0;
-      }
-      console.log(`${config.identifier}_catch_flag: ${cfi_catch_flag}`);
+      phase: `ques_${name}`,
     },
   };
 }
 
-//     showDemoPage()
+// Function for catch question logic
+function handleCatchLogic({ name, labelTypes, responses, catchQuestion }) {
+  const { labelTypes: updatedLabelTypes, responses: updatedResponses } = updateArrays({ labelTypes, responses });
+
+  if (!updatedResponses[catchQuestion]) {
+    throw Error(`No response found for the catch item (${catchQuestion}) in ${name}`);
+  }
+
+  const caughtItemIndex = updatedLabelTypes.findIndex((x) => x === catchQuestion);
+  const actualValue = parseInt(updatedResponses[catchQuestion]);
+  const expectedValue = caughtItemIndex + 1;
+
+  eval(`${name}_catch_flag = actualValue !== expectedValue;`);
+  console.log(`${name}_catch_flag: ${eval(`${name}_catch_flag`)}`);
+}
+
+// Utility function to update arrays when checking for catch questions
+function updateArrays({ labelTypes, responses }) {
+  const updatedLabelTypes = [...labelTypes];
+  const updatedResponses = [...responses];
+
+  if (updatedLabelTypes.length > updatedResponses.length || updatedResponses.length > updatedLabelTypes.length) {
+    const maxLength = Math.max(updatedLabelTypes.length, updatedResponses.length);
+
+    for (let i = 0; i < maxLength; i++) {
+      if (typeof updatedLabelTypes[i] === 'undefined') {
+        updatedLabelTypes[i] = '';
+      }
+
+      if (typeof updatedResponses[i] === 'undefined') {
+        updatedResponses[i] = '';
+      }
+    }
+  }
+
+  return { labelTypes: updatedLabelTypes, responses: updatedResponses };
+}
+
+// Exit page and catch logic handling function
+function handleExitOrSplashScreen(flags, name) {
+  // Define exit page
+  const exit_page = {
+    type: 'html-button-response',
+    choices: ['Click here to exit the experiment'],
+    stimulus: '<center>Your response has been recorded. Unfortunately, you do not meet the inclusion criteria for this study. We thank you for your interest in participating in the experiment.</center>',
+    on_finish: function (data) {
+      jsPsych.endExperiment('The experiment ends. You may exit by closing the window.');
+    },
+  };
+
+  // Failed URL and message
+  const failedUrl = 'https://app.prolific.co/submissions/complete?cc=C5D763KX';
+  const failedAttCheckMsg = 'The experiment ends here.<p>Click <a href="' + failedUrl + '">here</a> to be returned to Prolific.</p>';
+
+  // Splash screen for catch questions
+  const showsplash_c = true;
+  const splash_screen_catch = {
+    type: 'html-button-response',
+    choices: ['Click here to exit the experiment'],
+    stimulus: '<center>Your response has been recorded. Unfortunatly, you do not meet the inclusion criteria for this study. We thank you for your interest in participating in the experiment.</center>',
+    on_finish: function (data) {
+      // Save the jsPsych data as a JSON object
+      const resultFailedAttCheck = jsPsych.data.get().json();
+      // submitJsPsychData(resultFailedAttCheck);
+
+      // Call the saveJsPsychData() function with the resultFailedAttCheck object
+      saveJsPsychData(resultFailedAttCheck);
+    },
+  };
+
+  // Display the splash screen only if the flags indicate an unsuccessful attempt
+  if (flags[name] === true && !flags['catchcorrect']) {
+    return [{
+      timeline: [splash_screen_catch],
+    }];
+  }
+  return [];
+}
+
     //load JATOS libraries
     //<script src="/assets/javascripts/jatos.js"></ script>
     
@@ -595,151 +668,96 @@ function generateSurveyLikert(config) {
       };
       timeline.push(demographics_block);
     
-      
-  // ----- questionnaires ----- 
-  var cfi_catch_flag = false;
-  var audit_catch_flag = false;
-  var catchcorrect = false;
+      // ----- Questionnaires -----
 
-  var preques_ins_block = {
-    type: 'instructions',
-    pages: [ins.preques],
-      allow_keys: false,
-      show_clickable_nav: true,
-      post_trial_gap: iti,
-      data: {
-      phase: 'instructions'
-    }
-    };
-  timeline.push(preques_ins_block); 
+// Initialize flags
+let cfi_passFlag = false;
+let htq_passFlag = false;
+let audit_passFlag = false;
+let catchcorrect = false;
 
-// Create the CFI block using the utility function and push it to the timeline
-var cfi_block = generateSurveyLikert({
+// Instructions block
+const preques_ins_block = {
+  type: 'instructions',
+  pages: [ins.preques],
+  allow_keys: false,
+  show_clickable_nav: true,
+  post_trial_gap: iti,
+  data: {
+    phase: 'instructions'
+  }
+};
+timeline.push(preques_ins_block);
+
+// Create CFI block
+const cfi_block = generateGenericSurvey({
   identifier: 'cfi',
   prompt: cfi.prompt,
   items: cfi.items,
   labels: cfi.labels,
-  catch: 6,
+  catchQuestion: 6,
+  catchLabelIndex: 6,
 });
 timeline.push(cfi_block);
 
-  // HTQ
-  var htq_block = {
-  type: 'survey-likert',
-  preamble: htq.prompt,
-  questions: [
-    {prompt: htq.items[0], name: 'item1', labels: htq.labels, required: true},
-    {prompt: htq.items[1], name: 'item2', labels: htq.labels, required: true},
-    {prompt: htq.items[2], name: 'item3', labels: htq.labels, required: true},
-    {prompt: htq.items[3], name: 'item4', labels: htq.labels, required: true},
-    {prompt: htq.items[4], name: 'item5', labels: htq.labels, required: true},
-    {prompt: htq.items[5], name: 'item6', labels: htq.labels, required: true},
-    {prompt: htq.items[6], name: 'item7', labels: htq.labels, required: true},
-    {prompt: htq.items[7], name: 'item8', labels: htq.labels, required: true},
-    {prompt: htq.items[8], name: 'item9', labels: htq.labels, required: true},
-    {prompt: htq.items[9], name: 'item10', labels: htq.labels, required: true},
-    {prompt: htq.items[10], name: 'item11', labels: htq.labels, required: true}
-    ],
-    scale_width: inf_slider_width,
-    post_trial_gap: iti,
-    data: {
-      phase: 'ques_htq'
-    }
-  };
-  timeline.push(htq_block);
+// Attach catch logic after creating the cfi_block
+handleCatchLogic({
+  name: 'cfi',
+  labelTypes: cfi.labels,
+  responses: cfi_block.questions[6].choices,
+  catchQuestion: 6,
+});
 
-  // AUDIT
-  var audit_block = {
-  type: 'survey-likert',
-  preamble: audit.prompt,
-  questions: [
-    {prompt: audit.items[0], name: 'item1', labels: audit.labels1, required: true},
-    {prompt: audit.items[1], name: 'item2', labels: audit.labels2, required: true},
-    {prompt: audit.items[2], name: 'item3', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[3], name: 'item4', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[4], name: 'item5', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[5], name: 'item6', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[6], name: 'catch', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[7], name: 'item7', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[8], name: 'item8', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[9], name: 'item9', labels: audit.labels10_11, required: true},
-    {prompt: audit.items[10], name: 'item10', labels: audit.labels10_11, required: true}
-    ],
-    scale_width: inf_slider_width,
-    post_trial_gap: iti,
-    data: {
-      phase: 'ques_audit'
-    },
-    on_finish: function(data) {
-      console.log(data.responses); //can delete afterwards
-      var obj_audit = JSON.parse(data.responses);
-      console.log(obj_audit); //can delete afterwards
-      console.log(obj_audit.catch); //can delete afterwards
-      if(obj_audit.catch !== 3) {
-        audit_catch_flag = true;
-      }
-      else if (obj_audit.catch == 3) {
-        audit_catch_flag = false;
-      };
-      console.log(audit_catch_flag); //can delete afterwards
-      if ((cfi_catch_flag == false) && (audit_catch_flag == false)) {
-        action = false;
-        catchcorrect = true;
-      };
-      console.log(catchcorrect); //can delete afterwards
-    }
-  };
-  timeline.push(audit_block);
+// Set flag for CFI passing
+cfi_passFlag = !(cfi_catch_flag);
 
-  // questionnaires end ----
+// Create HTQ block
+const htq_block = generateGenericSurvey({
+  identifier: 'htq',
+  prompt: htq.prompt,
+  items: htq.items.slice(0, 11),
+  labels: htq.labels,
+});
+timeline.push(htq_block);
 
-    
-      // Define exit page
-      var exit_page = {
-        type: 'html-button-response',
-        choices:['Click here to exit the experiment'],
-        stimulus: '<center>Your response has been recorded. Unfortunately, you do not meet the inclusion criteria for this study. We thank you for your interest in participating in the experiment.</center>',
-        on_finish: function(daa) {
-          jsPsych.endExperiment('The experiment ends. You may exit by closing the window.');
-        }
-      }
-      if ((cfi_catch_flag == true && audit_catch_flag == true) || (cfi_catch_flag == true) || (audit_catch_flag == true)) {
-        timeline.push(exit_page);
-      }
-    
-    
-      // NEW: catch Qs - define a page for incorrect responses
-      var failed_url = 'https://app.prolific.co/submissions/complete?cc=C5D763KX';
-      var failedAttCheck_msg = 'The experiment ends here. <p>Click <a href="' + failed_url + '">here</a> to be returned to Prolific.</p>';
-      
-      var showsplash_c = true; 
-      var splash_screen_catch = {
-        type: 'html-button-response',
-        choices:['Click here to exit the experiment'],
-        stimulus: '<center>Your response has been recorded. Unfortunatly, you do not meet the inclusion criteria for this study. We thank you for your interest in participating in the experiment.</center>',
-        on_finish: function(data) {
-              // Obtain the jsPsych data as an object
-            var resultFailedAttCheck = jsPsych.data.get().json();
-        //     jatos.submitResultData(resultFailedAttCheck, function() {
-        //       document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p><br><br><br>' +
-        //       failedAttCheck_msg +
-        //       '</p></div></div>')
-        // });
-    
-        // Call the saveJsPsychData() function with the resultFailedAttCheck object
-        saveJsPsychData(resultFailedAttCheck);
-    
-      }}
-      
-      // NEW:push it to a conditional code that only shows splash screen if one or more of the responses was wrong
-      var conditional_splash_catch = {
-        timeline: [splash_screen_catch],
-        conditional_function: function(data) {
-          return !catchcorrect //skip if correct
-        }
-      }
-      
-      timeline.push(conditional_splash_catch);
+// Set flag for HTQ passing
+htq_passFlag = !(htq_catch_flag);
+
+// Create Audit block
+const audit_block = generateGenericSurvey({
+  identifier: 'audit',
+  prompt: audit.prompt,
+  items: audit.items,
+  labels: audit.labels,
+  catchQuestion: 6,
+  catchLabelIndex: 6,
+});
+timeline.push(audit_block);
+
+// Attach catch logic after creating the audit_block
+handleCatchLogic({
+  name: 'audit',
+  labelTypes: audit.labels,
+  responses: audit_block.questions[6].choices,
+  catchQuestion: 6,
+});
+
+// Set flag for Audit passing
+audit_passFlag = !(audit_catch_flag);
+
+// Log flags
+console.log("cfi_passFlag: ", cfi_passFlag);
+console.log("htq_passFlag: ", htq_passFlag);
+console.log("audit_passFlag: ", audit_passFlag);
+
+// Check combined status and attach splash screen
+const combinedFlags = {
+  cfi: cfi_passFlag,
+  audit: audit_passFlag
+};
+
+const conditionalNodes = handleExitOrSplashScreen([combinedFlags, 'catchcorrect']);
+timeline.concat(conditionalNodes);
     
       // ----------*instruction phase*-----------
       //----------------------------------------------------------------------------
