@@ -52,33 +52,6 @@ async function saveJsPsychData(outputData) {
 
 }
 
-// Helper function to generate Likert scales
-function likertGenerator({ identifier, prompt, items, labels, catchQuestion, catchLabelIndex }) {
-  return {
-    type: 'survey-likert',
-    preamble: prompt,
-    questions: items.map((item, index) => ({
-      prompt: item,
-      name: `${identifier}${index + 1}`,
-      labels: labels,
-      required: true,
-    })),
-    scale_width: inf_slider_width,
-    post_trial_gap: iti,
-    data: {
-      phase: `${identifier}_ques`,
-    },
-    on_finish: function(data) {
-      const responsesObj = JSON.parse(data.responses);
-      if (responsesObj[catchQuestion] !== catchLabelIndex) {
-        window[`${identifier}_catch_flag`] = true;
-      } else {
-        window[`${identifier}_catch_flag`] = false;
-      }
-      console.log(`${identifier}_catch_flag: ${window[`${identifier}_catch_flag`]}`);
-    }
-  };
-}
 
     //load JATOS libraries
     //<script src="/assets/javascripts/jatos.js"></ script>
@@ -614,6 +587,27 @@ function likertGenerator({ identifier, prompt, items, labels, catchQuestion, cat
     }
     };
   timeline.push(preques_ins_block); 
+
+
+// Helper function to generate Likert scales
+function likertGenerator({ identifier, prompt, items, labels, catchQuestion, catchLabelIndex }) {
+  return {
+    type: 'survey-likert',
+    preamble: prompt,
+    questions: items.map((item, index) => ({
+      prompt: item,
+      name: `${identifier}${index + 1}`,
+      labels: labels,
+      required: true,
+    })),
+    scale_width: inf_slider_width,
+    post_trial_gap: iti,
+    data: {
+      phase: `${identifier}_ques`,
+    },
+
+  };
+}
 
 // CFI
 const cfiConfig = {
