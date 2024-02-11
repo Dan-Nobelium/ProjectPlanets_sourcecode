@@ -52,6 +52,33 @@ async function saveJsPsychData(outputData) {
 
 }
 
+// Helper function to generate Likert scales
+function likertGenerator({ identifier, prompt, items, labels, catchQuestion, catchLabelIndex }) {
+  return {
+    type: 'survey-likert',
+    preamble: prompt,
+    questions: items.map((item, index) => ({
+      prompt: item,
+      name: `${identifier}${index + 1}`,
+      labels: labels,
+      required: true,
+    })),
+    scale_width: inf_slider_width,
+    post_trial_gap: iti,
+    data: {
+      phase: `${identifier}_ques`,
+    },
+    on_finish: function(data) {
+      const responsesObj = JSON.parse(data.responses);
+      if (responsesObj[catchQuestion] !== catchLabelIndex) {
+        window[`${identifier}_catch_flag`] = true;
+      } else {
+        window[`${identifier}_catch_flag`] = false;
+      }
+      console.log(`${identifier}_catch_flag: ${window[`${identifier}_catch_flag`]}`);
+    }
+  };
+}
 
     //load JATOS libraries
     //<script src="/assets/javascripts/jatos.js"></ script>
@@ -588,78 +615,28 @@ async function saveJsPsychData(outputData) {
     };
   timeline.push(preques_ins_block); 
 
-  // CFI
-  var cfi_block = {
-  type: 'survey-likert',
-  preamble: cfi.prompt,
-  questions: [
-    {prompt: cfi.items[0], name: 'item1', labels: cfi.labels, required: true},
-    {prompt: cfi.items[1], name: 'item2', labels: cfi.labels, required: true},
-    {prompt: cfi.items[2], name: 'item3', labels: cfi.labels, required: true},
-    {prompt: cfi.items[3], name: 'item4', labels: cfi.labels, required: true},
-    {prompt: cfi.items[4], name: 'item5', labels: cfi.labels, required: true},
-    {prompt: cfi.items[5], name: 'item6', labels: cfi.labels, required: true},
-    {prompt: cfi.items[6], name: 'catch', labels: cfi.labels, required: true},
-    {prompt: cfi.items[7], name: 'item7', labels: cfi.labels, required: true},
-    {prompt: cfi.items[8], name: 'item8', labels: cfi.labels, required: true},
-    {prompt: cfi.items[9], name: 'item9', labels: cfi.labels, required: true},
-    {prompt: cfi.items[10], name: 'item10', labels: cfi.labels, required: true},
-    {prompt: cfi.items[11], name: 'item11', labels: cfi.labels, required: true},
-    {prompt: cfi.items[12], name: 'item12', labels: cfi.labels, required: true},
-    {prompt: cfi.items[13], name: 'item13', labels: cfi.labels, required: true},
-    {prompt: cfi.items[14], name: 'item14', labels: cfi.labels, required: true},
-    {prompt: cfi.items[15], name: 'item15', labels: cfi.labels, required: true},
-    {prompt: cfi.items[16], name: 'item16', labels: cfi.labels, required: true},
-    {prompt: cfi.items[17], name: 'item17', labels: cfi.labels, required: true},
-    {prompt: cfi.items[18], name: 'item18', labels: cfi.labels, required: true},
-    {prompt: cfi.items[19], name: 'item19', labels: cfi.labels, required: true},
-    {prompt: cfi.items[20], name: 'item20', labels: cfi.labels, required: true}
-    ],
-    scale_width: inf_slider_width,
-    post_trial_gap: iti,
-    data: {
-      phase: 'ques_cfi'
-    },
-    on_finish: function(data) {
-      console.log(data.responses); //can delete afterwards
-      var obj_cfi = JSON.parse(data.responses);
-      console.log(obj_cfi); //can delete afterwards
-      console.log(obj_cfi.catch); //can delete afterwards
-      if(obj_cfi.catch !== 0) {
-        cfi_catch_flag = true;
-      }
-      else if (obj_cfi.catch == 0) {
-        cfi_catch_flag = false;
-      };
-      console.log(cfi_catch_flag); //can delete afterwards
-    }
-  };
-  timeline.push(cfi_block);
+// CFI
+const cfiConfig = {
+  identifier: 'cfi',
+  prompt: cfi.prompt,
+  items: cfi.items,
+  labels: cfi.labels,
+  catchQuestion: 6,
+  catchLabelIndex: 6,
+};
+const cfi_block = likertGenerator(cfiConfig);
+timeline.push(cfi_block);
 
-  // HTQ
-  var htq_block = {
-  type: 'survey-likert',
-  preamble: htq.prompt,
-  questions: [
-    {prompt: htq.items[0], name: 'item1', labels: htq.labels, required: true},
-    {prompt: htq.items[1], name: 'item2', labels: htq.labels, required: true},
-    {prompt: htq.items[2], name: 'item3', labels: htq.labels, required: true},
-    {prompt: htq.items[3], name: 'item4', labels: htq.labels, required: true},
-    {prompt: htq.items[4], name: 'item5', labels: htq.labels, required: true},
-    {prompt: htq.items[5], name: 'item6', labels: htq.labels, required: true},
-    {prompt: htq.items[6], name: 'item7', labels: htq.labels, required: true},
-    {prompt: htq.items[7], name: 'item8', labels: htq.labels, required: true},
-    {prompt: htq.items[8], name: 'item9', labels: htq.labels, required: true},
-    {prompt: htq.items[9], name: 'item10', labels: htq.labels, required: true},
-    {prompt: htq.items[10], name: 'item11', labels: htq.labels, required: true}
-    ],
-    scale_width: inf_slider_width,
-    post_trial_gap: iti,
-    data: {
-      phase: 'ques_htq'
-    }
-  };
-  timeline.push(htq_block);
+
+// HTQ
+const htqConfig = {
+  identifier: 'htq',
+  prompt: htq.prompt,
+  items: htq.items,
+  labels: htq.labels,
+};
+const htq_block = likertGenerator(htqConfig);
+timeline.push(htq_block);
 
   // AUDIT
   var audit_block = {
