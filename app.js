@@ -52,19 +52,7 @@ async function saveJsPsychData(outputData) {
 
 }
 
-// function showDemoPage() {
-//   const divContainer = document.getElementById('content');
-//   divContainer.innerHTML = demoText;
-//   }
-  
-//   window.onload = () => {
-//   setTimeout(() => {
-//   showInstructionPage();
-//   hideLoadingScreen();
-//   }, 500);
-//   };
 
-//     showDemoPage()
     //load JATOS libraries
     //<script src="/assets/javascripts/jatos.js"></ script>
     
