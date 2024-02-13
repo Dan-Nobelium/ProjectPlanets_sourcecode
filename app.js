@@ -3,14 +3,6 @@
 // Import JS files
 //----------------------------------------------------------------------------
 
-// Import the variable
-import helloWorld from './instructions.js';
-
-// Print the imported variable
-console.log(helloWorld);
-
-// import * as ins from './instructions.js';
-// console.log(ins.getIns.ins.preques);
 
 //----------------------------------------------------------------------------
 // Functions
@@ -57,8 +49,6 @@ async function saveJsPsychData(outputData) {
   }
 
 }
-
-
 
 
     //load JATOS libraries
@@ -155,17 +145,15 @@ async function saveJsPsychData(outputData) {
   //----------------------------------------------------------------------------
   /* instructions text */
   let consent_text = [
-    '<img src="./img/logo.png"/>' +
-    '<p>Welcome to the experiment!</p>' +
-    '<p>Before you begin, please read the information sheet carefully.</p>' +
-    '  ' +
-    '<p><b>PARTICIPANT INFORMATION STATEMENT AND CONSENT</b></p>' +
-    '<img src="./data/consent/PIS_SONA_.1.jpg" alt="Page 1" width="800"/>' +
-    '<img src="./data/consent/PIS_SONA_.2.jpg" alt="Page 2" width="800"/>' +
-    '<img src="./data/consent/PIS_SONA_.3.jpg" alt="Page 3" width="800"/>' +
-    '<img src="./data/consent/PIS_SONA_.4.jpg" alt="Page 4" width="800"/>' +
-    '<p>By continuing, you are making a decision whether or not to participate. Clicking the button below indicates that, having read the information provided on the participant information statement and consent, you consent to the above.  </p>'
-  ];
+    '<img src= "./img/logo.png"></img>' +
+      '<p>Welcome to the experiment!</p>' +
+      '<p>Before you begin, please read the information sheet carefully.</p>' +
+      '<br>' +
+      '<p><b>PARTICIPANT INFORMATION STATEMENT AND CONSENT</b></p>' +
+        '<embed src="data/consent/PIS_SONA_3385.pdf" width="800px" height="2100px" />' +
+      '<p>By continuing, you are making a decision whether or not to participate. Clicking the button below indicates that, having read the information provided on the participant information sheet, you consent to the above.' +
+      '<br></p>'
+    ];
   
     let demo_text = [
       '<p> Gender: ' +
