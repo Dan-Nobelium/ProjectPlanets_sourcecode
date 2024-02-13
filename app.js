@@ -82,8 +82,12 @@ async function saveJsPsychData(outputData) {
       let pun_planet_side = "" + jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1) + "";
     
       // Stimulus List Initialization
-      const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/planet3.png'], 1);
-      const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png','img/ship3.png'], 1);
+      const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png'], 1);
+      const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png'], 1);
+
+      // // Stimulus List Initialization
+      // const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/planet3.png'], 1);
+      // const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png','img/ship3.png'], 1);
     
       // Contingency Instructions Screen Setup
       const pun_planet = stim_list[pun_planet_side].substring(4).slice(0, -5);
