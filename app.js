@@ -143,26 +143,6 @@ async function saveJsPsychData(outputData) {
     
   //----------------------------------------------------------------------------
   /* instructions text */
-  // let consent_text = [
-  //   '<img src= "./img/logo.png"></img>' +
-  //     '<p>Welcome to the experiment!</p>' +
-  //     '<p>Before you begin, please read the information sheet carefully.</p>' +
-  //     '<br>' +
-  //     '<p><b>PARTICIPANT INFORMATION STATEMENT AND CONSENT</b></p>' +
-  //       '<embed src="data/consent/PIS_SONA_3385.pdf" width="800px" height="2100px" />' +
-  //     '<p>By continuing, you are making a decision whether or not to participate. Clicking the button below indicates that, having read the information provided on the participant information sheet, you consent to the above.' +
-  //     '<br></p>'
-  //   ];
-  
-    // let demo_text = [
-    //   '<p> Gender: ' +
-    //   '<input type="radio" name="gender" value="male" required/> Male &nbsp; ' +
-    //   '<input type="radio" name="gender" value="female" required/> Female &nbsp;' +
-    //   '<input type="radio" name="gender" value="other" required/> Other<br>' + '<br>' +
-    //   '<p> Age: <input name="age" type="text" required/> </p>' + '<br>' +
-    //   '<p> Native language: <input name="language" type="text" required/> </p>' + '<br>'
-    // ];
-    
   
     if (sample === "ProA") {
       var ProA_insert = [
@@ -279,27 +259,27 @@ async function saveJsPsychData(outputData) {
       '<img src=' + 'img/blank_lose.jpg' + ' height="100"></p>'
     ];
   
-    ins.debrief = [
-      '<p>Please confirm that you have read the debriefing questions below: </p>' +
+    // ins.debrief = [
+    //   '<p>Please confirm that you have read the debriefing questions below: </p>' +
   
-      '<p><b><i>What are the research questions?</i></b></p>' + 
-      '<p>Our behaviour changes in response to experienced rewards and losses. This study asks how behaviour and accompanying beliefs change when these outcomes have varying degrees of relationship to our behaviour. </p>' +
+    //   '<p><b><i>What are the research questions?</i></b></p>' + 
+    //   '<p>Our behaviour changes in response to experienced rewards and losses. This study asks how behaviour and accompanying beliefs change when these outcomes have varying degrees of relationship to our behaviour. </p>' +
   
-      '<p><b><i>How does this study extend on previous research on this topic?</i></b></p>' +
-      '<p>Existing research suggests that stronger relationships between behaviours and outcomes will influence behaviour more. For example, behaviours that earn immediate and regular rewards are more likely to be reinforced than behaviours with a weaker relationship to rewards. We extend this by examining how dependent these changes are on beliefs and personality traits. </p>' +
+    //   '<p><b><i>How does this study extend on previous research on this topic?</i></b></p>' +
+    //   '<p>Existing research suggests that stronger relationships between behaviours and outcomes will influence behaviour more. For example, behaviours that earn immediate and regular rewards are more likely to be reinforced than behaviours with a weaker relationship to rewards. We extend this by examining how dependent these changes are on beliefs and personality traits. </p>' +
   
-      '<p><b><i>What are some potential real-world implications of this research?</i></b></p>' +
-      '<p>We learn about our environments through experience. Understanding how beliefs develop with this experience to change behaviour can help us better understand and predict adaptive/maladaptive decision-making. A potential outcome of this understanding is the development of more effective strategies to improve learning and decision-making. </p>' +
+    //   '<p><b><i>What are some potential real-world implications of this research?</i></b></p>' +
+    //   '<p>We learn about our environments through experience. Understanding how beliefs develop with this experience to change behaviour can help us better understand and predict adaptive/maladaptive decision-making. A potential outcome of this understanding is the development of more effective strategies to improve learning and decision-making. </p>' +
   
-      '<p><b><i>Describe a potential issue or limitation of the study (e.g., ethical, design etc.), or opportunities for future work that extends this study.</i></b></p>' +
-      '<p>Participants might have prior experience or beliefs that would affect performance in the task. We have attempted to control for this by using a cover-story to help participants understand and engage in the task. Future studies could vary this cover-story to assess how this affects learning and decision-making in the task. </p>' +
+    //   '<p><b><i>Describe a potential issue or limitation of the study (e.g., ethical, design etc.), or opportunities for future work that extends this study.</i></b></p>' +
+    //   '<p>Participants might have prior experience or beliefs that would affect performance in the task. We have attempted to control for this by using a cover-story to help participants understand and engage in the task. Future studies could vary this cover-story to assess how this affects learning and decision-making in the task. </p>' +
   
-      '<p><b><i>Describe the study methodology (e.g., design, dependent/independent variables, stimulus presentation).</i></b></p>' +
-      '<p>Participants are given the opportunity to click on “planets” to earn point rewards. In addition to this, “ships” that may or may not result in point loss are presented. The key independent variable is the programmed strength of the relationship between particular actions and point outcomes (weak vs. strong relationship). The key dependent variables are clicking behaviour, valuations of task elements, and inferred relationships between task elements. Personality traits are also assessed to observe how these relate to behaviour and beliefs. </p>' +
+    //   '<p><b><i>Describe the study methodology (e.g., design, dependent/independent variables, stimulus presentation).</i></b></p>' +
+    //   '<p>Participants are given the opportunity to click on “planets” to earn point rewards. In addition to this, “ships” that may or may not result in point loss are presented. The key independent variable is the programmed strength of the relationship between particular actions and point outcomes (weak vs. strong relationship). The key dependent variables are clicking behaviour, valuations of task elements, and inferred relationships between task elements. Personality traits are also assessed to observe how these relate to behaviour and beliefs. </p>' +
   
-      '<p><b><i>Further reading: </i></b></p>' +
-      '<p> Lovibond, P.F., & Shanks, D.R. (2002). The role of awareness in Pavlovian conditioning: Empirical evidence and theoretical implications. Journal of Experimental Psychology: Animal Behavior Processes, 28, 3. </p>'
-    ];
+    //   '<p><b><i>Further reading: </i></b></p>' +
+    //   '<p> Lovibond, P.F., & Shanks, D.R. (2002). The role of awareness in Pavlovian conditioning: Empirical evidence and theoretical implications. Journal of Experimental Psychology: Animal Behavior Processes, 28, 3. </p>'
+    // ];
     
       //----------------------------------------------------------------------------
       /* valence & inference checks */
