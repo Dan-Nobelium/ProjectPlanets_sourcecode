@@ -3,6 +3,12 @@
 // Import JS files
 //----------------------------------------------------------------------------
 
+// Import the variable
+import helloWorld from './instructions.js';
+
+// Print the imported variable
+console.log(helloWorld);
+
 // import * as ins from './instructions.js';
 // console.log(ins.getIns.ins.preques);
 
@@ -51,6 +57,8 @@ async function saveJsPsychData(outputData) {
   }
 
 }
+
+
 
 
     //load JATOS libraries
