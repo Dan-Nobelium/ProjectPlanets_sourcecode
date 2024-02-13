@@ -710,7 +710,7 @@ async function saveJsPsychData(outputData) {
         }
       }
       if ((cfi_catch_flag == true && audit_catch_flag == true) || (cfi_catch_flag == true) || (audit_catch_flag == true)) {
-        // timeline.push(exit_page);
+        timeline.push(exit_page);
       }
     
     
@@ -745,7 +745,7 @@ async function saveJsPsychData(outputData) {
         }
       }
       
-      // timeline.push(conditional_splash_catch);
+      timeline.push(conditional_splash_catch);
     
       // ----------*instruction phase*-----------
       //----------------------------------------------------------------------------
