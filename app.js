@@ -66,6 +66,8 @@ async function saveJsPsychData(outputData) {
       global variables, and the images list. */
     
       var groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];
+      // let groups = ["early_0.1", "early_0.4", "intermediate_0.2", "late_0.1", "late_0.4"];
+      
       let group = "" + jsPsych.randomization.sampleWithReplacement(groups, 1) + "";
     
     
@@ -106,14 +108,7 @@ async function saveJsPsychData(outputData) {
       const rf_ship_delay = 1500;
       const probability_trade = [[.5], [.5]];
       const probability_shield = [[.5], [.5]];
-      // let ins = {
-      //   preques: `<p>...</p>`,
-      //   pretrain1: `<p>...</p>`,
-      //   pretrain2: `<p>...</p>`,
-      //   pretrain3: `<p>...</p>`,
-      //   instructlate: `<p>...</p>`,
-      //   instructearly: `<p>...</p>`,
-      // };
+
     
       // manipulate response-ship Rft rate
       if (group.includes("0.1")) {
