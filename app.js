@@ -82,8 +82,8 @@ async function saveJsPsychData(outputData) {
       let pun_planet_side = "" + jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1) + "";
     
       // Stimulus List Initialization
-      const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png'], 1);
-      const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png'], 1);
+      const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/planet3.png'], 1);
+      const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png','img/ship3.png'], 1);
     
       // Contingency Instructions Screen Setup
       const pun_planet = stim_list[pun_planet_side].substring(4).slice(0, -5);
@@ -550,7 +550,7 @@ async function saveJsPsychData(outputData) {
           phase: 'consent'
         },
         }
-        timeline.push(consent_block);
+        // timeline.push(consent_block);
     
       // demographics
       var demographics_block = {
@@ -561,7 +561,7 @@ async function saveJsPsychData(outputData) {
           phase: 'demographics'
         }
       };
-      timeline.push(demographics_block);
+      // timeline.push(demographics_block);
     
       
   // ----- questionnaires ----- 
@@ -627,7 +627,7 @@ async function saveJsPsychData(outputData) {
       console.log(cfi_catch_flag); //can delete afterwards
     }
   };
-  timeline.push(cfi_block);
+  // timeline.push(cfi_block);
 
   // HTQ
   var htq_block = {
@@ -652,7 +652,7 @@ async function saveJsPsychData(outputData) {
       phase: 'ques_htq'
     }
   };
-  timeline.push(htq_block);
+  // timeline.push(htq_block);
 
   // AUDIT
   var audit_block = {
@@ -695,7 +695,7 @@ async function saveJsPsychData(outputData) {
       console.log(catchcorrect); //can delete afterwards
     }
   };
-  timeline.push(audit_block);
+  // timeline.push(audit_block);
 
   // questionnaires end ----
 
