@@ -65,8 +65,8 @@ async function saveJsPsychData(outputData) {
       position of the punished planet, left-right assignment of planets and ships,
       global variables, and the images list. */
     
-      var groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];
-      // let groups = ["early_0.1", "early_0.4", "intermediate_0.2", "late_0.1", "late_0.4"];
+      // var groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];
+      let groups = ["early_0.1", "early_0.4", "intermediate_0.2", "late_0.1", "late_0.4"];
       
       let group = "" + jsPsych.randomization.sampleWithReplacement(groups, 1) + "";
     
@@ -77,10 +77,10 @@ async function saveJsPsychData(outputData) {
     
       //var completion_code = (Math.floor(Math.random() * 99999) * 397).toString();
     
-  // randomise position of punished planet, left-right assignment of planets and ships
-const num_planets = 3;
-var pun_planet_sides = Array.from(Array(num_planets).keys()); // positions of punished planet, 0 = left (planet A), 1 = middle (planet B), 2 = right (planet C)
-let pun_planet_side = "" + jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1)[0] + "";
+      // randomise position of punished planet, left-right assignment of planets and ships
+      const num_planets = 3;
+      var pun_planet_sides = Array.from(Array(num_planets).keys()); // positions of punished planet, 0 = left (planet A), 1 = middle (planet B), 2 = right (planet C)
+      let pun_planet_side = "" + jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1)[0] + "";
     
       // Stimulus List Initialization
       const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/planet3.png'], 1);
@@ -531,7 +531,7 @@ var gen_ins_block = {
           }
         }
       }
-      introloop.push(instruction_check);
+      // introloop.push(instruction_check);
     
       // define a page for the incorrect response
       var showsplash = true;
