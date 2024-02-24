@@ -77,9 +77,10 @@ async function saveJsPsychData(outputData) {
     
       //var completion_code = (Math.floor(Math.random() * 99999) * 397).toString();
     
-      // randomise position of punished planet, left-right assignment of planets and ships
-      var pun_planet_sides = [0, 1]; // position of punished planet, 0 = left (planet A), 1 = right (planet B)
-      let pun_planet_side = "" + jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1) + "";
+  // randomise position of punished planet, left-right assignment of planets and ships
+const num_planets = 3;
+var pun_planet_sides = Array.from(Array(num_planets).keys()); // positions of punished planet, 0 = left (planet A), 1 = middle (planet B), 2 = right (planet C)
+let pun_planet_side = "" + jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1)[0] + "";
     
       // Stimulus List Initialization
       const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/planet3.png'], 1);
