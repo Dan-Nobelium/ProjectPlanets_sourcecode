@@ -564,189 +564,189 @@ async function saveJsPsychData(outputData) {
       // timeline.push(demographics_block);
     
       
-  // ----- questionnaires ----- 
-  var cfi_catch_flag = false;
-  var audit_catch_flag = false;
-  var catchcorrect = false;
+  // // ----- questionnaires ----- 
+  // var cfi_catch_flag = false;
+  // var audit_catch_flag = false;
+  // var catchcorrect = false;
 
-  var preques_ins_block = {
-    type: 'instructions',
-    pages: [ins.preques],
-      allow_keys: false,
-      show_clickable_nav: true,
-      post_trial_gap: iti,
-      data: {
-      phase: 'instructions'
-    }
-    };
-  timeline.push(preques_ins_block); 
+  // var preques_ins_block = {
+  //   type: 'instructions',
+  //   pages: [ins.preques],
+  //     allow_keys: false,
+  //     show_clickable_nav: true,
+  //     post_trial_gap: iti,
+  //     data: {
+  //     phase: 'instructions'
+  //   }
+  //   };
+  // timeline.push(preques_ins_block); 
 
-  // CFI
-  var cfi_block = {
-  type: 'survey-likert',
-  preamble: cfi.prompt,
-  questions: [
-    {prompt: cfi.items[0], name: 'item1', labels: cfi.labels, required: true},
-    {prompt: cfi.items[1], name: 'item2', labels: cfi.labels, required: true},
-    {prompt: cfi.items[2], name: 'item3', labels: cfi.labels, required: true},
-    {prompt: cfi.items[3], name: 'item4', labels: cfi.labels, required: true},
-    {prompt: cfi.items[4], name: 'item5', labels: cfi.labels, required: true},
-    {prompt: cfi.items[5], name: 'item6', labels: cfi.labels, required: true},
-    {prompt: cfi.items[6], name: 'catch', labels: cfi.labels, required: true},
-    {prompt: cfi.items[7], name: 'item7', labels: cfi.labels, required: true},
-    {prompt: cfi.items[8], name: 'item8', labels: cfi.labels, required: true},
-    {prompt: cfi.items[9], name: 'item9', labels: cfi.labels, required: true},
-    {prompt: cfi.items[10], name: 'item10', labels: cfi.labels, required: true},
-    {prompt: cfi.items[11], name: 'item11', labels: cfi.labels, required: true},
-    {prompt: cfi.items[12], name: 'item12', labels: cfi.labels, required: true},
-    {prompt: cfi.items[13], name: 'item13', labels: cfi.labels, required: true},
-    {prompt: cfi.items[14], name: 'item14', labels: cfi.labels, required: true},
-    {prompt: cfi.items[15], name: 'item15', labels: cfi.labels, required: true},
-    {prompt: cfi.items[16], name: 'item16', labels: cfi.labels, required: true},
-    {prompt: cfi.items[17], name: 'item17', labels: cfi.labels, required: true},
-    {prompt: cfi.items[18], name: 'item18', labels: cfi.labels, required: true},
-    {prompt: cfi.items[19], name: 'item19', labels: cfi.labels, required: true},
-    {prompt: cfi.items[20], name: 'item20', labels: cfi.labels, required: true}
-    ],
-    scale_width: inf_slider_width,
-    post_trial_gap: iti,
-    data: {
-      phase: 'ques_cfi'
-    },
-    on_finish: function(data) {
-      console.log(data.responses); //can delete afterwards
-      var obj_cfi = JSON.parse(data.responses);
-      console.log(obj_cfi); //can delete afterwards
-      console.log(obj_cfi.catch); //can delete afterwards
-      if(obj_cfi.catch !== 0) {
-        cfi_catch_flag = true;
-      }
-      else if (obj_cfi.catch == 0) {
-        cfi_catch_flag = false;
-      };
-      console.log(cfi_catch_flag); //can delete afterwards
-    }
-  };
-  timeline.push(cfi_block);
+  // // CFI
+  // var cfi_block = {
+  // type: 'survey-likert',
+  // preamble: cfi.prompt,
+  // questions: [
+  //   {prompt: cfi.items[0], name: 'item1', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[1], name: 'item2', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[2], name: 'item3', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[3], name: 'item4', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[4], name: 'item5', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[5], name: 'item6', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[6], name: 'catch', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[7], name: 'item7', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[8], name: 'item8', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[9], name: 'item9', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[10], name: 'item10', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[11], name: 'item11', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[12], name: 'item12', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[13], name: 'item13', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[14], name: 'item14', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[15], name: 'item15', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[16], name: 'item16', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[17], name: 'item17', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[18], name: 'item18', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[19], name: 'item19', labels: cfi.labels, required: true},
+  //   {prompt: cfi.items[20], name: 'item20', labels: cfi.labels, required: true}
+  //   ],
+  //   scale_width: inf_slider_width,
+  //   post_trial_gap: iti,
+  //   data: {
+  //     phase: 'ques_cfi'
+  //   },
+  //   on_finish: function(data) {
+  //     console.log(data.responses); //can delete afterwards
+  //     var obj_cfi = JSON.parse(data.responses);
+  //     console.log(obj_cfi); //can delete afterwards
+  //     console.log(obj_cfi.catch); //can delete afterwards
+  //     if(obj_cfi.catch !== 0) {
+  //       cfi_catch_flag = true;
+  //     }
+  //     else if (obj_cfi.catch == 0) {
+  //       cfi_catch_flag = false;
+  //     };
+  //     console.log(cfi_catch_flag); //can delete afterwards
+  //   }
+  // };
+  // timeline.push(cfi_block);
 
-  // HTQ
-  var htq_block = {
-  type: 'survey-likert',
-  preamble: htq.prompt,
-  questions: [
-    {prompt: htq.items[0], name: 'item1', labels: htq.labels, required: true},
-    {prompt: htq.items[1], name: 'item2', labels: htq.labels, required: true},
-    {prompt: htq.items[2], name: 'item3', labels: htq.labels, required: true},
-    {prompt: htq.items[3], name: 'item4', labels: htq.labels, required: true},
-    {prompt: htq.items[4], name: 'item5', labels: htq.labels, required: true},
-    {prompt: htq.items[5], name: 'item6', labels: htq.labels, required: true},
-    {prompt: htq.items[6], name: 'item7', labels: htq.labels, required: true},
-    {prompt: htq.items[7], name: 'item8', labels: htq.labels, required: true},
-    {prompt: htq.items[8], name: 'item9', labels: htq.labels, required: true},
-    {prompt: htq.items[9], name: 'item10', labels: htq.labels, required: true},
-    {prompt: htq.items[10], name: 'item11', labels: htq.labels, required: true}
-    ],
-    scale_width: inf_slider_width,
-    post_trial_gap: iti,
-    data: {
-      phase: 'ques_htq'
-    }
-  };
-  timeline.push(htq_block);
+  // // HTQ
+  // var htq_block = {
+  // type: 'survey-likert',
+  // preamble: htq.prompt,
+  // questions: [
+  //   {prompt: htq.items[0], name: 'item1', labels: htq.labels, required: true},
+  //   {prompt: htq.items[1], name: 'item2', labels: htq.labels, required: true},
+  //   {prompt: htq.items[2], name: 'item3', labels: htq.labels, required: true},
+  //   {prompt: htq.items[3], name: 'item4', labels: htq.labels, required: true},
+  //   {prompt: htq.items[4], name: 'item5', labels: htq.labels, required: true},
+  //   {prompt: htq.items[5], name: 'item6', labels: htq.labels, required: true},
+  //   {prompt: htq.items[6], name: 'item7', labels: htq.labels, required: true},
+  //   {prompt: htq.items[7], name: 'item8', labels: htq.labels, required: true},
+  //   {prompt: htq.items[8], name: 'item9', labels: htq.labels, required: true},
+  //   {prompt: htq.items[9], name: 'item10', labels: htq.labels, required: true},
+  //   {prompt: htq.items[10], name: 'item11', labels: htq.labels, required: true}
+  //   ],
+  //   scale_width: inf_slider_width,
+  //   post_trial_gap: iti,
+  //   data: {
+  //     phase: 'ques_htq'
+  //   }
+  // };
+  // timeline.push(htq_block);
 
-  // AUDIT
-  var audit_block = {
-  type: 'survey-likert',
-  preamble: audit.prompt,
-  questions: [
-    {prompt: audit.items[0], name: 'item1', labels: audit.labels1, required: true},
-    {prompt: audit.items[1], name: 'item2', labels: audit.labels2, required: true},
-    {prompt: audit.items[2], name: 'item3', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[3], name: 'item4', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[4], name: 'item5', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[5], name: 'item6', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[6], name: 'catch', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[7], name: 'item7', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[8], name: 'item8', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[9], name: 'item9', labels: audit.labels10_11, required: true},
-    {prompt: audit.items[10], name: 'item10', labels: audit.labels10_11, required: true}
-    ],
-    scale_width: inf_slider_width,
-    post_trial_gap: iti,
-    data: {
-      phase: 'ques_audit'
-    },
-    on_finish: function(data) {
-      console.log(data.responses); //can delete afterwards
-      var obj_audit = JSON.parse(data.responses);
-      console.log(obj_audit); //can delete afterwards
-      console.log(obj_audit.catch); //can delete afterwards
-      if(obj_audit.catch !== 3) {
-        audit_catch_flag = true;
-      }
-      else if (obj_audit.catch == 3) {
-        audit_catch_flag = false;
-      };
-      console.log(audit_catch_flag); //can delete afterwards
-      if ((cfi_catch_flag == false) && (audit_catch_flag == false)) {
-        action = false;
-        catchcorrect = true;
-      };
-      console.log(catchcorrect); //can delete afterwards
-    }
-  };
-  timeline.push(audit_block);
+  // // AUDIT
+  // var audit_block = {
+  // type: 'survey-likert',
+  // preamble: audit.prompt,
+  // questions: [
+  //   {prompt: audit.items[0], name: 'item1', labels: audit.labels1, required: true},
+  //   {prompt: audit.items[1], name: 'item2', labels: audit.labels2, required: true},
+  //   {prompt: audit.items[2], name: 'item3', labels: audit.labels3_9, required: true},
+  //   {prompt: audit.items[3], name: 'item4', labels: audit.labels3_9, required: true},
+  //   {prompt: audit.items[4], name: 'item5', labels: audit.labels3_9, required: true},
+  //   {prompt: audit.items[5], name: 'item6', labels: audit.labels3_9, required: true},
+  //   {prompt: audit.items[6], name: 'catch', labels: audit.labels3_9, required: true},
+  //   {prompt: audit.items[7], name: 'item7', labels: audit.labels3_9, required: true},
+  //   {prompt: audit.items[8], name: 'item8', labels: audit.labels3_9, required: true},
+  //   {prompt: audit.items[9], name: 'item9', labels: audit.labels10_11, required: true},
+  //   {prompt: audit.items[10], name: 'item10', labels: audit.labels10_11, required: true}
+  //   ],
+  //   scale_width: inf_slider_width,
+  //   post_trial_gap: iti,
+  //   data: {
+  //     phase: 'ques_audit'
+  //   },
+  //   on_finish: function(data) {
+  //     console.log(data.responses); //can delete afterwards
+  //     var obj_audit = JSON.parse(data.responses);
+  //     console.log(obj_audit); //can delete afterwards
+  //     console.log(obj_audit.catch); //can delete afterwards
+  //     if(obj_audit.catch !== 3) {
+  //       audit_catch_flag = true;
+  //     }
+  //     else if (obj_audit.catch == 3) {
+  //       audit_catch_flag = false;
+  //     };
+  //     console.log(audit_catch_flag); //can delete afterwards
+  //     if ((cfi_catch_flag == false) && (audit_catch_flag == false)) {
+  //       action = false;
+  //       catchcorrect = true;
+  //     };
+  //     console.log(catchcorrect); //can delete afterwards
+  //   }
+  // };
+  // timeline.push(audit_block);
 
-  // questionnaires end ----
+  // // questionnaires end ----
 
     
-      // Define exit page
-      var exit_page = {
-        type: 'html-button-response',
-        choices:['Click here to exit the experiment'],
-        stimulus: '<center>Your response has been recorded. Unfortunately, you do not meet the inclusion criteria for this study. We thank you for your interest in participating in the experiment.</center>',
-        on_finish: function(daa) {
-          jsPsych.endExperiment('The experiment ends. You may exit by closing the window.');
-        }
-      }
-      if ((cfi_catch_flag == true && audit_catch_flag == true) || (cfi_catch_flag == true) || (audit_catch_flag == true)) {
-        timeline.push(exit_page);
-      }
+  //     // Define exit page
+  //     var exit_page = {
+  //       type: 'html-button-response',
+  //       choices:['Click here to exit the experiment'],
+  //       stimulus: '<center>Your response has been recorded. Unfortunately, you do not meet the inclusion criteria for this study. We thank you for your interest in participating in the experiment.</center>',
+  //       on_finish: function(daa) {
+  //         jsPsych.endExperiment('The experiment ends. You may exit by closing the window.');
+  //       }
+  //     }
+  //     if ((cfi_catch_flag == true && audit_catch_flag == true) || (cfi_catch_flag == true) || (audit_catch_flag == true)) {
+  //       timeline.push(exit_page);
+  //     }
     
     
-      // NEW: catch Qs - define a page for incorrect responses
-      var failed_url = 'https://app.prolific.co/submissions/complete?cc=C5D763KX';
-      var failedAttCheck_msg = 'The experiment ends here. <p>Click <a href="' + failed_url + '">here</a> to be returned to Prolific.</p>';
+  //     // NEW: catch Qs - define a page for incorrect responses
+  //     var failed_url = 'https://app.prolific.co/submissions/complete?cc=C5D763KX';
+  //     var failedAttCheck_msg = 'The experiment ends here. <p>Click <a href="' + failed_url + '">here</a> to be returned to Prolific.</p>';
       
-      var showsplash_c = true; 
-      var splash_screen_catch = {
-        type: 'html-button-response',
-        choices:['Click here to exit the experiment'],
-        stimulus: '<center>Your response has been recorded. Unfortunatly, you do not meet the inclusion criteria for this study. We thank you for your interest in participating in the experiment.</center>',
-        on_finish: function(data) {
-              // Obtain the jsPsych data as an object
-            var resultFailedAttCheck = jsPsych.data.get().json();
-        //     jatos.submitResultData(resultFailedAttCheck, function() {
-        //       document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p><br><br><br>' +
-        //       failedAttCheck_msg +
-        //       '</p></div></div>')
-        // });
+  //     var showsplash_c = true; 
+  //     var splash_screen_catch = {
+  //       type: 'html-button-response',
+  //       choices:['Click here to exit the experiment'],
+  //       stimulus: '<center>Your response has been recorded. Unfortunatly, you do not meet the inclusion criteria for this study. We thank you for your interest in participating in the experiment.</center>',
+  //       on_finish: function(data) {
+  //             // Obtain the jsPsych data as an object
+  //           var resultFailedAttCheck = jsPsych.data.get().json();
+  //       //     jatos.submitResultData(resultFailedAttCheck, function() {
+  //       //       document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p><br><br><br>' +
+  //       //       failedAttCheck_msg +
+  //       //       '</p></div></div>')
+  //       // });
     
-        // Call the saveJsPsychData() function with the resultFailedAttCheck object
-        saveJsPsychData(resultFailedAttCheck);
-        jsPsych.endExperiment('Please exit by closing the browser window.');
+  //       // Call the saveJsPsychData() function with the resultFailedAttCheck object
+  //       saveJsPsychData(resultFailedAttCheck);
+  //       jsPsych.endExperiment('Please exit by closing the browser window.');
     
-      }}
+  //     }}
       
-      // NEW:push it to a conditional code that only shows splash screen if one or more of the responses was wrong
-      var conditional_splash_catch = {
-        timeline: [splash_screen_catch],
-        conditional_function: function(data) {
-          return !catchcorrect //skip if correct
-        }
-      }
+  //     // NEW:push it to a conditional code that only shows splash screen if one or more of the responses was wrong
+  //     var conditional_splash_catch = {
+  //       timeline: [splash_screen_catch],
+  //       conditional_function: function(data) {
+  //         return !catchcorrect //skip if correct
+  //       }
+  //     }
       
-      timeline.push(conditional_splash_catch);
+  //     timeline.push(conditional_splash_catch);
     
       // ----------*instruction phase*-----------
       //----------------------------------------------------------------------------
@@ -1585,6 +1585,7 @@ var gen_ins_block = {
         preload_images: images,
         on_finish: function() {
           var result = jsPsych.data.get().json();
+          jsPsych.data.displayData();
     
           
           jatos.submitResultData(result, function() {
@@ -1637,6 +1638,7 @@ var gen_ins_block = {
           //   finish_msg +
           //   '</p></div></div>')
           // });
+          jsPsych.data.displayData();
         }
       });
     }
