@@ -50,10 +50,6 @@ async function saveJsPsychData(outputData) {
 
 }
 
-
-    //load JATOS libraries
-    //<script src="/assets/javascripts/jatos.js"></ script>
-    
     // toggle on/off for dev
       const runJatos = false;
     
@@ -187,7 +183,7 @@ async function saveJsPsychData(outputData) {
   
     // contingency check
     var Q0_cont_text = "<b>Question 1:</b> Which (pirate) ship leads to attacks?";
-    var Q0_cont_answers = ['Ship Type 1', 'Ship Type 2'];
+    var Q0_cont_answers = ['Ship Type 1', 'Ship Type 2','Ship Type 3'];
     var Q1_cont_text = "<b>Question 2:</b> Which planet has been attracting pirate ships?";
     var Q1_cont_answers = ['The ' + pun_planet + ' planet (' + planet_layout[0] + ' side)', 'The ' + unpun_planet + ' planet (' + planet_layout[1] + ' side)'];
     // var Q2_cont_text = "<b>Question 3:</b> Which ship has the " + pun_planet + "  planet (" + planet_layout[0] + " side) been attracting?";
