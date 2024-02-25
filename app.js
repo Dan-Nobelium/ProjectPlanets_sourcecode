@@ -79,8 +79,8 @@ async function saveJsPsychData(outputData) {
     
       // randomise position of punished planet, left-right assignment of planets and ships
       const num_planets = 3;
-      var pun_planet_sides = Array.from(Array(num_planets).keys()); // positions of punished planet, 0 = left (planet A), 1 = middle (planet B), 2 = right (planet C)
-      let pun_planet_side = "" + jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1)[0] + "";
+      var pun_planet_sides = [...Array(num_planets).keys()].map(x => x.toString());
+      let pun_planet_side = jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1)[0];
     
       // Stimulus List Initialization
       const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/planet3.png'], 1);
@@ -577,7 +577,7 @@ var gen_ins_block = {
             type: 'planet-response',
             stimulus: stim_list,
             stimulus_select:'img/selectring.png',
-            prompt: ['Planet A','Planet B'],
+            prompt: ['Planet A','Planet B','Planet TREE'],
             ship_stimulus: ship_list,
             show_ship: false,
         ship_attack_damage: ship_attack_damage,
