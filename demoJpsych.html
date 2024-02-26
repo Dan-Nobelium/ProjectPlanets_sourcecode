@@ -40,57 +40,15 @@
 
     // /*define horisontal 3 trial*/
 
-    var planetResonseFirst = {
-      type: 'planet-respone',
-      stimulus: 'img/blue.png',
-      stimulus_select:'img/selectring.png',
-      prompt: ['Planet A','Planet B','Planet C'],
-      ship_stimulus: 'img/blue.png',
-      show_ship: false,
-      ship_attack_damage: 5,
-      ship_hostile_idx: pun_planet_side,
-      block_duration: block_duration,
-      reset_planet_wait: 1000,
-      shield_charging_time: 3000,
-      ship_attack_time: 6000,
-      feedback_duration: feedback_duration,
-      probability_trade: probability_trade,
-      probability_ship: probability_ship,
-      probability_shield: probability_shield,
+    // var planetResonseFirst = {
+    //   type: 'planet-respone',
+    //   stimulus: image_files,
+    //   stimulus_select:'img/selectring.png',
+    //   prompt: ['Planet A','Planet B','Planet C'],
+    //   ship_stimulus: image_files, //using circles instead
 
-    var planet_noship = {
-            type: 'planet-response',
-            stimulus: stim_list,
-            stimulus_select:'img/selectring.png',
-            prompt: ['Planet A','Planet B','Planet TREE'],
-            ship_stimulus: ship_list,
-            show_ship: false,
-            ship_attack_damage: ship_attack_damage,
-            ship_hostile_idx: pun_planet_side,
-            block_duration: block_duration,
-            reset_planet_wait: 1000,
-            shield_charging_time: 3000,
-            ship_attack_time: 6000,
-            feedback_duration: feedback_duration,
-            probability_trade: probability_trade,
-            probability_ship: probability_ship,
-            probability_shield: probability_shield,
-            data: {
-                phase: 'phase1',
-                block_type: 'planet_noship',
-                block_number: block_number,
-                trial_number: trial_number
-            },
-            on_start: function(trial) {
-                trial.data.points = points;
-                trial.data.block_number = block_number;
-                trial.data.trial_number = trial_number;
-            },
-            on_finish: function(data){
-                points = data.points_total;
-                trial_number = data.trial_number;
-                trial_number++;
-                // script for continuous response block
+    // }
+    // timeline.push(planetResonseFirst);
 
     /* define instructions trial */
     var instructions = {
