@@ -38,25 +38,66 @@
     };
     timeline.push(welcome);
 
+    // /*define horisontal 3 trial*/
+
+    var planetResonseFirst = {
+      type: 'planet-respone',
+      stimulus: 'img/blue.png',
+      stimulus_select:'img/selectring.png',
+      prompt: ['Planet A','Planet B','Planet C'],
+      ship_stimulus: 'img/blue.png',
+      show_ship: false,
+      ship_attack_damage: 5,
+      ship_hostile_idx: pun_planet_side,
+      block_duration: block_duration,
+      reset_planet_wait: 1000,
+      shield_charging_time: 3000,
+      ship_attack_time: 6000,
+      feedback_duration: feedback_duration,
+      probability_trade: probability_trade,
+      probability_ship: probability_ship,
+      probability_shield: probability_shield,
+
+    var planet_noship = {
+            type: 'planet-response',
+            stimulus: stim_list,
+            stimulus_select:'img/selectring.png',
+            prompt: ['Planet A','Planet B','Planet TREE'],
+            ship_stimulus: ship_list,
+            show_ship: false,
+            ship_attack_damage: ship_attack_damage,
+            ship_hostile_idx: pun_planet_side,
+            block_duration: block_duration,
+            reset_planet_wait: 1000,
+            shield_charging_time: 3000,
+            ship_attack_time: 6000,
+            feedback_duration: feedback_duration,
+            probability_trade: probability_trade,
+            probability_ship: probability_ship,
+            probability_shield: probability_shield,
+            data: {
+                phase: 'phase1',
+                block_type: 'planet_noship',
+                block_number: block_number,
+                trial_number: trial_number
+            },
+            on_start: function(trial) {
+                trial.data.points = points;
+                trial.data.block_number = block_number;
+                trial.data.trial_number = trial_number;
+            },
+            on_finish: function(data){
+                points = data.points_total;
+                trial_number = data.trial_number;
+                trial_number++;
+                // script for continuous response block
+
     /* define instructions trial */
     var instructions = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: `
         <p>In this experiment, a circle will appear in the center 
-        of the screen.</p><p>If the circle is <strong>blue</strong>, 
-        press the letter F on the keyboard as fast as you can.</p>
-        <p>If the circle is <strong>green</strong>, press the letter G 
-        as fast as you can.</p>
-        <p>If the circle is <strong>orange</strong>, press the letter J 
-        as fast as you can.</p>
-        <div style='width: 700px;'>
-        <div style='float: left;'><img src='img/green.png'></img>
-        <p class='small'><strong>Press the F key</strong></p></div>
-        <div style='float: left; margin-left: 20px;'><img src='img/blue.png'></img>
-        <p class='small'><strong>Press the G key</strong></p></div>
-        <div style='float: right;'><img src='img/orange.png'></img>
-        <p class='small'><strong>Press the J key</strong></p></div>
-        <p>Press any key to begin.</p>
+        of the screen.</p>
       `,
       post_trial_gap: 2000
     };
