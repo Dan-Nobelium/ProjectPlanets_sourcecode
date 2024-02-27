@@ -99,7 +99,7 @@
 
             let gen_ins_block = {
               type: "instructions",
-              pages: [preques, pretrain1, pretrain2, pretrain3],
+              pages: instructionPages,
               allow_keys: false,
               show_clickable_nav: true,
               post_trial_gap: iti,
@@ -107,6 +107,58 @@
                 phase: "instructions",
               },
             };
+
+
+
+
+
+      // Define instruction check block with immediate feedback
+      let instructionCheckWithFeedback = {
+        type: "survey-multi-choice",
+        questions: questions.map(q => ({
+          prompt: q.prompt,
+          options: q.options,
+          required: true
+        })),
+        preamble: function() {
+          // Check if we need to show a feedback message (e.g., based on a flag set in on_finish)
+          if (window.instructionFeedbackNeeded) {
+            return "<p><i>One of your answers was incorrect. Please try again.</i></p>";
+          } else {
+            return ""; // No feedback needed initially
+          }
+        },
+        on_finish: function(data) {
+          // Parse the responses
+          let responses = JSON.parse(data.responses);
+          let allCorrect = true; // Assume true initially
+
+          // Check each answer
+          for (let i = 0; i < questions.length; i++) {
+            if (responses[`Q${i}`] !== questions[i].correct) {
+              allCorrect = false;
+              break; // Exit the loop as soon as one incorrect answer is found
+            }
+          }
+
+          // Update 'instructioncorrect' and feedback need flag based on the check
+          instructioncorrect = allCorrect;
+          window.instructionFeedbackNeeded = !allCorrect;
+        }
+      };
+
+      // Loop structure for retrying questionnaire with immediate feedback
+      let instructionCheckLoopWithFeedback = {
+        timeline: [instructionCheckWithFeedback],
+        loop_function: function(data) {
+          return !instructioncorrect; // Continue looping if not correct
+        }
+      };
+
+      // Initialize the feedback needed flag, to alert participants they need to retry the question
+      window.instructionFeedbackNeeded = false;
+
+
 
 
         //----------------------------------------------------------------------------
@@ -158,82 +210,6 @@
 
 
 
-// Instruction check questions setup
-const questions = [
-  {
-    prompt: "<b>Question 1:</b> The aim of the task is to:",
-    options: ["Get as many points as possible", "Battle the aliens on the planets"],
-    correct: "Get as many points as possible"
-  },
-  {
-    prompt: "<b>Question 2:</b> Clicking on each planet will:",
-    options: ["Make the planet disappear", "Sometimes result in a successful trade, earning me points"],
-    correct: "Sometimes result in a successful trade, earning me points"
-  },
-  {
-    prompt: "<b>Question 3:</b> There will be multiple blocks in this experiment, with questions in between each block.",
-    options: ["FALSE", "TRUE"],
-    correct: "TRUE"
-  },
-  {
-    prompt: "<b>Question 4:</b> The top 10% performers at the end of the task will receive:",
-    options: ["An additional monetary prize", "Extra course credit"],
-    correct: "An additional monetary prize"
-  }
-];
-
-
-// Define instruction check block with immediate feedback
-let instructionCheckWithFeedback = {
-  type: "survey-multi-choice",
-  questions: questions.map(q => ({
-    prompt: q.prompt,
-    options: q.options,
-    required: true
-  })),
-  preamble: function() {
-    // Check if we need to show a feedback message (e.g., based on a flag set in on_finish)
-    if (window.instructionFeedbackNeeded) {
-      return "<p><i>One of your answers was incorrect. Please try again.</i></p>";
-    } else {
-      return ""; // No feedback needed initially
-    }
-  },
-  on_finish: function(data) {
-    // Parse the responses
-    let responses = JSON.parse(data.responses);
-    let allCorrect = true; // Assume true initially
-
-    // Check each answer
-    for (let i = 0; i < questions.length; i++) {
-      if (responses[`Q${i}`] !== questions[i].correct) {
-        allCorrect = false;
-        break; // Exit the loop as soon as one incorrect answer is found
-      }
-    }
-
-    // Update 'instructioncorrect' and feedback need flag based on the check
-    instructioncorrect = allCorrect;
-    window.instructionFeedbackNeeded = !allCorrect;
-  }
-};
-
-// Loop structure for retrying questionnaire with immediate feedback
-let instructionCheckLoopWithFeedback = {
-  timeline: [instructionCheckWithFeedback],
-  loop_function: function(data) {
-    return !instructioncorrect; // Continue looping if not correct
-  }
-};
-
-// Initialize the feedback needed flag
-window.instructionFeedbackNeeded = false;
-
-// Add the instructionCheckLoopWithFeedback to your main experiment timeline
-// timeline.push(instructionCheckLoopWithFeedback);
-
-
-
         
       // ----- Timeline creation -----
       let timeline = []; // This is the master timeline, the experiment in sequence based on the objects pushed into this array.
@@ -241,7 +217,7 @@ window.instructionFeedbackNeeded = false;
             
       // timeline.push(consent_block);
       // timeline.push(demographics_block);
-      // timeline.push(gen_ins_block);
+      timeline.push(gen_ins_block);
       timeline.push(instructionCheckLoopWithFeedback);
       // timeline.push(instruction_check);
 

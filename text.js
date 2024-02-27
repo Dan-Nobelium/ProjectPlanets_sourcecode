@@ -63,3 +63,29 @@ const demographics_block = {
     // } else {
     //   var ProA_insert = '';
     // }
+
+    let instructionPages = [preques, pretrain1, pretrain2, pretrain3];
+
+
+    const questions = [
+        {
+          prompt: "<b>Question 1:</b> The aim of the task is to:",
+          options: ["Get as many points as possible", "Battle the aliens on the planets"],
+          correct: "Get as many points as possible"
+        },
+        {
+          prompt: "<b>Question 2:</b> Clicking on each planet will:",
+          options: ["Make the planet disappear", "Sometimes result in a successful trade, earning me points"],
+          correct: "Sometimes result in a successful trade, earning me points"
+        },
+        {
+          prompt: "<b>Question 3:</b> There will be multiple blocks in this experiment, with questions in between each block.",
+          options: ["FALSE", "TRUE"],
+          correct: "TRUE"
+        },
+        {
+          prompt: "<b>Question 4:</b> The top 10% performers at the end of the task will receive:",
+          options: ["An additional monetary prize", "Extra course credit"],
+          correct: "An additional monetary prize"
+        }
+      ];
