@@ -1,55 +1,3 @@
-
-//----------------------------------------------------------------------------
-// Import JS files
-//----------------------------------------------------------------------------
-
-
-//----------------------------------------------------------------------------
-// Functions
-//----------------------------------------------------------------------------
-
-/**
- * Saves JSPsych data as a local JSON file.
- *
- * @param {Object|Array<Object>} outputData - Output data received from JSPsych
- */
-async function saveJsPsychData(outputData) {
-    try {
-    // Ensure that the input is treated as an array
-    const processedOutput = Array.isArray(outputData)
-    ? outputData
-    : [outputData];
-    // Decode the inner JSON strings since they appear to include multiple entries
-    const decodedData = [];
-    for (const datum of processedOutput) {
-    decodedData.push(JSON.parse(datum));
-    }
-  
-    // Convert the data structure to JSON format and add whitespace
-    const jsonData = JSON.stringify(decodedData, null, 2);
-  
-    // Construct a Blob object consisting of the JSON data
-    const blob = new Blob([jsonData], { type: 'application/json' });
-  
-    // Define the filename for the JSON file
-    const fileName = 'user_data.json';
-  
-    // Generate a downloadable anchor element with the specified attributes
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', URL.createObjectURL(blob));
-    linkElement.setAttribute('download', fileName);
-  
-    // Simulate clicking the anchor element to initiate the download
-    linkElement.style.display = 'none';
-    document.body.appendChild(linkElement);
-    linkElement.click();
-    document.body.removeChild(linkElement);
-    } catch (error) {
-    console.error('An error occurred: ', error);
-    }
-  
-  }
-  
       // toggle on/off for dev
         const runJatos = false;
       
@@ -61,9 +9,7 @@ async function saveJsPsychData(outputData) {
         position of the punished planet, left-right assignment of planets and ships,
         global variables, and the images list. */
       
-        // var groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];
-        let groups = ["early_0.1", "early_0.4", "intermediate_0.2", "late_0.1", "late_0.4"];
-        
+        var groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];        
         let group = "" + jsPsych.randomization.sampleWithReplacement(groups, 1) + "";
       
       

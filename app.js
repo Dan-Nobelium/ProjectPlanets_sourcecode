@@ -1290,7 +1290,7 @@ var gen_ins_block = {
       // // start experiment
   
       
-      // Code to run JATOS removed from here 27/02
+      // Code to run JATOS removed from here
 
       // else if (runJatos === false)
        {
