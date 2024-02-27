@@ -112,51 +112,69 @@
 
 
 
-      // Define instruction check block with immediate feedback
-      let instructionCheckWithFeedback = {
-        type: "survey-multi-choice",
-        questions: questions.map(q => ({
-          prompt: q.prompt,
-          options: q.options,
-          required: true
-        })),
-        preamble: function() {
-          // Check if we need to show a feedback message (e.g., based on a flag set in on_finish)
-          if (window.instructionFeedbackNeeded) {
-            return "<p><i>One of your answers was incorrect. Please try again.</i></p>";
-          } else {
-            return ""; // No feedback needed initially
-          }
-        },
-        on_finish: function(data) {
-          // Parse the responses
-          let responses = JSON.parse(data.responses);
-          let allCorrect = true; // Assume true initially
-
-          // Check each answer
-          for (let i = 0; i < questions.length; i++) {
-            if (responses[`Q${i}`] !== questions[i].correct) {
-              allCorrect = false;
-              break; // Exit the loop as soon as one incorrect answer is found
-            }
-          }
-
-          // Update 'instructioncorrect' and feedback need flag based on the check
-          instructioncorrect = allCorrect;
-          window.instructionFeedbackNeeded = !allCorrect;
+    // Define instruction check block with immediate feedback
+    let instructionCheckWithFeedback = {
+      type: "survey-multi-choice",
+      questions: questions.map(q => ({
+        prompt: q.prompt,
+        options: q.options,
+        required: true
+      })),
+      preamble: function() {
+        if (window.instructionFeedbackNeeded) {
+          // Dynamically insert overlay HTML with instruction content
+          const overlayHTML = `
+            <div id="instructionOverlay" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.75); color: white; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px;">
+              <div style="max-width: 80%;">
+                ${pretrain1, pretrain2, pretrain3}
+                <button id="closeOverlay" style="margin-top: 20px;">Acknowledge Instructions</button>
+              </div>
+            </div>
+          `;
+      
+          // Insert the overlay HTML into the body
+          document.body.insertAdjacentHTML('beforeend', overlayHTML);
+      
+          // Add event listener to the button to close the overlay
+          document.getElementById("closeOverlay").addEventListener("click", function() {
+            document.getElementById("instructionOverlay").style.display = "none";
+            window.instructionFeedbackNeeded = false; // Reset flag
+          });
+      
+          return "<p><i>One of your answers was incorrect. Please review the instructions again.</i></p>";
+        } else {
+          return ""; // No feedback needed initially
         }
-      };
+      },
+      on_finish: function(data) {
+        // Parse the responses
+        let responses = JSON.parse(data.responses);
+        let allCorrect = true; // Assume true initially
 
-      // Loop structure for retrying questionnaire with immediate feedback
-      let instructionCheckLoopWithFeedback = {
-        timeline: [instructionCheckWithFeedback],
-        loop_function: function(data) {
-          return !instructioncorrect; // Continue looping if not correct
+        // Check each answer
+        for (let i = 0; i < questions.length; i++) {
+          if (responses[`Q${i}`] !== questions[i].correct) {
+            allCorrect = false;
+            break; // Exit the loop as soon as one incorrect answer is found
+          }
         }
-      };
 
-      // Initialize the feedback needed flag, to alert participants they need to retry the question
-      window.instructionFeedbackNeeded = false;
+        // Update 'instructioncorrect' and feedback need flag based on the check
+        instructioncorrect = allCorrect;
+        window.instructionFeedbackNeeded = !allCorrect;
+      }
+    };
+
+    // Loop structure for retrying questionnaire with immediate feedback
+    let instructionCheckLoopWithFeedback = {
+      timeline: [instructionCheckWithFeedback],
+      loop_function: function(data) {
+        return !instructioncorrect; // Continue looping if not correct
+      }
+    };
+
+    // Initialize the feedback needed flag, to alert participants they need to retry the question
+    window.instructionFeedbackNeeded = false;
 
 
 
@@ -217,7 +235,7 @@
             
       // timeline.push(consent_block);
       // timeline.push(demographics_block);
-      timeline.push(gen_ins_block);
+      // timeline.push(gen_ins_block);
       timeline.push(instructionCheckLoopWithFeedback);
       // timeline.push(instruction_check);
 
