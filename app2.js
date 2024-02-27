@@ -124,7 +124,7 @@
         if (window.instructionFeedbackNeeded) {
           // Dynamically insert overlay HTML with instruction content
           const overlayHTML = `
-            <div id="instructionOverlay" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.75); color: white; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px;">
+            <div id="instructionOverlay" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); color: white; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px;">
               <div style="max-width: 80%;">
                 ${pretrain1, pretrain2, pretrain3}
                 <button id="closeOverlay" style="margin-top: 20px;">Acknowledge Instructions</button>
@@ -146,6 +146,7 @@
           return ""; // No feedback needed initially
         }
       },
+
       on_finish: function(data) {
         // Parse the responses
         let responses = JSON.parse(data.responses);
@@ -177,6 +178,16 @@
     window.instructionFeedbackNeeded = false;
 
 
+
+
+          // success trial
+          var successtrial = {
+            type: 'html-button-response',
+            post_trial_gap: 0,
+            choices: ['Click here to start Phase 1'],
+            stimulus: '<center>Well done!</center>'
+          };
+            
 
 
         //----------------------------------------------------------------------------
@@ -237,6 +248,7 @@
       // timeline.push(demographics_block);
       // timeline.push(gen_ins_block);
       timeline.push(instructionCheckLoopWithFeedback);
+      timeline.push(successtrial);   
       // timeline.push(instruction_check);
 
       addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
