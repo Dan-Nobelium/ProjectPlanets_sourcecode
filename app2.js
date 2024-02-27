@@ -22,7 +22,7 @@
       let pun_planet_side = jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1)[0];
     
       // Stimulus List Initialization
-      const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/planet3.png'], 1);
+      const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/pinkp.png'], 1);
       const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png','img/ship3.png'], 1);
     
       // Global Variables Definition
@@ -39,8 +39,8 @@
       const main_stim_height = 250;
       const feedback_duration = 2500;
       const rf_ship_delay = 1500;
-      const probability_trade = [[.5], [.5]];
-      const probability_shield = [[.5], [.5]];
+      const probability_trade = [[.5], [.5], [.5]];
+      const probability_shield = [[.5], [.5], [.5]];
 
     
       // manipulate response-ship Rft rate
@@ -89,7 +89,6 @@
               type: 'planet-response',
               stimulus: stim_list,
               stimulus_select:'img/selectring.png',
-              prompt: ['Planet A','Planet B','Planet C'],
               ship_stimulus: ship_list,
               show_ship: false,
               reset_planet_wait: 1000,
@@ -165,16 +164,7 @@
           timeline: timeline,
           preload_images: images,
           on_finish: function() {
-            var result = jsPsych.data.get().json();
-      
-            // Move this line down from outside jsPsych.init()
-            var jsonData = jsPsych.data.get().json();
-      
-            // Output JSON data to the console
-            console.log(jsonData);
-      
-            // Call the saveJsPsychData() function with appropriate arguments
-            saveJsPsychData(jsonData, 'experiment_data');
+
             jsPsych.data.displayData();
           }
         });

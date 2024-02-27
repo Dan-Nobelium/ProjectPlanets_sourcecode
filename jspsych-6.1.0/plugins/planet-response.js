@@ -49,7 +49,7 @@ jsPsych.plugins["planet-response"] = (function() {
 			prompt: {
 				type: jsPsych.plugins.parameterType.STRING,
 				pretty_name: 'Prompt',
-				default: ['Planet A','Planet B'],
+				default: ['Planet A','Planet B','Planet C'],
 				array: true,
 				description: 'Any content here will be displayed under the option.'
 			},
@@ -110,14 +110,14 @@ jsPsych.plugins["planet-response"] = (function() {
 			probability_trade: {
 				type: jsPsych.plugins.parameterType.FLOAT,
 				pretty_name: 'P(trade success)',
-				default: [.5, .5],
+				default: [.5, .5, .5],
 				array:  true,
 				description: 'Probability of successful trade for each planet.'
 			},
 			rewards: {
 				type: jsPsych.plugins.parameterType.INT,
 				pretty_name: 'Rewards',
-				default: [100,100],
+				default: [100,100, 100],
 				array: true,
 				description: 'Rewards for each planet.'
 			},
@@ -143,7 +143,7 @@ jsPsych.plugins["planet-response"] = (function() {
 				type: jsPsych.plugins.parameterType.FLOAT,
 				pretty_name: 'Probability of ship appearance.',
 				array: true,
-				default: [0.5, .5],
+				default: [0.5, .5, .5],
 				description: 'Probability the ship will appear when a planet button is clicked.'
 			},
 			ship_stimulus: {
@@ -238,7 +238,7 @@ jsPsych.plugins["planet-response"] = (function() {
 				type: jsPsych.plugins.parameterType.INT,
 				pretty_name: '[disabled]Signal duration range [currently disabled]',
 				array: true,
-				default: [2000,2000],
+				default: [2000,2000,2000],
 				description: '[disabled] Range of duration of signal image above chosen planet, in ms.'
 			},
 			reset_planet_wait: {
@@ -1307,7 +1307,7 @@ jsPsych.plugins["planet-response"] = (function() {
 
 	// initialise variables for balanced probability arrays
 	function initProbArray(probSuccess){
-		var numOptions = 2;
+		var numOptions = 3; //determines number of planets 3 = 3 planets
 		var orderbase = [];
 		var arr_log = [];
 		var arr_read = [];
