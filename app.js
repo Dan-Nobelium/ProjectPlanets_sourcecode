@@ -1288,61 +1288,12 @@ var gen_ins_block = {
     
       //----------------------------------------------------------------------------
       // // start experiment
-      // if (runJatos === true) {
+  
       
-      // // JATOS
-      // jatos.onLoad(function() {
-      //  //subject info 
-      //   var subject_id = jatos.urlQueryParameters.PROLIFIC_PID;
-      // //var study_id = jsPsych.data.getURLVariable('Study_id');
-      // //var session_id = jsPsych.data.getURLVariable('Session_id');
-      //   if (subject_id === undefined) {
-      //       subject_id = null;
-      //   }
-    
-      //  // add properties to each trial in the jsPsych data
-      //  jsPsych.data.addProperties({
-      //   subject_id: subject_id,
-      //   //study_id: study_id,
-      //   //session_id: session_id,
-      //   group: group,
-      //   sample: sample,
-      //   pun_planet_side: pun_planet_side,
-      //   pun_planet: stim_list[pun_planet_side],
-      //   pun_ship: ship_list[pun_planet_side],
-      //   nBlocks_p1: nBlocks_p1,
-      //   nBlocks_p2: nBlocks_p2
-      // });
-    
-      // var completion_url = 'https://app.prolific.co/submissions/complete?cc=C1AH5EU5';
-      // var finish_msg = 'All done! Click <a href="' + completion_url + '">here</a> to be returned to Prolific and receive your payment.';
-    
-    
-    
-    
-    
-      jsPsych.init({
-        timeline: timeline,
-        preload_images: images,
-        on_finish: function() {
-          var result = jsPsych.data.get().json();
-          jsPsych.data.displayData();
-    
-          
-          jatos.submitResultData(result, function() {
-              document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p><br><br><br>' +
-              finish_msg +
-              '</p></div></div>')
-            });
-          }
-        });
-      })
-    
-    
-      }
-      
-    
-      else if (runJatos === false) {
+      // Code to run JATOS removed from here 27/02
+
+      // else if (runJatos === false)
+       {
       var subject_id = jsPsych.data.getURLVariable('Subject_id');
       if (subject_id === undefined) {
         subject_id = null;
@@ -1374,11 +1325,6 @@ var gen_ins_block = {
           // Call the saveJsPsychData() function with appropriate arguments
           saveJsPsychData(jsonData, 'experiment_data');
     
-          // jatos.submitResultData(result, function() {
-          //   document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p>' +
-          //   finish_msg +
-          //   '</p></div></div>')
-          // });
           jsPsych.data.displayData();
         }
       });
