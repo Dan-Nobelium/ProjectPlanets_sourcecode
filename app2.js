@@ -159,7 +159,6 @@
 
 
 // Instruction check questions setup
-// Instruction check questions setup
 const questions = [
   {
     prompt: "<b>Question 1:</b> The aim of the task is to:",
@@ -216,6 +215,7 @@ let instruction_check = {
   loop_function: function(data) {
     if (!instructioncorrect) {
       // Participant got at least one answer wrong; show instruction check again
+      console.log('meep')
       return true; // Continue looping
     } else {
       // All answers correct; proceed
