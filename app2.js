@@ -94,45 +94,20 @@
 
 
 
-      // ----- Timeline creation -----
-      let timeline = []; // This is the master timeline, the experiment in sequence based on the objects pushed into this array.
+        //----------------------------------------------------------------------------
+        // ----- Participant instructions -----
 
+            let gen_ins_block = {
+              type: "instructions",
+              pages: [preques, pretrain1, pretrain2, pretrain3],
+              allow_keys: false,
+              show_clickable_nav: true,
+              post_trial_gap: iti,
+              data: {
+                phase: "instructions",
+              },
+            };
 
-
-//data
-
-
-  // demographics
-
-  timeline.push(demographics_block);
-
-
-// let consent_text = [
-//   '<img src= "./img/logo.png"></img>' +
-//     '<p>Welcome to the experiment!</p>' +
-//     '<p>Before you begin, please read the information sheet carefully.</p>' +
-//     '<br>' +
-//     '<p><b>PARTICIPANT INFORMATION STATEMENT AND CONSENT</b></p>' +
-//       '<embed src="data/consent/PIS_SONA_3385.pdf" width="800px" height="2100px" />' +
-//     '<p>By continuing, you are making a decision whether or not to participate. Clicking the button below indicates that, having read the information provided on the participant information sheet, you consent to the above.' +
-//     '<br></p>'
-//   ];
-
-
-
-//       // info statement and consent
-//       var consent_block = {
-//         type: 'html-button-response',
-//         stimulus: consent_text,
-//         choices: ['I consent to participate'],
-//     data: {
-//       phase: 'consent'
-//     },
-//     }
-//     timeline.push(consent_block);
-
-
-  
 
         //----------------------------------------------------------------------------
         // ----- Phase 1 -----
@@ -178,9 +153,95 @@
               }
           }
       
-          addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-
         //----------------------------------------------------------------------------
+
+
+
+
+// Instruction check questions setup
+// Instruction check questions setup
+const questions = [
+  {
+    prompt: "<b>Question 1:</b> The aim of the task is to:",
+    options: ["Get as many points as possible", "Battle the aliens on the planets"],
+    correct: "Get as many points as possible"
+  },
+  {
+    prompt: "<b>Question 2:</b> Clicking on each planet will:",
+    options: ["Make the planet disappear", "Sometimes result in a successful trade, earning me points"],
+    correct: "Sometimes result in a successful trade, earning me points"
+  },
+  {
+    prompt: "<b>Question 3:</b> There will be multiple blocks in this experiment, with questions in between each block.",
+    options: ["FALSE", "TRUE"],
+    correct: "TRUE"
+  },
+  {
+    prompt: "<b>Question 4:</b> The top 10% performers at the end of the task will receive:",
+    options: ["An additional monetary prize", "Extra course credit"],
+    correct: "An additional monetary prize"
+  }
+];
+
+
+// Define instruction check block
+let instructionCheck = {
+  type: "survey-multi-choice",
+  questions: questions.map(q => ({
+    prompt: q.prompt,
+    options: q.options,
+    required: true
+  })),
+  on_finish: function(data) {
+    // Parse the responses
+    let responses = JSON.parse(data.responses);
+    let allCorrect = true; // Assume true initially
+
+    // Check each answer
+    for (let i = 0; i < questions.length; i++) {
+      if (responses[`Q${i}`] !== questions[i].correct) {
+        allCorrect = false;
+        break; // Exit the loop as soon as one incorrect answer is found
+      }
+    }
+
+    // Update 'instructioncorrect' based on the check
+    instructioncorrect = allCorrect;
+  }
+};
+
+// Loop structure for retrying questionnaire
+let instruction_check = {
+  timeline: [instructionCheck],
+  loop_function: function(data) {
+    if (!instructioncorrect) {
+      // Participant got at least one answer wrong; show instruction check again
+      return true; // Continue looping
+    } else {
+      // All answers correct; proceed
+      return false; // Exit loop
+    }
+  }
+};
+
+
+
+        
+      // ----- Timeline creation -----
+      let timeline = []; // This is the master timeline, the experiment in sequence based on the objects pushed into this array.
+
+            
+      // timeline.push(consent_block);
+      // timeline.push(demographics_block);
+      // timeline.push(gen_ins_block);
+      timeline.push(instruction_check);
+
+      addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+      
+
+
+      //Run the experiment
+
         // 
          {
         let subject_id = jsPsych.data.getURLVariable('Subject_id');
