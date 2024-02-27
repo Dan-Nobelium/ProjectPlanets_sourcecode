@@ -164,7 +164,7 @@
         instructioncorrect = allCorrect;
         window.instructionFeedbackNeeded = !allCorrect;
       }
-    };
+    }
 
     // Loop structure for retrying questionnaire with immediate feedback
     let instructionCheckLoopWithFeedback = {
