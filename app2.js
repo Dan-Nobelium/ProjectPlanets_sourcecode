@@ -7,9 +7,7 @@
       position of the punished planet, left-right assignment of planets and ships,
       global variables, and the images list. */
     
-      // var groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];
-      let groups = ["early_0.1", "early_0.4", "intermediate_0.2", "late_0.1", "late_0.4"];
-      
+      var groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];      
       let group = "" + jsPsych.randomization.sampleWithReplacement(groups, 1) + "";
     
     
@@ -17,7 +15,6 @@
       const samples = ["ProA", "others"];
       let sample = samples[0];
     
-      //var completion_code = (Math.floor(Math.random() * 99999) * 397).toString();
     
       // randomise position of punished planet, left-right assignment of planets and ships
       const num_planets = 3;
@@ -27,13 +24,6 @@
       // Stimulus List Initialization
       const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/planet3.png'], 1);
       const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png','img/ship3.png'], 1);
-    
-      // // Contingency Instructions Screen Setup
-      // const pun_planet = stim_list[pun_planet_side].substring(4).slice(0, -5);
-      // const unpun_planet = stim_list[1 - pun_planet_side].substring(4).slice(0, -5);
-      // const pun_ship = ship_list[pun_planet_side].substring(8).slice(0, -4);
-      // const unpun_ship = ship_list[1 - pun_planet_side].substring(8).slice(0, -4);
-      // const planet_layout = pun_planet_side === "0" ? ["left", "right"] : ["right", "left"];
     
       // Global Variables Definition
       let block_number = 0;
@@ -80,12 +70,6 @@
         'img/arrow.jpg', 'img/blank_lose.jpg', 'img/blank_arrow.jpg'
       ];
     
-        
-  //   //----------------------------------------------------------------------------
-  //   /* self-report questionnaires (CFI-HTQ-AUDIT) */
-  
-  //----------------------------------------------------------------------------
-      
       //----------------------------------------------------------------------------
         /* experiment blocks */
       
@@ -95,13 +79,6 @@
         var block6loop = []
       
       
-      //force full screen
-        timeline.push(
-          {
-            type: 'fullscreen',
-            fullscreen_mode: true
-          }
-        );
 
 
         //----------------------------------------------------------------------------
@@ -198,12 +175,6 @@
       
             // Call the saveJsPsychData() function with appropriate arguments
             saveJsPsychData(jsonData, 'experiment_data');
-      
-            // jatos.submitResultData(result, function() {
-            //   document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p>' +
-            //   finish_msg +
-            //   '</p></div></div>')
-            // });
             jsPsych.data.displayData();
           }
         });
