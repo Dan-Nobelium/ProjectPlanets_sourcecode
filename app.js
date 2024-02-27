@@ -1287,35 +1287,35 @@ var gen_ins_block = {
     
     
       //----------------------------------------------------------------------------
-      // start experiment
-      if (runJatos === true) {
+      // // start experiment
+      // if (runJatos === true) {
       
-      // JATOS
-      jatos.onLoad(function() {
-       //subject info 
-        var subject_id = jatos.urlQueryParameters.PROLIFIC_PID;
-      //var study_id = jsPsych.data.getURLVariable('Study_id');
-      //var session_id = jsPsych.data.getURLVariable('Session_id');
-        if (subject_id === undefined) {
-            subject_id = null;
-        }
+      // // JATOS
+      // jatos.onLoad(function() {
+      //  //subject info 
+      //   var subject_id = jatos.urlQueryParameters.PROLIFIC_PID;
+      // //var study_id = jsPsych.data.getURLVariable('Study_id');
+      // //var session_id = jsPsych.data.getURLVariable('Session_id');
+      //   if (subject_id === undefined) {
+      //       subject_id = null;
+      //   }
     
-       // add properties to each trial in the jsPsych data
-       jsPsych.data.addProperties({
-        subject_id: subject_id,
-        //study_id: study_id,
-        //session_id: session_id,
-        group: group,
-        sample: sample,
-        pun_planet_side: pun_planet_side,
-        pun_planet: stim_list[pun_planet_side],
-        pun_ship: ship_list[pun_planet_side],
-        nBlocks_p1: nBlocks_p1,
-        nBlocks_p2: nBlocks_p2
-      });
+      //  // add properties to each trial in the jsPsych data
+      //  jsPsych.data.addProperties({
+      //   subject_id: subject_id,
+      //   //study_id: study_id,
+      //   //session_id: session_id,
+      //   group: group,
+      //   sample: sample,
+      //   pun_planet_side: pun_planet_side,
+      //   pun_planet: stim_list[pun_planet_side],
+      //   pun_ship: ship_list[pun_planet_side],
+      //   nBlocks_p1: nBlocks_p1,
+      //   nBlocks_p2: nBlocks_p2
+      // });
     
-      var completion_url = 'https://app.prolific.co/submissions/complete?cc=C1AH5EU5';
-      var finish_msg = 'All done! Click <a href="' + completion_url + '">here</a> to be returned to Prolific and receive your payment.';
+      // var completion_url = 'https://app.prolific.co/submissions/complete?cc=C1AH5EU5';
+      // var finish_msg = 'All done! Click <a href="' + completion_url + '">here</a> to be returned to Prolific and receive your payment.';
     
     
     
