@@ -49,7 +49,7 @@ jsPsych.plugins["planet-response"] = (function() {
 			prompt: {
 				type: jsPsych.plugins.parameterType.STRING,
 				pretty_name: 'Prompt',
-				default: ['Planet A','Planet B',],
+				default: ['Planet A','Planet B'],
 				array: true,
 				description: 'Any content here will be displayed under the option.'
 			},

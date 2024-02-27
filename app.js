@@ -573,7 +573,7 @@ var gen_ins_block = {
             type: 'planet-response',
             stimulus: stim_list,
             stimulus_select:'img/selectring.png',
-            prompt: ['Planet A','Planet B','Planet TREE'],
+            prompt: ['Planet A','Planet B','Planet C'],
             ship_stimulus: ship_list,
             show_ship: false,
             ship_attack_damage: ship_attack_damage,

@@ -1,22 +1,18 @@
-/*
- * Example plugin template
- */
-
 /**
- * Built on jpsych-planet-response & jspsych-image-button-response by: Josh de Leeuw
+ * Adapted from jspsych-image-button-response
+ * Original author: Josh de Leeuw
  *
- * plugin for displaying a stimulus and getting a mouseclick response (in the indexed order of displayed images), with 3 concurrent planet/ship stimuli rather than two.
+ * plugin for displaying a stimulus and getting a mouseclick response (in the indexed order of displayed images)
  *
  * documentation: docs.jspsych.org
  *
  **/
 
-
-jsPsych.plugins["planet-response"] = (function() {
+jsPsych.plugins["planet-response-triplet"] = (function() {
 	var plugin = {};
 	jsPsych.pluginAPI.registerPreload('planet-response', 'stimulus', 'image');
 	plugin.info = {
-		name: 'planet-response',
+		name: 'planet-response-triplet',
 		description: '',
 		parameters: {
 			stimulus: {
