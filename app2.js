@@ -74,9 +74,7 @@
         /* experiment blocks */
       
           // initialise timeline
-        var introloop = [];
         var timeline = [];
-        var block6loop = []
       
       
 
