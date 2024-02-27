@@ -23,6 +23,7 @@
       // Stimulus List Initialization
       const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/pinkp.png'], 1);
       const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png','img/ship3.png'], 1);
+      const stim_selector_highlight = 'img/selectring.png';
     
       // Global Variables Definition
       let block_number = 0;
@@ -94,10 +95,10 @@
           // define task blocks with no ships
           let planet_noship = {
               type: 'planet-response',
-              stimulus: stim_list,
-              stimulus_select:'img/selectring.png',
-              ship_stimulus: ship_list,
               show_ship: false,
+              stimulus: stim_list,
+              stimulus_select: stim_selector_highlight,
+              ship_stimulus: ship_list,              
               reset_planet_wait: reset_planet_wait_const,
               shield_charging_time: shield_charging_time_const,
               ship_attack_time: ship_attack_time_const,
