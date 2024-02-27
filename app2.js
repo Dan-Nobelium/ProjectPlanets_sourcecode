@@ -7,20 +7,19 @@
       position of the punished planet, left-right assignment of planets and ships,
       global variables, and the images list. */
     
-      var groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];      
-      let group = "" + jsPsych.randomization.sampleWithReplacement(groups, 1) + "";
-    
-    
+     
+
       // Participant Sample Selection
-      const samples = ["ProA", "others"];
-      let sample = samples[0];
-    
-    
+      let groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];      
+      let group = "" + jsPsych.randomization.sampleWithReplacement(groups, 1) + "";
+      let samples = ["ProA", "others"];
+      let sample = samples[0];  
+
       // randomise position of punished planet, left-right assignment of planets and ships
-      const num_planets = 3;
-      var pun_planet_sides = [...Array(num_planets).keys()].map(x => x.toString());
+      let num_planets = 3;
+      let pun_planet_sides = [...Array(num_planets).keys()].map(x => x.toString());
       let pun_planet_side = jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1)[0];
-    
+
       // Stimulus List Initialization
       const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/pinkp.png'], 1);
       const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png','img/ship3.png'], 1);
@@ -45,19 +44,18 @@
     
       // manipulate response-ship Rft rate
       if (group.includes("0.1")) {
-        var probability_ship = [[0.1],[0.1]]; 
-        var ship_attack_damage = 100;
+        let probability_ship = [[0.1],[0.1]]; 
+        let ship_attack_damage = 100;
       } else if (group.includes("0.2")) {
-        var probability_ship = [[0.2],[0.2]];
-        var ship_attack_damage = 100;
+        let probability_ship = [[0.2],[0.2]];
+        let ship_attack_damage = 100;
       } else if (group.includes("0.4")) {
-        var probability_ship = [[0.4],[0.4]];
-        var ship_attack_damage = 100;
+        let probability_ship = [[0.4],[0.4]];
+        let ship_attack_damage = 100;
       }
-    
-        var nTrialspBlk = 5; //if continuousResp is true though, this doesn't matter
+        let nTrialspBlk = 5; //if continuousResp is true though, this doesn't matter
         if (continuousResp){
-            var nTrialspBlk = 1;
+            let nTrialspBlk = 1;
         }
     
       
@@ -73,8 +71,10 @@
       //----------------------------------------------------------------------------
         /* experiment blocks */
       
-          // initialise timeline
-        var timeline = [];
+
+
+      // initialise empty timeline
+        let timeline = [];
       
       
 
@@ -83,7 +83,7 @@
         // ----- Phase 1 -----
       
           // define task blocks with no ships
-          var planet_noship = {
+          let planet_noship = {
               type: 'planet-response',
               stimulus: stim_list,
               stimulus_select:'img/selectring.png',
@@ -123,8 +123,8 @@
           }
       
           // loop over specified number of blocks
-          for (var i=0; i<nBlocks_p1; i++) {
-              var block_noship = {
+          for (let i=0; i<nBlocks_p1; i++) {
+              let block_noship = {
                   timeline: [planet_noship],
                   repetitions: nTrialspBlk,
                   data: {
@@ -142,7 +142,7 @@
         //----------------------------------------------------------------------------
         // 
          {
-        var subject_id = jsPsych.data.getURLVariable('Subject_id');
+        let subject_id = jsPsych.data.getURLVariable('Subject_id');
         if (subject_id === undefined) {
           subject_id = null;
         }
