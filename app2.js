@@ -29,10 +29,9 @@
       let block_number = 0;
       let trial_number = 0;
       let points = 0;
-      let continuousResp = true;
       const nBlocks_p1 = 2;
       const nBlocks_p2 = 4;
-      const block_duration = 180 * 10; // in milliseconds (3 mins)
+      const block_duration = 180 * 1; // in milliseconds (3 mins)
       const iti = 1000;
       const inf_stim_height = 80;
       const inf_slider_width = 500;
@@ -57,12 +56,15 @@
         let probability_ship = [[0.4],[0.4]];
         let ship_attack_damage = 100;
       }
-        let nTrialspBlk = 5; //if continuousResp is true though, this doesn't matter
-        if (continuousResp){
-            let nTrialspBlk = 1;
-        }
+
+      //Continious or discreete testing phases
+      let continuousResp = true;
+      let nTrialspBlk = 5; //if continuousResp is true though, this doesn't matter
+      if (continuousResp){
+          let nTrialspBlk = 1;
+      }
     
-      
+
       let images = [
         'img/signal1.png','img/signal2.png','img/signal3.png','img/signal4.png',
         'img/ship1.png','img/ship2.png',
@@ -73,19 +75,28 @@
       ];
     
       //----------------------------------------------------------------------------
-        /* experiment blocks */
+        /* functions */
       
+      // Define a function to add blocks to the timeline
+      function addBlocksToTimeline(timeline, blockConfig, nBlocks, nTrialsPerBlock) {
+        for (let i = 0; i < nBlocks; i++) {
+            let block = {
+                timeline: [blockConfig],
+                repetitions: nTrialsPerBlock,
+                data: {
+                    phase: 'phase1'
+                }
+            };
+            timeline.push(block);
+        }
+      }
 
 
 
 
+      // ----- Timeline creation -----
+      let timeline = []; // This is the master timeline, the experiment in sequence based on the objects pushed into this array.
 
-
-
-      // initialise empty timeline
-        let timeline = [];
-      
-      
 
 
         //----------------------------------------------------------------------------
@@ -132,19 +143,7 @@
               }
           }
       
-          // loop over specified number of blocks
-          for (let i=0; i<nBlocks_p1; i++) {
-              let block_noship = {
-                  timeline: [planet_noship],
-                  repetitions: nTrialspBlk,
-                  data: {
-                      phase: 'phase1'
-                  }
-              }
-
-
-              timeline.push(block_noship);
-          }
+          addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 
         //----------------------------------------------------------------------------
         // 
