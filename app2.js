@@ -147,14 +147,17 @@
         }
       },
 
-      on_finish: function(data) {
+      on_finish: function() 
+      {
         // Parse the responses
         let responses = JSON.parse(data.responses);
         let allCorrect = true; // Assume true initially
 
         // Check each answer
-        for (let i = 0; i < questions.length; i++) {
-          if (responses[`Q${i}`] !== questions[i].correct) {
+        for (let i = 0; i < questions.length; i++) 
+        {
+          if (responses[`Q${i}`] !== questions[i].correct) 
+          {
             allCorrect = false;
             break; // Exit the loop as soon as one incorrect answer is found
           }
@@ -164,7 +167,8 @@
         instructioncorrect = allCorrect;
         window.instructionFeedbackNeeded = !allCorrect;
       }
-    };
+      
+      };
 
     // Loop structure for retrying questionnaire with immediate feedback
     let instructionCheckLoopWithFeedback = {
@@ -176,7 +180,7 @@
 
     // Initialize the feedback needed flag, to alert participants they need to retry the question
     window.instructionFeedbackNeeded = false;
-
+  
 
 
 
