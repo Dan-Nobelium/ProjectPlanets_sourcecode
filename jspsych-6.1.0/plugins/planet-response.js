@@ -49,7 +49,7 @@ jsPsych.plugins["planet-response"] = (function() {
 			prompt: {
 				type: jsPsych.plugins.parameterType.STRING,
 				pretty_name: 'Prompt',
-				default: ['Planet A','Planet B','Planet C'],
+				default: ['Planet A','Planet B','Planet C'], //stup for 3 planets
 				array: true,
 				description: 'Any content here will be displayed under the option.'
 			},
@@ -1291,14 +1291,14 @@ jsPsych.plugins["planet-response"] = (function() {
 		}
 		arr_success = Boolean(arr_read[choice][arr_next])
 		if (verbose){
-			console.log(vstr + ' array read: ' + String(arr_read[0]) + '; ' + String(arr_read[1]))
-			console.log(vstr + ' array log (before event): ' + String(arr_log[0]) + '; ' + String(arr_log[1]))
+			// console.log(vstr + ' array read: ' + String(arr_read[0]) + '; ' + String(arr_read[1]))
+			// console.log(vstr + ' array log (before event): ' + String(arr_log[0]) + '; ' + String(arr_log[1]))
 		}
 		
 		// Update log
 		arr_log[choice].push(Number(arr_success))
 		if (verbose){
-			console.log(vstr + ' array log (after event): ' + String(arr_log[0]) + '; ' + String(arr_log[1]))
+			// console.log(vstr + ' array log (after event): ' + String(arr_log[0]) + '; ' + String(arr_log[1]))
 		}
 		//Return arguments
 		return([arr_success,arr_log,arr_read])
