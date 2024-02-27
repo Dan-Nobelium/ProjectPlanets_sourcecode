@@ -40,6 +40,9 @@
       const rf_ship_delay = 1500;
       const probability_trade = [[.5], [.5], [.5]];
       const probability_shield = [[.5], [.5], [.5]];
+      const reset_planet_wait_const = 1000;
+      const shield_charging_time_const = 3000;
+      const ship_attack_time_const = 6000;
 
     
       // manipulate response-ship Rft rate
@@ -73,6 +76,11 @@
       
 
 
+
+
+
+
+
       // initialise empty timeline
         let timeline = [];
       
@@ -82,6 +90,7 @@
         //----------------------------------------------------------------------------
         // ----- Phase 1 -----
       
+
           // define task blocks with no ships
           let planet_noship = {
               type: 'planet-response',
@@ -89,9 +98,9 @@
               stimulus_select:'img/selectring.png',
               ship_stimulus: ship_list,
               show_ship: false,
-              reset_planet_wait: 1000,
-              shield_charging_time: 3000,
-              ship_attack_time: 6000,
+              reset_planet_wait: reset_planet_wait_const,
+              shield_charging_time: shield_charging_time_const,
+              ship_attack_time: ship_attack_time_const,
               data: {
                   phase: 'phase1',
                   block_type: 'planet_noship'
@@ -131,14 +140,11 @@
                       phase: 'phase1'
                   }
               }
+
+
               timeline.push(block_noship);
-      
-          
           }
-      
-      
-      
-      
+
         //----------------------------------------------------------------------------
         // 
          {
