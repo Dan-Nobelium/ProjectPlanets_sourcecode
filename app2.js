@@ -99,6 +99,57 @@
 
 
 
+//data
+
+let demo_text = [
+  '<p> Gender: ' +
+  '<input type="radio" name="gender" value="male" required/> Male &nbsp; ' +
+  '<input type="radio" name="gender" value="female" required/> Female &nbsp;' +
+  '<input type="radio" name="gender" value="other" required/> Other<br>' + '<br>' +
+  '<p> Age: <input name="age" type="text" required/> </p>' + '<br>' +
+  '<p> Native language: <input name="language" type="text" required/> </p>' + '<br>'
+];
+
+
+  // demographics
+  let demographics_block = {
+    type: 'survey-html-form',
+    preamble: '<p><b>Please fill in your demographic details</b></p>',
+    html: demo_text,
+    data: {
+      phase: 'demographics'
+    }
+  };
+  timeline.push(demographics_block);
+
+
+// let consent_text = [
+//   '<img src= "./img/logo.png"></img>' +
+//     '<p>Welcome to the experiment!</p>' +
+//     '<p>Before you begin, please read the information sheet carefully.</p>' +
+//     '<br>' +
+//     '<p><b>PARTICIPANT INFORMATION STATEMENT AND CONSENT</b></p>' +
+//       '<embed src="data/consent/PIS_SONA_3385.pdf" width="800px" height="2100px" />' +
+//     '<p>By continuing, you are making a decision whether or not to participate. Clicking the button below indicates that, having read the information provided on the participant information sheet, you consent to the above.' +
+//     '<br></p>'
+//   ];
+
+
+
+//       // info statement and consent
+//       var consent_block = {
+//         type: 'html-button-response',
+//         stimulus: consent_text,
+//         choices: ['I consent to participate'],
+//     data: {
+//       phase: 'consent'
+//     },
+//     }
+//     timeline.push(consent_block);
+
+
+  
+
         //----------------------------------------------------------------------------
         // ----- Phase 1 -----
       

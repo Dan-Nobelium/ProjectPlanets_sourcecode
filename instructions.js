@@ -1,4 +1,4 @@
-var helloWorld = "Hello World";
+let helloWorld = "Hello World";
 let demo_text = [
     '<p> Gender: ' +
     '<input type="radio" name="gender" value="male" required/> Male &nbsp; ' +
@@ -23,7 +23,7 @@ let demo_text = [
   /* self-report questionnaires (CFI-HTQ-AUDIT) */
 
   // CFI
-  var cfi = [];
+  let cfi = [];
   cfi.prompt = '<b>Please rate how much you agree with the following statements. There are no right or wrong answers.</b>';
   cfi.items = [
     'I am good at "sizing up" situations.',
@@ -51,7 +51,7 @@ let demo_text = [
   cfi.labels = ['strongly<br>disagree', 'disagree', 'somewhat<br>disagree', 'neutral', 'somewhat<br>agree', 'agree', 'strongly<br>agree'];
  
   // HTQ
-  var htq = [];
+  let htq = [];
   htq.prompt = '<b>Please rate how much you agree with the following statements. There are no right or wrong answers.</b>';
   htq.items = [
     'I tend to dwell on the same issues.',
@@ -69,7 +69,7 @@ let demo_text = [
   htq.labels = ['strongly<br>disagree', 'disagree', 'somewhat<br>disagree', 'neutral', 'somewhat<br>agree', 'agree', 'strongly<br>agree'];
 
   // AUDIT
-  var audit = [];
+  let audit = [];
   audit.prompt = '<b>Please answer the following questions about your alcohol use during the <b>past 12 months</b>.</b>'
   audit.items = [
     'How often do you have a drink containing alcohol?',
