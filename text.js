@@ -64,8 +64,6 @@ const demographics_block = {
     //   var ProA_insert = '';
     // }
 
-    let instructionPages = [preques, pretrain1, pretrain2, pretrain3];
-
 
     const questions = [
         {

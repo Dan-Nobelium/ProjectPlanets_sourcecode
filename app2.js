@@ -99,7 +99,7 @@
 
             let gen_ins_block = {
               type: "instructions",
-              pages: instructionPages,
+              pages: [preques, pretrain1, pretrain2, pretrain3],
               allow_keys: false,
               show_clickable_nav: true,
               post_trial_gap: iti,
@@ -244,13 +244,11 @@
       let timeline = []; // This is the master timeline, the experiment in sequence based on the objects pushed into this array.
 
             
-      // timeline.push(consent_block);
-      // timeline.push(demographics_block);
-      // timeline.push(gen_ins_block);
+      timeline.push(consent_block);
+      timeline.push(demographics_block);
+      timeline.push(gen_ins_block);
       timeline.push(instructionCheckLoopWithFeedback);
       timeline.push(successtrial);   
-      // timeline.push(instruction_check);
-
       addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
       
 
