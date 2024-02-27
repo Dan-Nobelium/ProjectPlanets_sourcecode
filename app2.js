@@ -183,14 +183,22 @@ const questions = [
 ];
 
 
-// Define instruction check block
-let instructionCheck = {
+// Define instruction check block with immediate feedback
+let instructionCheckWithFeedback = {
   type: "survey-multi-choice",
   questions: questions.map(q => ({
     prompt: q.prompt,
     options: q.options,
     required: true
   })),
+  preamble: function() {
+    // Check if we need to show a feedback message (e.g., based on a flag set in on_finish)
+    if (window.instructionFeedbackNeeded) {
+      return "<p><i>One of your answers was incorrect. Please try again.</i></p>";
+    } else {
+      return ""; // No feedback needed initially
+    }
+  },
   on_finish: function(data) {
     // Parse the responses
     let responses = JSON.parse(data.responses);
@@ -204,25 +212,25 @@ let instructionCheck = {
       }
     }
 
-    // Update 'instructioncorrect' based on the check
+    // Update 'instructioncorrect' and feedback need flag based on the check
     instructioncorrect = allCorrect;
+    window.instructionFeedbackNeeded = !allCorrect;
   }
 };
 
-// Loop structure for retrying questionnaire
-let instruction_check = {
-  timeline: [instructionCheck],
+// Loop structure for retrying questionnaire with immediate feedback
+let instructionCheckLoopWithFeedback = {
+  timeline: [instructionCheckWithFeedback],
   loop_function: function(data) {
-    if (!instructioncorrect) {
-      // Participant got at least one answer wrong; show instruction check again
-      console.log('meep')
-      return true; // Continue looping
-    } else {
-      // All answers correct; proceed
-      return false; // Exit loop
-    }
+    return !instructioncorrect; // Continue looping if not correct
   }
 };
+
+// Initialize the feedback needed flag
+window.instructionFeedbackNeeded = false;
+
+// Add the instructionCheckLoopWithFeedback to your main experiment timeline
+// timeline.push(instructionCheckLoopWithFeedback);
 
 
 
@@ -234,7 +242,8 @@ let instruction_check = {
       // timeline.push(consent_block);
       // timeline.push(demographics_block);
       // timeline.push(gen_ins_block);
-      timeline.push(instruction_check);
+      timeline.push(instructionCheckLoopWithFeedback);
+      // timeline.push(instruction_check);
 
       addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
       
