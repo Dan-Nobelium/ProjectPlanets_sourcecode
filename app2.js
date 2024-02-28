@@ -10,14 +10,13 @@
 // Participant Sample Selection
 let groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];
 let group = jsPsych.randomization.sampleWithReplacement(groups, 1);
-console.log (group);
 let samples = ["ProA", "others"];
 let sample = samples[0];  
 
 // randomise position of planets (left/middle/right as 0/1/2)
 let num_planets = 3;
-let pun_planet_sides = [...Array(num_planets).keys()].map(x => x.toString());
-let pun_planet_side = jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1)[0];
+let planet_sides = [...Array(num_planets).keys()].map(x => x.toString());
+let planet_side = jsPsych.randomization.sampleWithReplacement(planet_sides, 1)[0];
 
 // Stimulus and image Initialization
 const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/pinkp.png'], 1);
@@ -191,7 +190,7 @@ var end_instruction = {
 let planet_noship = {
     type: 'planet-response',
     show_ship: false,
-    ship_hostile_idx: pun_planet_side,
+    ship_hostile_idx: planet_side,
     prompt: ['Planet A','Planet B','Planet C'],
     stimulus: stim_list,
     stimulus_select: stim_selector_highlight,
@@ -254,7 +253,7 @@ var phaseTwoInstructions = {
 let planet_ship = {
   type: 'planet-response',
   show_ship: true,
-  ship_hostile_idx: pun_planet_side,
+  ship_hostile_idx: planet_side,
   prompt: ['Planet A','Planet B','Planet C'],
   stimulus: stim_list,
   stimulus_select: stim_selector_highlight,
@@ -363,9 +362,9 @@ addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
     subject_id: subject_id,
     group: group,
     sample: sample,
-    pun_planet_side: pun_planet_side,
-    pun_planet: stim_list[pun_planet_side],
-    pun_ship: ship_list[pun_planet_side],
+    planet_side: planet_side,
+    pun_planet: stim_list[planet_side],
+    pun_ship: ship_list[planet_side],
   });
 
   jsPsych.init({
