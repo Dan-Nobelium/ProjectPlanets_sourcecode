@@ -335,6 +335,124 @@ var exit_experiment = {
     'The experiment has concluded.'
   ]
 };
+//
+
+
+
+      //----------------------------------------------------------------------------
+      /* valence & inference checks */
+    
+      // valence check
+      const valence_q = `How do you feel about each of these game elements: 
+    
+      `;
+  
+  const val_img_p1 = [
+    {
+      stimulus: 'img/win100.png',
+      text: "Winning $100"
+    },
+    {
+      stimulus: stim_list[0],
+      text: "Planet A (left)"
+    },
+    {
+      stimulus: stim_list[1],
+      text: "Planet B (right)"
+    }
+    ];
+  
+  
+  
+  
+    // inference check prompt
+    var inference_prompt = [
+      'Please answer the following questions with respect to <b>Planet A</b> (left planet):',
+      'Please answer the following questions with respect to <b>Planet B</b> (right planet):',
+      'Please answer the following questions with respect to <b>Ship 1</b>:',
+      'Please answer the following questions with respect to <b>Ship 2</b>:',
+    ];
+  
+    // contingency question
+    var contingency_q = [
+      'How OFTEN did interacting with <b>planet A</b> lead to the above outcome?',
+      'How OFTEN did interacting with <b>planet B</b> lead to the above outcome?',
+      'How OFTEN did interacting with <b>Ship 1</b> lead to the above outcome?',
+      'How OFTEN did interacting with <b>Ship 2</b> lead to the above outcome?',
+    ];
+  
+    // phase 1, planet A
+    var inf_img_p1_A = [
+      {
+        stimulus: 'img/win100.png',
+        text: "Winning $100"
+      }
+    ];
+  
+  
+  
+  
+    //* inference and valence checks end *-----------------
+
+var i = 1;
+
+            // valence check p1
+            var valence_p1 = {
+              type: 'valence-check-3',
+              prompt: valence_q,
+              stimulus_1: val_img_p1[0].stimulus,
+              stim_text_1: val_img_p1[0].text,
+              stimulus_2: val_img_p1[1].stimulus,
+              stim_text_2: val_img_p1[1].text,
+              stimulus_3: val_img_p1[2].stimulus,
+              stim_text_3: val_img_p1[2].text,
+              labels: valence_labels,
+              stimulus_height: inf_stim_height,
+              slider_width: inf_slider_width,
+              require_movement: false,
+              data: {
+                phase: 'val_check_1',
+                block_number: i
+              }
+            };
+        
+            // valence check p1
+            var valence_p2 = {
+              type: 'valence-checker',
+              prompt: valence_q,
+              stimulus_1: val_img_p1[0].stimulus,
+              stim_text_1: val_img_p1[0].text,
+              stimulus_2: val_img_p1[1].stimulus,
+              stim_text_2: val_img_p1[1].text,
+              stimulus_3: val_img_p1[2].stimulus,
+              stim_text_3: val_img_p1[2].text,
+              labels: valence_labels,
+              stimulus_height: inf_stim_height,
+              slider_width: inf_slider_width,
+              require_movement: false,
+              data: {
+                phase: 'val_check_1',
+                block_number: i
+              }
+            };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////
 
 // ---- Timeline creation ----
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
@@ -346,10 +464,19 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(end_instruction);   
 // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 // timeline.push(phaseTwoInstructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 // timeline.push(debrief_block);
 // timeline.push(contact_block);
-// timeline.push(exit_experiment);
+
+
+          timeline.push(valence_p1);
+          timeline.push(valence_p2);
+          // timeline.push(infer_p1_A);
+          //timeline.push(infer_p1_B);
+          //timeline.push(slider_p1_q1);
+          //timeline.push(slider_p1_q2);
+
+timeline.push(exit_experiment);
 
 // Run the experiment
 {

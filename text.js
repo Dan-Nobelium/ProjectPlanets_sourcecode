@@ -122,3 +122,17 @@ const demographics_block = {
         contact = [ 'If you would like to receive a copy of the study results via email, please provide your email address below. Your email address will be used for this purpose only, and will not be stored alongside your data.'
         
         ];
+
+        var valence_labels = [
+          'Very <br>negative',
+          'Slightly <br>negative',
+          'Neutral',
+          'Slightly <br>positive',
+          'Very <br>positive'
+        ];
+
+        var contingency_labels = [
+          '<p>' + 'Never' + '<br>(0%)</p>',
+          '<p>' + 'Sometimes' + '</p>',
+          '<p>' + 'Every time' + '<br>(100%)</p>'
+        ];

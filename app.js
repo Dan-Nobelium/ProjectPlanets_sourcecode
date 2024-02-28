@@ -442,6 +442,11 @@ async function saveJsPsychData(outputData) {
         stimulus: stim_list[1],
         text: "Planet B (right)"
       }]
+
+      // var slider_img_right = [{
+      //   stimulus: stim_list[2],
+      //   text: "Planet C (right)"
+      // }]
       
 //   //----------------------------------------------------------------------------
 //   /* self-report questionnaires (CFI-HTQ-AUDIT) */
