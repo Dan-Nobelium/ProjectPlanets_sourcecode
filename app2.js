@@ -341,11 +341,9 @@ var exit_experiment = {
 
       //----------------------------------------------------------------------------
       /* valence & inference checks */
-    
+
       // valence check
-      const valence_q = `How do you feel about each of these game elements: 
-    
-      `;
+      const valence_q = `How do you feel about each of these game elements: `;
   
   const val_img_p1 = [
     {
@@ -358,7 +356,7 @@ var exit_experiment = {
     },
     {
       stimulus: stim_list[1],
-      text: "Planet B (right)"
+      text: "Planet B (middle)"
     },
     {
       stimulus: stim_list[2],
@@ -385,22 +383,58 @@ var exit_experiment = {
       'How OFTEN did interacting with <b>Ship 2</b> lead to the above outcome?',
     ];
   
-    // phase 1, planet A
-    var inf_img_p1_A = [
-      {
-        stimulus: 'img/win100.png',
-        text: "Winning $100"
-      }
-    ];
+
+// // Prompts for planets and spaceships
+// //TODO swap in variable and for loops to tidy this up
+// const planetA = "Planet A (left side)"
+// const planetB = "Planet B (middle)"
+// const planetC = "Planet A (right side)"
+// const planets = [
+//   { title: "<b>Planet A</b>", content: "Please answer the following questions with respect to Planet A:" },
+//   { title: "<b>Planet B</b>", content: "Please answer the following questions with respect to Planet B:" },
+//   { title: "<b>Planet C</b>", content: "Please answer the following questions with respect to Planet C:" },
+// ];
+
+// const ships = [
+//   { title: "<b>Ship 1</b>", content: "Please answer the following questions with respect to Ship 1:" },
+//   { title: "<b>Ship 2</b>", content: "Please answer the following questions with respect to Ship 2:" },
+//   { title: "<b>Ship 3</b>", content: "Please answer the following questions with respect to Ship 3:" },
+// ];
+
+// // Combined prompts for easier use within the trials
+// const inference_prompts = [...planets, ...ships];
+
+      // phase 1, planet A
+      var inf_img_p1_A = [
+        {
+          stimulus: 'img/win100.png',
+          text: "Winning $100"
+        }
+      ];
+    
+      // phase 1, planet B
+      var inf_img_p1_B = [
+        {
+          stimulus: 'img/win100.png',
+          text: "Winning $100"
+        }
+      ];
   
-  
+        // phase 1, planet B
+        var inf_img_p1_C = [
+          {
+            stimulus: 'img/win100.png',
+            text: "Winning $100"
+          }
+        ];
+    
   
   
     //* inference and valence checks end *-----------------
 
 var i = 1;
        
-
+        // valence check phase 1
             const valence_p1 = {
               type: 'valence-check-4',
               prompt: valence_q,
@@ -424,7 +458,7 @@ var i = 1;
 
 
         // inference check p1 (planet A)
-        var infer_p1a = {
+        var infer_p1_A = {
           type: 'inference-check-1',
           main_stimulus: stim_list[0],
           main_stimulus_height: main_stim_height,
@@ -442,11 +476,44 @@ var i = 1;
           }
         };
 
+        // inference check p1 (planet B)
+        var infer_p1_B = {
+          type: 'inference-check-1',
+          main_stimulus: stim_list[1],
+          main_stimulus_height: main_stim_height,
+          prompt: inference_prompt[1],
+          stimulus_1: inf_img_p1_B[0].stimulus,
+          stim_text_1: inf_img_p1_B[0].text,
+          slider_text_top: contingency_q[1],
+          labels_top: contingency_labels,
+          stimulus_height: inf_stim_height,
+          slider_width: inf_slider_width,
+          require_movement: false,
+          data: {
+            phase: 'inf_check_1_B',
+            block_number: i
+          }
+        };
 
 
-
-
-
+        // inference check p1 (planet B)
+        var infer_p1_C = {
+          type: 'inference-check-1',
+          main_stimulus: stim_list[2],
+          main_stimulus_height: main_stim_height,
+          prompt: inference_prompt[2],
+          stimulus_1: inf_img_p1_B[0].stimulus,
+          stim_text_1: inf_img_p1_B[0].text,
+          slider_text_top: contingency_q[2],
+          labels_top: contingency_labels,
+          stimulus_height: inf_stim_height,
+          slider_width: inf_slider_width,
+          require_movement: false,
+          data: {
+            phase: 'inf_check_1_C',
+            block_number: i
+          }
+        };
 
 
 
@@ -460,7 +527,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(gen_ins_block);
 // timeline.push(instructionCheckLoopWithFeedback);
 // timeline.push(end_instruction);   
-addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 // timeline.push(phaseTwoInstructions);
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 // timeline.push(debrief_block);
@@ -468,7 +535,9 @@ addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 
 
           timeline.push(valence_p1);
-          timeline.push(infer_p1a);
+          timeline.push(infer_p1_A);
+          timeline.push(infer_p1_B);
+          timeline.push(infer_p1_C);
           // timeline.push(infer_p1_A);
           //timeline.push(infer_p1_B);
           //timeline.push(slider_p1_q1);
