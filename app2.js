@@ -31,7 +31,7 @@
       let points = 0;
       const nBlocks_p1 = 2;
       const nBlocks_p2 = 4;
-      const block_duration = 180 * 1; // in milliseconds (3 mins)
+      const block_duration = 180 * 10; // in milliseconds (3 mins)
       const iti = 1000;
       const inf_stim_height = 80;
       const inf_slider_width = 500;
@@ -40,6 +40,10 @@
       const rf_ship_delay = 1500;
       const probability_trade = [[.5], [.5], [.5]];
       const probability_shield = [[.5], [.5], [.5]];
+      // const probability_trade = [[.0], [.0], [.0]];
+      // const probability_shield = [[.0], [.0], [.0]];
+      // const probability_trade = [[1], [1], [1]];
+      // const probability_shield = [[1], [1], [1]];
       const reset_planet_wait_const = 1000;
       const shield_charging_time_const = 3000;
       const ship_attack_time_const = 6000;
@@ -58,7 +62,7 @@
       }
 
       //Continious or discreete testing phases
-      let continuousResp = false;
+      let continuousResp = true;
       let nTrialspBlk = 5; //if continuousResp is true though, this doesn't matter
       if (continuousResp){
           let nTrialspBlk = 1;
@@ -87,6 +91,7 @@
                     phase: 'phase1'
                 }
             };
+            console.log(block);
             timeline.push(block);
         }
       }
@@ -198,12 +203,15 @@
           let planet_noship = {
               type: 'planet-response',
               show_ship: false,
+              ship_hostile_idx: pun_planet_side,
+              prompt: ['Planet A','Planet B','Planet C'],
               stimulus: stim_list,
               stimulus_select: stim_selector_highlight,
               ship_stimulus: ship_list,              
               reset_planet_wait: reset_planet_wait_const,
               shield_charging_time: shield_charging_time_const,
               ship_attack_time: ship_attack_time_const,
+              block_duration: block_duration,
               data: {
                   phase: 'phase1',
                   block_type: 'planet_noship'
@@ -236,7 +244,56 @@
       
         //----------------------------------------------------------------------------
 
-// valnce and inference responses
+
+
+        //----------------------------------------------------------------------------
+        // ----- Phase 2 -----
+      
+
+          // define task blocks with no ships
+          let planet_ship = {
+            type: 'planet-response',
+            show_ship: true,
+            ship_hostile_idx: pun_planet_side,
+            prompt: ['Planet A','Planet B','Planet C'],
+            stimulus: stim_list,
+            stimulus_select: stim_selector_highlight,
+            ship_stimulus: ship_list,              
+            reset_planet_wait: reset_planet_wait_const,
+            shield_charging_time: shield_charging_time_const,
+            ship_attack_time: ship_attack_time_const,
+            block_duration: block_duration,
+            data: {
+                phase: 'phase2',
+                block_type: 'planet_ship'
+            },
+            on_start: function(trial) {
+                trial.data.points = points;
+                trial.data.block_number = block_number;
+                trial.data.trial_number = trial_number;
+            },
+            on_finish: function(data){
+                points = data.points_total;
+                trial_number = data.trial_number;
+                trial_number++;
+                // script for continuous response block
+                if (continuousResp) {
+                    jsPsych.endCurrentTimeline();
+                    block_number = data.block_number;
+                    block_number++
+                    console.log('Block ' + block_number)
+                } else {
+                    if (trial_number >= nTrialspBlk) {
+                        trial_number = 0
+                        block_number = data.block_number;
+                        block_number++
+                        console.log('Block ' + block_number)
+                    }
+                }
+            }
+        }
+    
+      //----------------------------------------------------------------------------
 
 
 
@@ -270,7 +327,8 @@
       // timeline.push(gen_ins_block);
       // timeline.push(instructionCheckLoopWithFeedback);
       // timeline.push(successtrial);   
-      // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+      addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+      addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
       timeline.push(debrief_block);
 
       

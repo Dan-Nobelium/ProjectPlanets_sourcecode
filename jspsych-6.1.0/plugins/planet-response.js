@@ -187,7 +187,7 @@ jsPsych.plugins["planet-response"] = (function() {
 				type: jsPsych.plugins.parameterType.INT,
 				pretty_name: 'Index of hostile ship',			
 				default: 0,
-				description: 'Index of hostile ship, can be 0 (left) or 1 (right).'
+				description: 'Index of hostile ship, can be 0 (left) or 1 (right), or 3'
 			},
 			shield_charging_time: {
 				type: jsPsych.plugins.parameterType.INT,
@@ -562,7 +562,7 @@ jsPsych.plugins["planet-response"] = (function() {
 					show_ship_check = true
 				}
 			}
-			//console.log([show_ship_samp,show_ship_check])
+			console.log([show_ship_samp,show_ship_check])
 			// Start timer for ship
 			if (trial.show_ship && show_ship_check){
 				setTimeout(function(){
