@@ -18,8 +18,9 @@
 
   jsPsych.pluginAPI.registerPreload('valence-checker', 'stimulus', 'image');
 
+  
   plugin.info = {
-    name: 'valence-check-3',
+    name: 'valence-checker',
     description: '',
     parameters: {
       stimulus_1: {
