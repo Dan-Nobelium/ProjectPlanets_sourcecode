@@ -9,7 +9,8 @@
 
 // Participant Sample Selection
 let groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];
-let group = "" + jsPsych.randomization.sampleWithReplacement(groups, 1) + "";
+let group = jsPsych.randomization.sampleWithReplacement(groups, 1);
+console.log (group);
 let samples = ["ProA", "others"];
 let sample = samples[0];  
 
@@ -18,7 +19,7 @@ let num_planets = 3;
 let pun_planet_sides = [...Array(num_planets).keys()].map(x => x.toString());
 let pun_planet_side = jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1)[0];
 
-// Stimulus and image List Initialization
+// Stimulus and image Initialization
 const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/pinkp.png'], 1);
 const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png','img/ship3.png'], 1);
 const stim_selector_highlight = 'img/selectring.png';
@@ -35,9 +36,6 @@ const images = [
 let block_number = 0;
 let trial_number = 0;
 let points = 0;
-const nBlocks_p1 = 1;
-const nBlocks_p2 = 1;
-const nBlocks_p3 = 1;
 const block_duration = 180 * 10; // in milliseconds (3 mins)
 const iti = 1000;
 const inf_stim_height = 80;
@@ -55,18 +53,23 @@ const reset_planet_wait_const = 1000;
 const shield_charging_time_const = 3000;
 const ship_attack_time_const = 6000;
 
-// manipulate response-ship Rft rate
-if (group.includes("0.1")) {
-  let probability_ship = [[0.1],[0.1],[0.1]]; 
-  let ship_attack_damage = 100;
-} else if (group.includes("0.2")) {
-  let probability_ship = [[0.2],[0.2],[0.2]];
-  let ship_attack_damage = 100;
-} else if (group.includes("0.4")) {
-  let probability_ship = [[0.4],[0.4],[0.4]];
-  let ship_attack_damage = 100;
-}
 
+// Condition controll Global Variables Definition
+const nBlocks_p1 = 1;
+const nBlocks_p2 = 1;
+const nBlocks_p3 = 1;
+ship_attack_damage_index = [0,100,25]
+let ship_attack_damage = 100;
+
+
+// manipulate response-ship Rft rate
+if (group[0].includes("0.1")) {
+  var probability_ship = [[0.1],[0.1],[0.1]]; 
+} else if (group[0].includes("0.4")) {
+  var probability_ship = [[0.4],[0.4],[0.4]];
+} else (console.log("ERROR: group is not defined as 0.1 or 0.4"))
+
+// var probability_ship = probability_ship;
 //Continious or discreete testing phases
 let continuousResp = true;
 let nTrialspBlk = 5; //if continuousResp is true though, this doesnt matter
@@ -196,6 +199,7 @@ let planet_noship = {
     reset_planet_wait: reset_planet_wait_const,
     shield_charging_time: shield_charging_time_const,
     ship_attack_time: ship_attack_time_const,
+    ship_attack_damage: ship_attack_damage,
     block_duration: block_duration,
     data: {
         phase: 'phase1',
@@ -258,7 +262,11 @@ let planet_ship = {
   reset_planet_wait: reset_planet_wait_const,
   shield_charging_time: shield_charging_time_const,
   ship_attack_time: ship_attack_time_const,
+  ship_attack_damage: ship_attack_damage,
   block_duration: block_duration,
+  probability_trade: probability_trade,
+  probability_ship: probability_ship,
+  probability_shield: probability_shield,
   data: {
       phase: 'phase2',
       block_type: 'planet_ship'
@@ -337,12 +345,12 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(gen_ins_block);
 // timeline.push(instructionCheckLoopWithFeedback);
 // timeline.push(end_instruction);   
-addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 // timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 // timeline.push(debrief_block);
 // timeline.push(contact_block);
-timeline.push(exit_experiment);
+// timeline.push(exit_experiment);
 
 // Run the experiment
 {
