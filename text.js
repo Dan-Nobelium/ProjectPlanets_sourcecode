@@ -136,3 +136,24 @@ const demographics_block = {
           '<p>' + 'Sometimes' + '</p>',
           '<p>' + 'Every time' + '<br>(100%)</p>'
         ];
+
+        
+    // inference check prompt
+    var inference_prompt = [
+      'Please answer the following questions with respect to <b>Planet A</b> (left planet):',
+      'Please answer the following questions with respect to <b>Planet B</b> (middle planet):',
+      'Please answer the following questions with respect to <b>Planet C</b> (right planet):',
+      'Please answer the following questions with respect to <b>Ship 1</b>:',
+      'Please answer the following questions with respect to <b>Ship 2</b>:',
+      'Please answer the following questions with respect to <b>Ship 3</b>:',
+    ];
+  
+    // contingency question
+    var contingency_q = [
+      'How OFTEN did interacting with <b>planet A</b> lead to the above outcome?',
+      'How OFTEN did interacting with <b>planet B</b> lead to the above outcome?',
+      'How OFTEN did interacting with <b>planet C</b> lead to the above outcome?',
+      'How OFTEN did interacting with <b>Ship 1</b> lead to the above outcome?',
+      'How OFTEN did interacting with <b>Ship 2</b> lead to the above outcome?',
+      'How OFTEN did interacting with <b>Ship 3</b> lead to the above outcome?',
+    ];

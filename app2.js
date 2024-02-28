@@ -35,7 +35,7 @@ const images = [
 let block_number = 0;
 let trial_number = 0;
 let points = 0;
-const block_duration = 180 * 10; // in milliseconds (3 mins)
+const block_duration = 180 * 100; // in milliseconds (3 mins)
 const iti = 1000;
 const inf_stim_height = 80;
 const inf_slider_width = 500;
@@ -93,6 +93,12 @@ function addBlocksToTimeline(timeline, blockConfig, nBlocks, nTrialsPerBlock) {
     timeline.push(block);
   }
 }
+
+  // force full screen
+  let fullscreen = {
+      type: 'fullscreen',
+      fullscreen_mode: true
+    };
 
 //----------------------------------------------------------------------------
 // ----- Participant instructions -----
@@ -364,70 +370,13 @@ var exit_experiment = {
     }
     ];
   
-  
-  
-  
-    // inference check prompt
-    var inference_prompt = [
-      'Please answer the following questions with respect to <b>Planet A</b> (left planet):',
-      'Please answer the following questions with respect to <b>Planet B</b> (right planet):',
-      'Please answer the following questions with respect to <b>Ship 1</b>:',
-      'Please answer the following questions with respect to <b>Ship 2</b>:',
-    ];
-  
-    // contingency question
-    var contingency_q = [
-      'How OFTEN did interacting with <b>planet A</b> lead to the above outcome?',
-      'How OFTEN did interacting with <b>planet B</b> lead to the above outcome?',
-      'How OFTEN did interacting with <b>Ship 1</b> lead to the above outcome?',
-      'How OFTEN did interacting with <b>Ship 2</b> lead to the above outcome?',
-    ];
-  
-
-// // Prompts for planets and spaceships
-// //TODO swap in variable and for loops to tidy this up
-// const planetA = "Planet A (left side)"
-// const planetB = "Planet B (middle)"
-// const planetC = "Planet A (right side)"
-// const planets = [
-//   { title: "<b>Planet A</b>", content: "Please answer the following questions with respect to Planet A:" },
-//   { title: "<b>Planet B</b>", content: "Please answer the following questions with respect to Planet B:" },
-//   { title: "<b>Planet C</b>", content: "Please answer the following questions with respect to Planet C:" },
-// ];
-
-// const ships = [
-//   { title: "<b>Ship 1</b>", content: "Please answer the following questions with respect to Ship 1:" },
-//   { title: "<b>Ship 2</b>", content: "Please answer the following questions with respect to Ship 2:" },
-//   { title: "<b>Ship 3</b>", content: "Please answer the following questions with respect to Ship 3:" },
-// ];
-
-// // Combined prompts for easier use within the trials
-// const inference_prompts = [...planets, ...ships];
-
-      // phase 1, planet A
-      var inf_img_p1_A = [
+      // phase 1, winning $100 image/text
+      var inf_img_p1_winning100 = [
         {
           stimulus: 'img/win100.png',
           text: "Winning $100"
         }
       ];
-    
-      // phase 1, planet B
-      var inf_img_p1_B = [
-        {
-          stimulus: 'img/win100.png',
-          text: "Winning $100"
-        }
-      ];
-  
-        // phase 1, planet B
-        var inf_img_p1_C = [
-          {
-            stimulus: 'img/win100.png',
-            text: "Winning $100"
-          }
-        ];
-    
   
   
     //* inference and valence checks end *-----------------
@@ -463,8 +412,8 @@ var i = 1;
           main_stimulus: stim_list[0],
           main_stimulus_height: main_stim_height,
           prompt: inference_prompt[0],
-          stimulus_1: inf_img_p1_A[0].stimulus,
-          stim_text_1: inf_img_p1_A[0].text,
+          stimulus_1: inf_img_p1_winning100[0].stimulus,
+          stim_text_1: inf_img_p1_winning100[0].text,
           slider_text_top: contingency_q[0],
           labels_top: contingency_labels,
           stimulus_height: inf_stim_height,
@@ -482,8 +431,8 @@ var i = 1;
           main_stimulus: stim_list[1],
           main_stimulus_height: main_stim_height,
           prompt: inference_prompt[1],
-          stimulus_1: inf_img_p1_B[0].stimulus,
-          stim_text_1: inf_img_p1_B[0].text,
+          stimulus_1: inf_img_p1_winning100[0].stimulus,
+          stim_text_1: inf_img_p1_winning100[0].text,
           slider_text_top: contingency_q[1],
           labels_top: contingency_labels,
           stimulus_height: inf_stim_height,
@@ -496,14 +445,14 @@ var i = 1;
         };
 
 
-        // inference check p1 (planet B)
+        // inference check p1 (planet C)
         var infer_p1_C = {
           type: 'inference-check-1',
           main_stimulus: stim_list[2],
           main_stimulus_height: main_stim_height,
           prompt: inference_prompt[2],
-          stimulus_1: inf_img_p1_B[0].stimulus,
-          stim_text_1: inf_img_p1_B[0].text,
+          stimulus_1: inf_img_p1_winning100[0].stimulus,
+          stim_text_1: inf_img_p1_winning100[0].text,
           slider_text_top: contingency_q[2],
           labels_top: contingency_labels,
           stimulus_height: inf_stim_height,
@@ -516,32 +465,88 @@ var i = 1;
         };
 
 
+   //* inference and valence checks end *-----------------
+    
+      //NEW: slider response Qs - images
+      var slider_img_left = [{
+        stimulus: stim_list[0],
+        text: "Planet A (left)"
+      }]
+    
+      var slider_img_right = [{
+        stimulus: stim_list[1],
+        text: "Planet B (right)"
+      }]
+
+  // //NEW: slider questions p1 
+  // //NEW: define slider Qs variables
+  let left_label ="";
+  let right_label ="";
+  
+  var slider_p1_q1 = {
+    type: 'html-slider-response',
+    prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with Planet A (left) versus Planet B (right)?</p>",
+    left_stimulus: slider_img_left[0].stimulus,
+    left_stim_text: slider_img_left[0].text,
+    right_stimulus: slider_img_right[0].stimulus,
+    right_stim_text: slider_img_right[0].text,
+    labels: ["100%/0%<p>(only click Planet A)</p>", "75%/25%", "50%/50%<p>(click both equally)</p>", "25%/75%", "0%/100%<p>(only click Planet B)</p>"],
+    stimulus_height: 250,
+    slider_width: 700,
+    require_movement: false,
+    data: {
+      phase: 'slider-response_p1_q1',
+      block_number: i
+    }
+  };
+
+  // var slider_p1_q2 = {
+  //   type: 'html-slider-response',
+  //   prompt: "To maximise your points in the <b>previous block</b>, what proportion of interactions would you allocate for Planet A (left) versus Planet B (right)?",
+  //   left_stimulus: slider_img_left[0].stimulus,
+  //   left_stim_text: slider_img_left[0].text,
+  //   right_stimulus: slider_img_right[0].stimulus,
+  //   right_stim_text: slider_img_right[0].text,
+  //   labels: ["100%/0%<p>(only click Planet A)</p>", "75%/25%", "50%/50%<p>(click both equally)</p>", "25%/75%", "0%/100%<p>(only click Planet B)</p>"],
+  //   stimulus_height: 250,
+  //   slider_width: 700,
+  //   require_movement: false,
+  //   data: {
+  //     phase: 'slider-response_p1_q2',
+  //     block_number: i
+  //   }
+  // };
 
 //////////////////////
 
 // ---- Timeline creation ----
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
-// timeline.push(consent_block);
-// timeline.push(demographics_block);
-// timeline.push(gen_ins_block);
-// timeline.push(instructionCheckLoopWithFeedback);
-// timeline.push(end_instruction);   
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-// timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-// timeline.push(debrief_block);
-// timeline.push(contact_block);
 
 
-          timeline.push(valence_p1);
-          timeline.push(infer_p1_A);
-          timeline.push(infer_p1_B);
-          timeline.push(infer_p1_C);
-          // timeline.push(infer_p1_A);
-          //timeline.push(infer_p1_B);
-          //timeline.push(slider_p1_q1);
-          //timeline.push(slider_p1_q2);
+//timeline.push(slider_p1_q2);
+
+timeline.push(fullscreen);
+timeline.push(consent_block);
+timeline.push(demographics_block);
+timeline.push(gen_ins_block);
+timeline.push(instructionCheckLoopWithFeedback);
+timeline.push(end_instruction);   
+addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+timeline.push(valence_p1);
+timeline.push(infer_p1_A);
+timeline.push(infer_p1_B);
+timeline.push(infer_p1_C);
+timeline.push(slider_p1_q1);
+timeline.push(phaseTwoInstructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+timeline.push(debrief_block);
+timeline.push(contact_block);
+
+
+
+
+
 
 // timeline.push(exit_experiment);
 
