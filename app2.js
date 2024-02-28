@@ -359,6 +359,10 @@ var exit_experiment = {
     {
       stimulus: stim_list[1],
       text: "Planet B (right)"
+    },
+    {
+      stimulus: stim_list[2],
+      text: "Planet C (right)"
     }
     ];
   
@@ -395,29 +399,9 @@ var exit_experiment = {
     //* inference and valence checks end *-----------------
 
 var i = 1;
+       
 
-            // valence check p1
-            var valence_p1 = {
-              type: 'valence-check-3',
-              prompt: valence_q,
-              stimulus_1: val_img_p1[0].stimulus,
-              stim_text_1: val_img_p1[0].text,
-              stimulus_2: val_img_p1[1].stimulus,
-              stim_text_2: val_img_p1[1].text,
-              stimulus_3: val_img_p1[2].stimulus,
-              stim_text_3: val_img_p1[2].text,
-              labels: valence_labels,
-              stimulus_height: inf_stim_height,
-              slider_width: inf_slider_width,
-              require_movement: false,
-              data: {
-                phase: 'val_check_3',
-                block_number: i
-              }
-            };
-        
-
-            const valence_p2 = {
+            const valence_p1 = {
               type: 'valence-check-4',
               prompt: valence_q,
               stimulus_1: val_img_p1[0].stimulus,
@@ -426,8 +410,8 @@ var i = 1;
               stim_text_2: val_img_p1[1].text,
               stimulus_3: val_img_p1[2].stimulus,
               stim_text_3: val_img_p1[2].text,
-              stimulus_4: val_img_p1[2].stimulus,
-              stim_text_4: val_img_p1[2].text,
+              stimulus_4: val_img_p1[3].stimulus,
+              stim_text_4: val_img_p1[3].text,
               labels: valence_labels,
               stimulus_height: inf_stim_height,
               slider_width: inf_slider_width,
@@ -439,7 +423,24 @@ var i = 1;
             };
 
 
-
+        // inference check p1 (planet A)
+        var infer_p1a = {
+          type: 'inference-check-1',
+          main_stimulus: stim_list[0],
+          main_stimulus_height: main_stim_height,
+          prompt: inference_prompt[0],
+          stimulus_1: inf_img_p1_A[0].stimulus,
+          stim_text_1: inf_img_p1_A[0].text,
+          slider_text_top: contingency_q[0],
+          labels_top: contingency_labels,
+          stimulus_height: inf_stim_height,
+          slider_width: inf_slider_width,
+          require_movement: false,
+          data: {
+            phase: 'inf_check_1_A',
+            block_number: i
+          }
+        };
 
 
 
@@ -459,15 +460,15 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(gen_ins_block);
 // timeline.push(instructionCheckLoopWithFeedback);
 // timeline.push(end_instruction);   
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 // timeline.push(phaseTwoInstructions);
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 // timeline.push(debrief_block);
 // timeline.push(contact_block);
 
 
-          // timeline.push(valence_p1);
-          timeline.push(valence_p2);
+          timeline.push(valence_p1);
+          timeline.push(infer_p1a);
           // timeline.push(infer_p1_A);
           //timeline.push(infer_p1_B);
           //timeline.push(slider_p1_q1);
@@ -500,3 +501,6 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
     }
   });
 }
+
+//#TODO
+// labels left/middle/right, currently read left/right(not-middle)/right, fix these
