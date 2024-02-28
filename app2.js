@@ -6,6 +6,7 @@
       Randomises the participant's group and sample. Also sets up the randomised
       position of the punished planet, left-right assignment of planets and ships,
       global variables, and the images list. */
+      // Text/string based variables are imported through text.js via the global scope.
     
      
 
@@ -15,15 +16,23 @@
       let samples = ["ProA", "others"];
       let sample = samples[0];  
 
-      // randomise position of punished planet, left-right assignment of planets and ships
+      // randomise position of planets (left/middle/right as 0/1/2)
       let num_planets = 3;
       let pun_planet_sides = [...Array(num_planets).keys()].map(x => x.toString());
       let pun_planet_side = jsPsych.randomization.sampleWithReplacement(pun_planet_sides, 1)[0];
 
-      // Stimulus List Initialization
+      // Stimulus and image List Initialization
       const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/pinkp.png'], 1);
       const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png','img/ship3.png'], 1);
       const stim_selector_highlight = 'img/selectring.png';
+      const images = [
+        'img/signal1.png','img/signal2.png','img/signal3.png','img/signal4.png',
+        'img/ship1.png','img/ship2.png',
+        'img/bluep.png','img/orangep.png',
+        'img/cursor.png','img/cursordark.png', 'img/selectring.png',
+        'img/win100.png', 'img/lose.png',
+        'img/arrow.jpg', 'img/blank_lose.jpg', 'img/blank_arrow.jpg'
+      ];
     
       // Global Variables Definition
       let block_number = 0;
@@ -52,13 +61,13 @@
     
       // manipulate response-ship Rft rate
       if (group.includes("0.1")) {
-        let probability_ship = [[0.1],[0.1]]; 
+        let probability_ship = [[0.1],[0.1],[0.1]]; 
         let ship_attack_damage = 100;
       } else if (group.includes("0.2")) {
-        let probability_ship = [[0.2],[0.2]];
+        let probability_ship = [[0.2],[0.2],[0.2]];
         let ship_attack_damage = 100;
       } else if (group.includes("0.4")) {
-        let probability_ship = [[0.4],[0.4]];
+        let probability_ship = [[0.4],[0.4],[0.4]];
         let ship_attack_damage = 100;
       }
 
@@ -70,14 +79,7 @@
       }
     
 
-      let images = [
-        'img/signal1.png','img/signal2.png','img/signal3.png','img/signal4.png',
-        'img/ship1.png','img/ship2.png',
-        'img/bluep.png','img/orangep.png',
-        'img/cursor.png','img/cursordark.png', 'img/selectring.png',
-        'img/win100.png', 'img/lose.png',
-        'img/arrow.jpg', 'img/blank_lose.jpg', 'img/blank_arrow.jpg'
-      ];
+     
     
       //----------------------------------------------------------------------------
         /* functions */
@@ -118,7 +120,7 @@
 
 
 
-    // Define instruction check block with immediate feedback
+    // Define instruction check block
     let instructionCheckWithFeedback = {
       type: "survey-multi-choice",
       questions: questions.map(q => ({
@@ -364,7 +366,7 @@
       // timeline.push(gen_ins_block);
       // timeline.push(instructionCheckLoopWithFeedback);
       // timeline.push(end_instruction);   
-      // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+      addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
       // timeline.push(phaseTwoInstructions);
       // addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
       // timeline.push(debrief_block);
@@ -390,15 +392,12 @@
           pun_planet_side: pun_planet_side,
           pun_planet: stim_list[pun_planet_side],
           pun_ship: ship_list[pun_planet_side],
-          nBlocks_p1: 1,
-          nBlocks_p2: 2
         });
       
         jsPsych.init({
           timeline: timeline,
           preload_images: images,
           on_finish: function() {
-
             jsPsych.data.displayData();
           }
         });
