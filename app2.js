@@ -236,30 +236,7 @@
       
         //----------------------------------------------------------------------------
 
-// valnce and inference
-
-
-//debrief wqrapup stuff
-
-
-instructlate = [          // past tense (LATE condition)
-'<p>Local intel has determined where the pirates are coming from!</p>' +
-'<br>' +
-'<img src=' + 'img/lose.png' + ' height="100"></p>' + 
-'<br><br><br>' +
-'<img src=' + 'img/blank_arrow.jpg' + ' height="100">' + 
-'<img src=' + 'img/blank_lose.jpg' + ' height="100"></p>'
-];
-
-instructearly = [          // future tense (LATE condition)
-'<p>Local intel has determined where the pirates are coming from!</p>' +
-'<br>' +
-'<img src=' + 'img/arrow.jpg' + ' height="100">' + 
-'<img src=' + 'img/lose.png' + ' height="100"></p>' + 
-'<br><br><br>' +
-'<img src=' + 'img/blank_lose.jpg' + ' height="100"></p>'
-];
-
+// valnce and inference responses
 
 
 
@@ -279,9 +256,6 @@ instructearly = [          // future tense (LATE condition)
         data: {
           phase: 'debrief'
         }
-    
-    
-        
       };
     
     
