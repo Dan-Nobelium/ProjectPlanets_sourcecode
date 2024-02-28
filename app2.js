@@ -38,9 +38,9 @@
       let block_number = 0;
       let trial_number = 0;
       let points = 0;
-      const nBlocks_p1 = 2;
-      const nBlocks_p2 = 4;
-      const nBlocks_p3 = 4;
+      const nBlocks_p1 = 1;
+      const nBlocks_p2 = 1;
+      const nBlocks_p3 = 1;
       const block_duration = 180 * 10; // in milliseconds (3 mins)
       const iti = 1000;
       const inf_stim_height = 80;
