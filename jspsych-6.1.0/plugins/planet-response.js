@@ -143,7 +143,7 @@ jsPsych.plugins["planet-response"] = (function() {
 				type: jsPsych.plugins.parameterType.FLOAT,
 				pretty_name: 'Probability of ship appearance.',
 				array: true,
-				default: [0.5, .5, .5],
+				default: [.5, .5, .5],
 				description: 'Probability the ship will appear when a planet button is clicked.'
 			},
 			ship_stimulus: {
