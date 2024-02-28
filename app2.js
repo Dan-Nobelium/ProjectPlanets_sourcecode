@@ -411,36 +411,32 @@ var i = 1;
               slider_width: inf_slider_width,
               require_movement: false,
               data: {
-                phase: 'val_check_1',
+                phase: 'val_check_3',
                 block_number: i
               }
             };
         
 
-// valence check p1
-const valence_p2 = {
-  type: 'valence-checker',
-  prompt: valence_q,
-  stimuli: [val_img_p1[0].stimulus,val_img_p1[0].stimulus,val_img_p1[0].stimulus],
-  // stimulus_1: val_img_p1[0].stimulus,
-  // stim_text_1: val_img_p1[0].text,
-  // stimulus_2: val_img_p1[1].stimulus,
-  // stim_text_2: val_img_p1[1].text,
-  // stimulus_3: val_img_p1[2].stimulus,
-  // stim_text_3: val_img_p1[2].text,
-  num_stims: 1,
-  labels: valence_labels,
-  stimulus_height: inf_stim_height,
-  slider_width: inf_slider_width,
-  require_movement: false,
-  data: {
-    phase: 'val_check_1',
-    block_number: 1
-  }
-};
-
-
-
+            const valence_p2 = {
+              type: 'valence-check-4',
+              prompt: valence_q,
+              stimulus_1: val_img_p1[0].stimulus,
+              stim_text_1: val_img_p1[0].text,
+              stimulus_2: val_img_p1[1].stimulus,
+              stim_text_2: val_img_p1[1].text,
+              stimulus_3: val_img_p1[2].stimulus,
+              stim_text_3: val_img_p1[2].text,
+              stimulus_4: val_img_p1[2].stimulus,
+              stim_text_4: val_img_p1[2].text,
+              labels: valence_labels,
+              stimulus_height: inf_stim_height,
+              slider_width: inf_slider_width,
+              require_movement: false,
+              data: {
+                phase: 'val_check_4',
+                block_number: i
+              }
+            };
 
 
 
@@ -477,7 +473,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
           //timeline.push(slider_p1_q1);
           //timeline.push(slider_p1_q2);
 
-timeline.push(exit_experiment);
+// timeline.push(exit_experiment);
 
 // Run the experiment
 {
@@ -495,6 +491,7 @@ timeline.push(exit_experiment);
     pun_ship: ship_list[planet_side],
   });
 
+  
   jsPsych.init({
     timeline: timeline,
     preload_images: images,
