@@ -245,7 +245,19 @@
       
         //----------------------------------------------------------------------------
 
-
+      // define phase 2 instructions
+      var phaseTwoInstructions = {
+        type: 'instructions',
+        pages: [
+          phase2_instructions
+          ],
+        allow_keys: false,
+        show_clickable_nav: true,
+        post_trial_gap: iti,
+        data: {
+          phase: 'instructions'
+        }
+      };
 
         //----------------------------------------------------------------------------
         // ----- Phase 2 -----
@@ -305,8 +317,7 @@
       var debrief_block = {
         type: 'instructions',
         pages: [
-          debrief,
-          contact
+          debrief
           ],
         button_label_next: "I acknowledge that I have received this debriefing information",
         show_clickable_nav: true,
@@ -314,45 +325,51 @@
         data: {
           phase: 'debrief'
         }
+
       };
     
     
-//
-
-
-
-       // define pre-phase 2 instructions
-       var phaseTwoInstructions = {
-        type: 'instructions',
-        pages: [
-          phase2_instructions
+        var contact_block = {
+          type: 'survey-text',
+          questions: [
+            {
+              prompt: contact,
+              rows: 2,
+              columns: 80
+            }
           ],
-        allow_keys: false,
-        show_clickable_nav: true,
-        post_trial_gap: iti,
-        data: {
-          phase: 'instructions'
-        }
-      };
-    
+          data: {
+            phase: 'contact'
+          }
+        };
+
+
+        var exit_experiment = {
+          type: 'instructions',
+          pages: [ 
+            'The experiment has concluded.'
+          ]
+          };
+        
+  
 
 
         
       // ----- Timeline creation -----
-      let timeline = []; // This is the master timeline, the experiment in sequence based on the objects pushed into this array.
+      let timeline = []; // This is the master timeline, the experiment runs sequentually based on the objects pushed into this array.
 
             
       // timeline.push(consent_block);
       // timeline.push(demographics_block);
-      // ProA block as needed
       // timeline.push(gen_ins_block);
       // timeline.push(instructionCheckLoopWithFeedback);
       // timeline.push(end_instruction);   
       // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-      //interphase instructions
-      timeline.push(phaseTwoInstructions);
-      addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-      timeline.push(debrief_block);
+      // timeline.push(phaseTwoInstructions);
+      // addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+      // timeline.push(debrief_block);
+      // timeline.push(contact_block);
+      timeline.push(exit_experiment);
 
       
 
