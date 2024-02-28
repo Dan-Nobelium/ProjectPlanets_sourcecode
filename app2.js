@@ -58,7 +58,7 @@
       }
 
       //Continious or discreete testing phases
-      let continuousResp = true;
+      let continuousResp = false;
       let nTrialspBlk = 5; //if continuousResp is true though, this doesn't matter
       if (continuousResp){
           let nTrialspBlk = 1;
@@ -180,14 +180,14 @@
 
 
 
-          // success trial
-          var successtrial = {
-            type: 'html-button-response',
-            post_trial_gap: 0,
-            choices: ['Click here to start Phase 1'],
-            stimulus: '<center>Well done!</center>'
-          };
-            
+    // Begin Experiment Phase
+    var successtrial = {
+      type: 'html-button-response',
+      post_trial_gap: 0,
+      choices: ['Click here to start Phase 1'],
+      stimulus: '<center>Well done!</center>'
+    };
+    
 
 
         //----------------------------------------------------------------------------
@@ -236,20 +236,106 @@
       
         //----------------------------------------------------------------------------
 
+// valnce and inference
 
 
+//debrief wqrapup stuff
+
+
+instructlate = [          // past tense (LATE condition)
+'<p>Local intel has determined where the pirates are coming from!</p>' +
+'<br>' +
+'<img src=' + 'img/lose.png' + ' height="100"></p>' + 
+'<br><br><br>' +
+'<img src=' + 'img/blank_arrow.jpg' + ' height="100">' + 
+'<img src=' + 'img/blank_lose.jpg' + ' height="100"></p>'
+];
+
+instructearly = [          // future tense (LATE condition)
+'<p>Local intel has determined where the pirates are coming from!</p>' +
+'<br>' +
+'<img src=' + 'img/arrow.jpg' + ' height="100">' + 
+'<img src=' + 'img/lose.png' + ' height="100"></p>' + 
+'<br><br><br>' +
+'<img src=' + 'img/blank_lose.jpg' + ' height="100"></p>'
+];
+
+debrief = [
+'<p>Please confirm that you have read the debriefing questions below: </p>' +
+
+'<p><b><i>What are the research questions?</i></b></p>' + 
+'<p>Our behaviour changes in response to experienced rewards and losses. This study asks how behaviour and accompanying beliefs change when these outcomes have varying degrees of relationship to our behaviour. </p>' +
+
+'<p><b><i>How does this study extend on previous research on this topic?</i></b></p>' +
+'<p>Existing research suggests that stronger relationships between behaviours and outcomes will influence behaviour more. For example, behaviours that earn immediate and regular rewards are more likely to be reinforced than behaviours with a weaker relationship to rewards. We extend this by examining how dependent these changes are on beliefs and personality traits. </p>' +
+
+'<p><b><i>What are some potential real-world implications of this research?</i></b></p>' +
+'<p>We learn about our environments through experience. Understanding how beliefs develop with this experience to change behaviour can help us better understand and predict adaptive/maladaptive decision-making. A potential outcome of this understanding is the development of more effective strategies to improve learning and decision-making. </p>' +
+
+'<p><b><i>Describe a potential issue or limitation of the study (e.g., ethical, design etc.), or opportunities for future work that extends this study.</i></b></p>' +
+'<p>Participants might have prior experience or beliefs that would affect performance in the task. We have attempted to control for this by using a cover-story to help participants understand and engage in the task. Future studies could vary this cover-story to assess how this affects learning and decision-making in the task. </p>' +
+
+'<p><b><i>Describe the study methodology (e.g., design, dependent/independent variables, stimulus presentation).</i></b></p>' +
+'<p>Participants are given the opportunity to click on “planets” to earn point rewards. In addition to this, “ships” that may or may not result in point loss are presented. The key independent variable is the programmed strength of the relationship between particular actions and point outcomes (weak vs. strong relationship). The key dependent variables are clicking behaviour, valuations of task elements, and inferred relationships between task elements. Personality traits are also assessed to observe how these relate to behaviour and beliefs. </p>' +
+
+'<p><b><i>Further reading: </i></b></p>' +
+'<p> Lovibond, P.F., & Shanks, D.R. (2002). The role of awareness in Pavlovian conditioning: Empirical evidence and theoretical implications. Journal of Experimental Psychology: Animal Behavior Processes, 28, 3. </p>'
+];
+
+
+
+
+
+      // ----- HREAP-C stuff -----
+    
+      // debrief
+      var debrief_block = {
+        type: 'instructions',
+        pages: [
+          debrief
+          ],
+        button_label_next: "I acknowledge that I have received this debriefing information",
+        show_clickable_nav: true,
+        post_trial_gap: iti,
+        data: {
+          phase: 'debrief'
+        }
+    
+    
+        
+      };
+    
+      var contact_block = {
+        type: 'survey-text',
+        questions: [
+          {
+            prompt: 'If you would like to receive a copy of the study results via email, please provide your email address below. Your email address will be used for this purpose only, and will not be stored alongside your data. MEEE',
+            rows: 2,
+            columns: 80
+          }
+        ],
+        preamble: '<font size="-1">You may leave this blank if you wish. </font>',
+        data: {
+          phase: 'contact'
+        }
+    
+        
+      };
+    
 
         
       // ----- Timeline creation -----
       let timeline = []; // This is the master timeline, the experiment in sequence based on the objects pushed into this array.
 
             
-      timeline.push(consent_block);
-      timeline.push(demographics_block);
-      timeline.push(gen_ins_block);
-      timeline.push(instructionCheckLoopWithFeedback);
-      timeline.push(successtrial);   
-      addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+      // timeline.push(consent_block);
+      // timeline.push(demographics_block);
+      // timeline.push(gen_ins_block);
+      // timeline.push(instructionCheckLoopWithFeedback);
+      // timeline.push(successtrial);   
+      // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+      timeline.push(debrief_block);
+      timeline.push(contact_block);
       
 
 
