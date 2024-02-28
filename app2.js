@@ -31,6 +31,7 @@
       let points = 0;
       const nBlocks_p1 = 2;
       const nBlocks_p2 = 4;
+      const nBlocks_p3 = 4;
       const block_duration = 180 * 10; // in milliseconds (3 mins)
       const iti = 1000;
       const inf_stim_height = 80;
@@ -185,8 +186,8 @@
 
 
 
-    // Begin Experiment Phase
-    var successtrial = {
+    // End instruction phase
+    var end_instruction = {
       type: 'html-button-response',
       post_trial_gap: 0,
       choices: ['Click here to start Phase 1'],
@@ -250,7 +251,7 @@
         // ----- Phase 2 -----
       
 
-          // define task blocks with no ships
+          // define task blocks with ships
           let planet_ship = {
             type: 'planet-response',
             show_ship: true,
@@ -316,6 +317,25 @@
       };
     
     
+//
+
+
+
+       // define pre-phase 2 instructions
+       var phaseTwoInstructions = {
+        type: 'instructions',
+        pages: [
+          phase2_instructions
+          ],
+        allow_keys: false,
+        show_clickable_nav: true,
+        post_trial_gap: iti,
+        data: {
+          phase: 'instructions'
+        }
+      };
+    
+
 
         
       // ----- Timeline creation -----
@@ -324,10 +344,13 @@
             
       // timeline.push(consent_block);
       // timeline.push(demographics_block);
+      // ProA block as needed
       // timeline.push(gen_ins_block);
       // timeline.push(instructionCheckLoopWithFeedback);
-      // timeline.push(successtrial);   
-      addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+      // timeline.push(end_instruction);   
+      // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+      //interphase instructions
+      timeline.push(phaseTwoInstructions);
       addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
       timeline.push(debrief_block);
 

@@ -88,6 +88,15 @@ const demographics_block = {
         }
       ];
 
+
+      phase2_instructions = [
+        '<p>There have been reports of local pirates stealing from trading ships. Watch out! </p>' +
+        // '<p>In the next few blocks, trading with a planet might result in the arrival of a pirate ship. </p>' +
+        '<p>Your ship has a shield that can keep these pirates from stealing from you, but the shield will not always be available. If available, you can activate the shield by pressing the ACTIVATE button. </p>' +
+        '<p>Remember, your goal is still to <b> gain as many points as possible! </b></p>'
+      ];
+      
+
       debrief = [
         '<p>Please confirm that you have read the debriefing questions below: </p>' +
         
