@@ -52,7 +52,7 @@ const ship_attack_time_const = 6000;
 const nBlocks_p1 = 1;
 let nBlocks_p2 = 1;
 let nBlocks_p3 = 1;
-let ship_attack_damage_index = [0,100,25]
+//let ship_attack_damage_index = [0(non-attack), fixed 100pts,25%]
 let ship_attack_damage = 100;
 
 
