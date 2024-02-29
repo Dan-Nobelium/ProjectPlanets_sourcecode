@@ -17,7 +17,6 @@ let sample = samples[0];
 let num_planets = 3;
 let planet_sides = [...Array(num_planets).keys()].map(x => x.toString());
 let planet_side = jsPsych.randomization.sampleWithReplacement(planet_sides, 1)[0];
-console.log(planet_side);
 // Stimulus and image Initialization
 const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/pinkp.png'], 1);
 const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png','img/ship3.png'], 1);
@@ -44,10 +43,6 @@ const feedback_duration = 2500;
 const rf_ship_delay = 1500;
 const probability_trade = [[.5], [.5], [.5]];
 const probability_shield = [[.5], [.5], [.5]];
-// const probability_trade = [[.0], [.0], [.0]];
-// const probability_shield = [[.0], [.0], [.0]];
-// const probability_trade = [[1], [1], [1]];
-// const probability_shield = [[1], [1], [1]];
 const reset_planet_wait_const = 1000;
 const shield_charging_time_const = 3000;
 const ship_attack_time_const = 6000;
@@ -55,9 +50,9 @@ const ship_attack_time_const = 6000;
 
 // Condition controll Global Variables Definition
 const nBlocks_p1 = 1;
-const nBlocks_p2 = 1;
-const nBlocks_p3 = 1;
-ship_attack_damage_index = [0,100,25]
+let nBlocks_p2 = 1;
+let nBlocks_p3 = 1;
+let ship_attack_damage_index = [0,100,25]
 let ship_attack_damage = 100;
 
 
@@ -67,6 +62,16 @@ if (group[0].includes("0.1")) {
 } else if (group[0].includes("0.4")) {
   var probability_ship = [[0.4],[0.4],[0.4]];
 } else (console.log("ERROR: group is not defined as 0.1 or 0.4"))
+
+// // manipulate early/late instruction by block sizes of phase 2/3
+// if (group[0].includes("early")) {
+//   nBlocks_p2 = 2;
+//   nBlocks_p3 = 3;
+// } else if (group[0].includes("late")) {
+//   nBlocks_p2 = 3;
+//   nBlocks_p3 = 4;
+// } else (console.log("ERROR: group is not defined as early or late"))
+
 
 // var probability_ship = probability_ship;
 //Continious or discreete testing phases
@@ -772,9 +777,42 @@ let planet_ship = {
         //   }
         // };
     
+//----------------------------------------------------------------------------
+// --- Phase 3
+
+// 2 planet -> 3 planet conversion:
+// How do we want to raise the 3 levels of pirate attraction
+
+// instructlate = [          // past tense (LATE condition)
+// '<p>Your signals to the ' + planet_side[0]+ ' planet (' + planet_layout[0] + ' side) have been attracting pirate ships (Ship: Type ' + pun_ship + '), that have been stealing your points! </p>' +
+
+// ];
+
+// instructearly = [          // future tense (LATE condition)
+// '<p>Local intel has determined where the pirates are coming from!</p>' +
+// '<p>Your signals to the ' + planet_side[0]+ ' planet (' + planet_layout[0] + ' side) will attract pirate ships (Ship: Type ' + pun_ship + ') and steal your points! </p>' +
+// ];
 
 
+// if (group.includes("early")) {      // EARLY condition
+// 	for (var i=0; i<nBlocks_p2; i++){
 
+// 		if (i === nBlocks_p2-4) {
+			
+			// present correct contingencies
+			var cont_instructions = {
+				type: 'instructions',
+				pages: [
+					'<p>Local intel has determined where the pirates are coming from!<br>Click Next to view this intel.</p>',
+          '<p>[decide how to present this information]</p>',
+        ],
+				allow_keys: false,
+				show_clickable_nav: true,
+				post_trial_gap: iti,
+				data: {
+					phase: 'instruct contingencies'
+				}
+			};
 
 //----------------------------------------------------------------------------
 // --- Debrief and experiment end
@@ -820,43 +858,51 @@ var exit_experiment = {
 
 
 
+
+
 // ---- Timeline creation ----
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
-
-
-
-
+// // Induction
 // timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
 // timeline.push(gen_ins_block);
 // timeline.push(instructionCheckLoopWithFeedback);
-timeline.push(end_instruction);   
+// timeline.push(end_instruction);   
+
+// //Phase 1, no ships
 // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-// timeline.push(valence_p1);
+timeline.push(valence_p1);
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
-// timeline.push(slider_p1_q1);
+// timeline.push(slider_p1_q1); 
 // timeline.push(slider_p1_q2);
+
+// //Phase2, ships
 // timeline.push(phaseTwoInstructions);
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// timeline.push(valence_p2);
+// timeline.push(infer_p2_A);
+// timeline.push(infer_p2_B);
+// timeline.push(infer_p2_C);
+
+//Phase3, ships
+timeline.push(cont_instructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
 timeline.push(valence_p2);
 timeline.push(infer_p2_A);
 timeline.push(infer_p2_B);
 timeline.push(infer_p2_C);
-// timeline.push(infer_p2_ship1);
-// timeline.push(infer_p2_ship2);
-// timeline.push(slider_p2_q1);
-// timeline.push(slider_p2_q2);
 
-// timeline.push(debrief_block);
-// timeline.push(contact_block);
+//Debrief
+timeline.push(debrief_block);
+timeline.push(contact_block);
 
 
 
-
+// planet A/B sliders (do we want more sliders for planet C?) 
 
 
 // timeline.push(exit_experiment);
