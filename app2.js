@@ -549,45 +549,45 @@ let planet_ship = {
     ];
 
 
-      // // phase 2, planet A
-      // var inf_img_p2_A = [
-      //   {
-      //     stimulus: 'img/win100.png',
-      //     text: "Winning $100"
-      //   },
-      //   {
-      //     stimulus: 'img/lose.png',
-      //     text: "Losing $"
-      //   },
-      //   {
-      //     stimulus: 'img/ship1.png',
-      //     text: "Ship 1"
-      //   },
-      //   {
-      //     stimulus: 'img/ship2.png',
-      //     text: "Ship 2"
-      //   },
-      // ];
+      // phase 2, planet A
+      var inf_img_p2_A = [
+        {
+          stimulus: 'img/win100.png',
+          text: "Winning $100"
+        },
+        {
+          stimulus: 'img/lose.png',
+          text: "Losing $"
+        },
+        {
+          stimulus: 'img/ship1.png',
+          text: "Ship 1"
+        },
+        {
+          stimulus: 'img/ship2.png',
+          text: "Ship 2"
+        },
+      ];
     
-      // // phase 2, planet B
-      // var inf_img_p2_B = [
-      //   {
-      //     stimulus: 'img/win100.png',
-      //     text: "Winning $100"
-      //   },
-      //   {
-      //     stimulus: 'img/lose.png',
-      //     text: "Losing $"
-      //   },
-      //   {
-      //     stimulus: 'img/ship1.png',
-      //     text: "Ship 1"
-      //   },
-      //   {
-      //     stimulus: 'img/ship2.png',
-      //     text: "Ship 2"
-      //   },
-      // ];
+      // phase 2, planet B
+      var inf_img_p2_B = [
+        {
+          stimulus: 'img/win100.png',
+          text: "Winning $100"
+        },
+        {
+          stimulus: 'img/lose.png',
+          text: "Losing $"
+        },
+        {
+          stimulus: 'img/ship1.png',
+          text: "Ship 1"
+        },
+        {
+          stimulus: 'img/ship2.png',
+          text: "Ship 2"
+        },
+      ];
 
 //TODO: create valance check 8 library and use it here
         // value check p2
@@ -619,82 +619,82 @@ let planet_ship = {
             block_number: i + nBlocks_p1
           }
         };
+    
+        // inference check p2 (planet A)
+        var infer_p2_A = {
+          type: 'inference-check-4',
+          main_stimulus: stim_list[0],
+          main_stimulus_height: main_stim_height,
+          prompt: inference_prompt[0],
+          stimulus_1: inf_img_p2_A[0].stimulus,
+          stimulus_2: inf_img_p2_A[1].stimulus,
+          stimulus_3: inf_img_p2_A[2].stimulus,
+          stimulus_4: inf_img_p2_A[3].stimulus,
+          stim_text_1: inf_img_p2_A[0].text,
+          stim_text_2: inf_img_p2_A[1].text,
+          stim_text_3: inf_img_p2_A[2].text,
+          stim_text_4: inf_img_p2_A[3].text,
+          slider_text_top: contingency_q[0],
+          labels_top: contingency_labels,
+          stimulus_height: inf_stim_height,
+          slider_width: inf_slider_width,
+          require_movement: false,
+          data: {
+            phase: 'inf_check_2_A',
+            block_number: i + nBlocks_p1
+          }
+        };
+    
+        //create 5 item valance library check for p2 A/B/C
+        // inference check p2 (planet B)
+        var infer_p2_B = {
+          type: 'inference-check-4',
+          main_stimulus: stim_list[1],
+          main_stimulus_height: main_stim_height,
+          prompt: inference_prompt[1],
+          stimulus_1: inf_img_p2_B[0].stimulus,
+          stimulus_2: inf_img_p2_B[1].stimulus,
+          stimulus_3: inf_img_p2_B[2].stimulus,
+          stimulus_4: inf_img_p2_B[3].stimulus,
+          stim_text_1: inf_img_p2_B[0].text,
+          stim_text_2: inf_img_p2_B[1].text,
+          stim_text_3: inf_img_p2_B[2].text,
+          stim_text_4: inf_img_p2_B[3].text,
+          slider_text_top: contingency_q[1],
+          labels_top: contingency_labels,
+          stimulus_height: inf_stim_height,
+          slider_width: inf_slider_width,
+          require_movement: false,
+          data: {
+            phase: 'inf_check_2_B',
+            block_number: i + nBlocks_p1
+          }
+        };
 
-        // value check p2, getting to 8 items
-        // var valence_p2 = {
-        //   type: 'valence-check-6',
-        //   prompt: valence_q,
-        //   stimulus_1: val_img_p2[0].stimulus,
-        //   stim_text_1: val_img_p2[0].text,
-        //   stimulus_2: val_img_p2[1].stimulus,
-        //   stim_text_2: val_img_p2[1].text,
-        //   stimulus_3: val_img_p2[2].stimulus,
-        //   stim_text_3: val_img_p2[2].text,
-        //   stimulus_4: val_img_p2[3].stimulus,
-        //   stim_text_4: val_img_p2[3].text,
-        //   stimulus_5: val_img_p2[4].stimulus,
-        //   stim_text_5: val_img_p2[4].text,
-        //   stimulus_6: val_img_p2[5].stimulus,
-        //   stim_text_6: val_img_p2[5].text,
-        //   labels: valence_labels,
-        //   stimulus_height: inf_stim_height,
-        //   slider_width: inf_slider_width,
-        //   require_movement: false,
-        //   data: {
-        //     phase: 'val_check_2',
-        //     block_number: i + nBlocks_p1
-        //   }
-        // };
-    
-        // // inference check p2 (planet A)
-        // var infer_p2_A = {
-        //   type: 'inference-check-4',
-        //   main_stimulus: stim_list[0],
-        //   main_stimulus_height: main_stim_height,
-        //   prompt: inference_prompt[0],
-        //   stimulus_1: inf_img_p2_A[0].stimulus,
-        //   stimulus_2: inf_img_p2_A[1].stimulus,
-        //   stimulus_3: inf_img_p2_A[2].stimulus,
-        //   stimulus_4: inf_img_p2_A[3].stimulus,
-        //   stim_text_1: inf_img_p2_A[0].text,
-        //   stim_text_2: inf_img_p2_A[1].text,
-        //   stim_text_3: inf_img_p2_A[2].text,
-        //   stim_text_4: inf_img_p2_A[3].text,
-        //   slider_text_top: contingency_q[0],
-        //   labels_top: contingency_labels,
-        //   stimulus_height: inf_stim_height,
-        //   slider_width: inf_slider_width,
-        //   require_movement: false,
-        //   data: {
-        //     phase: 'inf_check_2_A',
-        //     block_number: i + nBlocks_p1
-        //   }
-        // };
-    
-        // // inference check p2 (planet B)
-        // var infer_p2_B = {
-        //   type: 'inference-check-4',
-        //   main_stimulus: stim_list[1],
-        //   main_stimulus_height: main_stim_height,
-        //   prompt: inference_prompt[1],
-        //   stimulus_1: inf_img_p2_B[0].stimulus,
-        //   stimulus_2: inf_img_p2_B[1].stimulus,
-        //   stimulus_3: inf_img_p2_B[2].stimulus,
-        //   stimulus_4: inf_img_p2_B[3].stimulus,
-        //   stim_text_1: inf_img_p2_B[0].text,
-        //   stim_text_2: inf_img_p2_B[1].text,
-        //   stim_text_3: inf_img_p2_B[2].text,
-        //   stim_text_4: inf_img_p2_B[3].text,
-        //   slider_text_top: contingency_q[1],
-        //   labels_top: contingency_labels,
-        //   stimulus_height: inf_stim_height,
-        //   slider_width: inf_slider_width,
-        //   require_movement: false,
-        //   data: {
-        //     phase: 'inf_check_2_B',
-        //     block_number: i + nBlocks_p1
-        //   }
-        // };
+        // inference check p2 (planet B)
+        var infer_p2_C = {
+          type: 'inference-check-4',
+          main_stimulus: stim_list[2],
+          main_stimulus_height: main_stim_height,
+          prompt: inference_prompt[1],
+          stimulus_1: inf_img_p2_B[0].stimulus,
+          stimulus_2: inf_img_p2_B[1].stimulus,
+          stimulus_3: inf_img_p2_B[2].stimulus,
+          stimulus_4: inf_img_p2_B[3].stimulus,
+          stim_text_1: inf_img_p2_B[0].text,
+          stim_text_2: inf_img_p2_B[1].text,
+          stim_text_3: inf_img_p2_B[2].text,
+          stim_text_4: inf_img_p2_B[3].text,
+          slider_text_top: contingency_q[1],
+          labels_top: contingency_labels,
+          stimulus_height: inf_stim_height,
+          slider_width: inf_slider_width,
+          require_movement: false,
+          data: {
+            phase: 'inf_check_2_B',
+            block_number: i + nBlocks_p1
+          }
+        };
     
         // // inference check p2 (ship 1)
         // var infer_p2_ship1 = {
@@ -843,8 +843,9 @@ timeline.push(end_instruction);
 // timeline.push(phaseTwoInstructions);
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
 // timeline.push(infer_p2_ship1);
 // timeline.push(infer_p2_ship2);
 // timeline.push(slider_p2_q1);
