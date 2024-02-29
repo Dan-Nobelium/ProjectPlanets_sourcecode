@@ -490,32 +490,6 @@ let planet_ship = {
 //----------------------------------------------------------------------------
 // ----- Phase 2 valance and inference-----
 
-// const val_img_p2 = [
-//   {
-//     stimulus: 'img/win100.png',
-//     text: "Winning $100"
-//   },
-//   {
-//     stimulus: 'img/lose.png',
-//     text: "Losing $"
-//   },
-//   {
-//     stimulus: stim_list[0],
-//     text: "Planet A (left)"
-//   },
-//   {
-//     stimulus: stim_list[1],
-//     text: "Planet B (right)"
-//   },
-//   {
-//     stimulus: 'img/ship1.png',
-//     text: "Ship 1"
-//   },
-//   {
-//     stimulus: 'img/ship2.png',
-//     text: "Ship 2"
-//   }
-//   ];
 //p2 valance 8 items
   const val_img_p2 = [
     {
@@ -863,30 +837,30 @@ var exit_experiment = {
 // ---- Timeline creation ----
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
-// // Induction
-// timeline.push(fullscreen);
-// timeline.push(consent_block);
-// timeline.push(demographics_block);
-// timeline.push(gen_ins_block);
-// timeline.push(instructionCheckLoopWithFeedback);
-// timeline.push(end_instruction);   
+// Induction
+timeline.push(fullscreen);
+timeline.push(consent_block);
+timeline.push(demographics_block);
+timeline.push(gen_ins_block);
+timeline.push(instructionCheckLoopWithFeedback);
+timeline.push(end_instruction);   
 
-// //Phase 1, no ships
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+//Phase 1, no ships
+addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 timeline.push(valence_p1);
-// timeline.push(infer_p1_A);
-// timeline.push(infer_p1_B);
-// timeline.push(infer_p1_C);
-// timeline.push(slider_p1_q1); 
-// timeline.push(slider_p1_q2);
+timeline.push(infer_p1_A);
+timeline.push(infer_p1_B);
+timeline.push(infer_p1_C);
+timeline.push(slider_p1_q1); 
+timeline.push(slider_p1_q2);
 
-// //Phase2, ships
-// timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
+//Phase2, ships
+timeline.push(phaseTwoInstructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
 
 //Phase3, ships
 timeline.push(cont_instructions);
@@ -932,6 +906,3 @@ timeline.push(contact_block);
     }
   });
 }
-
-//#TODO
-// labels left/middle/right, currently read left/right(not-middle)/right, fix these
