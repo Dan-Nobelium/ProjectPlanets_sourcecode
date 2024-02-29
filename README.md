@@ -1,6 +1,7 @@
 # Planets Task
 
 Planets Task is a JavaScript-based application for conducting studies related to decision-making and probability. In this task, participants interact with a simulated environment where they can click on planets to receive probabilistic rewards and encounter various events like pirate attacks.
+This README is substantially outdated due to a rewrite
 
 ## Installation
 
