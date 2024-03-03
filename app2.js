@@ -317,7 +317,7 @@ var i = 1;
               type: 'valence-check-all',
               stimuli: val_img_p1,
               prompt: valence_q,
-              num_stimuli: 4,
+              num_stimuli: 1,
               data: {
                 phase: 'val_check_all',
                 block_number: 1
@@ -862,8 +862,8 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(end_instruction);   
 
 //Phase 1, no ships
-addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-timeline.push(valence_p1);
+// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+// timeline.push(valence_p1);
 timeline.push(valence_p1_all);
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
