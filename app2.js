@@ -34,7 +34,7 @@ const images = [
 let block_number = 0;
 let trial_number = 0;
 let points = 0;
-const block_duration = 180 * 100; // in milliseconds (3 mins)
+const block_duration = 180 * 10; // in milliseconds (3 mins)
 const iti = 1000;
 const inf_stim_height = 80;
 const inf_slider_width = 500;
@@ -240,6 +240,9 @@ let planet_noship = {
         }
     }
 }
+
+
+
 
 //----------------------------------------------------------------------------
 // ----- Phase 1  valance and inference checks-----
@@ -838,41 +841,41 @@ var exit_experiment = {
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
 // Induction
-timeline.push(fullscreen);
-timeline.push(consent_block);
-timeline.push(demographics_block);
-timeline.push(gen_ins_block);
-timeline.push(instructionCheckLoopWithFeedback);
-timeline.push(end_instruction);   
+// timeline.push(fullscreen);
+// timeline.push(consent_block);
+// timeline.push(demographics_block);
+// timeline.push(gen_ins_block);
+// timeline.push(instructionCheckLoopWithFeedback);
+// timeline.push(end_instruction);   
 
 //Phase 1, no ships
 addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 timeline.push(valence_p1);
-timeline.push(infer_p1_A);
-timeline.push(infer_p1_B);
-timeline.push(infer_p1_C);
-timeline.push(slider_p1_q1); 
-timeline.push(slider_p1_q2);
+// timeline.push(infer_p1_A);
+// timeline.push(infer_p1_B);
+// timeline.push(infer_p1_C);
+// timeline.push(slider_p1_q1); 
+// timeline.push(slider_p1_q2);
 
-//Phase2, ships
-timeline.push(phaseTwoInstructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-timeline.push(valence_p2);
-timeline.push(infer_p2_A);
-timeline.push(infer_p2_B);
-timeline.push(infer_p2_C);
+// //Phase2, ships
+// timeline.push(phaseTwoInstructions);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// timeline.push(valence_p2);
+// timeline.push(infer_p2_A);
+// timeline.push(infer_p2_B);
+// timeline.push(infer_p2_C);
 
-//Phase3, ships
-timeline.push(cont_instructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-timeline.push(valence_p2);
-timeline.push(infer_p2_A);
-timeline.push(infer_p2_B);
-timeline.push(infer_p2_C);
+// //Phase3, ships
+// timeline.push(cont_instructions);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+// timeline.push(valence_p2);
+// timeline.push(infer_p2_A);
+// timeline.push(infer_p2_B);
+// timeline.push(infer_p2_C);
 
-//Debrief
-timeline.push(debrief_block);
-timeline.push(contact_block);
+// //Debrief
+// timeline.push(debrief_block);
+// timeline.push(contact_block);
 
 
 
