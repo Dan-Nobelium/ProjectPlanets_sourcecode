@@ -16,6 +16,12 @@ jsPsych.plugins['valence-check-all'] = (function() {
         default: [],
         description: 'List of stimuli to evaluate.',
       },
+      text_descriptions: {
+        type: jsPsych.plugins.parameterType.ARRAY,
+        pretty_name: 'Text Descriptions',
+        default: [],
+        description: 'List of text descriptions to associate with each stimulus.',
+      },
       num_stimuli: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Number of stimuli per trial',
