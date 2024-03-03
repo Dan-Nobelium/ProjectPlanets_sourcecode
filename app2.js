@@ -312,18 +312,23 @@ var i = 1;
               }
             };
 
-            // valence_p1_all
+            const mappedValImgP1 = val_img_p1.map((entry, index) => {
+              return {
+                picture: entry.stimulus,
+                id: entry.id || `item-${index}`,
+              };
+            });
+            
             const valence_p1_all = {
               type: 'valence-check-all',
-              stimuli: val_img_p1,
+              stimuli: mappedValImgP1,
               prompt: valence_q,
-              num_stimuli: 1,
+              num_stimuli: 2,
               data: {
                 phase: 'val_check_all',
                 block_number: 1
               }
             };
-        
 
 
         // inference check p1 (planet A)

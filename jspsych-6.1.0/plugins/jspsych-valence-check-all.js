@@ -25,23 +25,17 @@ jsPsych.plugins['valence-check-all'] = (function() {
     },
   };
 
-  plugin.trial = async function(display_element, trial) {
-    await preloadImages(trial.stimuli);
-
-    // Div for holding the individual rating containers
-    const ratingsContainerDiv = document.createElement('div');
-    ratingsContainerDiv.classList.add('jspsych-valence-check-all-ratings-container');
+  plugin.trial = function(display_element, trial) {
+    const promises = [];
 
     // Prepare the grid layout
     const rowCount = Math.ceil(trial.num_stimuli / 3);
-    let columnCounter = 1;
     for (let i = 0; i < trial.num_stimuli; ++i) {
-      if (columnCounter === 4) {
-        columnCounter = 1;
-      }
+      const rowPosition = Math.floor(i / 3);
+      const columnPosition = i % 3;
 
       const ratingContainer = document.createElement('div');
-      ratingContainer.classList.add('rating-container', `column-${columnCounter}`);
+      ratingContainer.classList.add('rating-container', `row-pos-${rowPosition}`, `col-pos-${columnPosition}`);
 
       const stimulus = trial.stimuli[i % trial.stimuli.length];
 
@@ -55,16 +49,9 @@ jsPsych.plugins['valence-check-all'] = (function() {
       ratingContainer.appendChild(imageElement);
       ratingContainer.appendChild(titleSpan);
 
-      ratingsContainerDiv.appendChild(ratingContainer);
+      display_element.appendChild(ratingContainer);
 
-      columnCounter++;
-    }
-
-    display_element.appendChild(ratingsContainerDiv);
-
-    // Collect ratings
-    const promises = Array.from(document.querySelectorAll('.rating-container')).map(async (ratingContainer) => {
-      const selector = '.rating-container.column-' + ratingContainer.classList[1];
+      const selector = `.rating-container.row-pos-${rowPosition}.col-pos-${columnPosition}`;
       const initialValue = 0;
 
       const ratingInput = document.createElement('input');
@@ -92,7 +79,7 @@ jsPsych.plugins['valence-check-all'] = (function() {
       ratingInput.addEventListener('input', updateLabelText);
       updateLabelText();
 
-      return new Promise((resolve) => {
+      promises.push(new Promise((resolve) => {
         ratingInput.addEventListener('change', () => {
           const ratingValue = parseFloat(ratingInput.value);
           jsPsych.pluginAPI.clearAllTimeouts();
@@ -107,51 +94,11 @@ jsPsych.plugins['valence-check-all'] = (function() {
           jsPsych.data.write(trialData);
           resolve();
         });
-      });
-    });
+      }));
+    }
 
-    await Promise.all(promises);
-
-    jsPsych.finishTrial();
+    return Promise.all(promises);
   };
-
-  function preloadImages(images) {
-    return new Promise((resolve) => {
-      const loadedImages = [];
-      const totalImages = images.length;
-
-      if (!totalImages) {
-        resolve();
-      }
-
-      images.forEach((image, index) => {
-        const imgObj = new Image();
-        imgObj.src = image.picture;
-
-        imgObj.onload = () => {
-          loadedImages.push({
-            source: image.picture,
-            loaded: true,
-          });
-
-          if (loadedImages.length === totalImages) {
-            resolve();
-          }
-        };
-
-        imgObj.onerror = () => {
-          loadedImages.push({
-            source: image.picture,
-            loaded: false,
-          });
-
-          if (loadedImages.length === totalImages) {
-            resolve();
-          }
-        };
-      });
-    });
-  }
 
   return plugin;
 })();
