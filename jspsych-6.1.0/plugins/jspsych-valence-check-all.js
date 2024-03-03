@@ -1,4 +1,4 @@
-/*
+/**
  * jsPsych plugin for checking multiple valences at once
  */
 
@@ -14,110 +14,127 @@ jsPsych.plugins['valence-check-all'] = (function() {
         type: jsPsych.plugins.parameterType.JSON,
         pretty_name: 'Stimuli',
         default: [],
-        description: 'List of stimuli to evaluate.',
-      },
-      text_descriptions: {
-        type: jsPsych.plugins.parameterType.ARRAY,
-        pretty_name: 'Text Descriptions',
-        default: [],
-        description: 'List of text descriptions to associate with each stimulus.',
+        description: 'List of stimuli to evaluate.'
       },
       num_stimuli: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Number of stimuli per trial',
-        default: 3,
-        description: 'Specifies the number of stimuli to show simultaneously.',
+        default: 4,
+        description: 'Specifies the number of stimuli to show simultaneously.'
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Button label',
-        default:  'Continue',
+        default:  'Submit Ratings',
         array: false,
-        description: 'Label of the button to advance.',
-      },
-    },
+        description: 'Label of the button to advance.'
+      }
+    }
   };
 
-  plugin.trial = function(display_element, trial) {
-    // Create a container for the stimuli
-    const stimulusContainers = document.createElement('div');
-    stimulusContainers. className = 'jspsych-valence-check-all-stimulus-container';
+  /**
+   * Creates the markup for the trial
+   * @param {Object} trial - The trial object
+   * @returns {string} Markup for the trial
+   */
+  const createMarkup = (trial) => {
+    // Start building the container
+    let markup = `
+      <div id="valence-check-all-main-container" class="valence-check-all-grid">
+    `;
 
-    // Display the stimuli
-    const stimuli = trial.stimuli;
-    const texts = trial.text_descriptions;
-    for (let i = 0; i < trial.num_stimuli && i < stimuli.length; i++) {
-      const stimulusContainer = document.createElement('div');
-      stimulusContainer.className = 'jspsych-valence-check-all-stimulus';
-      stimulusContainer.appendChild(document.createTextNode(texts[i]));
-      const image = document.createElement('img');
-      image.src = stimuli[i].picture;
-      stimulusContainer.appendChild(image);
-      stimulusContainers.appendChild(stimulusContainer);
-    }
+    // Iterate over the list of stimuli
+    trial.stimuli.forEach((stimulus, index) => {
+      // Construct the stimulus container
+      markup += `
+        <div class="valence-check-all-stimulus">
+          <img src="${stimulus.picture}" alt="${stimulus.id}"/>
+          <fieldset class="valence-check-all-options">
+      `;
 
-    // Create a wrapper around the slider inputs
-    const sliderWrapper = document.createElement('div');
-    sliderWrapper.className = 'jspsych-valence-check-all-slider-wrapper';
+      // Insert the possible answers
+      Object.entries(answerChoices).forEach(([value, answerLabel]) => {
+        markup += `
+            <div class="valence-check-all-option">
+              <input type="radio" name="valence-check-all-group-${index}" id="valence-check-all-option-${index}-${value}" value="${value}" required/>
+              <label for="valence-check-all-option-${index}-${value}">${answerLabel}</label>
+            </div>
+          `;
+      });
 
-    // Create the slider inputs
-    const sliders = [];
-    for (let i = 0; i < trial.num_stimuli && i < stimuli.length; i++) {
-      const slider = document.createElement('input');
-      slider.type = 'range';
-      slider.min = 0;
-      slider.max = 100;
-      slider.step = 1;
-      slider.value = 50;
-      sliderWrapper.appendChild(slider);
-      sliders.push(slider);
-    }
-
-    // Add the stimulus container to the display element
-    display_element.appendChild(stimulusContainers);
-
-    // Add the slider container to the display element
-    display_element.appendChild(sliderWrapper);
-
-    // Function handling updates to the slider
-    function handleSliderChange(event) {
-      const sliderIndex = Array.from(sliders).indexOf(event.target);
-      const value = parseFloat(event.target.value);
-      trial.response[sliderIndex] = value;
-      display_element.querySelector('#valence-score').innerHTML = JSON.stringify(trial.response);
-    }
-
-    // Register listeners for the slider inputs
-    for (let i = 0; i < trial.num_stimuli && i < stimuli.length; i++) {
-      sliders[i].addEventListener('input', handleSliderChange);
-    }
-
-    // On Finish Callback
-    const on_finish = function(data) {
-      data.correct = true;
-      delete data.response;
-    };
-
-    // Render the plugin
-    jsPsych.pluginAPI.convertKeysToKeyCodes(trial.keys);
-    display_element.innerHTML = "";
-    display_element.appendChild(stimulusContainers);
-    display_element.appendChild(sliderWrapper);
-    display_element.appendChild(generateContinueButton(trial.button_label));
-    jsPsych.pluginAPI.registerNextTrialCallback(on_finish);
-  };
-
-  function generateContinueButton(button_label) {
-    const button = document.createElement("button");
-    button.className = "jspsych-btn";
-    button.innerHTML = button_label;
-
-    button.addEventListener("click", function() {
-      jsPsych.finishTrial();
+      markup += `
+          </fieldset>
+        </div>
+      `;
     });
 
-    return button;
-  }
+    // Close the container
+    markup += `
+      </div>
+      <button class="jspsych-btn" id="valence-check-all-next-btn">${trial.button_label}</button>
+    `;
+
+    return markup;
+  };
+
+  /**
+   * Handles the finished event of the trial
+   * @param {Object} data - Data collected during the trial
+   */
+  const handleFinishedEvent = (data) => {
+    // Get the selected values
+    data.response = data.response.map(r => parseInt(r));
+  };
+
+  /**
+   * Initialization method for the trial
+   * @param {Object} display_element - Element where the trial will be rendered
+   * @param {Object} trial - Trial specification
+   */
+  plugin.trial = function(display_element, trial) {
+    // Clear out old contents
+    display_element.innerHTML = '';
+
+    // Build the trial markup
+    const markup = createMarkup(trial);
+
+    // Attach the generated markup to the display_element
+    display_element.innerHTML = markup;
+
+    // Save the trial data
+    const rawData = {
+      stimuli: trial.stimuli,
+      num_stimuli: trial.num_stimuli
+    };
+    jsPsych.data.addProperties(rawData);
+
+    // Handle the submission
+    display_element.querySelector("#valence-check-all-next-btn").addEventListener("click", () => {
+      const radioButtons = display_element.querySelectorAll("[type='radio'][required]:checked");
+
+      if (radioButtons.length >= trial.num_stimuli) {
+        const selections = Array.from(radioButtons).map(rb => rb.value);
+        jsPsych.data.append({
+          correct: selections.every(v => typeof v === 'number'),
+          response: selections,
+        });
+
+        handleFinishedEvent(jsPsych.data.latest());
+        jsPsych.finishTrial();
+      } else {
+        alert("You must select a value for every item.");
+      }
+    });
+  };
+
+  // Answer Choices Dictionary
+  const answerChoices = {
+    1: 'Very Negative',
+    2: 'Slightly Negative',
+    3: 'Neutral',
+    4: 'Slightly Positive',
+    5: 'Very Positive',
+  };
 
   return plugin;
 })();
