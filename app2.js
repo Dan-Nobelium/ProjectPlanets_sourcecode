@@ -312,6 +312,19 @@ var i = 1;
               }
             };
 
+            // valence_p1_all
+            const valence_p1_all = {
+              type: 'valence-check-all',
+              stimuli: val_img_p1,
+              prompt: valence_q,
+              num_stimuli: 4,
+              data: {
+                phase: 'val_check_all',
+                block_number: 1
+              }
+            };
+        
+
 
         // inference check p1 (planet A)
         var infer_p1_A = {
@@ -851,6 +864,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 //Phase 1, no ships
 addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 timeline.push(valence_p1);
+timeline.push(valence_p1_all);
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
