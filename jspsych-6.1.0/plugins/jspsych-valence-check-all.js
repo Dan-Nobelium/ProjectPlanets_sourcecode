@@ -32,7 +32,7 @@ jsPsych.plugins['valence-check-all'] = (function() {
     const rowCount = Math.ceil(trial.num_stimuli / 3);
     for (let i = 0; i < trial.num_stimuli; ++i) {
       const rowPosition = Math.floor(i / 3);
-      const columnPosition = i % 3;
+      const columnPosition = i % 3 === 0 ? 0 : (i % 3 === 1 ? 1 : 2);
 
       const ratingContainer = document.createElement('div');
       ratingContainer.classList.add('rating-container', `row-pos-${rowPosition}`, `col-pos-${columnPosition}`);

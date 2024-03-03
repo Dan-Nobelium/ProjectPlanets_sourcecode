@@ -312,24 +312,25 @@ var i = 1;
               }
             };
 
-            const mappedValImgP1 = val_img_p1.map((entry, index) => {
-              return {
-                picture: entry.stimulus,
-                id: entry.id || `item-${index}`,
-              };
-            });
-            
-            const valence_p1_all = {
-              type: 'valence-check-all',
-              stimuli: mappedValImgP1,
-              prompt: valence_q,
-              num_stimuli: 2,
-              data: {
-                phase: 'val_check_all',
-                block_number: 1
-              }
+          // Map the Stimuli for Valence Check All
+          const mappedValImgP1 = val_img_p1.map((entry) => {
+            return {
+              picture: entry.stimulus,
+              id: entry.text,
             };
+          });
 
+          // Define Valence Check All Trial
+          const valence_p1_all = {
+            type: 'valence-check-all',
+            stimuli: mappedValImgP1,
+            prompt: val_img_p1[0].text,
+            num_stimuli: 4,
+            data: {
+              phase: 'val_check_all',
+              block_number: 1
+            }
+          };
 
         // inference check p1 (planet A)
         var infer_p1_A = {
