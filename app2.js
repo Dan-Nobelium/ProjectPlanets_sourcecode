@@ -320,12 +320,13 @@ var i = 1;
             };
           });
 
-          // Define Valence Check All Trial
           const valence_p1_all = {
             type: 'valence-check-all',
             stimuli: mappedValImgP1,
+            text_descriptions: val_img_p1.map(entry => entry.text),
             prompt: val_img_p1[0].text,
             num_stimuli: 4,
+            button_label: 'Proceed',
             data: {
               phase: 'val_check_all',
               block_number: 1
@@ -869,7 +870,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 //Phase 1, no ships
 // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-timeline.push(valence_p1);
+// timeline.push(valence_p1);
 timeline.push(valence_p1_all);
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);

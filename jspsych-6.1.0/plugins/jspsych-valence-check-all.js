@@ -28,83 +28,96 @@ jsPsych.plugins['valence-check-all'] = (function() {
         default: 3,
         description: 'Specifies the number of stimuli to show simultaneously.',
       },
+      button_label: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button label',
+        default:  'Continue',
+        array: false,
+        description: 'Label of the button to advance.',
+      },
     },
   };
 
   plugin.trial = function(display_element, trial) {
-    const promises = [];
+    // Create a container for the stimuli
+    const stimulusContainers = document.createElement('div');
+    stimulusContainers. className = 'jspsych-valence-check-all-stimulus-container';
 
-    // Prepare the grid layout
-    const rowCount = Math.ceil(trial.num_stimuli / 3);
-    for (let i = 0; i < trial.num_stimuli; ++i) {
-      const rowPosition = Math.floor(i / 3);
-      const columnPosition = i % 3 === 0 ? 0 : (i % 3 === 1 ? 1 : 2);
-
-      const ratingContainer = document.createElement('div');
-      ratingContainer.classList.add('rating-container', `row-pos-${rowPosition}`, `col-pos-${columnPosition}`);
-
-      const stimulus = trial.stimuli[i % trial.stimuli.length];
-
-      const imageElement = document.createElement('img');
-      imageElement.setAttribute('src', stimulus.picture);
-      imageElement.setAttribute('alt', stimulus.text);
-
-      const titleSpan = document.createElement('span');
-      titleSpan.textContent = stimulus.text;
-
-      ratingContainer.appendChild(imageElement);
-      ratingContainer.appendChild(titleSpan);
-
-      display_element.appendChild(ratingContainer);
-
-      const selector = `.rating-container.row-pos-${rowPosition}.col-pos-${columnPosition}`;
-      const initialValue = 0;
-
-      const ratingInput = document.createElement('input');
-      ratingInput.type = 'range';
-      ratingInput.min = 0;
-      ratingInput.max = 100;
-      ratingInput.step = 1;
-      ratingInput.value = initialValue;
-      ratingInput.classList.add('rating-input');
-
-      const ratingLabel = document.createElement('label');
-      ratingLabel.textContent = `${initialValue}`;
-      ratingLabel.htmlFor = 'rating-input';
-
-      ratingContainer.appendChild(ratingInput);
-      ratingContainer.appendChild(ratingLabel);
-
-      // Update visual representation of the rating
-      function updateLabelText() {
-        const value = parseFloat(ratingInput.value);
-        const percentage = (value / 100) * 100;
-        ratingLabel.textContent = `${percentage.toFixed(0)}%`;
-      }
-
-      ratingInput.addEventListener('input', updateLabelText);
-      updateLabelText();
-
-      promises.push(new Promise((resolve) => {
-        ratingInput.addEventListener('change', () => {
-          const ratingValue = parseFloat(ratingInput.value);
-          jsPsych.pluginAPI.clearAllTimeouts();
-          ratingLabel.textContent = `${ratingValue}%`;
-
-          // Store the rating in trial data
-          const trialData = {
-            stimulus_id: stimulus.id,
-            rating: ratingValue,
-          };
-
-          jsPsych.data.write(trialData);
-          resolve();
-        });
-      }));
+    // Display the stimuli
+    const stimuli = trial.stimuli;
+    const texts = trial.text_descriptions;
+    for (let i = 0; i < trial.num_stimuli && i < stimuli.length; i++) {
+      const stimulusContainer = document.createElement('div');
+      stimulusContainer.className = 'jspsych-valence-check-all-stimulus';
+      stimulusContainer.appendChild(document.createTextNode(texts[i]));
+      const image = document.createElement('img');
+      image.src = stimuli[i].picture;
+      stimulusContainer.appendChild(image);
+      stimulusContainers.appendChild(stimulusContainer);
     }
 
-    return Promise.all(promises);
+    // Create a wrapper around the slider inputs
+    const sliderWrapper = document.createElement('div');
+    sliderWrapper.className = 'jspsych-valence-check-all-slider-wrapper';
+
+    // Create the slider inputs
+    const sliders = [];
+    for (let i = 0; i < trial.num_stimuli && i < stimuli.length; i++) {
+      const slider = document.createElement('input');
+      slider.type = 'range';
+      slider.min = 0;
+      slider.max = 100;
+      slider.step = 1;
+      slider.value = 50;
+      sliderWrapper.appendChild(slider);
+      sliders.push(slider);
+    }
+
+    // Add the stimulus container to the display element
+    display_element.appendChild(stimulusContainers);
+
+    // Add the slider container to the display element
+    display_element.appendChild(sliderWrapper);
+
+    // Function handling updates to the slider
+    function handleSliderChange(event) {
+      const sliderIndex = Array.from(sliders).indexOf(event.target);
+      const value = parseFloat(event.target.value);
+      trial.response[sliderIndex] = value;
+      display_element.querySelector('#valence-score').innerHTML = JSON.stringify(trial.response);
+    }
+
+    // Register listeners for the slider inputs
+    for (let i = 0; i < trial.num_stimuli && i < stimuli.length; i++) {
+      sliders[i].addEventListener('input', handleSliderChange);
+    }
+
+    // On Finish Callback
+    const on_finish = function(data) {
+      data.correct = true;
+      delete data.response;
+    };
+
+    // Render the plugin
+    jsPsych.pluginAPI.convertKeysToKeyCodes(trial.keys);
+    display_element.innerHTML = "";
+    display_element.appendChild(stimulusContainers);
+    display_element.appendChild(sliderWrapper);
+    display_element.appendChild(generateContinueButton(trial.button_label));
+    jsPsych.pluginAPI.registerNextTrialCallback(on_finish);
   };
+
+  function generateContinueButton(button_label) {
+    const button = document.createElement("button");
+    button.className = "jspsych-btn";
+    button.innerHTML = button_label;
+
+    button.addEventListener("click", function() {
+      jsPsych.finishTrial();
+    });
+
+    return button;
+  }
 
   return plugin;
 })();
