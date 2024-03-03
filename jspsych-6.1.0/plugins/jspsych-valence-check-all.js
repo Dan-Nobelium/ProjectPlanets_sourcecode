@@ -1,108 +1,157 @@
 /*
- * jsPsych plugins must be written in a particular format. See: https://www.jspsych.org/developers/writing-new-plugins/
+ * jsPsych plugin for checking multiple valences at once
  */
 
-jsPsych.plugins["valence-check-all"] = (function() {
+jsPsych.plugins['valence-check-all'] = (function() {
 
-  var plugin = {};
+  const plugin = {};
 
   plugin.info = {
-    name: "valence-check-all",
+    name: 'valence-check-all',
+    description: '',
     parameters: {
       stimuli: {
-        type: jsPsych.plugins.parameterType.COMPLEX,
-        nested: {
-          picture: {
-            type: jsPsych.plugins.parameterType.IMAGE,
-            default: undefined,
-          },
-          text: {
-            type: jsPsych.plugins.parameterType.STRING,
-            default: "",
-          },
-          labels: {
-            type: jsPsych.plugins.parameterType.ARRAY,
-            default: ['Negative', 'Neutral', 'Positive'],
-          },
-        },
+        type: jsPsych.plugins.parameterType.JSON,
+        pretty_name: 'Stimuli',
+        default: [],
+        description: 'List of stimuli to evaluate.',
       },
       num_stimuli: {
         type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Number of stimuli per trial',
         default: 3,
-      },
-      prompt: {
-        type: jsPsych.plugins.parameterType.HTML_STRING,
-        default: "",
+        description: 'Specifies the number of stimuli to show simultaneously.',
       },
     },
   };
 
-  plugin.trial = function(display_element, trial) {
-    // Access to shared globals
-    const plugin = this;
+  plugin.trial = async function(display_element, trial) {
+    await preloadImages(trial.stimuli);
 
-    // Data initialization
-    const shuffledStimuli = _.shuffle(trial.stimuli);
-    plugin._preloadImages([...shuffledStimuli.map(el => el.picture)]);
+    // Div for holding the individual rating containers
+    const ratingsContainerDiv = document.createElement('div');
+    ratingsContainerDiv.classList.add('jspsych-valence-check-all-ratings-container');
 
-    // Generated HTML setup
-    const html = `
-      ${shuffledStimuli
-        .map(
-          (item, idx) => `
-          <div class="jspsych-valence-check-all-item">
-            <img src="${item.picture}" alt="${item.text}"/>
-            <p>${item.text}</p>
-            
-            <!-- Slider -->
-            <input type="range" id="jspsych-valence-check-all-slider-${idx}" min="0" max="100" step="1" value="50">
-            
-            <!-- Value indicators -->
-            <div class="jspsych-valence-check-all-values">
-              ${item.labels
-                .map(
-                  (label, labelIdx) => `
-                  <span class="indicator-item indicator-${labelIdx}">${label}: <strong>${
-                    labelIdx * 33.33
-                  }%</strong></span>
-                  `
-                )
-                .join("")}
-            </div>
-          </div>
-        `
-        )
-        .join("")}
-      
-      <!-- Prompt -->
-      <div class="jspsych-valence-check-all-prompt">${trial.prompt}</div>
-      
-      <!-- Submit button -->
-      <button id="jspsych-valence-check-all-submit" class="jspsych-btn">Submit</button>
-    `;
+    // Prepare the grid layout
+    const rowCount = Math.ceil(trial.num_stimuli / 3);
+    let columnCounter = 1;
+    for (let i = 0; i < trial.num_stimuli; ++i) {
+      if (columnCounter === 4) {
+        columnCounter = 1;
+      }
 
-    // Display HTML
-    display_element.innerHTML = html;
+      const ratingContainer = document.createElement('div');
+      ratingContainer.classList.add('rating-container', `column-${columnCounter}`);
 
-    // Gather slide values upon submission
-    display_element.querySelector("#jspsych-valence-check-all-submit").addEventListener("click", () => {
-      const values = shuffledStimuli.map((_, idx) => {
-        return parseInt(
-          display_element.querySelector(`#jspsych-valence-check-all-slider-${idx}`).value,
-          10
-        );
+      const stimulus = trial.stimuli[i % trial.stimuli.length];
+
+      const imageElement = document.createElement('img');
+      imageElement.setAttribute('src', stimulus.picture);
+      imageElement.setAttribute('alt', stimulus.text);
+
+      const titleSpan = document.createElement('span');
+      titleSpan.textContent = stimulus.text;
+
+      ratingContainer.appendChild(imageElement);
+      ratingContainer.appendChild(titleSpan);
+
+      ratingsContainerDiv.appendChild(ratingContainer);
+
+      columnCounter++;
+    }
+
+    display_element.appendChild(ratingsContainerDiv);
+
+    // Collect ratings
+    const promises = Array.from(document.querySelectorAll('.rating-container')).map(async (ratingContainer) => {
+      const selector = '.rating-container.column-' + ratingContainer.classList[1];
+      const initialValue = 0;
+
+      const ratingInput = document.createElement('input');
+      ratingInput.type = 'range';
+      ratingInput.min = 0;
+      ratingInput.max = 100;
+      ratingInput.step = 1;
+      ratingInput.value = initialValue;
+      ratingInput.classList.add('rating-input');
+
+      const ratingLabel = document.createElement('label');
+      ratingLabel.textContent = `${initialValue}`;
+      ratingLabel.htmlFor = 'rating-input';
+
+      ratingContainer.appendChild(ratingInput);
+      ratingContainer.appendChild(ratingLabel);
+
+      // Update visual representation of the rating
+      function updateLabelText() {
+        const value = parseFloat(ratingInput.value);
+        const percentage = (value / 100) * 100;
+        ratingLabel.textContent = `${percentage.toFixed(0)}%`;
+      }
+
+      ratingInput.addEventListener('input', updateLabelText);
+      updateLabelText();
+
+      return new Promise((resolve) => {
+        ratingInput.addEventListener('change', () => {
+          const ratingValue = parseFloat(ratingInput.value);
+          jsPsych.pluginAPI.clearAllTimeouts();
+          ratingLabel.textContent = `${ratingValue}%`;
+
+          // Store the rating in trial data
+          const trialData = {
+            stimulus_id: stimulus.id,
+            rating: ratingValue,
+          };
+
+          jsPsych.data.write(trialData);
+          resolve();
+        });
       });
-
-      // Save data
-      const trialData = {
-        stimuli: shuffledStimuli,
-        values: values,
-      };
-
-      // Finish trial
-      plugin.finishTrial(trialData);
     });
+
+    await Promise.all(promises);
+
+    jsPsych.finishTrial();
   };
+
+  function preloadImages(images) {
+    return new Promise((resolve) => {
+      const loadedImages = [];
+      const totalImages = images.length;
+
+      if (!totalImages) {
+        resolve();
+      }
+
+      images.forEach((image, index) => {
+        const imgObj = new Image();
+        imgObj.src = image.picture;
+
+        imgObj.onload = () => {
+          loadedImages.push({
+            source: image.picture,
+            loaded: true,
+          });
+
+          if (loadedImages.length === totalImages) {
+            resolve();
+          }
+        };
+
+        imgObj.onerror = () => {
+          loadedImages.push({
+            source: image.picture,
+            loaded: false,
+          });
+
+          if (loadedImages.length === totalImages) {
+            resolve();
+          }
+        };
+      });
+    });
+  }
 
   return plugin;
 })();
