@@ -322,7 +322,7 @@ var i = 1;
 
           const valence_p1_all = {
             type: 'valence-check-all',
-            stimuli: mappedValImgP1,
+            "stimuli": mappedValImgP1,
             text_descriptions: val_img_p1.map(entry => entry.text),
             prompt: val_img_p1[0].text,
             num_stimuli: 4,

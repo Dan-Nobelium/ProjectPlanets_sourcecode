@@ -49,21 +49,8 @@ jsPsych.plugins['valence-check-all'] = (function() {
       markup += `
         <div class="valence-check-all-stimulus">
           <img src="${stimulus.picture}" alt="${stimulus.id}"/>
-          <fieldset class="valence-check-all-options">
-      `;
-
-      // Insert the possible answers
-      Object.entries(answerChoices).forEach(([value, answerLabel]) => {
-        markup += `
-            <div class="valence-check-all-option">
-              <input type="radio" name="valence-check-all-group-${index}" id="valence-check-all-option-${index}-${value}" value="${value}" required/>
-              <label for="valence-check-all-option-${index}-${value}">${answerLabel}</label>
-            </div>
-          `;
-      });
-
-      markup += `
-          </fieldset>
+          <input type="range" min="-100" max="100" step="1" value="0" class="valence-check-all-slider" id="valence-check-all-slider-${index}">
+          <output for="valence-check-all-slider-${index}" id="valence-check-all-slider-value-${index}"></output>
         </div>
       `;
     });
@@ -78,12 +65,25 @@ jsPsych.plugins['valence-check-all'] = (function() {
   };
 
   /**
+   * Updates the slider value visually
+   * @param {HTMLElement} slider - Slider being updated
+   */
+  const updateSliderValueVisual = (slider) => {
+    const value = Math.round(slider.value / 10) * 10;
+    slider.previousElementSibling.innerText = `${value}`;
+    slider.setAttribute('aria-valuemax', Math.abs(Math.ceil(Math.abs(value) / 10) * 10));
+  };
+
+  /**
    * Handles the finished event of the trial
    * @param {Object} data - Data collected during the trial
    */
   const handleFinishedEvent = (data) => {
-    // Get the selected values
-    data.response = data.response.map(r => parseInt(r));
+    // Calculate the response
+    const response = data.values().slice(-trial.num_stimuli).map(v => parseFloat(v));
+
+    // Store the calculated response in the data object
+    data.response = response;
   };
 
   /**
@@ -98,42 +98,50 @@ jsPsych.plugins['valence-check-all'] = (function() {
     // Build the trial markup
     const markup = createMarkup(trial);
 
-    // Attach the generated markup to the display_element
+    // Add the generated markup to the display element
     display_element.innerHTML = markup;
 
-    // Save the trial data
-    const rawData = {
-      stimuli: trial.stimuli,
-      num_stimuli: trial.num_stimuli
+    // Connect sliders with the same ID
+    const sliders = display_element.querySelectorAll('.valence-check-all-slider');
+    for (let i = 0; i < sliders.length; ++i) {
+      sliders[i].addEventListener('input', () => {
+        updateSliderValueVisual(sliders[i]);
+      });
+    }
+
+    // Function updating the visual representation of the slider
+    const updateSliderValueVisual = (slider) => {
+      const value = Math.round(slider.value / 10) * 10;
+      slider.setAttribute('aria-valuenow', value);
+      slider.previousElementSibling.innerText = `${value}`;
     };
-    jsPsych.data.addProperties(rawData);
 
-    // Handle the submission
-    display_element.querySelector("#valence-check-all-next-btn").addEventListener("click", () => {
-      const radioButtons = display_element.querySelectorAll("[type='radio'][required]:checked");
+    // Initialize sliders
+    for (let i = 0; i < sliders.length; ++i) {
+      updateSliderValueVisual(sliders[i]);
+    }
 
-      if (radioButtons.length >= trial.num_stimuli) {
-        const selections = Array.from(radioButtons).map(rb => rb.value);
-        jsPsych.data.append({
-          correct: selections.every(v => typeof v === 'number'),
-          response: selections,
-        });
+    // When the Next button is clicked
+    const onNextClicked = () => {
+      // Collect all slider values
+      const sliderValues = Array.from(display_element.querySelectorAll('.valence-check-all-slider'))
+        .map(slider => slider.value);
 
-        handleFinishedEvent(jsPsych.data.latest());
-        jsPsych.finishTrial();
-      } else {
-        alert("You must select a value for every item.");
-      }
-    });
-  };
+      // Gather the collected data
+      const data = jsPsych.pluginAPI.gatherData(this);
 
-  // Answer Choices Dictionary
-  const answerChoices = {
-    1: 'Very Negative',
-    2: 'Slightly Negative',
-    3: 'Neutral',
-    4: 'Slightly Positive',
-    5: 'Very Positive',
+      // Process the gathered data
+      data.response = sliderValues;
+
+      // Clean up and close the trial
+      handleFinishedEvent(data);
+      display_element.querySelector('#valence-check-all-next-btn').removeEventListener('click', onNextClicked);
+      display_element.querySelector('#valence-check-all-next-btn').disabled = true;
+    };
+
+    // Add click handler for the next button
+    display_element.querySelector('#valence-check-all-next-btn')
+      .addEventListener('click', onNextClicked);
   };
 
   return plugin;
