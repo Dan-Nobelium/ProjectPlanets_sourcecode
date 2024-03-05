@@ -179,9 +179,10 @@ jsPsych.plugins["planet-response"] = (function() {
 			},
 			ship_attack_damage: {
 				type: jsPsych.plugins.parameterType.FLOAT,
-				pretty_name: 'Ship damage',			
-				default: .2,
-				description: 'Proportion of total points that an undefended encounter with the hostile ship removes.'
+				pretty_name: 'Ship damage',
+				array: true,
+				default: [0, 100, 0.2],
+				description: 'Array of ship damage values: [0 damage, 100 damage, 20% of total points]'
 			},
 			ship_hostile_idx: {
 				type: jsPsych.plugins.parameterType.INT,

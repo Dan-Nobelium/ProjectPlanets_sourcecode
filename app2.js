@@ -34,7 +34,7 @@ const images = [
 let block_number = 0;
 let trial_number = 0;
 let points = 0;
-const block_duration = 180 * 10; // in milliseconds (3 mins)
+const block_duration = 180 * 1000; // in milliseconds (3 mins)
 const iti = 1000;
 const inf_stim_height = 80;
 const inf_slider_width = 500;
@@ -46,14 +46,12 @@ const probability_shield = [[.5], [.5], [.5]];
 const reset_planet_wait_const = 1000;
 const shield_charging_time_const = 3000;
 const ship_attack_time_const = 6000;
-
-
-// Condition controll Global Variables Definition
 const nBlocks_p1 = 1;
 let nBlocks_p2 = 1;
 let nBlocks_p3 = 1;
 //let ship_attack_damage_index = [0(non-attack), fixed 100pts,25%]
-let ship_attack_damage = 100;
+let planet_labels = ['Planet A','Planet B','Planet C'];
+let ship_attack_damage = [0, 100, 0.2];
 
 
 // manipulate response-ship Rft rate
@@ -202,7 +200,7 @@ let planet_noship = {
     type: 'planet-response',
     show_ship: false,
     ship_hostile_idx: planet_side,
-    prompt: ['Planet A','Planet B','Planet C'],
+    prompt: planet_labels,
     stimulus: stim_list,
     stimulus_select: stim_selector_highlight,
     ship_stimulus: ship_list,              
@@ -468,7 +466,7 @@ let planet_ship = {
   type: 'planet-response',
   show_ship: true,
   ship_hostile_idx: planet_side,
-  prompt: ['Planet A','Planet B','Planet C'],
+  prompt: planet_labels,
   stimulus: stim_list,
   stimulus_select: stim_selector_highlight,
   ship_stimulus: ship_list,              
@@ -869,34 +867,34 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(end_instruction);   
 
 // Phase 1, no ships
-addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-timeline.push(valence_p1);
-timeline.push(valence_p1_all);
-timeline.push(infer_p1_A);
-timeline.push(infer_p1_B);
-timeline.push(infer_p1_C);
-timeline.push(slider_p1_q1); 
-timeline.push(slider_p1_q2);
+// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+// timeline.push(valence_p1);
+// timeline.push(valence_p1_all);
+// timeline.push(infer_p1_A);
+// timeline.push(infer_p1_B);
+// timeline.push(infer_p1_C);
+// timeline.push(slider_p1_q1); 
+// timeline.push(slider_p1_q2);
 
 //Phase2, ships
-timeline.push(phaseTwoInstructions);
+// timeline.push(phaseTwoInstructions);
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-timeline.push(valence_p2);
-timeline.push(infer_p2_A);
-timeline.push(infer_p2_B);
-timeline.push(infer_p2_C);
+// timeline.push(valence_p2);
+// timeline.push(infer_p2_A);
+// timeline.push(infer_p2_B);
+// timeline.push(infer_p2_C);
 
-//Phase3, ships
-timeline.push(cont_instructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-timeline.push(valence_p2);
-timeline.push(infer_p2_A);
-timeline.push(infer_p2_B);
-timeline.push(infer_p2_C);
+// //Phase3, ships
+// timeline.push(cont_instructions);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+// timeline.push(valence_p2);
+// timeline.push(infer_p2_A);
+// timeline.push(infer_p2_B);
+// timeline.push(infer_p2_C);
 
-//Debrief
-timeline.push(debrief_block);
-timeline.push(contact_block);
+// //Debrief
+// timeline.push(debrief_block);
+// timeline.push(contact_block);
 
 
 
