@@ -184,12 +184,12 @@ jsPsych.plugins["planet-response"] = (function() {
 				default: [0, 100, 0.2],
 				description: 'Array of ship damage values: [0 damage, 100 damage, 20% of total points]'
 			},
-			ship_hostile_idx: {
-				type: jsPsych.plugins.parameterType.INT,
-				pretty_name: 'Index of hostile ship',			
-				default: 0,
-				description: 'Index of hostile ship, can be 0 (left) or 1 (right), or 3'
-			},
+			// ship_hostile_idx: {
+			// 	type: jsPsych.plugins.parameterType.INT,
+			// 	pretty_name: 'Index of hostile ship',			
+			// 	default: 0,
+			// 	description: 'Index of hostile ship, can be 0 (left) or 1 (right), or 3'
+			// },
 			shield_charging_time: {
 				type: jsPsych.plugins.parameterType.INT,
 				pretty_name: 'Shield charging duration',
@@ -817,6 +817,8 @@ jsPsych.plugins["planet-response"] = (function() {
 			
 		}
 
+		trial.ship_attack_damage = [1,2,3];
+		appliedDamage = trial.ship_attack_damage[0];
 		// function for ship to attack
 		function ship_attack(choice){
 			//Disable button if no response
@@ -828,21 +830,21 @@ jsPsych.plugins["planet-response"] = (function() {
 			//Log shield response
 			response.ships.shield_activated.push(shield_activated)
 
-			var pointslost = 0;
-			//var flag_shield_allow_trade = false; //Flag indicating shield was activated and that trade should be allowed
-			if (choice != trial.ship_hostile_idx || trial.ship_attack_damage==0){
-					var statusmsg = 'Ship passed by without incident'
-					var statusclr = '#b4ba38' //some shade of green								
-			} else if (choice == trial.ship_hostile_idx && !shield_activated){
-				// 20% of points
-				pointslost = ship_attack_damage
-				trial.data.points -= pointslost
+			/**
+			 * Calculate points lost depending on the choice and the shield activation
+			 */
+			if (appliedDamage === 0) {
+				var statusmsg = 'Ship passed by without incident';
+				var statusclr = '#b4ba38'; // Some shade of green
+			} else if (!shield_activated) {
+				// Subtract the ship_attack_damage from the points
+				trial.data.points -= appliedDamage;
 
 				//Update score
 				updateScore(trial.data.points)
 
 				//Update status
-				var statusmsg = 'Ship attacked: <br><b>-' + pointslost + ' points</b>'
+				var statusmsg = 'Ship attacked: <br><b>-' + appliedDamage + ' points</b>'
 				var statusclr = 'red' //some shade of red
 			} else if (shield_activated) {
 				var statusmsg = 'Shield successfully deflected attack'
@@ -852,10 +854,10 @@ jsPsych.plugins["planet-response"] = (function() {
 
 			//log details
 			var time_outcome = performance.now()-start_time
-			response.ships.outcome.push(-pointslost)
+			response.ships.outcome.push(-appliedDamage)
 			response.ships.time_outcome.push(time_outcome)
 			// Also update a single list of outcomes for easier tracking of each change in score
-			response.all_outcomes.outcome.push(-pointslost)
+			response.all_outcomes.outcome.push(-appliedDamage)
 			response.all_outcomes.time_outcome.push(time_outcome)
 			// Finally, update total
 			response.all_outcomes.total.push(trial.data.points)
@@ -910,8 +912,8 @@ jsPsych.plugins["planet-response"] = (function() {
 				// gather the data to store for the trial
 				var trial_data = {
 					"stimuli": {planets:trial.stimulus,
-								ships:trial.ship_stimulus,
-								ship_hostile_idx: trial.ship_hostile_idx},	
+								ships:trial.ship_stimulus
+							},	
 					"planets": response.planets,
 					"ships": response.ships,
 					"all_outcomes": response.all_outcomes,
