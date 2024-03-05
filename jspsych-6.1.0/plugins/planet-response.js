@@ -829,64 +829,54 @@ jsPsych.plugins["planet-response"] = (function() {
 			}
 		
 
-		// function for ship to attack
-		function ship_attack(choice){
-			//Disable button if no response
-			if (shield_activated==null){
-				shield_activated = false
-				response.ships.rt_shield_activated.push(null);
-			}
-
-			//Log shield response
-			response.ships.shield_activated.push(shield_activated)
-
-			/**
-			 * Calculate points lost depending on the choice and the shield activation
-			 */
-			if (appliedDamage === 0) {
-				var statusmsg = 'Ship passed by without incident';
-				var statusclr = '#b4ba38'; // Some shade of green
-			} else if (!shield_activated) {
-				// Subtract the ship_attack_damage from the points
+			function ship_attack(choice){
+				//Disable button if no response
+				if (shield_activated==null){
+					shield_activated = false
+					response.ships.rt_shield_activated.push(null);
+				}
+			
+				//Log shield response
+				response.ships.shield_activated.push(shield_activated)
+			
+				//Calculate points lost depending on the choice
 				trial.data.points -= appliedDamage;
-
+			
 				//Update score
 				updateScore(trial.data.points)
-
-				//Update status
-				var statusmsg = 'Ship attacked: <br><b>-' + appliedDamage + ' points</b>'
-				var statusclr = 'red' //some shade of red
-			} else if (shield_activated) {
-				var statusmsg = 'Shield successfully deflected attack'
-				var statusclr = '#05BF00'
+			
+				//Determine the message to display
+				var statusmsg =  'Ship attacked: 			<b>-' + appliedDamage + ' points</b>';
+			
+				//Update status, makes text green for 0 attack damage (experimetally changable)
+				var statusclr = (appliedDamage > 0) ? 'red' : 'limegreen';
+				updateStatus('ship',statusmsg,statusclr)
+			
+				//log details
+				var time_outcome = performance.now()-start_time
+				response.ships.outcome.push(-appliedDamage)
+				response.ships.time_outcome.push(time_outcome)
+				// Also update a single list of outcomes for easier tracking of each change in score
+				response.all_outcomes.outcome.push(-appliedDamage)
+				response.all_outcomes.time_outcome.push(time_outcome)
+				// Finally, update total
+				response.all_outcomes.total.push(trial.data.points)
+			
+				//Visually disable button
+				var shieldDiv = display_element.querySelector('#ship-shield-text')
+				//shieldDiv.style.opacity = .5
+				var shieldButton = display_element.querySelector('#ship-shield-button')
+				if (!shield_activated){
+					shieldButton.style.opacity = .5
+					shieldButton.style.backgroundColor = ''
+					shieldButton.style.color = 'green'
+				}
+			
+				//Reset ship
+				setTimeout(function(){
+					reset_ship()
+				},trial.feedback_duration)//trial.reset_ship_wait
 			}
-			updateStatus('ship',statusmsg,statusclr)
-
-			//log details
-			var time_outcome = performance.now()-start_time
-			response.ships.outcome.push(-appliedDamage)
-			response.ships.time_outcome.push(time_outcome)
-			// Also update a single list of outcomes for easier tracking of each change in score
-			response.all_outcomes.outcome.push(-appliedDamage)
-			response.all_outcomes.time_outcome.push(time_outcome)
-			// Finally, update total
-			response.all_outcomes.total.push(trial.data.points)
-
-			//Visually disable button
-			var shieldDiv = display_element.querySelector('#ship-shield-text')
-			//shieldDiv.style.opacity = .5
-			var shieldButton = display_element.querySelector('#ship-shield-button')
-			if (!shield_activated){
-				shieldButton.style.opacity = .5
-				shieldButton.style.backgroundColor = ''
-				shieldButton.style.color = 'green'
-			}
-
-			//Reset ship
-			setTimeout(function(){
-				reset_ship()
-			},trial.feedback_duration)//trial.reset_ship_wait
-		}
 
 		// function to end trial when it is time
 		function end_trial() {
