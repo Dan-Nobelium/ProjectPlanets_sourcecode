@@ -818,66 +818,87 @@ jsPsych.plugins["planet-response"] = (function() {
 			
 		}
 
-		appliedDamage = trial.ship_attack_damage[1];
 
-		
-		const planetCount = trial.stimulus.length;
-			if (choice >= 0 && choice < planetCount) {
-			appliedDamage = trial.ship_attack_damage[choice];
-			} else {
-			throw new Error(`Invalid choice (${choice}). Expected a value between 0 and ${planetCount - 1}.`);
-			}
-		
 
-			function ship_attack(choice){
-				//Disable button if no response
-				if (shield_activated==null){
-					shield_activated = false
-					response.ships.rt_shield_activated.push(null);
-				}
-			
-				//Log shield response
-				response.ships.shield_activated.push(shield_activated)
-			
-				//Calculate points lost depending on the choice
-				trial.data.points -= appliedDamage;
-			
-				//Update score
-				updateScore(trial.data.points)
-			
-				//Determine the message to display
-				var statusmsg =  'Ship attacked: 			<b>-' + appliedDamage + ' points</b>';
-			
-				//Update status, makes text green for 0 attack damage (experimetally changable)
-				var statusclr = (appliedDamage > 0) ? 'red' : 'limegreen';
-				updateStatus('ship',statusmsg,statusclr)
-			
-				//log details
-				var time_outcome = performance.now()-start_time
-				response.ships.outcome.push(-appliedDamage)
-				response.ships.time_outcome.push(time_outcome)
-				// Also update a single list of outcomes for easier tracking of each change in score
-				response.all_outcomes.outcome.push(-appliedDamage)
-				response.all_outcomes.time_outcome.push(time_outcome)
-				// Finally, update total
-				response.all_outcomes.total.push(trial.data.points)
-			
-				//Visually disable button
-				var shieldDiv = display_element.querySelector('#ship-shield-text')
-				//shieldDiv.style.opacity = .5
-				var shieldButton = display_element.querySelector('#ship-shield-button')
-				if (!shield_activated){
-					shieldButton.style.opacity = .5
-					shieldButton.style.backgroundColor = ''
-					shieldButton.style.color = 'green'
-				}
-			
-				//Reset ship
-				setTimeout(function(){
-					reset_ship()
-				},trial.feedback_duration)//trial.reset_ship_wait
-			}
+// let appliedDamage = Array(3).fill(0);
+// appliedDamage[0] = trial.ship_attack_damage[0];
+// appliedDamage[1] = trial.ship_attack_damage[1];
+// appliedDamage[2] = trial.ship_attack_damage[2];
+// click_idx = response.clicks.idx.slice(-1)[0];
+// console.log(typeof planetClicked !== 'undefined' ? ('AAAAAAAA' + currentTarget[-1]) : 'Variable is undefined');
 
+
+
+
+// // Print appliedDamages
+// console.log("Applied Damages:", appliedDamage[0,1,2]);
+
+// // Print click_idx
+// console.log("Click Index", click_idx);
+
+// // Print Trial Ship Attack Damages
+// console.log("Trial Ship Attack Damages:", trial.ship_attack_damage);
+
+// // LOG PLANET SELECTION HERE
+// // console.log('Planet selected: ' + currentTarget[-1]);
+
+function ship_attack() {
+    // Disable button if no response
+    if (shield_activated == null) {
+        shield_activated = false;
+        response.ships.rt_shield_activated.push(null);
+    }
+
+    // Log shield response
+    response.ships.shield_activated.push(shield_activated);
+
+    // Calculate points lost depending on the choice
+    const chosenPlanet = click_idx;
+
+    // Print chosenPlanet
+    console.log("Chosen Planet:", chosenPlanet);
+
+    trial.data.points -= appliedDamage[chosenPlanet];
+
+    // Update score
+    updateScore(trial.data.points);
+
+    // Determine the message to display
+    const appliedDamageVal = appliedDamage[chosenPlanet];
+
+    // Print appliedDamageVal
+    console.log("Applied Damage Value:", appliedDamageVal);
+
+    const statusmsg = 'Ship attacked: <b>-' + appliedDamageVal + ' points</b>';
+
+    // Update status
+    updateStatus('ship', statusmsg, 'red');
+
+    // Log details
+    const time_outcome = performance.now() - start_time;
+    response.ships.outcome.push(-appliedDamageVal);
+    response.ships.time_outcome.push(time_outcome);
+    // Also update a single list of outcomes for easier tracking of each change in score
+    response.all_outcomes.outcome.push(-appliedDamageVal);
+    response.all_outcomes.time_outcome.push(time_outcome);
+    // Finally, update total
+    response.all_outcomes.total.push(trial.data.points);
+
+    // Visually disable button
+    const shieldDiv = display_element.querySelector('#ship-shield-text');
+    // shieldDiv.style.opacity = .5
+    const shieldButton = display_element.querySelector('#ship-shield-button');
+    if (!shield_activated) {
+        shieldButton.style.opacity = .5;
+        shieldButton.style.backgroundColor = '';
+        shieldButton.style.color = 'green';
+    }
+
+    // Reset ship
+    setTimeout(function () {
+        reset_ship();
+    }, trial.feedback_duration); // trial.reset_ship_wait
+}
 		// function to end trial when it is time
 		function end_trial() {
 			setTimeout(function(){
@@ -1014,6 +1035,8 @@ jsPsych.plugins["planet-response"] = (function() {
 			// Log id on mousedown
 			element.addEventListener('mousedown', function(e){
 				console.log(e.currentTarget.id)
+				planetClicked = e.currentTarget.id;
+				console.log(planetClicked);
 				//Only log element if not hidden
 				if(e.currentTarget.style.visibility=='hidden'){
 					response.clicks.element[clickcnt] = undefined
