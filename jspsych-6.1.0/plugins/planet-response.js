@@ -723,6 +723,7 @@ jsPsych.plugins["planet-response"] = (function() {
 			//log ship appearance details
 			response.ships.type.push(choice)
 			response.ships.time_appear.push(performance.now() - start_time)
+			var potatoChoice = choice;
 		}
 
 		// function to update state of shield
@@ -817,8 +818,17 @@ jsPsych.plugins["planet-response"] = (function() {
 			
 		}
 
-		trial.ship_attack_damage = [1,2,3];
-		appliedDamage = trial.ship_attack_damage[0];
+		appliedDamage = trial.ship_attack_damage[1];
+
+		
+		const planetCount = trial.stimulus.length;
+			if (choice >= 0 && choice < planetCount) {
+			appliedDamage = trial.ship_attack_damage[choice];
+			} else {
+			throw new Error(`Invalid choice (${choice}). Expected a value between 0 and ${planetCount - 1}.`);
+			}
+		
+
 		// function for ship to attack
 		function ship_attack(choice){
 			//Disable button if no response
