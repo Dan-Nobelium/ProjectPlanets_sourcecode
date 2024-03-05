@@ -837,15 +837,19 @@ jsPsych.plugins["planet-response"] = (function() {
              * Apply points loss depending on the choice and the shield activation
              */
 			if (!shield_activated) {
-                // Subtract the calculated damage from the points
-                trial.data.points -= appliedDamage;
-
-                //Update score
-                updateScore(trial.data.points)
+				// Subtract the calculated damage from the points
+				if (typeof appliedDamage === 'number' && appliedDamage % 1 !== 0) {
+				  trial.data.points *= 1 - appliedDamage;
+				} else {
+				  trial.data.points -= appliedDamage;
+				}
+			
+				//Update score
+				updateScore(trial.data.points)
 
                 //Update status
                 var statusmsg = 'Ship engaged for: <b>-' + appliedDamage + ' points</b>'
-                var statusclr = 'grey' //some shade of red - optionally make this green/orange/red for tiers of damage for each damage amt
+                var statusclr = 'grey' //some shade of red - optionally make this green/orange/red for tiers of damage for each damage level
             } else if (shield_activated) {
                 var statusmsg = 'Shield successfully deflected attack'
                 var statusclr = '#05BF00'
