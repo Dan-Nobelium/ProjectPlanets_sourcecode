@@ -51,7 +51,7 @@ let nBlocks_p2 = 1;
 let nBlocks_p3 = 1;
 //let ship_attack_damage_index = [0(non-attack), fixed 100pts,25%]
 let planet_labels = ['Planet A','Planet B','Planet C'];
-let ship_attack_damage = [1, 2, 0.2];
+let ship_attack_damage = [0, 2, 0.2];
 
 
 // manipulate response-ship Rft rate

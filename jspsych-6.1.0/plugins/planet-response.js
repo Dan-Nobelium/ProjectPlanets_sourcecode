@@ -816,6 +816,8 @@ jsPsych.plugins["planet-response"] = (function() {
 			shieldTxt.innerHTML = shieldTxtStr
 			
 		}
+
+
 		function ship_attack(choice){
             //Disable button if no response
             if (shield_activated==null){
@@ -828,16 +830,13 @@ jsPsych.plugins["planet-response"] = (function() {
 
             // Calculate damage based on the attacking ship's index and the ship_attack_damage parameter
             const damageTypes = trial.ship_attack_damage;
-      const appliedDamage = typeof damageTypes[choice] === 'number' ? damageTypes[choice] :
-        damageTypes[choice](trial.data.points);
+     		const appliedDamage = typeof damageTypes[choice] === 'number' ? damageTypes[choice] :
+      	 	 damageTypes[choice](trial.data.points);
 
             /**
              * Apply points loss depending on the choice and the shield activation
              */
-            if (appliedDamage === 0) {
-                var statusmsg = 'Ship passed by without incident';
-                var statusclr = '#b4ba38'; // Some shade of green
-            } else if (!shield_activated) {
+			if (!shield_activated) {
                 // Subtract the calculated damage from the points
                 trial.data.points -= appliedDamage;
 
@@ -845,8 +844,8 @@ jsPsych.plugins["planet-response"] = (function() {
                 updateScore(trial.data.points)
 
                 //Update status
-                var statusmsg = 'Ship attacked: <b>-' + appliedDamage + ' points</b>'
-                var statusclr = 'red' //some shade of red
+                var statusmsg = 'Ship engaged for: <b>-' + appliedDamage + ' points</b>'
+                var statusclr = 'grey' //some shade of red - optionally make this green/orange/red for tiers of damage for each damage amt
             } else if (shield_activated) {
                 var statusmsg = 'Shield successfully deflected attack'
                 var statusclr = '#05BF00'
@@ -880,8 +879,10 @@ jsPsych.plugins["planet-response"] = (function() {
 
             
             // Print hostil IDX to console
-            console.log("Hostile IDX:", choice);
+            // console.log("Hostile IDX:", choice);
         }
+
+
 		// function to end trial when it is time
 		function end_trial() {
 			setTimeout(function(){
