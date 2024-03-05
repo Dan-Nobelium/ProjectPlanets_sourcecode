@@ -860,7 +860,7 @@ var exit_experiment = {
 // ---- Timeline creation ----
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
-// Induction
+// // Induction
 // timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
@@ -868,35 +868,35 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(instructionCheckLoopWithFeedback);
 // timeline.push(end_instruction);   
 
-//Phase 1, no ships
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-// timeline.push(valence_p1);
+// Phase 1, no ships
+addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+timeline.push(valence_p1);
 timeline.push(valence_p1_all);
-// timeline.push(infer_p1_A);
-// timeline.push(infer_p1_B);
-// timeline.push(infer_p1_C);
-// timeline.push(slider_p1_q1); 
-// timeline.push(slider_p1_q2);
+timeline.push(infer_p1_A);
+timeline.push(infer_p1_B);
+timeline.push(infer_p1_C);
+timeline.push(slider_p1_q1); 
+timeline.push(slider_p1_q2);
 
-// //Phase2, ships
-// timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
+//Phase2, ships
+timeline.push(phaseTwoInstructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
 
-// //Phase3, ships
-// timeline.push(cont_instructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
+//Phase3, ships
+timeline.push(cont_instructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
 
-// //Debrief
-// timeline.push(debrief_block);
-// timeline.push(contact_block);
+//Debrief
+timeline.push(debrief_block);
+timeline.push(contact_block);
 
 
 

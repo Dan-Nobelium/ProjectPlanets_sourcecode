@@ -1,5 +1,5 @@
 /**
- * jsPsych plugin for checking multiple valences at once
+ * jsPsych plugin for checking multiple valences at once by dan, it does any number of valance items
  */
 
 jsPsych.plugins['valence-check-all'] = (function() {
