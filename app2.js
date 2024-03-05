@@ -51,7 +51,7 @@ let nBlocks_p2 = 1;
 let nBlocks_p3 = 1;
 //let ship_attack_damage_index = [0(non-attack), fixed 100pts,25%]
 let planet_labels = ['Planet A','Planet B','Planet C'];
-let ship_attack_damage = [0, 100, 0.2];
+let ship_attack_damage = [1, 2, 0.2];
 
 
 // manipulate response-ship Rft rate
@@ -60,6 +60,8 @@ if (group[0].includes("0.1")) {
 } else if (group[0].includes("0.4")) {
   var probability_ship = [[0.4],[0.4],[0.4]];
 } else (console.log("ERROR: group is not defined as 0.1 or 0.4"))
+
+var probability_ship = [[1],[1],[1]]; 
 
 // // manipulate early/late instruction by block sizes of phase 2/3
 // if (group[0].includes("early")) {

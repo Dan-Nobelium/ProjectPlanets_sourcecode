@@ -816,68 +816,72 @@ jsPsych.plugins["planet-response"] = (function() {
 			shieldTxt.innerHTML = shieldTxtStr
 			
 		}
-
-		trial.ship_attack_damage = [1,2,3];
-		appliedDamage = trial.ship_attack_damage[0];
-		// function for ship to attack
 		function ship_attack(choice){
-			//Disable button if no response
-			if (shield_activated==null){
-				shield_activated = false
-				response.ships.rt_shield_activated.push(null);
-			}
+            //Disable button if no response
+            if (shield_activated==null){
+                shield_activated = false
+                response.ships.rt_shield_activated.push(null);
+            }
 
-			//Log shield response
-			response.ships.shield_activated.push(shield_activated)
+            //Log shield response
+            response.ships.shield_activated.push(shield_activated)
 
-			/**
-			 * Calculate points lost depending on the choice and the shield activation
-			 */
-			if (appliedDamage === 0) {
-				var statusmsg = 'Ship passed by without incident';
-				var statusclr = '#b4ba38'; // Some shade of green
-			} else if (!shield_activated) {
-				// Subtract the ship_attack_damage from the points
-				trial.data.points -= appliedDamage;
+            // Calculate damage based on the attacking ship's index and the ship_attack_damage parameter
+            const damageTypes = trial.ship_attack_damage;
+      const appliedDamage = typeof damageTypes[choice] === 'number' ? damageTypes[choice] :
+        damageTypes[choice](trial.data.points);
 
-				//Update score
-				updateScore(trial.data.points)
+            /**
+             * Apply points loss depending on the choice and the shield activation
+             */
+            if (appliedDamage === 0) {
+                var statusmsg = 'Ship passed by without incident';
+                var statusclr = '#b4ba38'; // Some shade of green
+            } else if (!shield_activated) {
+                // Subtract the calculated damage from the points
+                trial.data.points -= appliedDamage;
 
-				//Update status
-				var statusmsg = 'Ship attacked: <br><b>-' + appliedDamage + ' points</b>'
-				var statusclr = 'red' //some shade of red
-			} else if (shield_activated) {
-				var statusmsg = 'Shield successfully deflected attack'
-				var statusclr = '#05BF00'
-			}
-			updateStatus('ship',statusmsg,statusclr)
+                //Update score
+                updateScore(trial.data.points)
 
-			//log details
-			var time_outcome = performance.now()-start_time
-			response.ships.outcome.push(-appliedDamage)
-			response.ships.time_outcome.push(time_outcome)
-			// Also update a single list of outcomes for easier tracking of each change in score
-			response.all_outcomes.outcome.push(-appliedDamage)
-			response.all_outcomes.time_outcome.push(time_outcome)
-			// Finally, update total
-			response.all_outcomes.total.push(trial.data.points)
+                //Update status
+                var statusmsg = 'Ship attacked: <b>-' + appliedDamage + ' points</b>'
+                var statusclr = 'red' //some shade of red
+            } else if (shield_activated) {
+                var statusmsg = 'Shield successfully deflected attack'
+                var statusclr = '#05BF00'
+            }
+            updateStatus('ship',statusmsg,statusclr)
 
-			//Visually disable button
-			var shieldDiv = display_element.querySelector('#ship-shield-text')
-			//shieldDiv.style.opacity = .5
-			var shieldButton = display_element.querySelector('#ship-shield-button')
-			if (!shield_activated){
-				shieldButton.style.opacity = .5
-				shieldButton.style.backgroundColor = ''
-				shieldButton.style.color = 'green'
-			}
+            //log details
+            var time_outcome = performance.now()-start_time
+            response.ships.outcome.push(-appliedDamage)
+            response.ships.time_outcome.push(time_outcome)
+            // Also update a single list of outcomes for easier tracking of each change in score
+            response.all_outcomes.outcome.push(-appliedDamage)
+            response.all_outcomes.time_outcome.push(time_outcome)
+            // Finally, update total
+            response.all_outcomes.total.push(trial.data.points)
 
-			//Reset ship
-			setTimeout(function(){
-				reset_ship()
-			},trial.feedback_duration)//trial.reset_ship_wait
-		}
+            //Visually disable button
+            var shieldDiv = display_element.querySelector('#ship-shield-text')
+            //shieldDiv.style.opacity = .5
+            var shieldButton = display_element.querySelector('#ship-shield-button')
+            if (!shield_activated){
+                shieldButton.style.opacity = .5
+                shieldButton.style.backgroundColor = ''
+                shieldButton.style.color = 'green'
+            }
 
+            //Reset ship
+            setTimeout(function(){
+                reset_ship()
+            },trial.feedback_duration)//trial.reset_ship_wait
+
+            
+            // Print hostil IDX to console
+            console.log("Hostile IDX:", choice);
+        }
 		// function to end trial when it is time
 		function end_trial() {
 			setTimeout(function(){
