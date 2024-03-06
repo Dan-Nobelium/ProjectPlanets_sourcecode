@@ -184,12 +184,12 @@ jsPsych.plugins["planet-response"] = (function() {
 				default: [0, 100, 0.2],
 				description: 'Array of ship damage values: [0 damage, 100 damage, 20% of total points]'
 			},
-			// ship_hostile_idx: {
-			// 	type: jsPsych.plugins.parameterType.INT,
-			// 	pretty_name: 'Index of hostile ship',			
-			// 	default: 0,
-			// 	description: 'Index of hostile ship, can be 0 (left) or 1 (right), or 3'
-			// },
+			ship_hostile_idx: {
+				type: jsPsych.plugins.parameterType.INT,
+				pretty_name: 'Index of hostile ship',			
+				default: 0,
+				description: 'Index of hostile ship, can be 0 (left) or 1 (right), or 3'
+			},
 			shield_charging_time: {
 				type: jsPsych.plugins.parameterType.INT,
 				pretty_name: 'Shield charging duration',
@@ -256,8 +256,9 @@ jsPsych.plugins["planet-response"] = (function() {
 			},
 	}
 }
-
-	plugin.trial = function(display_element, trial) {
+//Change CSS here for new UI split
+	plugin.trial = function(display_element, trial) 
+	{
 		var html = ''
 		html += '<div id="planets">'
 		var display_wrapper = document.getElementsByClassName('jspsych-content-wrapper')[0]
