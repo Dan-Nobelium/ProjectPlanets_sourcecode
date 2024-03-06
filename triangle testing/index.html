@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .triangle {
+      position: relative;
+      width: 0;
+      height: 0;
+      border-left: 50px solid transparent;
+      border-right: 50px solid transparent;
+      border-bottom: 100px solid #ccc;
+    }
+
+    .triangle input[type=range] {
+      position: absolute;
+      top: -48px;
+      left: -26px;
+      margin: 0;
+      appearance: none;
+      width: 52px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      border-radius: 3px;
+    }
+
+    #slider1 {
+      left: -75px;
+    }
+
+    #slider2 {
+      left: 0;
+    }
+
+    #slider3 {
+      left: 75px;
+    }
+  </style>
+</head>
+<body>
+  <div class="triangle">
+    <input type="range" min="0" max="100" value="50" id="slider1">
+    <input type="range" min="0" max="100" value="50" id="slider2">
+    <input type="range" min="0" max="100" value="50" id="slider3">
+  </div>
+
+  <script>
+    const sliders = document.querySelectorAll('.triangle input[type=range]');
+    sliders.forEach((slider) => {
+      slider.addEventListener('input', () => {
+        const values = Array.from(sliders).map((s) => s.value);
+        // Do something with the values here
+        console.log(values);
+      });
+    });
+  </script>
+</body>
+</html>

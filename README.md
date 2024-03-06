@@ -72,3 +72,5 @@ Authors
 ### License
 
 This projects license is indeterminite, please open an issue to learn more.
+
+triangle selector: https://jsfiddle.net/r12cqz7b/
