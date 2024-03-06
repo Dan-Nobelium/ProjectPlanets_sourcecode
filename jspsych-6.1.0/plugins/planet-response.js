@@ -263,51 +263,6 @@ jsPsych.plugins["planet-response"] = (function() {
 
 //Change CSS here for new UI split
 
-function createStaticHtml() {
-	let html = "";
-  
-	// Create general div structure: Planet | Ship+Shield | Planet
-	if (Array.isArray(trial.stimulus)) {
-	  for (let i = 0; i < trial.stimulus.length; i++) {
-		// Set up space for score, signal, and planet
-		html += "<div id='planet-div-" + i + "'>";
-		html += "<div id='planet-score-box-" + i + "'></div>";
-  
-		// Write img tag
-		html +=
-		  '<img id="planet-' +
-		  i +
-		  '" allowclick="1" draggable="false" src="' +
-		  trial.stimulus[i] +
-		  '"/>';
-  
-		// Show planet names below the planet
-		if (trial.prompt !== null) {
-		  html += "<div id='planet-prompt-" + i + "'>" + trial.prompt[i] + "</div>";
-		}
-  
-		// Add signal box
-		html += "<div id='planet-signal-box-" + i + "'></div>";
-  
-		// Add select ring divs
-		html += "<img id='planet-select-" + i + "'/>";
-  
-		// End planet div
-		html += "</div>";
-  
-		// Add ship div in between planets
-		if (i + 1 < trial.stimulus.length) {
-		  html +=
-			"<div id='ship-div' style='display: inline-block; vertical-align: top; width:" +
-			trial.ship_space +
-			"px;'><div id='total-score-box'></div><div id='ship-img-box'></div><div id='ship-shield-box'></div></div>";
-		}
-	  }
-	}
-  
-	return html;
-  }
-
 	plugin.trial = function(display_element, trial) 
 	{
 		var html = ''
@@ -372,18 +327,19 @@ function createStaticHtml() {
 				html +='</div>';
 				
 
-				//Add ship div in between planets
-				if (i+1 < trial.stimulus.length){
-					html += '<div id="ship-div" style="display:inline-block; ' +
-						'vertical-align: top; ' +
-						'visibility:visible; ' +
-						'width:' + trial.ship_space + 'px;">' +
-						'<div class="clickid" id="total-score-box" style="height:50px;"></div>' +
-						//'<div id="ship-score-box" style="height:50px;"></div>' +
-						'<div id="ship-img-box"></div>' +
-						'<div id="ship-shield-box" style="height:200px;"></div>' +
-						'</div>'
-				}
+            //Add ship div in between planets and also down
+            if (i+1 < trial.stimulus.length){
+                html += '<div id="ship-div" style="display:inline-block; ' +
+                    'vertical-align: top; ' +
+                    'visibility:visible; ' +
+                    'width:' + trial.ship_space + 'px;">' +
+                    '<div class="parent-of-img-and-score-boxes" style="margin-bottom: 200px;">' + // Margin bottom equals the height of the shield div
+                    '<div class="clickid" id="total-score-box" style="height:50px;"></div>' +
+                    '<div id="ship-img-box"></div>' +
+                    '</div>' +
+                    '<div id="ship-shield-box"></div>' +
+                    '</div>'
+            }
 			}
 		}
 
