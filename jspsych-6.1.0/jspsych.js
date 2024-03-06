@@ -35,13 +35,13 @@ window.jsPsych = (function() {
 
   // storing a single webaudio context to prevent problems with multiple inits
   // of jsPsych
-  core.webaudio_context = null;
-  // temporary patch for Safari
-  if (typeof window !== 'undefined' && window.hasOwnProperty('webkitAudioContext') && !window.hasOwnProperty('AudioContext')) {
-    window.AudioContext = webkitAudioContext;
-  }
-  // end patch
-  core.webaudio_context = (typeof window !== 'undefined' && typeof window.AudioContext !== 'undefined') ? new AudioContext() : null;
+  // core.webaudio_context = null;
+  // // temporary patch for Safari
+  // if (typeof window !== 'undefined' && window.hasOwnProperty('webkitAudioContext') && !window.hasOwnProperty('AudioContext')) {
+  //   window.AudioContext = webkitAudioContext;
+  // }
+  // // end patch
+  // core.webaudio_context = (typeof window !== 'undefined' && typeof window.AudioContext !== 'undefined') ? new AudioContext() : null;
 
   // enumerated variables for special parameter types
   core.ALL_KEYS = 'allkeys';
