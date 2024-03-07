@@ -327,22 +327,20 @@ jsPsych.plugins["planet-response"] = (function() {
 				html +='</div>';
 				
 
-            //Add ship div in between planets and also down
-            if (i+1 < trial.stimulus.length){
-                html += '<div id="ship-div" style="display:inline-block; ' +
-                    'vertical-align: top; ' +
-                    'visibility:visible; ' +
-                    'width:' + trial.ship_space + 'px;">' +
-                    '<div class="parent-of-img-and-score-boxes" style="margin-bottom: 200px;">' + // Margin bottom equals the height of the shield div
-                    '<div class="clickid" id="total-score-box" style="height:50px;"></div>' +
-                    '<div id="ship-img-box"></div>' +
-                    '</div>' +
-                    '<div id="ship-shield-box"></div>' +
-                    '</div>'
-            }
-			}
-		}
-
+	//Add ship div in between planets
+	if (i+1 < trial.stimulus.length){
+		html += '<div id="ship-div" style="display:inline-block; ' +
+			'vertical-align: top; ' +
+			'visibility:visible; ' +
+			'width:' + trial.ship_space + 'px;">' +
+			'<div class="clickid" id="total-score-box" style="height:50px;"></div>' +
+			//'<div id="ship-score-box" style="height:50px;"></div>' +
+			'<div id="ship-img-box"></div>' +
+			'<div id="ship-shield-box" style="height:200px;"></div>' +
+			'</div>'
+	}
+}
+}
 		html += '</div>'
 		//Render basic div structure
 		display_element.innerHTML = html;
