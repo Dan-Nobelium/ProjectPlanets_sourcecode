@@ -819,9 +819,7 @@ var slider_p2_q3 = {
     phase: 'slider-response_p2_q3',
     block_number: i + nBlocks_p1,
   }
-}
-console.log("slider_p2_q3 finished");
-;
+};
 
 // stim_list[0],
 

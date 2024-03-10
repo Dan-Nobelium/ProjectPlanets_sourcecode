@@ -1,36 +1,123 @@
-jsPsych.plugins["jspsych-html-slider-3items"] = (function() {
 
+//3d slider
+
+jsPsych.plugins["jspsych-html-slider-3items"] = (function() {
   var plugin = {};
-  
+
   plugin.info = {
-    name: "custom-html-slider-3items",
+    name: "jspsych-html-slider-3items",
+    description: "A custom plugin for creating a 3-item rating task with a draggable dot on a triangular area.",
     parameters: {
       left_stimulus: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: "Left stimulus",
         default: undefined,
-        description: "Path to the image file for the left item."
+        description: "Path to the image file for the left item.",
       },
       middle_stimulus: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: "Middle stimulus",
         default: undefined,
-        description: "Path to the image file for the middle item."
+        description: "Path to the image file for the middle item.",
       },
       right_stimulus: {
         type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: "Right stimulus",
         default: undefined,
-        description: "Path to the image file for the right item."
+        description: "Path to the image file for the right item.",
       },
-      slider_values: {
-        type: jsPsych.plugins.parameterType.ARRAY,
-        items: [
-          {type: jsPsych.plugins.parameterType.FLOAT},
-          {type: jsPsych.plugins.parameterType.FLOAT},
-          {type: jsPsych.plugins.parameterType.FLOAT}
-        ],
-        default: [33, 33, 34],
-        description: "Values corresponding to the relative weight of the three slider positions."
-      }
-    }
+      stimulus_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: "Stimulus Height",
+        default: null,
+        description: "Height of the stimuli in pixels.",
+      },
+      stimulus_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: "Stimulus Width",
+        default: null,
+        description: "Width of the stimuli in pixels.",
+      },
+      maintain_aspect_ratio: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: "Maintain Aspect Ratio",
+        default: true,
+        description: "Whether to maintain the aspect ratio after setting width or height.",
+      },
+      min: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: "Minimum Value",
+        default: 0,
+        description: "Sets the minimum value of the slider.",
+      },
+      max: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: "Maximum Value",
+        default: 100,
+        description: "Sets the maximum value of the slider.",
+      },
+      start: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: "Starting Point",
+        default: 50,
+        description: "Sets the starting point of the draggable dot.",
+      },
+      step: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: "Step Size",
+        default: 1,
+        description: "Sets the step size of the draggable dot.",
+      },
+      labels: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: "Slider Labels",
+        default: [],
+        array: true,
+        description: "Labels for the slider positions.",
+      },
+      slider_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: "Slider Width",
+        default: null,
+        description: "Width of the slider in pixels.",
+      },
+      button_label: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: "Submit Button Label",
+        default: "Continue",
+        description: "Label for the submit button.",
+      },
+      require_movement: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: "Requires Movement",
+        default: true,
+        description: "If enabled, requires the participant to move the dot before submitting.",
+      },
+      prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: "Prompt Text",
+        default: null,
+        description: "Text displayed at the beginning of the trial.",
+      },
+      stimulus_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: "Stimulus Visible Duration",
+        default: null,
+        description: "Duration (in seconds) the stimuli are visible.",
+      },
+      trial_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: "Total Trial Duration",
+        default: null,
+        description: "Duration (in seconds) the trial lasts.",
+      },
+      response_ends_trial: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: "Response Terminates Trial",
+        default: true,
+        description: "Determines if a response triggers the end of the trial.",
+      },
+    },
   };
 
   plugin.trial = function(display_element, trial) {
@@ -137,6 +224,6 @@ jsPsych.plugins["jspsych-html-slider-3items"] = (function() {
       };
     }
   };
-
+  console.log("slider_p2_q3 finished");
   return plugin;
 })();
