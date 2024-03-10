@@ -894,12 +894,12 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
-// timeline.push(slider_p1_q1); // replace with triangle
-// timeline.push(slider_p1_q2); //
+timeline.push(slider_p1_q1); // replace with triangle
+timeline.push(slider_p1_q2); //
 
 //Phase2, ships
 // timeline.push(phaseTwoInstructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 
 // timeline.push(valence_p2);
 // timeline.push(infer_p2_A);
