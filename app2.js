@@ -407,8 +407,8 @@ var i = 1;
 
   // //NEW: slider questions p1 
   // //NEW: define slider Qs variables
-  let left_label ="";
-  let right_label ="";
+  var left_label ="";
+  var right_label ="";
   
   var slider_p1_q1 = {
     type: 'html-slider-response',
@@ -698,81 +698,100 @@ let planet_ship = {
           }
         };
     
-        // // inference check p2 (ship 1)
-        // var infer_p2_ship1 = {
-        //   type: 'inference-check-1',
-        //   main_stimulus: 'img/ship1.png',
-        //   main_stimulus_height: main_stim_height,
-        //   prompt: inference_prompt[2],
-        //   stimulus_1: 'img/lose.png',
-        //   stim_text_1: 'Losing $',
-        //   slider_text_top: contingency_q[2],
-        //   labels_top: contingency_labels,
-        //   stimulus_height: inf_stim_height,
-        //   slider_width: inf_slider_width,
-        //   require_movement: false,
-        //   data: {
-        //     phase: 'inf_check_2_ship1',
-        //     block_number: i + nBlocks_p1
-        //   }
-        // };
+        // inference check p2 (ship 1)
+        var infer_p2_ship1 = {
+          type: 'inference-check-1',
+          main_stimulus: 'img/ship1.png',
+          main_stimulus_height: main_stim_height,
+          prompt: inference_prompt[3],
+          stimulus_1: 'img/lose.png',
+          stim_text_1: 'Losing $',
+          slider_text_top: contingency_q[3],
+          labels_top: contingency_labels,
+          stimulus_height: inf_stim_height,
+          slider_width: inf_slider_width,
+          require_movement: false,
+          data: {
+            phase: 'inf_check_2_ship1',
+            block_number: i + nBlocks_p1
+          }
+        };
     
-        // // inference check p2 (ship 2)
-        // var infer_p2_ship2 = {
-        //   type: 'inference-check-1',
-        //   main_stimulus: 'img/ship2.png',
-        //   main_stimulus_height: main_stim_height,
-        //   prompt: inference_prompt[3],
-        //   stimulus_1: 'img/lose.png',
-        //   stim_text_1: 'Losing $',
-        //   slider_text_top: contingency_q[3],
-        //   labels_top: contingency_labels,
-        //   stimulus_height: inf_stim_height,
-        //   slider_width: inf_slider_width,
-        //   require_movement: false,
-        //   data: {
-        //     phase: 'inf_check_2_ship2',
-        //     block_number: i + nBlocks_p1
-        //   }
-        // };
+        // inference check p2 (ship 2)
+        var infer_p2_ship2 = {
+          type: 'inference-check-1',
+          main_stimulus: 'img/ship2.png',
+          main_stimulus_height: main_stim_height,
+          prompt: inference_prompt[4],
+          stimulus_1: 'img/lose.png',
+          stim_text_1: 'Losing $',
+          slider_text_top: contingency_q[4],
+          labels_top: contingency_labels,
+          stimulus_height: inf_stim_height,
+          slider_width: inf_slider_width,
+          require_movement: false,
+          data: {
+            phase: 'inf_check_2_ship2',
+            block_number: i + nBlocks_p1
+          }
+        };
+
+        // inference check p2 (ship 2)
+        var infer_p2_ship3 = {
+          type: 'inference-check-1',
+          main_stimulus: 'img/ship2.png',
+          main_stimulus_height: main_stim_height,
+          prompt: inference_prompt[5],
+          stimulus_1: 'img/lose.png',
+          stim_text_1: 'Losing $',
+          slider_text_top: contingency_q[5],
+          labels_top: contingency_labels,
+          stimulus_height: inf_stim_height,
+          slider_width: inf_slider_width,
+          require_movement: false,
+          data: {
+            phase: 'inf_check_2_ship2',
+            block_number: i + nBlocks_p1
+          }
+        };
     
-        // //NEW: slider questions p2
-        // //NEW: define slider Qs variables
-        // let left_label ="";
-        // let right_label ="";
-        // var slider_p2_q1 = {
-        //   type: 'html-slider-response',
-        //   prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with Planet A (left) versus Planet B (right)?</p>",
-        //   left_stimulus: slider_img_left[0].stimulus,
-        //   left_stim_text: slider_img_left[0].text,
-        //   right_stimulus: slider_img_right[0].stimulus,
-        //   right_stim_text: slider_img_right[0].text,
-        //   labels: ["100%/0%<p>(only click Planet A)</p>", "75%/25%", "50%/50%<p>(click both equally)</p>", "25%/75%", "0%/100%<p>(only click Planet B)</p>"],
-        //   stimulus_height: 250,
-        //   slider_width: 700,
-        //   require_movement: false,
-        //   data: {
-        //     phase: 'slider-response_p2_q1',
-        //     block_number: i + nBlocks_p1
-        //   }
-        // };
+        //NEW: slider questions p2
+        //NEW: define slider Qs variables
+        var left_label ="";
+        var right_label ="";
+        var slider_p2_q1 = {
+          type: 'html-slider-response',
+          prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with Planet A (left) versus Planet B (right)?</p>",
+          left_stimulus: slider_img_left[0].stimulus,
+          left_stim_text: slider_img_left[0].text,
+          right_stimulus: slider_img_right[0].stimulus,
+          right_stim_text: slider_img_right[0].text,
+          labels: ["100%/0%<p>(only click Planet A)</p>", "75%/25%", "50%/50%<p>(click both equally)</p>", "25%/75%", "0%/100%<p>(only click Planet B)</p>"],
+          stimulus_height: 250,
+          slider_width: 700,
+          require_movement: false,
+          data: {
+            phase: 'slider-response_p2_q1',
+            block_number: i + nBlocks_p1
+          }
+        };
     
-        // var slider_p2_q2 = {
-        //   type: 'html-slider-response',
-        //   prompt: "To maximise your points in the <b>previous block</b>, what proportion of interactions would you allocate for Planet A (left) versus Planet B (right)?",
-        //   left_stimulus: slider_img_left[0].stimulus,
-        //   left_stim_text: slider_img_left[0].text,
-        //   right_stimulus: slider_img_right[0].stimulus,
-        //   right_stim_text: slider_img_right[0].text,
-        //   labels: ["100%/0%<p>(only click Planet A)</p>", "75%/25%", "50%/50%<p>(click both equally)</p>", "25%/75%", "0%/100%<p>(only click Planet B)</p>"],
-        //   stimulus_height: 250,
-        //   slider_width: 700,
-        //   require_movement: false,
-        //   data: {
-        //     phase: 'slider-response_p2_q2',
-        //     block_number: i + nBlocks_p1
-        //   }
-        // };
+        var slider_p2_q2 = {
+          type: 'html-slider-response',
+          prompt: "To maximise your points in the <b>previous block</b>, what proportion of interactions would you allocate for Planet A (left) versus Planet B (right)?",
+          left_stimulus: slider_img_left[0].stimulus,
+          left_stim_text: slider_img_left[0].text,
+          right_stimulus: slider_img_right[0].stimulus,
+          right_stim_text: slider_img_right[0].text,
+          labels: ["100%/0%<p>(only click Planet A)</p>", "75%/25%", "50%/50%<p>(click both equally)</p>", "25%/75%", "0%/100%<p>(only click Planet B)</p>"],
+          stimulus_height: 250,
+          slider_width: 700,
+          require_movement: false,
+          data: {
+            phase: 'slider-response_p2_q2',
+            block_number: i + nBlocks_p1
+          }
+        };
     
 //----------------------------------------------------------------------------
 // --- Phase 3
@@ -875,16 +894,26 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
-// timeline.push(slider_p1_q1); 
-// timeline.push(slider_p1_q2);
+// timeline.push(slider_p1_q1); // replace with triangle
+// timeline.push(slider_p1_q2); //
 
 //Phase2, ships
 // timeline.push(phaseTwoInstructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+
 // timeline.push(valence_p2);
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);
 // timeline.push(infer_p2_C);
+// timeline.push(infer_p2_ship1);
+// timeline.push(infer_p2_ship2);
+// timeline.push(infer_p2_ship3);
+// timeline.push(slider_p2_q1); //
+// timeline.push(slider_p2_q2); //
+
+
+
+
 
 // //Phase3, ships
 // timeline.push(cont_instructions);
