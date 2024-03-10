@@ -793,6 +793,60 @@ let planet_ship = {
           }
         };
     
+
+// NEW: slider questions p2
+// NEW: define slider Qs variables
+var left_label = "";
+var right_label = "";
+
+// Question 3
+var slider_p2_q3 = {
+  type: 'jspsych-html-slider-3items',
+  prompt: "<p>What proportion of your recent interactions were with:</p>" +
+           "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
+  left_stimulus: stim_list[0],
+  left_stim_text: ('a'),
+  middle_stimulus: stim_list[1],
+  middle_stim_text: ('b'),
+  right_stimulus: stim_list[2],
+  right_stim_text: ('c'),
+  slider_values: [33, 33, 34], // Initial slider values for the 3 items
+  stimulus_height: 250,
+  slider_width: 900, // Increased width to accommodate more space for labels
+  labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
+  require_movement: false,
+  data: {
+    phase: 'slider-response_p2_q3',
+    block_number: i + nBlocks_p1,
+  }
+}
+console.log("slider_p2_q3 finished");
+;
+
+// stim_list[0],
+
+// // Question 4
+// var slider_p2_q4 = {
+//   type: 'jspsych-html-slider-3items',
+//   prompt: "<p>To maximize your points in the <b>previous block</b>, what proportion of interactions would you allocate for:</p>" +
+//            "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
+//   left_stimulus: slider_img_left[0].stimulus,
+//   left_stim_text: slider_img_left[0].text,
+//   middle_stimulus: slider_img_center[0].stimulus,
+//   middle_stim_text: slider_img_center[0].text,
+//   right_stimulus: slider_img_right[0].stimulus,
+//   right_stim_text: slider_img_right[0].text,
+//   slider_values: [33, 33, 34], // Initial slider values for the 3 items
+//   stimulus_height: 250,
+//   slider_width: 900, // Increased width to accommodate more space for labels
+//   labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
+//   require_movement: false,
+//   data: {
+//     phase: 'slider-response_p2_q4',
+//     block_number: i + nBlocks_p1
+//   }
+// };
+
 //----------------------------------------------------------------------------
 // --- Phase 3
 
@@ -894,8 +948,12 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
-timeline.push(slider_p1_q1); // replace with triangle
-timeline.push(slider_p1_q2); //
+
+// timeline.push(slider_p1_q1); // replace with triangle
+// timeline.push(slider_p1_q2); //
+
+// timeline.push(slider_p1_q3); // replace with triangle
+// timeline.push(slider_p1_q4); //
 
 //Phase2, ships
 // timeline.push(phaseTwoInstructions);
@@ -911,6 +969,9 @@ timeline.push(slider_p1_q2); //
 // timeline.push(slider_p2_q1); //
 // timeline.push(slider_p2_q2); //
 
+timeline.push(slider_p2_q3); // replace with triangle
+// timeline.push(slider_p2_q4); //
+
 
 
 
@@ -922,6 +983,8 @@ timeline.push(slider_p1_q2); //
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);
 // timeline.push(infer_p2_C);
+timeline.push(slider_p2_q3); // replace with triangle
+// timeline.push(slider_p2_q4); //
 
 // //Debrief
 // timeline.push(debrief_block);
