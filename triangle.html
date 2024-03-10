@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        #container {
+            padding: 20px;
+            background-color: yellow;
+        }
+
+        #x_triangle {
+            width: 208px;
+            height: 180px;
+            margin: -15px 0 18px 35px;
+        }
+
+        #x_node {
+            left: 0;
+            top: 0;
+            cursor: pointer;
+            position: relative;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: red;
+        }
+
+        #x_triangle_border {
+            width: 0;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+            border-bottom: 180px solid gray;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <div id="x_triangle">
+        <div id="x_node"></div>
+        <div id="x_triangle_border"></div>
+    </div>
+</div>
+
+
+
+Top: <input id="x_inputtop" value="33">
+
+Left: <input id="x_inputleft" value="33">
+
+Right: <input id="x_inputright" value="34">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+<script>
+$(document).ready(function(){
+    var triangle = $("#x_triangle"),
+            node = $("#x_node"),
+            formFields = [$("#x_inputtop"), $("#x_inputleft"), $("#x_inputright")],
+            nwidth = node.width() / 2,
+            nheight = node.height() / 2,
+            width = triangle.width(),
+            height = triangle.height();
+
+    triangle.click(click);
+    node.draggable({
+        scroll: false,
+        drag: drag,
+        start: start,
+        stop: stop
+    });
+
+    function click(e) {
+        var xy = calcXY(e.pageX, e.pageY);
+        node.stop().animate({
+            "left": xy.left - nwidth,
+            "top": xy.top + nwidth
+        }, 300, function() {
+            calcDistance(xy.left - nwidth, xy.top + nwidth);
+        });
+    }
+
+    function drag(e, ui) {
+        var xy = calcXY(ui.position.left + nwidth, ui.position.top - nheight);
+        ui.position.top = xy.top;
+        ui.position.left = xy.left;
+        node.stop().animate({
+            "left": xy.left,
+            "top": xy.top
+        }, 300, function() {
+            calcDistance(xy.left, xy.top);
+        });
+    }
+
+    function start(e, ui) {
+        uielem = ui;
+        interval = setInterval(function () {
+            calcDistance(uielem.position.left, uielem.position.top);
+        }, 50);
+    }
+
+    function stop(e, ui) {
+        clearInterval(interval);
+        calcDistance(ui.position.left, ui.position.top);
+    }
+
+    function calcDistance(x, y) {
+        x += nwidth;
+        y -= nheight;
+        var pixels = [
+            Math.sqrt(Math.pow(Math.abs(x - width / 2), 2) + Math.pow(y, 2)),
+            Math.sqrt(Math.pow(x, 2) + Math.pow(height - y, 2)),
+            Math.sqrt(Math.pow(width - x, 2) + Math.pow(height - y, 2))];
+        var sum = pixels[0] + pixels[1] + pixels[2];
+
+        $.each([0, 1, 2], function (index) {
+            var percent = 100 - ((pixels[index]/sum)*100*2);
+            formFields[index].val(percent.toFixed(2)+"%");
+        });
+    }
+
+    function calcXY(pageX, pageY) {
+        var x = pageX - $("body").offset().left,
+            y = pageY - $("body").offset().top;
+
+        var difference = Math.abs(x - width / 2),
+            min_y = height*(difference/(width/2));
+
+        if (y < min_y) y = min_y;
+        if (x < 0) x = 0;
+        if (y < 0) y = 0;
+        if (x > width) x = width;
+        if (y > height) y = height;
+
+        return {"left": x, "top": y};
+    }
+});
+</script>
+
+</body>
+</html>
