@@ -114,7 +114,7 @@ jsPsych.plugins["jspsych-html-slider-3items"] = (function() {
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: "Response Terminates Trial",
-        default: true,
+        default: false,
         description: "Determines if a response triggers the end of the trial.",
       },
     },
@@ -217,6 +217,8 @@ jsPsych.plugins["jspsych-html-slider-3items"] = (function() {
       if (y < 0) y = 0;
       if (x > width) x = width;
       if (y > height) y = height;
+        console.log(y);
+        console.log(x);
 
       return {
         top: y,
@@ -225,5 +227,7 @@ jsPsych.plugins["jspsych-html-slider-3items"] = (function() {
     }
   };
   console.log("slider_p2_q3 finished");
+  
+
   return plugin;
 })();
