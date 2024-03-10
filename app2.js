@@ -59,7 +59,7 @@ if (group[0].includes("0.1")) {
   var probability_ship = [[0.1],[0.1],[0.1]]; 
 } else if (group[0].includes("0.4")) {
   var probability_ship = [[0.4],[0.4],[0.4]];
-} else (console.log("ERROR: group is not defined as 0.1 or 0.4"))
+} else (console.error("ERROR: group is not defined as 0.1 or 0.4"))
 
 var probability_ship = [[1],[1],[1]]; 
 
@@ -899,7 +899,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 //Phase2, ships
 // timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 
 // timeline.push(valence_p2);
 // timeline.push(infer_p2_A);
