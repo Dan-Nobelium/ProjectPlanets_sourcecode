@@ -574,26 +574,7 @@ let planet_ship = {
           text: "Ship 3"
         },
       ];
-    
-      // phase 2, planet B
-      var inf_img_p2_B = [
-        {
-          stimulus: 'img/win100.png',
-          text: "Winning $100"
-        },
-        {
-          stimulus: 'img/lose.png',
-          text: "Losing $"
-        },
-        {
-          stimulus: 'img/ship1.png',
-          text: "Ship 1"
-        },
-        {
-          stimulus: 'img/ship2.png',
-          text: "Ship 2"
-        },
-      ];
+
 
 //TODO: create valance check 8 library and use it here
         // value check p2
@@ -626,6 +607,7 @@ let planet_ship = {
             block_number: i + nBlocks_p1
           }
         };
+
         // inference check p2 (planet A)
         var infer_p2_A = {
           type: 'inference-check-5',
@@ -656,18 +638,20 @@ let planet_ship = {
         //create 5 item valance library check for p2 A/B/C
         // inference check p2 (planet B)
         var infer_p2_B = {
-          type: 'inference-check-4',
+          type: 'inference-check-5',
           main_stimulus: stim_list[1],
           main_stimulus_height: main_stim_height,
           prompt: inference_prompt[1],
-          stimulus_1: inf_img_p2_B[0].stimulus,
-          stimulus_2: inf_img_p2_B[1].stimulus,
-          stimulus_3: inf_img_p2_B[2].stimulus,
-          stimulus_4: inf_img_p2_B[3].stimulus,
-          stim_text_1: inf_img_p2_B[0].text,
-          stim_text_2: inf_img_p2_B[1].text,
-          stim_text_3: inf_img_p2_B[2].text,
-          stim_text_4: inf_img_p2_B[3].text,
+          stimulus_1: inf_img_p2_A[0].stimulus,
+          stimulus_2: inf_img_p2_A[1].stimulus,
+          stimulus_3: inf_img_p2_A[2].stimulus,
+          stimulus_4: inf_img_p2_A[3].stimulus,
+          stimulus_5: inf_img_p2_A[4].stimulus,
+          stim_text_1: inf_img_p2_A[0].text,
+          stim_text_2: inf_img_p2_A[1].text,
+          stim_text_3: inf_img_p2_A[2].text,
+          stim_text_4: inf_img_p2_A[3].text,
+          stim_text_5: inf_img_p2_A[4].text,
           slider_text_top: contingency_q[1],
           labels_top: contingency_labels,
           stimulus_height: inf_stim_height,
@@ -681,19 +665,21 @@ let planet_ship = {
 
         // inference check p2 (planet B)
         var infer_p2_C = {
-          type: 'inference-check-4',
+          type: 'inference-check-5',
           main_stimulus: stim_list[2],
           main_stimulus_height: main_stim_height,
-          prompt: inference_prompt[1],
-          stimulus_1: inf_img_p2_B[0].stimulus,
-          stimulus_2: inf_img_p2_B[1].stimulus,
-          stimulus_3: inf_img_p2_B[2].stimulus,
-          stimulus_4: inf_img_p2_B[3].stimulus,
-          stim_text_1: inf_img_p2_B[0].text,
-          stim_text_2: inf_img_p2_B[1].text,
-          stim_text_3: inf_img_p2_B[2].text,
-          stim_text_4: inf_img_p2_B[3].text,
-          slider_text_top: contingency_q[1],
+          prompt: inference_prompt[2],
+          stimulus_1: inf_img_p2_A[0].stimulus,
+          stimulus_2: inf_img_p2_A[1].stimulus,
+          stimulus_3: inf_img_p2_A[2].stimulus,
+          stimulus_4: inf_img_p2_A[3].stimulus,
+          stimulus_5: inf_img_p2_A[4].stimulus,
+          stim_text_1: inf_img_p2_A[0].text,
+          stim_text_2: inf_img_p2_A[1].text,
+          stim_text_3: inf_img_p2_A[2].text,
+          stim_text_4: inf_img_p2_A[3].text,
+          stim_text_5: inf_img_p2_A[4].text,
+          slider_text_top: contingency_q[2],
           labels_top: contingency_labels,
           stimulus_height: inf_stim_height,
           slider_width: inf_slider_width,
