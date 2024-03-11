@@ -1,238 +1,282 @@
+/**
+ * jspsych-html-slider-response
+ * a jspsych plugin for free response survey questions
+ *
+ * original author: Josh de Leeuw
+ *
+ * documentation: docs.jspsych.org
+ *
+ */
 
-//3d slider, sawpping to mouse
+ // Modified by LZ (2023)
+ // Slider questions presented at the end of each experimental phase
 
-jsPsych.plugins["jspsych-triangle-slider"] = (function() {
+ jsPsych.plugins['html-slider-response-3items'] = (function() {
+
   var plugin = {};
 
+  jsPsych.pluginAPI.registerPreload('html-slider-response-3items', 'stimulus', 'image');
+
   plugin.info = {
-    name: "jspsych-html-slider-3items",
-    description: "A custom plugin for creating a 3-item rating task with a draggable dot on a triangular area.",
+    name: 'html-slider-response',
+    description: '',
     parameters: {
       left_stimulus: {
         type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: "Left stimulus",
+        pretty_name: 'left stimulus',
         default: undefined,
-        description: "Path to the image file for the left item.",
-      },
-      middle_stimulus: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: "Middle stimulus",
-        default: undefined,
-        description: "Path to the image file for the middle item.",
+        description: 'Stimulus image on LHS'
       },
       right_stimulus: {
         type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: "Right stimulus",
+        pretty_name: 'right stimulus',
         default: undefined,
-        description: "Path to the image file for the right item.",
+        description: 'Stimulus image on RHS'
       },
       stimulus_height: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: "Stimulus Height",
+        pretty_name: 'Image height',
         default: null,
-        description: "Height of the stimuli in pixels.",
+        description: 'Set the image height in pixels'
       },
       stimulus_width: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: "Stimulus Width",
+        pretty_name: 'Image width',
         default: null,
-        description: "Width of the stimuli in pixels.",
+        description: 'Set the image width in pixels'
       },
       maintain_aspect_ratio: {
         type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: "Maintain Aspect Ratio",
+        pretty_name: 'Maintain aspect ratio',
         default: true,
-        description: "Whether to maintain the aspect ratio after setting width or height.",
+        description: 'Maintain the aspect ratio after setting width or height'
       },
       min: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: "Minimum Value",
+        pretty_name: 'Min slider',
         default: 0,
-        description: "Sets the minimum value of the slider.",
+        description: 'Sets the minimum value of the slider.'
       },
       max: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: "Maximum Value",
+        pretty_name: 'Max slider',
         default: 100,
-        description: "Sets the maximum value of the slider.",
+        description: 'Sets the maximum value of the slider',
       },
       start: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: "Starting Point",
-        default: 50,
-        description: "Sets the starting point of the draggable dot.",
-      },
+                type: jsPsych.plugins.parameterType.INT,
+                pretty_name: 'Slider starting value',
+                default: 50,
+                description: 'Sets the starting value of the slider',
+            },
       step: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: "Step Size",
+        pretty_name: 'Step',
         default: 1,
-        description: "Sets the step size of the draggable dot.",
+        description: 'Sets the step of the slider'
       },
       labels: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: "Slider Labels",
+        pretty_name:'Labels',
         default: [],
         array: true,
-        description: "Labels for the slider positions.",
+        description: 'Labels of the slider.',
       },
       slider_width: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: "Slider Width",
+        pretty_name:'Slider width',
         default: null,
-        description: "Width of the slider in pixels.",
+        description: 'Width of the slider in pixels.'
       },
       button_label: {
         type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: "Submit Button Label",
-        default: "Continue",
-        description: "Label for the submit button.",
+        pretty_name: 'Button label',
+        default:  'Continue',
+        array: false,
+        description: 'Label of the button to advance.'
       },
       require_movement: {
         type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: "Requires Movement",
+        pretty_name: 'Require movement',
         default: true,
-        description: "If enabled, requires the participant to move the dot before submitting.",
+        description: 'If true, the participant will have to move the slider before continuing.'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: "Prompt Text",
-        default: "null",
-        description: "Text displayed at the beginning of the trial.",
+        pretty_name: 'Prompt',
+        default: null,
+        description: 'Any content here will be displayed at the top of the screen.'
       },
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: "Stimulus Visible Duration",
-        default: 1000,
-        description: "Duration (in seconds) the stimuli are visible.",
+        pretty_name: 'Stimulus duration',
+        default: null,
+        description: 'How long to hide the stimulus.'
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: "Total Trial Duration",
-        default: 100000,
-        description: "Duration (in seconds) the trial lasts.",
+        pretty_name: 'Trial duration',
+        default: null,
+        description: 'How long to show the trial.'
       },
       response_ends_trial: {
         type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: "Response Terminates Trial",
-        default: false,
-        description: "Determines if a response triggers the end of the trial.",
+        pretty_name: 'Response ends trial',
+        default: true,
+        description: 'If true, trial will end when user makes a response.'
       },
-    },
-  };
+    }
+  }
 
   plugin.trial = function(display_element, trial) {
 
-    
-console.log('plugin up')
+    var html = '<div id="jspsych-html-slider-response-wrapper" style="margin: 100px 0px;">';
 
-      // display stimulus
-      var html = '<div id="jspsych-image-mouseclick-response-stimulus">' 
-
-    const containerDiv = document.createElement('div');
-    containerDiv.setAttribute('id', 'container');
-    display_element.appendChild(containerDiv);
-
-    const triangleDiv = document.createElement('div');
-    triangleDiv.setAttribute('id', 'x_triangle');
-    containerDiv.appendChild(triangleDiv);
-
-    const nodeDiv = document.createElement('div');
-    nodeDiv.setAttribute('id', 'x_node');
-    triangleDiv.appendChild(nodeDiv);
-
-    const inputs = Array.from(document.getElementsByTagName('INPUT'));
-    const formFields = [...inputs];
-
-    const nwidth = nodeDiv.clientWidth / 2;
-    const nheight = nodeDiv.clientHeight / 2;
-    const width = triangleDiv.clientWidth;
-    const height = triangleDiv.clientHeight;
-
-    const initialY = height / 100 * (100 - trial.slider_values[0]) + nheight;
-    const initialX = width / 100 * (100 - trial.slider_values[1]) - nwidth;
-
-    let interval;
-    let uielem;
-
-    const formatter = Intl.NumberFormat("en");
-
-    formFields.forEach(function(elem, idx) {
-      elem.value = formatter.format(trial.slider_values[idx]);
-    });
-
-    triangleDiv.onclick = click;
-    nodeDiv.ondragstart = dragStart;
-    nodeDiv.ondragend = dragEnd;
-
-    function click(event) {
-      const rect = event.target.getBoundingClientRect();
-      const xy = calcXY(event.clientX - rect.left, event.clientY - rect.top);
-      nodeDiv.style.left = `${xy.left - nwidth}px`;
-      nodeDiv.style.top = `${xy.top + nwidth}px`;
-      calcDistance(xy.left - nwidth, xy.top + nwidth);
+    // prompt
+    if (trial.prompt !== null){
+      html += trial.prompt + '<br><br><br><br>';
     }
 
-    function dragStart(event) {
-      uielem = event;
-      interval = setInterval(function() {
-        calcDistance(uielem.clientX, uielem.clientY);
-      }, 50);
+    // -------------------------------- stimulus --------------------------------
+    // left stimulus
+    html += '<div id="jspsych-html-slider-response-left-stimulus" style="float:left;">';
+    html += '<img src="'+trial.left_stimulus+'" style="';
+    if(trial.stimulus_height !== null){
+      html += 'height:'+trial.stimulus_height+'px; '
+      if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
+        html += 'width: auto; ';
+      }
+    }
+    if(trial.stimulus_width !== null){
+      html += 'width:'+trial.stimulus_width+'px; '
+      if(trial.stimulus_height == null && trial.maintain_aspect_ratio){
+        html += 'height: auto; ';
+      }
+    }
+    html += '"></img>';
+    html += '<div style="margin-top: 5px;">'+trial.left_stim_text+'</div>';
+    html += '</div>';
+
+    // right stimulus
+    html += '<div id="jspsych-html-slider-response-right-stimulus" style="float:right;">';
+    html += '<img src="'+trial.right_stimulus+'" style="';
+    if(trial.stimulus_height !== null){
+      html += 'height:'+trial.stimulus_height+'px; '
+      if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
+        html += 'width: auto; ';
+      }
+    }
+    if(trial.stimulus_width !== null){
+      html += 'width:'+trial.stimulus_width+'px; '
+      if(trial.stimulus_height == null && trial.maintain_aspect_ratio){
+        html += 'height: auto; ';
+      }
+    }
+    html += '"></img>';
+    html += '<div style="margin-top: 5px;">'+trial.right_stim_text+'</div>';
+    html += '</div>';
+
+    // text_stim_left
+    // if (trial.left_stim_text !== null){
+    //  html += trial.left_stim_text;
+    // }
+    // html += '<br><br>';
+
+    // text_stim_right
+    // if (trial.right_stim_text !== null){
+    //   html += trial.right_stim_text;
+    // }
+    // html += '<br><br>';
+
+    // slider
+    html += '<div class="jspsych-html-slider-response-container" style="position:relative; margin: 0 auto 3em auto; ';
+    if(trial.slider_width !== null){
+      html += 'width:'+trial.slider_width+'px;';
+    }
+    else {
+      html +="width:auto;";
+    }
+    html += '">';
+    html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-html-slider-response-response"></input>';
+    html += '<div>'
+    for(var j=0; j < trial.labels.length; j++){
+      var width = 100/(trial.labels.length-1);
+      var left_offset = (j * (100 /(trial.labels.length - 1))) - (width/2);
+      html += '<div style="display: inline-block; position: absolute; left:'+left_offset+'%; text-align: center; width: '+width+'%;">';
+      html += '<span style="text-align: center; font-size: 80%;">'+trial.labels[j]+'</span>';
+      html += '</div>'
+    }
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    html += '<br><br><br><hr><br><br><br>';
+
+
+    // add submit button
+    html += '<button id="jspsych-html-slider-response-next" class="jspsych-btn" '+ (trial.require_movement ? "disabled" : "") + '>'+trial.button_label+'</button>';
+
+    display_element.innerHTML = html;
+
+    var response = {
+      rt: null,
+      val: null
+    };
+
+    if(trial.require_movement){
+      display_element.querySelector('#jspsych-html-slider-response-response').addEventListener('change', function(){
+        display_element.querySelector('#jspsych-html-slider-response-next').disabled = false;
+      })
     }
 
-    function dragEnd(event) {
-      clearInterval(interval);
-      calcDistance(event.clientX, event.clientY);
+    display_element.querySelector('#jspsych-html-slider-response-next').addEventListener('click', function() {
+      // measure response time
+      var endTime = performance.now();
+      response.rt = endTime - startTime;
+      response.response = display_element.querySelector("#jspsych-html-slider-response-response").valueAsNumber;
+            if (trial.response_ends_trial) {
+                end_trial();
+            }
+            else {
+                display_element.querySelector("#jspsych-html-slider-response-next").disabled = true;
+            }
+        });
+        if (trial.stimulus_duration !== null) {
+          this.jsPsych.pluginAPI.setTimeout(() => {
+              display_element.querySelector("#jspsych-html-slider-response-stimulus").style.visibility = "hidden";
+          }, trial.stimulus_duration);
+      }
 
-      const values = [];
-      formFields.forEach(function(elem) {
-        values.push(parseFloat(elem.value));
-      });
+    function end_trial(){
 
-      trial_data = {
-        left_weight: values[0],
-        mid_weight: values[1],
-        right_weight: values[2]
+      jsPsych.pluginAPI.clearAllTimeouts();
+
+      // save data
+      var trialdata = {
+        "rt": response.rt,
+        "val": response.response,
       };
 
-      jsPsych.finishTrial(trial_data);
+      display_element.innerHTML = '';
+
+      // next trial
+      jsPsych.finishTrial(trialdata);
     }
 
-    function calcDistance(x, y) {
-      x += nwidth;
-      y -= nheight;
-      const pixels = [
-        Math.sqrt(Math.pow(Math.abs(x - width / 2), 2) + Math.pow(y, 2)),
-        Math.sqrt(Math.pow(x, 2) + Math.pow(height - y, 2)),
-        Math.sqrt(Math.pow(width - x, 2) + Math.pow(height - y, 2))];
-      const sum = pixels[0] + pixels[1] + pixels[2];
-
-      formFields.forEach(function(elem, index) {
-        const percent = ((100 / sum * pixels[index]).toFixed(2)).toString().slice(0,-1);
-        elem.value = percent;
-      });
+    if (trial.stimulus_duration !== null) {
+      jsPsych.pluginAPI.setTimeout(function() {
+        display_element.querySelector('#jspsych-html-slider-response-stimulus').style.visibility = 'hidden';
+      }, trial.stimulus_duration);
     }
 
-    function calcXY(left, top) {
-      let x = left + nwidth,
-        y = top + nheight,
-        difference = Math.abs(x - width / 2),
-        min_y = height * (difference / (width / 2));
-
-      if (y < min_y) y = min_y;
-      if (x < 0) x = 0;
-      if (y < 0) y = 0;
-      if (x > width) x = width;
-      if (y > height) y = height;
-        console.log(y);
-        console.log(x);
-
-      return {
-        top: y,
-        left: x
-      };
+    // end trial if trial_duration is set
+    if (trial.trial_duration !== null) {
+      jsPsych.pluginAPI.setTimeout(function() {
+        end_trial();
+      }, trial.trial_duration);
     }
+
+    var startTime = performance.now();
   };
-  
-  console.log("slider-3items loaded");
+
   return plugin;
 })();
