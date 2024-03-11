@@ -981,7 +981,7 @@ timeline.push(slider_p2_q3); // replace with triangle
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);
 // timeline.push(infer_p2_C);
-timeline.push(slider_p2_q3); // replace with triangle
+// timeline.push(slider_p2_q3); // replace with triangle
 // timeline.push(slider_p2_q4); //
 
 // //Debrief
