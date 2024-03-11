@@ -18,7 +18,7 @@ let num_planets = 3;
 let planet_sides = [...Array(num_planets).keys()].map(x => x.toString());
 let planet_side = jsPsych.randomization.sampleWithReplacement(planet_sides, 1)[0];
 // Stimulus and image Initialization
-const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/pinkp.png'], 1);
+const stim_list = jsPsych.randomization.repeat(['img/planet_p.png','img/planet_o.png', 'img/planet_b.png'], 1);
 const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png','img/ship3.png'], 1);
 const stim_selector_highlight = 'img/selectring.png';
 const images = [
@@ -953,7 +953,7 @@ var exit_experiment = {
 // ---- Timeline creation ----
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
-// // Induction
+// Induction
 // timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
@@ -964,7 +964,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // Phase 1, no ships
 // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 // timeline.push(valence_p1);
-// timeline.push(valence_p1_all);
+// timeline.push(valence_p1_all); //triangle
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
@@ -975,7 +975,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(slider_p1_q3); // replace with triangle
 // timeline.push(slider_p1_q4); //
 
-//Phase2, ships
+// Phase2, ships
 // timeline.push(phaseTwoInstructions);
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 
@@ -989,26 +989,26 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(slider_p2_q1); //
 // timeline.push(slider_p2_q2); //
 
-timeline.push(slider_p2_q3); // replace with triangle
+// timeline.push(slider_p2_q3); // replace with triangle
 // timeline.push(slider_p2_q4); //
 
 
 
 
 
-// //Phase3, ships
-// timeline.push(cont_instructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-timeline.push(slider_p2_q3); // replace with triangle
+//Phase3, ships
+timeline.push(cont_instructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+// timeline.push(slider_p2_q3); // replace with triangle
 // timeline.push(slider_p2_q4); //
 
-// //Debrief
-// timeline.push(debrief_block);
-// timeline.push(contact_block);
+//Debrief
+timeline.push(debrief_block);
+timeline.push(contact_block);
 
 
 
