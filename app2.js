@@ -798,7 +798,7 @@ let planet_ship = {
 // NEW: define slider Qs variables
 var left_label = "";
 var right_label = "";
-
+jsPsych.pluginAPI.registerPreload('image-mouseclick-response', 'stimulus', 'image');
 // // Question 3
 // var slider_p2_q3 = {
 //   type: 'jspsych-html-slider-3items',
@@ -822,7 +822,7 @@ var right_label = "";
 // };
 
 const slider_p2_q3 = {
-  type: 'mouseclick-response',
+  type: 'html-button-response',
   prompt: "<p>What proportion of your recent interactions were with:</p>" +
   "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
   left_stimulus: stim_list[0],
