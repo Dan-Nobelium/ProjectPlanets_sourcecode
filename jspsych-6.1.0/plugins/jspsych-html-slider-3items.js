@@ -1,5 +1,5 @@
 
-//3d slider
+//3d slider, sawpping to mouse
 
 jsPsych.plugins["jspsych-html-slider-3items"] = (function() {
   var plugin = {};
