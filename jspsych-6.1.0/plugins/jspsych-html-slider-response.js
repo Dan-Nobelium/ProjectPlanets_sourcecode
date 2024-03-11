@@ -11,11 +11,11 @@
  // Modified by LZ (2023)
  // Slider questions presented at the end of each experimental phase
 
- jsPsych.plugins['html-slider-response-3items'] = (function() {
+ jsPsych.plugins['html-slider-response'] = (function() {
 
     var plugin = {};
   
-    jsPsych.pluginAPI.registerPreload('html-slider-response-3items', 'stimulus', 'image');
+    jsPsych.pluginAPI.registerPreload('html-slider-response', 'stimulus', 'image');
   
     plugin.info = {
       name: 'html-slider-response',
