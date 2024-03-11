@@ -562,12 +562,16 @@ let planet_ship = {
           text: "Losing $"
         },
         {
-          stimulus: 'img/ship1.png',
+          stimulus: ship_list[0],
           text: "Ship 1"
         },
         {
-          stimulus: 'img/ship2.png',
+          stimulus: ship_list[1],
           text: "Ship 2"
+        },
+        {
+          stimulus: ship_list[2],
+          text: "Ship 3"
         },
       ];
     
@@ -593,36 +597,8 @@ let planet_ship = {
 
 //TODO: create valance check 8 library and use it here
         // value check p2
-        var valence_p2 = {
-          type: 'valence-check-6',
-          prompt: valence_q,
-          stimulus_1: val_img_p2[0].stimulus,
-          stim_text_1: val_img_p2[0].text,
-          stimulus_2: val_img_p2[1].stimulus,
-          stim_text_2: val_img_p2[1].text,
-          stimulus_3: val_img_p2[2].stimulus,
-          stim_text_3: val_img_p2[2].text,
-          stimulus_4: val_img_p2[3].stimulus,
-          stim_text_4: val_img_p2[3].text,
-          stimulus_5: val_img_p2[4].stimulus,
-          stim_text_5: val_img_p2[4].text,
-          stimulus_6: val_img_p2[5].stimulus,
-          stim_text_6: val_img_p2[5].text,
-          stimulus_7: val_img_p2[6].stimulus,
-          stim_text_7: val_img_p2[6].text,
-          stimulus_8: val_img_p2[7].stimulus,
-          stim_text_8: val_img_p2[7].text,
-          labels: valence_labels,
-          stimulus_height: inf_stim_height,
-          slider_width: inf_slider_width,
-          require_movement: false,
-          data: {
-            phase: 'val_check_2',
-            block_number: i + nBlocks_p1
-          }
-        };
         
-        var valence_p2_8 = {
+        var valence_p2 = {
           type: 'valence-check-8',
           prompt: valence_q,
           stimulus_1: val_img_p2[0].stimulus,
@@ -652,7 +628,7 @@ let planet_ship = {
         };
         // inference check p2 (planet A)
         var infer_p2_A = {
-          type: 'inference-check-4',
+          type: 'inference-check-5',
           main_stimulus: stim_list[0],
           main_stimulus_height: main_stim_height,
           prompt: inference_prompt[0],
@@ -660,10 +636,12 @@ let planet_ship = {
           stimulus_2: inf_img_p2_A[1].stimulus,
           stimulus_3: inf_img_p2_A[2].stimulus,
           stimulus_4: inf_img_p2_A[3].stimulus,
+          stimulus_5: inf_img_p2_A[4].stimulus,
           stim_text_1: inf_img_p2_A[0].text,
           stim_text_2: inf_img_p2_A[1].text,
           stim_text_3: inf_img_p2_A[2].text,
           stim_text_4: inf_img_p2_A[3].text,
+          stim_text_5: inf_img_p2_A[4].text,
           slider_text_top: contingency_q[0],
           labels_top: contingency_labels,
           stimulus_height: inf_stim_height,
@@ -1005,11 +983,10 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(phaseTwoInstructions);
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 
-timeline.push(valence_p2);
-timeline.push(valence_p2_8);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
+// timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
 // timeline.push(infer_p2_ship1);
 // timeline.push(infer_p2_ship2);
 // timeline.push(infer_p2_ship3);
