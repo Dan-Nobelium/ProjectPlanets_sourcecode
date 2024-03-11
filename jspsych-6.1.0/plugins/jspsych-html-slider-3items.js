@@ -96,19 +96,19 @@ jsPsych.plugins["jspsych-html-slider-3items"] = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: "Prompt Text",
-        default: null,
+        default: "null",
         description: "Text displayed at the beginning of the trial.",
       },
       stimulus_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: "Stimulus Visible Duration",
-        default: null,
+        default: 1000,
         description: "Duration (in seconds) the stimuli are visible.",
       },
       trial_duration: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: "Total Trial Duration",
-        default: null,
+        default: 100000,
         description: "Duration (in seconds) the trial lasts.",
       },
       response_ends_trial: {
@@ -121,6 +121,12 @@ jsPsych.plugins["jspsych-html-slider-3items"] = (function() {
   };
 
   plugin.trial = function(display_element, trial) {
+
+    
+console.log('plugin up')
+
+      // display stimulus
+      var html = '<div id="jspsych-image-mouseclick-response-stimulus">' 
 
     const containerDiv = document.createElement('div');
     containerDiv.setAttribute('id', 'container');
@@ -226,8 +232,7 @@ jsPsych.plugins["jspsych-html-slider-3items"] = (function() {
       };
     }
   };
-  console.log("slider_p2_q3 finished");
   
-
+  console.log("slider-3items loaded");
   return plugin;
 })();
