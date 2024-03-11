@@ -1,0 +1,284 @@
+/**
+ * Plugin for displaying a centered triangle with planet images at each vertex, recording X/Y mouse positions for clicks or drags, and displaying the reference for each planet as 3 integers indicating the level of preference.
+ *
+ * @author Your Name
+ * @version 1.0.0
+ * @since 2023-07-24
+ */
+
+jsPsych.plugins["planet-preference-tracker"] = (function () {
+
+  var plugin = {};
+
+  jsPsych.pluginAPI.registerPreload('planet-preference-tracker', 'stimulus', 'image');
+
+  plugin.info = {
+    name: 'planet-preference-tracker',
+    description: '',
+    parameters: {
+      stimulus: {
+        type: jsPsych.plugins.parameterType.IMAGE,
+          pretty_name: 'Planet Images',
+          array: true,
+        default: undefined,
+        description: 'Images of planets placed at each vertex of the triangle.'
+      },
+      mousedown: {
+        type: jsPsych.plugins.parameterType.IMAGE,
+          pretty_name: 'Planet Images on Mousedown',
+          array: true,
+        default: undefined,
+        description: 'Images of planets to be displayed when mouse is clicking on it.'
+      },
+      prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
+        default: null,
+        description: 'Any content here will be displayed under the triangle.'
+      },
+      stimulus_size: {
+        type: jsPsych.plugins.parameterType.FLOAT,
+        pretty_name: 'Stimulus Size',
+        default: 1.0,
+        description: 'Size multiplier for the planet images.',
+      },
+      trial_duration: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Trial duration',
+        default: null,
+        description: 'How long to show the trial.'
+      },
+      response_ends_trial: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Response ends trial',
+        default: true,
+        description: 'If true, then trial will end when user responds.'
+      },
+    }
+  }
+
+  plugin.trial = function(display_element, trial) {
+
+    // Define canvas & context
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas size
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+
+    // Position canvas centrally
+    canvas.style.position = 'absolute';
+    canvas.style.left = '50%';
+    canvas.style.transform = 'translate(-50%, -50%)';
+
+    // Append canvas to display_element
+    display_element.appendChild(canvas);
+
+    // Draw triangle
+    drawTriangle(ctx, canvas.width / 2, canvas.height / 2, canvas.width / 4 * 3 * trial.stimulus_size);
+
+    // Display planet images
+    displayPlanetImages(ctx, trial.stimulus, canvas.width / 2, canvas.height / 2, canvas.width / 4 * 3 * trial.stimulus_size);
+
+    // Show prompt if provided
+    if (trial.prompt !== null) {
+      displayElementCentered(trial.prompt, canvas.width, canvas.height);
+    }
+
+    // Record mouse movement
+    let prevMousePos = { x: null, y: null };
+    canvas.addEventListener('mousemove', function (e) {
+      recordMousePosition(e, prevMousePos);
+    });
+
+    // Track click & drag interaction
+    let active = false;
+    let offsetX, offsetY;
+    let posX, posY;
+
+    canvas.addEventListener('mousedown', function (e) {
+      active = true;
+      offsetX = e.offsetX - posX;
+      offsetY = e.offsetY - posY;
+    });
+
+    canvas.addEventListener('mouseup', function (e) {
+      active = false;
+      recordMousePosition(e, prevMousePos);
+    });
+
+    canvas.addEventListener('mouseout', function () {
+      active = false;
+    });
+
+    // Functions
+
+    /**
+     * Displays the supplied text centered vertically and horizontally.
+     *
+     * @param {string} text
+     * @param {number} width
+     * @param {number} height
+     */
+    function displayElementCentered(text, width, height) {
+      const fontSize = Math.round((innerHeight / 35));
+      ctx.font = `${fontSize}px sans-serif`;
+      ctx.fillStyle = '#000';
+      const lineHeights = fontSize * 1.2;
+      const messageHeight = (lineHeights * text.split('\n').length);
+      ctx.fillText(text, (width - ctx.measureText(text).width) / 2, height / 2 + messageHeight / 2);
+    }
+
+    /**
+     * Records the current mouse position and updates the previous mouse position.
+     *
+     * @param {MouseEvent} e
+     * @param {object} prevMousePos
+     */
+    function recordMousePosition(e, prevMousePos) {
+      prevMousePos = {
+        x: e.offsetX,
+        y: e.offsetY
+      };
+    }
+
+    /**
+     * Draws a triangle with the specified base length, rotation angle, and center position.
+     *
+     * @param {CanvasRenderingContext2D} ctx
+     * @param {number} cx
+     * @param {number} cy
+     * @param {number} radius
+     * @param {number} degrees
+     */
+    function drawTriangle(ctx, cx, cy, radius, degrees = 0) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.translate(cx, cy);
+      ctx.rotate(degrees);
+      ctx.moveTo(0, -radius);
+      ctx.lineTo(-radius * Math.cos(Math.PI / 3), -radius * Math.sin(Math.PI / 3));
+      ctx.lineTo(radius * Math.cos(Math.PI / 3), -radius * Math.sin(Math.PI / 3));
+      ctx.closePath();
+      ctx.restore();
+    }
+
+    /**
+     * Displays the planet images at the vertices of the triangle.
+     *
+     * @param {CanvasRenderingContext2D} ctx
+     * @param {array} images
+     * @param {number} cx
+     * @param {number} cy
+     * @param {number} radius
+     */
+    function displayPlanetImages(ctx, images, cx, cy, radius) {
+      images.forEach((image, index) => {
+        switch (index) {
+          case 0:
+            posX = (-radius / 2) * Math.cos(Math.PI / 3);
+            posY = (-radius / 2) * Math.sin(Math.PI / 3);
+            break;
+          case 1:
+            posX = 0;
+            posY = -radius;
+            break;
+          case 2:
+            posX = (+radius / 2) * Math.cos(Math.PI / 3);
+            posY = (+radius / 2) * Math.sin(Math.PI / 3);
+            break;
+        }
+        const img = new Image();
+        img.src = image;
+        img.onload = () => {
+          ctx.drawImage(img, cx + posX - (img.width * trial.stimulus_size / 2), cy + posY - (img.height * trial.stimulus_size / 2), img.width * trial.stimulus_size, img.height * trial.stimulus_size);
+        };
+      });
+    }
+
+    // Store preferences
+    let preferences = {
+      p1: 0,
+      p2: 0,
+      p3: 0
+    };
+
+    // End trial when timeout reached
+    if (trial.trial_duration !== null) {
+      jsPsych.pluginAPI.setTimeout(function () {
+        end_trial();
+      }, trial.trial_duration);
+    }
+
+    /**
+     * Updates preferences based on the final mouse position.
+     */
+    function updatePreferences() {
+      const distToPoints = findClosestPointIndex(prevMousePos.x, prevMousePos.y);
+      Object.keys(distToPoints).forEach(key => {
+        if (distToPoints[key] === 0) {
+          preferences['p' + Number(key) + 1]++;
+        }
+      });
+    }
+
+    /**
+     * Finds the closest point index to the given mouse position.
+     *
+     * @param {number} mx
+     * @param {number} my
+     * @returns {{p1: number, p2: number, p3: number}}
+     */
+    function findClosestPointIndex(mx, my) {
+      const points = [{
+          x: cx + posX - (images[0].width * trial.stimulus_size / 2),
+          y: cy + posY - (images[0].height * trial.stimulus_size / 2)
+        },
+        {
+          x: cx - (images[1].width * trial.stimulus_size / 2),
+          y: cy - (images[1].height * trial.stimulus_size / 2)
+        },
+        {
+          x: cx + posX - (images[2].width * trial.stimulus_size / 2),
+          y: cy + posY - (images[2].height * trial.stimulus_size / 2)
+        }
+      ];
+
+      let distances = points.map(({ x, y }) => {
+        const dx = Math.abs(x - mx);
+        const dy = Math.abs(y - my);
+        return Math.sqrt(dx * dx + dy * dy);
+      });
+
+      return distances.reduce((acc, val, ind) => ({
+        ...acc,
+        ['p' + String(ind + 1)]: val
+      }), {});
+    }
+
+    /**
+     * Handles the response end trial logic.
+     */
+    function end_trial() {
+      // Kill any remaining setTimeout handlers
+      jsPsych.pluginAPI.clearAllTimeouts();
+
+      // Gather data to store for the trial
+      updatePreferences();
+      const trial_data = {
+        preferences: preferences,
+        mouse_positions: JSON.stringify(prevMousePos)
+      };
+
+      // Clear the display
+      display_element.innerHTML = "";
+
+      // Move on to the next trial
+      jsPsych.finishTrial(trial_data);
+    }
+
+  };
+
+  return plugin;
+})();

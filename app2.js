@@ -18,13 +18,13 @@ let num_planets = 3;
 let planet_sides = [...Array(num_planets).keys()].map(x => x.toString());
 let planet_side = jsPsych.randomization.sampleWithReplacement(planet_sides, 1)[0];
 // Stimulus and image Initialization
-const stim_list = jsPsych.randomization.repeat(['img/bluep.png','img/orangep.png', 'img/pinkp.png'], 1);
+const stim_list = jsPsych.randomization.repeat(['img/planet_p.png','img/planet_o.png', 'img/planet_b.png'], 1);
 const ship_list = jsPsych.randomization.repeat(['img/ship1.png','img/ship2.png','img/ship3.png'], 1);
 const stim_selector_highlight = 'img/selectring.png';
 const images = [
   'img/signal1.png','img/signal2.png','img/signal3.png','img/signal4.png',
-  'img/ship1.png','img/ship2.png',
-  'img/bluep.png','img/orangep.png',
+  'img/ship1.png','img/ship2.png', 'img/planet_p.png',
+  'img/planet_b.png','img/planet_o.png',
   'img/cursor.png','img/cursordark.png', 'img/selectring.png',
   'img/win100.png', 'img/lose.png',
   'img/arrow.jpg', 'img/blank_lose.jpg', 'img/blank_arrow.jpg'
@@ -826,12 +826,33 @@ let planet_ship = {
 // NEW: define slider Qs variables
 var left_label = "";
 var right_label = "";
-
+jsPsych.pluginAPI.registerPreload('image-mouseclick-response', 'stimulus', 'image');
 // Question 3
-// var slider_p2_q3 = {
-//   type: 'jspsych-html-slider-3items',
+var slider_p2_q3 = {
+  type: 'html-slider-response',
+  prompt: "<p>What proportion of your recent interactions were with:</p>" +
+           "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
+  left_stimulus: stim_list[0],
+  left_stim_text: ('a'),
+  middle_stimulus: stim_list[1],
+  middle_stim_text: ('b'),
+  right_stimulus: stim_list[2],
+  right_stim_text: ('c'),
+  slider_values: [33, 33, 34], // Initial slider values for the 3 items
+  stimulus_height: 250,
+  slider_width: 900, // Increased width to accommodate more space for labels
+  labels: ["100%/0%/0%<p>(only click Planetas A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
+  require_movement: false,
+  data: {
+    phase: 'slider-response_p2_q3',
+    block_number: i + nBlocks_p1,
+  }
+};
+
+// const slider_p2_q3 = {
+//   type: 'html-button-response',
 //   prompt: "<p>What proportion of your recent interactions were with:</p>" +
-//            "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
+//   "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
 //   left_stimulus: stim_list[0],
 //   left_stim_text: ('a'),
 //   middle_stimulus: stim_list[1],
@@ -844,10 +865,10 @@ var right_label = "";
 //   labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
 //   require_movement: false,
 //   data: {
-//     phase: 'slider-response_p2_q3',
-//     block_number: i + nBlocks_p1,
+//   phase: 'slider-response_p2_q3',
+//   block_number: i + nBlocks_p1,
 //   }
-// };
+//   };
 
 // stim_list[0],
 
@@ -959,7 +980,7 @@ var exit_experiment = {
 // ---- Timeline creation ----
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
-// // Induction
+// Induction
 // timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
@@ -980,7 +1001,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(slider_p1_q3); // replace with triangle
 // timeline.push(slider_p1_q4); //
 
-//Phase2, ships
+// Phase2, ships
 // timeline.push(phaseTwoInstructions);
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 
@@ -1002,7 +1023,7 @@ timeline.push(valence_p2_8);
 
 
 
-// //Phase3, ships
+//Phase3, ships
 // timeline.push(cont_instructions);
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
 // timeline.push(valence_p2);
@@ -1012,7 +1033,7 @@ timeline.push(valence_p2_8);
 // timeline.push(slider_p2_q3); // replace with triangle
 // timeline.push(slider_p2_q4); //
 
-// //Debrief
+//Debrief
 // timeline.push(debrief_block);
 // timeline.push(contact_block);
 
