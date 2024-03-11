@@ -822,7 +822,7 @@ var right_label = "";
 // };
 
 const slider_p2_q3 = {
-  type: 'html-slider-3items',
+  type: 'mouseclick-response',
   prompt: "<p>What proportion of your recent interactions were with:</p>" +
   "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
   left_stimulus: stim_list[0],
