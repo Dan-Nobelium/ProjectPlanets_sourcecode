@@ -23,146 +23,173 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
         default: undefined,
         description: 'Stimulus image on the right of the triangle'
       },
-      // Add other parameters as needed (e.g., stimulus dimensions, labels, prompt, etc.)
+      prompt: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Prompt',
+        default: null,
+        description: 'Any content here will be displayed above the triangle slider.'
+      },
+      slider_width: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Slider width',
+        default: 500,
+        description: 'Width of the triangle slider in pixels.'
+      },
+      slider_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Slider height',
+        default: 400,
+        description: 'Height of the triangle slider in pixels.'
+      },
+      stimulus_height: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Stimulus height',
+        default: 100,
+        description: 'Height of the stimulus images in pixels.'
+      },
+      labels: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Labels',
+        default: [],
+        array: true,
+        description: 'Labels to display on the triangle slider.'
+      },
+      require_movement: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Require movement',
+        default: false,
+        description: 'If true, the participant will have to move the slider before continuing.'
+      }
     }
   };
 
   plugin.trial = function(display_element, trial) {
-    // Create the HTML for the triangle slider
     var html = `
-      <div id="jspsych-html-slider-triangle-wrapper">
-        <div id="triangle-container">
-          <div id="triangle">
-            <div id="slider-handle"></div>
-          </div>
-          <img src="${trial.stimulus_left}" class="stimulus-image left" alt="Left stimulus">
-          <img src="${trial.stimulus_right}" class="stimulus-image right" alt="Right stimulus">
-          <img src="${trial.stimulus_top}" class="stimulus-image top" alt="Top stimulus">
-          <div id="proportion-left" class="proportion">33%</div>
-          <div id="proportion-right" class="proportion">33%</div>
-          <div id="proportion-top" class="proportion">34%</div>
+      <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
+        <div id="jspsych-html-slider-triangle-stimulus" style="position: relative; width: 100%; height: 100%;">
+          <img src="${trial.stimulus_left}" style="position: absolute; bottom: 0; left: 0; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <img src="${trial.stimulus_right}" style="position: absolute; bottom: 0; right: 0; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <img src="${trial.stimulus_top}" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <div id="jspsych-html-slider-triangle" style="position: absolute; top: ${trial.stimulus_height}px; left: 0; width: 100%; height: calc(100% - ${trial.stimulus_height}px); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); background-color: #ddd;"></div>
+          <div id="jspsych-html-slider-triangle-handle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; background-color: #333; border-radius: 50%; cursor: pointer;"></div>
+        </div>
+        <div id="jspsych-html-slider-triangle-labels" style="position: absolute; top: calc(100% + 10px); left: 0; width: 100%; display: flex; justify-content: space-between;">
+          ${trial.labels.map(label => `<div style="text-align: center;">${label}</div>`).join('')}
         </div>
       </div>
     `;
 
-    // Display the HTML
+    if (trial.prompt !== null) {
+      html = `<div>${trial.prompt}</div>` + html;
+    }
+
     display_element.innerHTML = html;
 
-    // Get the necessary elements
-    var triangle = display_element.querySelector('#triangle');
-    var sliderHandle = display_element.querySelector('#slider-handle');
-    var proportionLeft = display_element.querySelector('#proportion-left');
-    var proportionRight = display_element.querySelector('#proportion-right');
-    var proportionTop = display_element.querySelector('#proportion-top');
+    var triangle = display_element.querySelector('#jspsych-html-slider-triangle');
+    var handle = display_element.querySelector('#jspsych-html-slider-triangle-handle');
+    var labels = display_element.querySelectorAll('#jspsych-html-slider-triangle-labels div');
 
-    // Variables to store the current proportions
+    var triangleRect = triangle.getBoundingClientRect();
+    var handleRect = handle.getBoundingClientRect();
+
+    var isDragging = false;
     var proportions = {
       left: 33,
       right: 33,
       top: 34
     };
 
-    // Function to handle the triangle slider interaction
-    function handleTriangleSlider(e) {
-      // Get the position of the mouse click relative to the triangle
-      var trianglePosition = getTrianglePosition(e);
-
-      // Update the position of the slider handle
-      updateSliderHandle(trianglePosition);
-
-      // Calculate the proportions for each stimulus based on the slider position
-      proportions = calculateProportions(trianglePosition);
-
-      // Update the displayed proportions
-      updateProportionDisplay(proportions);
+    function updateHandlePosition(x, y) {
+      handle.style.left = `${x}px`;
+      handle.style.top = `${y}px`;
     }
 
-    // Function to get the position of the mouse click relative to the triangle
-    function getTrianglePosition(e) {
-      var rect = triangle.getBoundingClientRect();
-      var x = e.clientX - rect.left;
-      var y = e.clientY - rect.top;
-      return { x: x, y: y };
+    function updateProportions(x, y) {
+      var left = x / triangleRect.width;
+      var right = 1 - left;
+      var top = 1 - (y / triangleRect.height);
+
+      var sum = left + right + top;
+
+      proportions.left = Math.round((left / sum) * 100);
+      proportions.right = Math.round((right / sum) * 100);
+      proportions.top = Math.round((top / sum) * 100);
+
+      labels[0].textContent = `${proportions.left}%`;
+      labels[1].textContent = `${proportions.right}%`;
+      labels[2].textContent = `${proportions.top}%`;
     }
 
-    // Function to update the position of the slider handle
-    function updateSliderHandle(position) {
-      sliderHandle.style.left = position.x + 'px';
-      sliderHandle.style.top = position.y + 'px';
+    function handleMouseMove(e) {
+      if (!isDragging) return;
+
+      var x = e.clientX - triangleRect.left - handleRect.width / 2;
+      var y = e.clientY - triangleRect.top - handleRect.height / 2;
+
+      if (x < 0) x = 0;
+      if (x > triangleRect.width - handleRect.width) x = triangleRect.width - handleRect.width;
+      if (y < 0) y = 0;
+      if (y > triangleRect.height - handleRect.height) y = triangleRect.height - handleRect.height;
+
+      updateHandlePosition(x, y);
+      updateProportions(x + handleRect.width / 2, y + handleRect.height / 2);
     }
 
-    // Function to calculate the proportions for each stimulus based on the slider position
-    function calculateProportions(position) {
-      var triangleWidth = triangle.offsetWidth;
-      var triangleHeight = triangle.offsetHeight;
-
-      var leftProportion = (triangleWidth - position.x) / triangleWidth * 100;
-      var rightProportion = position.x / triangleWidth * 100;
-      var topProportion = (triangleHeight - position.y) / triangleHeight * 100;
-
-      var sum = leftProportion + rightProportion + topProportion;
-      var normalizedLeft = (leftProportion / sum) * 100;
-      var normalizedRight = (rightProportion / sum) * 100;
-      var normalizedTop = (topProportion / sum) * 100;
-
-      return {
-        left: Math.round(normalizedLeft),
-        right: Math.round(normalizedRight),
-        top: Math.round(normalizedTop)
-      };
-    }
-
-    // Function to update the displayed proportions
-    function updateProportionDisplay(proportions) {
-      proportionLeft.textContent = proportions.left + '%';
-      proportionRight.textContent = proportions.right + '%';
-      proportionTop.textContent = proportions.top + '%';
-    }
-
-    // Add event listener for the triangle slider interaction
-    triangle.addEventListener('click', handleTriangleSlider);
-
-    // Make the slider handle draggable
-    sliderHandle.addEventListener('mousedown', startDragging);
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', stopDragging);
-
-    var isDragging = false;
-
-    function startDragging(e) {
+    function handleMouseDown(e) {
       isDragging = true;
+      handleMouseMove(e);
     }
 
-    function drag(e) {
-      if (isDragging) {
-        handleTriangleSlider(e);
-      }
-    }
-
-    function stopDragging(e) {
+    function handleMouseUp() {
       isDragging = false;
     }
 
-    // Function to end the trial
-    function endTrial() {
-      // Prepare the trial data
-      var trialData = {
-        proportions: proportions,
-        // Include other relevant data
+    triangle.addEventListener('click', function(e) {
+      var x = e.clientX - triangleRect.left - handleRect.width / 2;
+      var y = e.clientY - triangleRect.top - handleRect.height / 2;
+
+      updateHandlePosition(x, y);
+      updateProportions(x + handleRect.width / 2, y + handleRect.height / 2);
+    });
+
+    handle.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    var end_trial = function() {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+
+      var trial_data = {
+        proportions: proportions
       };
 
-      // Clear the display
       display_element.innerHTML = '';
+      jsPsych.finishTrial(trial_data);
+    };
 
-      // End the trial
-      jsPsych.finishTrial(trialData);
+    if (trial.require_movement) {
+      handle.addEventListener('mousedown', function() {
+        document.getElementById('jspsych-html-slider-triangle-response').disabled = false;
+      });
     }
 
-    // End the trial when a button is clicked
-    var button = document.createElement('button');
-    button.textContent = 'Submit';
-    button.addEventListener('click', endTrial);
-    display_element.appendChild(button);
+    display_element.querySelector('#jspsych-html-slider-triangle-next').addEventListener('click', function() {
+      end_trial();
+    });
+
+    if (trial.stimulus_duration !== null) {
+      jsPsych.pluginAPI.setTimeout(function() {
+        display_element.querySelector('#jspsych-html-slider-triangle-stimulus').style.visibility = 'hidden';
+      }, trial.stimulus_duration);
+    }
+
+    var trial_duration = trial.trial_duration;
+    if (trial_duration !== null) {
+      jsPsych.pluginAPI.setTimeout(function() {
+        end_trial();
+      }, trial_duration);
+    }
   };
 
   return plugin;
