@@ -57,24 +57,38 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       require_movement: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Require movement',
-        default: false,
+        default: true,
         description: 'If true, the participant will have to move the slider before continuing.'
       }
     }
   };
 
+  
   plugin.trial = function(display_element, trial) {
+    var proportions = {
+      left: 33,
+      right: 33,
+      top: 34
+    };
+
     var html = `
       <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
         <div id="jspsych-html-slider-triangle-stimulus" style="position: relative; width: 100%; height: 100%;">
-          <img src="${trial.stimulus_left}" style="position: absolute; bottom: 0; left: 0; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          <img src="${trial.stimulus_right}" style="position: absolute; bottom: 0; right: 0; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          <img src="${trial.stimulus_top}" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          <div id="jspsych-html-slider-triangle" style="position: absolute; top: ${trial.stimulus_height}px; left: 0; width: 100%; height: calc(100% - ${trial.stimulus_height}px); clip-path: polygon(50% 0%, 0% 100%, 100% 100%); background-color: #ddd;"></div>
+          <!-- Planet images -->
+          <img src="${trial.stimulus_left}" style="position: absolute; top: 0; left: 0; transform: translate(-50%, -110%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <img src="${trial.stimulus_right}" style="position: absolute; top: 0; right: 0; transform: translate(50%, -110%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <img src="${trial.stimulus_top}" style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 110%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+
+          <!-- Planet labels -->
+          <div style="position: absolute; top: 0; left: 0; transform: translate(-50%, -60%);">Planet A (${proportions.left}%)</div>
+          <div style="position: absolute; top: 0; right: 0; transform: translate(50%, -60%);">Planet B (${proportions.right}%)</div>
+          <div style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 60%);">Planet C (${proportions.top}%)</div>
+
+          <!-- Triangle -->
+          <div id="jspsych-html-slider-triangle" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;"></div>
+
+          <!-- Handle -->
           <div id="jspsych-html-slider-triangle-handle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; background-color: #333; border-radius: 50%; cursor: pointer;"></div>
-        </div>
-        <div id="jspsych-html-slider-triangle-labels" style="position: absolute; top: calc(100% + 10px); left: 0; width: 100%; display: flex; justify-content: space-between;">
-          ${trial.labels.map(label => `<div style="text-align: center;">${label}</div>`).join('')}
         </div>
       </div>
     `;
@@ -87,110 +101,109 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
     var triangle = display_element.querySelector('#jspsych-html-slider-triangle');
     var handle = display_element.querySelector('#jspsych-html-slider-triangle-handle');
-    var labels = display_element.querySelectorAll('#jspsych-html-slider-triangle-labels div');
-
-    var triangleRect = triangle.getBoundingClientRect();
-    var handleRect = handle.getBoundingClientRect();
 
     var isDragging = false;
-    var proportions = {
-      left: 33,
-      right: 33,
-      top: 34
-    };
 
+    // Function to update the handle position
     function updateHandlePosition(x, y) {
-      handle.style.left = `${x}px`;
-      handle.style.top = `${y}px`;
+      // Calculate the barycentric coordinates of the point
+      var s = (x / triangle.offsetWidth) * 100;
+      var t = (y / triangle.offsetHeight) * 100;
+
+      // Check if the point is inside the triangle
+      if (s >= 0 && t >= 0 && s + t <= 100) {
+        handle.style.left = `${s}%`;
+        handle.style.top = `${100 - t}%`;
+        updateProportions(s, 100 - s - t, t);
+      }
     }
 
-    function updateProportions(x, y) {
-      var left = x / triangleRect.width;
-      var right = 1 - left;
-      var top = 1 - (y / triangleRect.height);
+    // Function to update the proportions
+    function updateProportions(left, right, top) {
+      proportions.left = Math.round(left);
+      proportions.right = Math.round(right);
+      proportions.top = Math.round(top);
 
-      var sum = left + right + top;
-
-      proportions.left = Math.round((left / sum) * 100);
-      proportions.right = Math.round((right / sum) * 100);
-      proportions.top = Math.round((top / sum) * 100);
-
-      labels[0].textContent = `${proportions.left}%`;
-      labels[1].textContent = `${proportions.right}%`;
-      labels[2].textContent = `${proportions.top}%`;
+      // Update the labels with the new proportions
+      display_element.querySelector('#jspsych-html-slider-triangle-stimulus > div:nth-child(4)').textContent = `Planet A (${proportions.left}%)`;
+      display_element.querySelector('#jspsych-html-slider-triangle-stimulus > div:nth-child(5)').textContent = `Planet B (${proportions.right}%)`;
+      display_element.querySelector('#jspsych-html-slider-triangle-stimulus > div:nth-child(6)').textContent = `Planet C (${proportions.top}%)`;
     }
 
+    // Event listener for mouse movement
     function handleMouseMove(e) {
       if (!isDragging) return;
 
-      var x = e.clientX - triangleRect.left - handleRect.width / 2;
-      var y = e.clientY - triangleRect.top - handleRect.height / 2;
-
-      if (x < 0) x = 0;
-      if (x > triangleRect.width - handleRect.width) x = triangleRect.width - handleRect.width;
-      if (y < 0) y = 0;
-      if (y > triangleRect.height - handleRect.height) y = triangleRect.height - handleRect.height;
+      var rect = triangle.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
 
       updateHandlePosition(x, y);
-      updateProportions(x + handleRect.width / 2, y + handleRect.height / 2);
     }
 
+    // Event listener for mouse button down
     function handleMouseDown(e) {
       isDragging = true;
       handleMouseMove(e);
     }
 
+    // Event listener for mouse button up
     function handleMouseUp() {
       isDragging = false;
     }
 
+    // Event listener for clicking on the triangle
     triangle.addEventListener('click', function(e) {
-      var x = e.clientX - triangleRect.left - handleRect.width / 2;
-      var y = e.clientY - triangleRect.top - handleRect.height / 2;
+      var rect = triangle.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
 
       updateHandlePosition(x, y);
-      updateProportions(x + handleRect.width / 2, y + handleRect.height / 2);
     });
 
+    // Add event listeners
     handle.addEventListener('mousedown', handleMouseDown);
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
 
+    // Function to end the trial
     var end_trial = function() {
+      // Remove event listeners
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
 
+      // Prepare the trial data
       var trial_data = {
         proportions: proportions
       };
 
+      // Clear the display
       display_element.innerHTML = '';
+
+      // End the trial
       jsPsych.finishTrial(trial_data);
     };
 
-    if (trial.require_movement) {
-      handle.addEventListener('mousedown', function() {
-        document.getElementById('jspsych-html-slider-triangle-response').disabled = false;
-      });
-    }
-
+    // Add event listener to the button for ending the trial
     display_element.querySelector('#jspsych-html-slider-triangle-next').addEventListener('click', function() {
       end_trial();
     });
 
+    // Hide the stimulus after the specified duration
     if (trial.stimulus_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
         display_element.querySelector('#jspsych-html-slider-triangle-stimulus').style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
-    var trial_duration = trial.trial_duration;
-    if (trial_duration !== null) {
+    // End the trial after the specified duration
+    if (trial.trial_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
         end_trial();
-      }, trial_duration);
+      }, trial.trial_duration);
     }
   };
+
 
   return plugin;
 })();

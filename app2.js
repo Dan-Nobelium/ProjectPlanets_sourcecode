@@ -794,8 +794,8 @@ var right_label = "";
 // Question 3
 var slider_p2_q3 = {
   type: 'html-slider-triangle',
-  prompt: "<p>What proportion of your recent interactions were with:</p>" +
-           "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
+  prompt: "<p>What proportion of your recent interactions were with:</p>",
+          //  "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
   stimulus_left: stim_list[0],
   stimulus_right: stim_list[1],
   stimulus_top: stim_list[2],
@@ -973,7 +973,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(infer_p2_ship2);
 // timeline.push(infer_p2_ship3);
 // timeline.push(slider_p2_q1); //
-timeline.push(slider_p2_q2); //
+// timeline.push(slider_p2_q2); //
 
 timeline.push(slider_p2_q3); // replace with triangle
 // timeline.push(slider_p2_q4); //
