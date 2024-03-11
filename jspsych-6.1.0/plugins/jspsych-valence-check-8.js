@@ -234,7 +234,7 @@ jsPsych.plugins['valence-check-8'] = (function () {
       if (eval(`trial.stim_text_${i}`) != null) {
         html += eval(`trial.stim_text_${i}`);
       }
-      html += "";
+      html += "<br><br><br>";
 
       // Slider
       html += `<div class="jspsych-valence-check-8-container" style="position: relative; margin: 0 auto 3em auto; ";`;
