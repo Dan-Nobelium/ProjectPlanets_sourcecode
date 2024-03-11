@@ -593,34 +593,34 @@ let planet_ship = {
 
 //TODO: create valance check 8 library and use it here
         // value check p2
-        // var valence_p2 = {
-        //   type: 'valence-check-6',
-        //   prompt: valence_q,
-        //   stimulus_1: val_img_p2[0].stimulus,
-        //   stim_text_1: val_img_p2[0].text,
-        //   stimulus_2: val_img_p2[1].stimulus,
-        //   stim_text_2: val_img_p2[1].text,
-        //   stimulus_3: val_img_p2[2].stimulus,
-        //   stim_text_3: val_img_p2[2].text,
-        //   stimulus_4: val_img_p2[3].stimulus,
-        //   stim_text_4: val_img_p2[3].text,
-        //   stimulus_5: val_img_p2[4].stimulus,
-        //   stim_text_5: val_img_p2[4].text,
-        //   stimulus_6: val_img_p2[5].stimulus,
-        //   stim_text_6: val_img_p2[5].text,
-        //   stimulus_7: val_img_p2[6].stimulus,
-        //   stim_text_7: val_img_p2[6].text,
-        //   stimulus_8: val_img_p2[7].stimulus,
-        //   stim_text_8: val_img_p2[7].text,
-        //   labels: valence_labels,
-        //   stimulus_height: inf_stim_height,
-        //   slider_width: inf_slider_width,
-        //   require_movement: false,
-        //   data: {
-        //     phase: 'val_check_2',
-        //     block_number: i + nBlocks_p1
-        //   }
-        // };
+        var valence_p2 = {
+          type: 'valence-check-6',
+          prompt: valence_q,
+          stimulus_1: val_img_p2[0].stimulus,
+          stim_text_1: val_img_p2[0].text,
+          stimulus_2: val_img_p2[1].stimulus,
+          stim_text_2: val_img_p2[1].text,
+          stimulus_3: val_img_p2[2].stimulus,
+          stim_text_3: val_img_p2[2].text,
+          stimulus_4: val_img_p2[3].stimulus,
+          stim_text_4: val_img_p2[3].text,
+          stimulus_5: val_img_p2[4].stimulus,
+          stim_text_5: val_img_p2[4].text,
+          stimulus_6: val_img_p2[5].stimulus,
+          stim_text_6: val_img_p2[5].text,
+          stimulus_7: val_img_p2[6].stimulus,
+          stim_text_7: val_img_p2[6].text,
+          stimulus_8: val_img_p2[7].stimulus,
+          stim_text_8: val_img_p2[7].text,
+          labels: valence_labels,
+          stimulus_height: inf_stim_height,
+          slider_width: inf_slider_width,
+          require_movement: false,
+          data: {
+            phase: 'val_check_2',
+            block_number: i + nBlocks_p1
+          }
+        };
         
         var valence_p2_8 = {
           type: 'valence-check-8',
@@ -984,7 +984,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(phaseTwoInstructions);
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 
-// timeline.push(valence_p2);
+timeline.push(valence_p2);
 timeline.push(valence_p2_8);
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);

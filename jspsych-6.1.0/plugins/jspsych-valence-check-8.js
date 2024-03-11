@@ -252,6 +252,7 @@ jsPsych.plugins['valence-check-8'] = (function () {
       html += "</div>";
       html += "</div>";
       html += "</div>";
+      html += "<br><br>";
 
       // Horizontal Line Between Slides
       if (i < 8) {
