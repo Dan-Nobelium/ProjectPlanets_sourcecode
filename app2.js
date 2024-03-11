@@ -790,22 +790,18 @@ let planet_ship = {
 // NEW: define slider Qs variables
 var left_label = "";
 var right_label = "";
-jsPsych.pluginAPI.registerPreload('image-mouseclick-response', 'stimulus', 'image');
+
 // Question 3
 var slider_p2_q3 = {
   type: 'html-slider-triangle',
   prompt: "<p>What proportion of your recent interactions were with:</p>" +
            "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
-  left_stimulus: stim_list[0],
-  left_stim_text: ('a'),
-  middle_stimulus: stim_list[1],
-  middle_stim_text: ('b'),
-  right_stimulus: stim_list[2],
-  right_stim_text: ('c'),
-  slider_values: [33, 33, 34], // Initial slider values for the 3 items
+  stimulus_left: stim_list[0],
+  stimulus_right: stim_list[1],
+  stimulus_top: stim_list[2],
   stimulus_height: 250,
   slider_width: 900, // Increased width to accommodate more space for labels
-  labels: ["100%/0%/0%<p>(only click Planetas A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
+  labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
   require_movement: false,
   data: {
     phase: 'slider-response_p2_q3',
