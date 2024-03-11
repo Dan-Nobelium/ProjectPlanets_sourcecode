@@ -731,7 +731,7 @@ let planet_ship = {
         // inference check p2 (ship 2)
         var infer_p2_ship3 = {
           type: 'inference-check-1',
-          main_stimulus: 'img/ship2.png',
+          main_stimulus: 'img/ship3.png',
           main_stimulus_height: main_stim_height,
           prompt: inference_prompt[5],
           stimulus_1: 'img/lose.png',
@@ -793,7 +793,7 @@ var right_label = "";
 jsPsych.pluginAPI.registerPreload('image-mouseclick-response', 'stimulus', 'image');
 // Question 3
 var slider_p2_q3 = {
-  type: 'html-slider-response',
+  type: 'html-slider-triangle',
   prompt: "<p>What proportion of your recent interactions were with:</p>" +
            "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
   left_stimulus: stim_list[0],
@@ -970,16 +970,16 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 
 // timeline.push(valence_p2);
-timeline.push(infer_p2_A);
-timeline.push(infer_p2_B);
-timeline.push(infer_p2_C);
+// timeline.push(infer_p2_A);
+// timeline.push(infer_p2_B);
+// timeline.push(infer_p2_C);
 // timeline.push(infer_p2_ship1);
 // timeline.push(infer_p2_ship2);
 // timeline.push(infer_p2_ship3);
 // timeline.push(slider_p2_q1); //
-// timeline.push(slider_p2_q2); //
+timeline.push(slider_p2_q2); //
 
-// timeline.push(slider_p2_q3); // replace with triangle
+timeline.push(slider_p2_q3); // replace with triangle
 // timeline.push(slider_p2_q4); //
 
 
