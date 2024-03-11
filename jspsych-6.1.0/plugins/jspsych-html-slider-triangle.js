@@ -81,9 +81,9 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
           <img src="${trial.stimulus_top}" style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 120%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
 
           <!-- Planet labels -->
-          <div style="position: absolute; top: 0; left: 0; transform: translate(-50%, -70%);">Planet A (${proportions.left}%)</div>
-          <div style="position: absolute; top: 0; right: 0; transform: translate(50%, -70%);">Planet B (${proportions.right}%)</div>
-          <div style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 70%);">Planet C (${proportions.top}%)</div>
+          <div style="position: absolute; top: 0; left: 0; transform: translate(-50%, -90%);">Planet A (${proportions.left}%)</div>
+          <div style="position: absolute; top: 0; right: 0; transform: translate(50%, -90%);">Planet B (${proportions.right}%)</div>
+          <div style="position: absolute; bottom: 0; left: 50%; transform: translate(-0%, 70%);">Planet C (${proportions.top}%)</div>
 
           <!-- Triangle -->
           <div id="jspsych-html-slider-triangle" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;"></div>
