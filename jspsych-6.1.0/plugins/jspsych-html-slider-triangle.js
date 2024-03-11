@@ -64,7 +64,6 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   };
 
   
-
   plugin.trial = function(display_element, trial) {
     var proportions = {
       left: 33,
@@ -76,14 +75,14 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
         <div id="jspsych-html-slider-triangle-stimulus" style="position: relative; width: 100%; height: 100%;">
           <!-- Planet images -->
-          <img src="${trial.stimulus_left}" style="position: absolute; top: 0; left: 0; transform: translate(-50%, -120%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          <img src="${trial.stimulus_right}" style="position: absolute; top: 0; right: 0; transform: translate(50%, -120%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          <img src="${trial.stimulus_top}" style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 120%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <img src="${trial.stimulus_left}" style="position: absolute; top: 0; left: 0; transform: translate(-50%, -130%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <img src="${trial.stimulus_right}" style="position: absolute; top: 0; right: 0; transform: translate(50%, -130%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <img src="${trial.stimulus_top}" style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 130%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
 
           <!-- Planet labels -->
-          <div style="position: absolute; top: 0; left: 0; transform: translate(-50%, -90%);">Planet A (${proportions.left}%)</div>
-          <div style="position: absolute; top: 0; right: 0; transform: translate(50%, -90%);">Planet B (${proportions.right}%)</div>
-          <div style="position: absolute; bottom: 0; left: 50%; transform: translate(-0%, 70%);">Planet C (${proportions.top}%)</div>
+          <div style="position: absolute; top: 0; left: 0; transform: translate(-50%, -80%);">Planet A (${proportions.left}%)</div>
+          <div style="position: absolute; top: 0; right: 0; transform: translate(50%, -80%);">Planet B (${proportions.right}%)</div>
+          <div style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 80%);">Planet C (${proportions.top}%)</div>
 
           <!-- Triangle -->
           <div id="jspsych-html-slider-triangle" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;"></div>
@@ -123,22 +122,23 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       var handleRect = handle.getBoundingClientRect();
 
       // Calculate the barycentric coordinates of the point
-      var s = (x - triangleRect.left) / triangleRect.width;
-      var t = 1 - (y - triangleRect.top) / triangleRect.height;
+      var a = y / triangleRect.height;
+      var b = (triangleRect.width - x) / triangleRect.width;
+      var c = 1 - a - b;
 
-      // Check if the point is inside the triangle
-      if (s >= 0 && t >= 0 && s + t <= 1) {
-        handle.style.left = `${s * 100}%`;
-        handle.style.top = `${(1 - t) * 100}%`;
-        updateProportions(s * 100, (1 - s - t) * 100, t * 100);
-      }
+      // Update the handle position
+      handle.style.left = `${(1 - b) * 100}%`;
+      handle.style.top = `${a * 100}%`;
+
+      // Update the proportions
+      updateProportions(a, b, c);
     }
 
     // Function to update the proportions and pie chart
-    function updateProportions(left, right, top) {
-      proportions.left = Math.round(left);
-      proportions.right = Math.round(right);
-      proportions.top = Math.round(top);
+    function updateProportions(a, b, c) {
+      proportions.left = Math.round(a * 100);
+      proportions.right = Math.round(b * 100);
+      proportions.top = Math.round(c * 100);
 
       // Update the labels with the new proportions
       display_element.querySelector('#jspsych-html-slider-triangle-stimulus > div:nth-child(4)').textContent = `Planet A (${proportions.left}%)`;
@@ -155,11 +155,9 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
     // Event listener for mouse movement
     function handleMouseMove(e) {
-      if (!isDragging) return;
-
       var triangleRect = triangle.getBoundingClientRect();
-      var x = e.clientX;
-      var y = e.clientY;
+      var x = e.clientX - triangleRect.left;
+      var y = e.clientY - triangleRect.top;
 
       updateHandlePosition(x, y);
     }
@@ -178,21 +176,24 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     // Event listener for clicking on the triangle
     triangle.addEventListener('click', function(e) {
       var triangleRect = triangle.getBoundingClientRect();
-      var x = e.clientX;
-      var y = e.clientY;
+      var x = e.clientX - triangleRect.left;
+      var y = e.clientY - triangleRect.top;
 
       updateHandlePosition(x, y);
     });
 
     // Add event listeners
-    handle.addEventListener('mousedown', handleMouseDown);
-    document.addEventListener('mousemove', handleMouseMove);
+    triangle.addEventListener('mousemove', handleMouseMove);
+    triangle.addEventListener('mousedown', handleMouseDown);
+    triangle.addEventListener('mouseup', handleMouseUp);
     document.addEventListener('mouseup', handleMouseUp);
 
     // Function to end the trial
     var end_trial = function() {
       // Remove event listeners
-      document.removeEventListener('mousemove', handleMouseMove);
+      triangle.removeEventListener('mousemove', handleMouseMove);
+      triangle.removeEventListener('mousedown', handleMouseDown);
+      triangle.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mouseup', handleMouseUp);
 
       // Prepare the trial data
