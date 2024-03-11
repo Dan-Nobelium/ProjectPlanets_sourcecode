@@ -197,6 +197,12 @@ jsPsych.plugins["jspsych-html-slider-3items"] = (function() {
       html += '</div>';
       html += '</div>';
       html += '<br><br><br><hr><br><br><br>';
+
+
+      
+      html += '<div id="container">';
+
+      //////////////////////////
   
   
       // add submit button

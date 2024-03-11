@@ -593,8 +593,37 @@ let planet_ship = {
 
 //TODO: create valance check 8 library and use it here
         // value check p2
-        var valence_p2 = {
-          type: 'valence-check-6',
+        // var valence_p2 = {
+        //   type: 'valence-check-6',
+        //   prompt: valence_q,
+        //   stimulus_1: val_img_p2[0].stimulus,
+        //   stim_text_1: val_img_p2[0].text,
+        //   stimulus_2: val_img_p2[1].stimulus,
+        //   stim_text_2: val_img_p2[1].text,
+        //   stimulus_3: val_img_p2[2].stimulus,
+        //   stim_text_3: val_img_p2[2].text,
+        //   stimulus_4: val_img_p2[3].stimulus,
+        //   stim_text_4: val_img_p2[3].text,
+        //   stimulus_5: val_img_p2[4].stimulus,
+        //   stim_text_5: val_img_p2[4].text,
+        //   stimulus_6: val_img_p2[5].stimulus,
+        //   stim_text_6: val_img_p2[5].text,
+        //   stimulus_7: val_img_p2[6].stimulus,
+        //   stim_text_7: val_img_p2[6].text,
+        //   stimulus_8: val_img_p2[7].stimulus,
+        //   stim_text_8: val_img_p2[7].text,
+        //   labels: valence_labels,
+        //   stimulus_height: inf_stim_height,
+        //   slider_width: inf_slider_width,
+        //   require_movement: false,
+        //   data: {
+        //     phase: 'val_check_2',
+        //     block_number: i + nBlocks_p1
+        //   }
+        // };
+        
+        var valence_p2_8 = {
+          type: 'valence-check-8',
           prompt: valence_q,
           stimulus_1: val_img_p2[0].stimulus,
           stim_text_1: val_img_p2[0].text,
@@ -621,7 +650,6 @@ let planet_ship = {
             block_number: i + nBlocks_p1
           }
         };
-    
         // inference check p2 (planet A)
         var infer_p2_A = {
           type: 'inference-check-4',
@@ -800,26 +828,26 @@ var left_label = "";
 var right_label = "";
 
 // Question 3
-var slider_p2_q3 = {
-  type: 'jspsych-html-slider-3items',
-  prompt: "<p>What proportion of your recent interactions were with:</p>" +
-           "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
-  left_stimulus: stim_list[0],
-  left_stim_text: ('a'),
-  middle_stimulus: stim_list[1],
-  middle_stim_text: ('b'),
-  right_stimulus: stim_list[2],
-  right_stim_text: ('c'),
-  slider_values: [33, 33, 34], // Initial slider values for the 3 items
-  stimulus_height: 250,
-  slider_width: 900, // Increased width to accommodate more space for labels
-  labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
-  require_movement: false,
-  data: {
-    phase: 'slider-response_p2_q3',
-    block_number: i + nBlocks_p1,
-  }
-};
+// var slider_p2_q3 = {
+//   type: 'jspsych-html-slider-3items',
+//   prompt: "<p>What proportion of your recent interactions were with:</p>" +
+//            "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
+//   left_stimulus: stim_list[0],
+//   left_stim_text: ('a'),
+//   middle_stimulus: stim_list[1],
+//   middle_stim_text: ('b'),
+//   right_stimulus: stim_list[2],
+//   right_stim_text: ('c'),
+//   slider_values: [33, 33, 34], // Initial slider values for the 3 items
+//   stimulus_height: 250,
+//   slider_width: 900, // Increased width to accommodate more space for labels
+//   labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
+//   require_movement: false,
+//   data: {
+//     phase: 'slider-response_p2_q3',
+//     block_number: i + nBlocks_p1,
+//   }
+// };
 
 // stim_list[0],
 
@@ -942,14 +970,13 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // Phase 1, no ships
 // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 // timeline.push(valence_p1);
-// timeline.push(valence_p1_all);
+// timeline.push(valence_p1_all); //broken
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
 
 // timeline.push(slider_p1_q1); // replace with triangle
 // timeline.push(slider_p1_q2); //
-
 // timeline.push(slider_p1_q3); // replace with triangle
 // timeline.push(slider_p1_q4); //
 
@@ -958,6 +985,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 
 // timeline.push(valence_p2);
+timeline.push(valence_p2_8);
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);
 // timeline.push(infer_p2_C);
@@ -967,7 +995,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(slider_p2_q1); //
 // timeline.push(slider_p2_q2); //
 
-timeline.push(slider_p2_q3); // replace with triangle
+// timeline.push(slider_p2_q3); // replace with triangle
 // timeline.push(slider_p2_q4); //
 
 
