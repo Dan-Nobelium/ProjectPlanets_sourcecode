@@ -64,6 +64,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   };
 
   
+
   plugin.trial = function(display_element, trial) {
     var proportions = {
       left: 33,
@@ -75,14 +76,14 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
         <div id="jspsych-html-slider-triangle-stimulus" style="position: relative; width: 100%; height: 100%;">
           <!-- Planet images -->
-          <img src="${trial.stimulus_left}" style="position: absolute; top: 0; left: 0; transform: translate(-50%, -130%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          <img src="${trial.stimulus_right}" style="position: absolute; top: 0; right: 0; transform: translate(50%, -130%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          <img src="${trial.stimulus_top}" style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 130%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <img src="${trial.stimulus_left}" style="position: absolute; top: 0; left: 0; transform: translate(-50%, -150%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <img src="${trial.stimulus_right}" style="position: absolute; top: 0; right: 0; transform: translate(50%, -150%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <img src="${trial.stimulus_top}" style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 150%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
 
           <!-- Planet labels -->
-          <div style="position: absolute; top: 0; left: 0; transform: translate(-50%, -80%);">Planet A (${proportions.left}%)</div>
-          <div style="position: absolute; top: 0; right: 0; transform: translate(50%, -80%);">Planet B (${proportions.right}%)</div>
-          <div style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 80%);">Planet C (${proportions.top}%)</div>
+          <div id="planet-a-label" style="position: absolute; top: 0; left: 0; transform: translate(-50%, -100%);">Planet A (${proportions.left}%)</div>
+          <div id="planet-b-label" style="position: absolute; top: 0; right: 0; transform: translate(50%, -100%);">Planet B (${proportions.right}%)</div>
+          <div id="planet-c-label" style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 100%);">Planet C (${proportions.top}%)</div>
 
           <!-- Triangle -->
           <div id="jspsych-html-slider-triangle" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;"></div>
@@ -93,14 +94,14 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
         <!-- Pie chart -->
         <div id="jspsych-html-slider-triangle-pie-chart" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 150px; height: 150px; border-radius: 50%; background-image: conic-gradient(
-          red 0 ${proportions.left}%,
-          green 0 ${proportions.left + proportions.right}%,
+          red 0 ${proportions.right}%,
+          green 0 ${proportions.right + proportions.top}%,
           blue 0 100%
         );"></div>
       </div>
 
       <!-- Continue button -->
-      <button id="jspsych-html-slider-triangle-continue" class="jspsych-btn" style="margin-top: 20px;">Continue</button>
+      <button id="jspsych-html-slider-triangle-continue" class="jspsych-btn" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">Continue</button>
     `;
 
     if (trial.prompt !== null) {
@@ -113,18 +114,25 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     var handle = display_element.querySelector('#jspsych-html-slider-triangle-handle');
     var pieChart = display_element.querySelector('#jspsych-html-slider-triangle-pie-chart');
     var continueButton = display_element.querySelector('#jspsych-html-slider-triangle-continue');
+    var planetALabel = display_element.querySelector('#planet-a-label');
+    var planetBLabel = display_element.querySelector('#planet-b-label');
+    var planetCLabel = display_element.querySelector('#planet-c-label');
 
     var isDragging = false;
 
     // Function to update the handle position
     function updateHandlePosition(x, y) {
       var triangleRect = triangle.getBoundingClientRect();
-      var handleRect = handle.getBoundingClientRect();
 
-      // Calculate the barycentric coordinates of the point
-      var a = y / triangleRect.height;
-      var b = (triangleRect.width - x) / triangleRect.width;
+      // Calculate the normalized coordinates within the triangle
+      var a = Math.max(0, Math.min(1, y / triangleRect.height));
+      var b = Math.max(0, Math.min(1, (triangleRect.width - x) / triangleRect.width));
       var c = 1 - a - b;
+
+      // Clamp the values to ensure they are within the valid range
+      a = Math.max(0, Math.min(1, a));
+      b = Math.max(0, Math.min(1 - a, b));
+      c = 1 - a - b;
 
       // Update the handle position
       handle.style.left = `${(1 - b) * 100}%`;
@@ -141,20 +149,22 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       proportions.top = Math.round(c * 100);
 
       // Update the labels with the new proportions
-      display_element.querySelector('#jspsych-html-slider-triangle-stimulus > div:nth-child(4)').textContent = `Planet A (${proportions.left}%)`;
-      display_element.querySelector('#jspsych-html-slider-triangle-stimulus > div:nth-child(5)').textContent = `Planet B (${proportions.right}%)`;
-      display_element.querySelector('#jspsych-html-slider-triangle-stimulus > div:nth-child(6)').textContent = `Planet C (${proportions.top}%)`;
+      planetALabel.textContent = `Planet A (${proportions.left}%)`;
+      planetBLabel.textContent = `Planet B (${proportions.right}%)`;
+      planetCLabel.textContent = `Planet C (${proportions.top}%)`;
 
       // Update the pie chart
       pieChart.style.backgroundImage = `conic-gradient(
-        red 0 ${proportions.left}%,
-        green 0 ${proportions.left + proportions.right}%,
+        red 0 ${proportions.right}%,
+        green 0 ${proportions.right + proportions.top}%,
         blue 0 100%
       )`;
     }
 
     // Event listener for mouse movement
     function handleMouseMove(e) {
+      if (!isDragging) return;
+
       var triangleRect = triangle.getBoundingClientRect();
       var x = e.clientX - triangleRect.left;
       var y = e.clientY - triangleRect.top;
@@ -164,36 +174,29 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
     // Event listener for mouse button down
     function handleMouseDown(e) {
-      isDragging = true;
-      handleMouseMove(e);
+      if (e.button === 0) {
+        isDragging = true;
+        handleMouseMove(e);
+      }
     }
 
     // Event listener for mouse button up
-    function handleMouseUp() {
-      isDragging = false;
+    function handleMouseUp(e) {
+      if (e.button === 0) {
+        isDragging = false;
+      }
     }
 
-    // Event listener for clicking on the triangle
-    triangle.addEventListener('click', function(e) {
-      var triangleRect = triangle.getBoundingClientRect();
-      var x = e.clientX - triangleRect.left;
-      var y = e.clientY - triangleRect.top;
-
-      updateHandlePosition(x, y);
-    });
-
     // Add event listeners
-    triangle.addEventListener('mousemove', handleMouseMove);
     triangle.addEventListener('mousedown', handleMouseDown);
-    triangle.addEventListener('mouseup', handleMouseUp);
+    triangle.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
 
     // Function to end the trial
     var end_trial = function() {
       // Remove event listeners
-      triangle.removeEventListener('mousemove', handleMouseMove);
       triangle.removeEventListener('mousedown', handleMouseDown);
-      triangle.removeEventListener('mouseup', handleMouseUp);
+      triangle.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
 
       // Prepare the trial data
