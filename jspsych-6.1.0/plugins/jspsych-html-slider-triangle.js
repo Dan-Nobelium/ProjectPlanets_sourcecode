@@ -64,7 +64,6 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   };
 
   
-
   plugin.trial = function(display_element, trial) {
     var proportions = {
       left: 33,
@@ -76,14 +75,9 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
         <div id="jspsych-html-slider-triangle-stimulus" style="position: relative; width: 100%; height: 100%;">
           <!-- Planet images -->
-          <img src="${trial.stimulus_left}" style="position: absolute; top: 0; left: 0; transform: translate(-50%, -150%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          <img src="${trial.stimulus_right}" style="position: absolute; top: 0; right: 0; transform: translate(50%, -150%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          <img src="${trial.stimulus_top}" style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 150%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-
-          <!-- Planet labels -->
-          <div id="planet-a-label" style="position: absolute; top: 0; left: 0; transform: translate(-50%, -100%);">Planet A (${proportions.left}%)</div>
-          <div id="planet-b-label" style="position: absolute; top: 0; right: 0; transform: translate(50%, -100%);">Planet B (${proportions.right}%)</div>
-          <div id="planet-c-label" style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 100%);">Planet C (${proportions.top}%)</div>
+          <img src="${trial.stimulus_left}" style="position: absolute; top: 0; left: 0; transform: translate(-50%, -130%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <img src="${trial.stimulus_right}" style="position: absolute; top: 0; right: 0; transform: translate(50%, -130%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          <img src="${trial.stimulus_top}" style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 120%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
 
           <!-- Triangle -->
           <div id="jspsych-html-slider-triangle" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;"></div>
@@ -98,6 +92,15 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
           green 0 ${proportions.right + proportions.top}%,
           blue 0 100%
         );"></div>
+
+        <!-- Percentage table -->
+        <table id="jspsych-html-slider-triangle-percentage-table" style="position: absolute; top: calc(50% + 100px); right: 20px; width: 150px; text-align: center;">
+          <tr>
+            <td id="planet-a-label">Planet A (${proportions.left}%)</td>
+            <td id="planet-b-label">Planet B (${proportions.right}%)</td>
+            <td id="planet-c-label">Planet C (${proportions.top}%)</td>
+          </tr>
+        </table>
       </div>
 
       <!-- Continue button -->
@@ -123,21 +126,21 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     // Function to update the handle position
     function updateHandlePosition(x, y) {
       var triangleRect = triangle.getBoundingClientRect();
-
+    
       // Calculate the normalized coordinates within the triangle
       var a = Math.max(0, Math.min(1, y / triangleRect.height));
       var b = Math.max(0, Math.min(1, (triangleRect.width - x) / triangleRect.width));
       var c = 1 - a - b;
-
+    
       // Clamp the values to ensure they are within the valid range
       a = Math.max(0, Math.min(1, a));
       b = Math.max(0, Math.min(1 - a, b));
       c = 1 - a - b;
-
-      // Update the handle position
-      handle.style.left = `${(1 - b) * 100}%`;
-      handle.style.top = `${a * 100}%`;
-
+    
+      // Update the handle position, clamping to the triangle edges
+      handle.style.left = `${Math.max(0, Math.min((1 - b) * 100, 100))}%`;
+      handle.style.top = `${Math.max(0, Math.min(a * 100, 100))}%`;
+    
       // Update the proportions
       updateProportions(a, b, c);
     }
@@ -191,7 +194,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     triangle.addEventListener('mousedown', handleMouseDown);
     triangle.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
-
+    isPointInTriangle 
     // Function to end the trial
     var end_trial = function() {
       // Remove event listeners
