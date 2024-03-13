@@ -12,11 +12,6 @@ let groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];
 let group = jsPsych.randomization.sampleWithReplacement(groups, 1);
 let samples = ["ProA", "others"];
 let sample = samples[0];  
-const planetColors = {
-  'img/planet_p.png': 'pink',
-  'img/planet_o.png': 'orange',
-  'img/planet_b.png': 'blue',
-};
 
 // randomise position of planets (left/middle/right as 0/1/2)
 let num_planets = 3;
@@ -34,6 +29,12 @@ const images = [
   'img/win100.png', 'img/lose.png',
   'img/arrow.jpg', 'img/blank_lose.jpg', 'img/blank_arrow.jpg'
 ];
+const planetColors = {
+  'img/planet_p.png': 'pink',
+  'img/planet_o.png': 'orange',
+  'img/planet_b.png': 'blue',
+};
+
 
 // Global Variables Definition
 let block_number = 0;
@@ -708,7 +709,9 @@ var p1_q3_triangle = {
   prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with each planet:",
   stimulus_left: stim_list[0],
   stimulus_right: stim_list[1],
-  stimulus_top: stim_list[2],
+  stimulus_bottom: stim_list[2],
+  stimulus_all: stim_list,
+  planetColors: planetColors,
   stimulus_height: 250,
   slider_width: 900, // Increased width to accommodate more space for labels
   labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
@@ -722,11 +725,9 @@ var p1_q3_triangle = {
 // Question 4
 var p1_q4_triangle = {
   type: 'html-slider-triangle',
-  prompt: "<p>To maximise your points in the previous block, <p></p> what proportion of interactions would you allocate for</p>",
-          //  "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
-  stimulus_left: stim_list[0],
-  stimulus_right: stim_list[1],
-  stimulus_top: stim_list[2],
+  prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with each planet:",
+  stimulus_all: stim_list,
+  planetColors: planetColors,
   stimulus_height: 250,
   slider_width: 900, // Increased width to accommodate more space for labels
   labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
@@ -983,13 +984,13 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
-// timeline.push(p1_q3_triangle);
+timeline.push(p1_q3_triangle);
 // timeline.push(p1_q4_triangle);
 
 // Phase 1.5 Psychometrics
-timeline.push(cfi_block);
-timeline.push(htq_block);
-timeline.push(audit_block);
+// timeline.push(cfi_block);
+// timeline.push(htq_block);
+// timeline.push(audit_block);
 
 // Phase2, ships
 // timeline.push(phaseTwoInstructions);

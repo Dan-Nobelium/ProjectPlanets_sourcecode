@@ -5,23 +5,18 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     name: 'html-slider-triangle',
     description: 'A plugin for creating a 3D triangle slider',
     parameters: {
-      stimulus_top: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Top stimulus',
-        default: undefined,
-        description: 'Stimulus image at the top of the triangle'
+      // 1. Update plugin parameters
+      stimulus_all: {
+        type: jsPsych.plugins.parameterType.ARRAY,
+        pretty_name: 'Stimulus all',
+        default: [],
+        description: 'Array of stimulus image paths'
       },
-      stimulus_left: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Left stimulus',
-        default: undefined,
-        description: 'Stimulus image on the left of the triangle'
-      },
-      stimulus_right: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Right stimulus',
-        default: undefined,
-        description: 'Stimulus image on the right of the triangle'
+      planetColors: {
+        type: jsPsych.plugins.parameterType.OBJECT,
+        pretty_name: 'Planet colors',
+        default: null,
+        description: 'Object mapping image paths to their respective colors'
       },
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -59,40 +54,29 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
         pretty_name: 'Require movement',
         default: false,
         description: 'If true, the participant will have to move the slider before continuing.'
-      },
+      }
     }
   };
 
-  
+  var proportions = []; // Declare the proportions array outside the trial function
 
   plugin.trial = function(display_element, trial) {
-    var proportions = {
-      left: 33,
-      right: 33,
-      top: 34
-    };
+    // 3. Determine the order of planets
+    var planetOrder = trial.stimulus_all;
 
-    console.log(planetColors);
-    
-    var colors = trial.colors || {
-      left: planetColors[0],
-      right: planetColors[1],
-      top: planetColors[2]
-    };
-
-
+    // 2. Refactor the HTML structure
     var html = `
       <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
         <div id="jspsych-html-slider-triangle-stimulus" style="position: relative; width: 100%; height: 100%;">
           <!-- Planet images -->
-          <img src="${trial.stimulus_left}" style="position: absolute; top: 0; left: 0; transform: translate(-50%, -150%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          <img src="${trial.stimulus_right}" style="position: absolute; top: 0; right: 0; transform: translate(50%, -150%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          <img src="${trial.stimulus_top}" style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 150%); width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          ${planetOrder.map((planet, index) => `
+            <img src="${planet}" style="position: absolute; ${getImagePosition(index)}; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          `).join('')}
 
           <!-- Planet labels -->
-          <div id="planet-a-label" style="position: absolute; top: 0; left: 0; transform: translate(-50%, -100%);">Planet A (${proportions.left}%)</div>
-          <div id="planet-b-label" style="position: absolute; top: 0; right: 0; transform: translate(50%, -100%);">Planet B (${proportions.right}%)</div>
-          <div id="planet-c-label" style="position: absolute; bottom: 0; left: 50%; transform: translate(-50%, 100%);">Planet C (${proportions.top}%)</div>
+          ${planetOrder.map((planet, index) => `
+            <div id="planet-${index}-label" style="position: absolute; ${getLabelPosition(index)}; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)} (${getDefaultProportion(index)}%)</div>
+          `).join('')}
 
           <!-- Triangle -->
           <div id="jspsych-html-slider-triangle" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;"></div>
@@ -102,11 +86,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
         </div>
 
         <!-- Pie chart -->
-        <div id="jspsych-html-slider-triangle-pie-chart" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 150px; height: 150px; border-radius: 50%; background-image: conic-gradient(
-          red 0 ${proportions.right}%,
-          green 0 ${proportions.right + proportions.top}%,
-          blue 0 100%
-        );"></div>
+        <div id="jspsych-html-slider-triangle-pie-chart" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 150px; height: 150px; border-radius: 50%; background-image: ${getPieChartGradient(trial.planetColors, planetOrder)}"></div>
       </div>
 
       <!-- Continue button -->
@@ -119,18 +99,12 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
     display_element.innerHTML = html;
 
-
-
     var triangle = display_element.querySelector('#jspsych-html-slider-triangle');
     var handle = display_element.querySelector('#jspsych-html-slider-triangle-handle');
     var pieChart = display_element.querySelector('#jspsych-html-slider-triangle-pie-chart');
     var continueButton = display_element.querySelector('#jspsych-html-slider-triangle-continue');
-    var planetALabel = display_element.querySelector('#planet-a-label');
-    var planetBLabel = display_element.querySelector('#planet-b-label');
-    var planetCLabel = display_element.querySelector('#planet-c-label');
 
     var isDragging = false;
-
 
     // Initialize the response object
     var response = {
@@ -145,14 +119,15 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       locations: {
         clicks: [],
       },
-      colors: colors,
+      // 8. Update the response object
+      stimulus_all: trial.stimulus_all,
+      planetColors: trial.planetColors
     };
 
     // Record the start timestamp
     response.timestamps.start = performance.now();
 
-
-    // Function to update the handle position
+    // 6. Update the handle position calculation
     function updateHandlePosition(x, y) {
       var triangleRect = triangle.getBoundingClientRect();
 
@@ -170,27 +145,25 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       handle.style.left = `${(1 - b) * 100}%`;
       handle.style.top = `${a * 100}%`;
 
-      // Update the proportions
-      updateProportions(a, b, c);
+      // 7. Update the proportions calculation and store the returned value
+      proportions = updateProportions(a, b, c);
     }
 
-    // Function to update the proportions and pie chart
+    // 7. Update the proportions calculation
     function updateProportions(a, b, c) {
-      proportions.left = Math.round(a * 100);
-      proportions.right = Math.round(b * 100);
-      proportions.top = Math.round(c * 100);
+      proportions = [a, b, c].map(value => Math.round(value * 100));
 
       // Update the labels with the new proportions
-      planetALabel.textContent = `Planet A (${proportions.left}%)`;
-      planetBLabel.textContent = `Planet B (${proportions.right}%)`;
-      planetCLabel.textContent = `Planet C (${proportions.top}%)`;
+      planetOrder.forEach((planet, index) => {
+        var label = display_element.querySelector(`#planet-${index}-label`);
+        label.textContent = `Planet ${String.fromCharCode(65 + index)} (${proportions[index]}%)`;
+      });
 
-      // Update the pie chart
-      pieChart.style.backgroundImage = `conic-gradient(
-        red 0 ${proportions.right}%,
-        green 0 ${proportions.right + proportions.top}%,
-        blue 0 100%
-      )`;
+      // 5. Update the pie chart rendering
+      pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
+
+      // Return the updated proportions array
+      return proportions;
     }
 
     // Event listener for mouse movement
@@ -212,19 +185,16 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
         response.clicked = true;
         var timestamp = performance.now();
         response.timestamps.clicks.push(timestamp);
-        
+
         // Record the click location and proportions
         response.locations.clicks.push({
           x: e.clientX,
           y: e.clientY,
-          proportions: {
-            left: proportions.left,
-            right: proportions.right,
-            top: proportions.top
-          }
+          proportions: proportions // Use the updated proportions array
         });
       }
     }
+
     // Event listener for mouse button up
     function handleMouseUp(e) {
       if (e.button === 0) {
@@ -237,37 +207,93 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     triangle.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
 
-   // Function to end the trial
-   var end_trial = function() {
-    // Remove event listeners
-    triangle.removeEventListener('mousedown', handleMouseDown);
-    triangle.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
+    // Function to end the trial
+    var end_trial = function() {
+      // Remove event listeners
+      triangle.removeEventListener('mousedown', handleMouseDown);
+      triangle.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
 
-    // Set the final proportions
-    response.proportions = proportions;
+      // Set the final proportions
+      response.proportions = proportions;
 
-    // Set the end timestamp and reaction time
-    response.timestamps.end = performance.now();
-    response.rt = response.timestamps.end - response.timestamps.start;
+      // Set the end timestamp and reaction time
+      response.timestamps.end = performance.now();
+      response.rt = response.timestamps.end - response.timestamps.start;
 
-    // Prepare the trial data
-    var trial_data = {
-      response: response
+      // Prepare the trial data
+      var trial_data = {
+        response: response
+      };
+
+      // Clear the display
+      display_element.innerHTML = '';
+
+      // End the trial
+      jsPsych.finishTrial(trial_data);
     };
 
-    // Clear the display
-    display_element.innerHTML = '';
-
-    // End the trial
-    jsPsych.finishTrial(trial_data);
+    // Event listener for the continue button
+    continueButton.addEventListener('click', function() {
+      end_trial();
+    });
   };
 
-  // Event listener for the continue button
-  continueButton.addEventListener('click', function() {
-    end_trial();
-  });
-};
+  // Helper functions
+  function getImagePosition(index) {
+    switch (index) {
+      case 0:
+        return 'top: 0; left: 0; transform: translate(-50%, -150%);';
+      case 1:
+        return 'top: 0; right: 0; transform: translate(50%, -150%);';
+      case 2:
+        return 'bottom: 0; left: 50%; transform: translate(-50%, 150%);';
+      default:
+        return '';
+    }
+  }
 
-return plugin;
+  function getLabelPosition(index) {
+    switch (index) {
+      case 0:
+        return 'top: 0; left: 0; transform: translate(-50%, -100%);';
+      case 1:
+        return 'top: 0; right: 0; transform: translate(50%, -100%);';
+      case 2:
+        return 'bottom: 0; left: 50%; transform: translate(-50%, 100%);';
+      default:
+        return '';
+    }
+  }
+
+  function getDefaultProportion(index) {
+    switch (index) {
+      case 0:
+        return 33;
+      case 1:
+        return 33;
+      case 2:
+        return 34;
+      default:
+        return 0;
+    }
+  }
+
+  function getPieChartGradient(planetColors, planetOrder, proportions = [33, 33, 34]) {
+    var colorStops = [];
+    var cumulativePercentage = 0;
+
+    for (var i = 0; i < planetOrder.length; i++) {
+      var planet = planetOrder[i];
+      var color = planetColors[planet];
+      var percentage = proportions[i];
+
+      colorStops.push(`${color} ${cumulativePercentage}% ${cumulativePercentage + percentage}%`);
+      cumulativePercentage += percentage;
+    }
+
+    return `conic-gradient(${colorStops.join(', ')})`;
+  }
+
+  return plugin;
 })();
