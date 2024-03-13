@@ -858,6 +858,7 @@ var cfi_catch_flag = false;
 var cfi_block = {
   type: 'survey-likert-catch',
   preamble: cfi.prompt,
+  catch_handling: "abort",
   questions: [
     {prompt: cfi.items[0], name: 'item1', labels: cfi.labels, required: true},
     {prompt: cfi.items[1], name: 'item2', labels: cfi.labels, required: true},
@@ -895,6 +896,8 @@ var cfi_block = {
     console.log(cfi_catch_flag); //can delete afterwards
   }
 };
+
+
 var htq_block = {
   type: 'survey-likert-catch',
   preamble: htq.prompt,

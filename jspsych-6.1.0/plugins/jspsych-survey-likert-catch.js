@@ -56,12 +56,6 @@ jsPsych.plugins['survey-likert-catch'] = (function() {
             default: [0],
             description: 'The correct response index for the catch question'
           }
-          catch_handling: {
-            type: jsPsych.plugins.parameterType.STRING,
-            pretty_name: 'Catch Handling',
-            default: 'continue',
-            description: 'Specifies how to handle failed catch questions. "continue" will continue the experiment, "abort" will redirect to a screen notifying the participant they don\'t qualify for the study.'
-          }
         }
       },
       randomize_question_order: {
@@ -87,6 +81,12 @@ jsPsych.plugins['survey-likert-catch'] = (function() {
         pretty_name: 'Button label',
         default: 'Continue',
         description: 'Label of the button.'
+      },
+      catch_handling: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Catch Handling',
+        default: 'continue',
+        description: 'Specifies how to handle failed catch questions. "continue" will continue the experiment, "abort" will redirect to a screen notifying the participant they don\'t qualify for the study.'
       }
     }
   }
@@ -224,11 +224,18 @@ jsPsych.plugins['survey-likert-catch'] = (function() {
         catch_failed: catch_failed
       };
   
-      // Clear the display
-      display_element.innerHTML = '';
-  
-      // Finish the trial
-      jsPsych.finishTrial(trial_data);
+      // Check the catch_handling parameter
+      if (catch_failed && trial.catch_handling === 'abort') {
+        // Redirect to a screen notifying the participant they don't qualify for the study
+        display_element.innerHTML = '<p>Unfortunately, you do not meet the attention check criteria for this study. Please contact your researcher for further instructions.</p>';
+        setTimeout(function() {
+          jsPsych.endExperiment('Experiment ended due to failed attention check.');
+        }, 5000);
+      } else {
+        // Clear the display and finish the trial
+        display_element.innerHTML = '';
+        jsPsych.finishTrial(trial_data);
+      }
     });
   
     var startTime = performance.now();
