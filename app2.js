@@ -899,4 +899,4 @@ timeline.push(p2_q4_triangle);
       jsPsych.data.displayData();
     }
   });
-}
+} 
