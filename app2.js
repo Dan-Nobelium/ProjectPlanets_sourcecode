@@ -138,7 +138,6 @@ let instructionCheckWithFeedback = {
     <div id="instructionOverlay" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); color: white; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px;">
       <div style="max-width: 80%;">
         ${pretrain1, pretrain2, pretrain3}
-        <button id="closeOverlay" style="margin-top: 20px;">Acknowledge Instructions</button>
       </div>
     </div>
   `
@@ -738,7 +737,7 @@ var left_label = "";
 var right_label = "";
 
 // Question 3
-var slider_p2_q3 = {
+var p2_triangle = {
   type: 'html-slider-triangle',
   prompt: "<p>What proportion of your recent interactions were with:</p>",
           //  "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
@@ -801,20 +800,45 @@ var slider_p2_q3 = {
 // 		if (i === nBlocks_p2-4) {
 			
 			// present correct contingencies
-			var cont_instructions = {
-				type: 'instructions',
-				pages: [
-					'<p>Local intel has determined where the pirates are coming from!<br>Click Next to view this intel.</p>',
-          '<p>[decide how to present this information]</p>',
-        ],
-				allow_keys: false,
-				show_clickable_nav: true,
-				post_trial_gap: iti,
-				data: {
-					phase: 'instruct contingencies'
-				}
-			};
-
+      var cont_instructions = {
+        type: 'instructions',
+        pages: function() {
+          var instructionPage = '';
+      
+          instructionPage += '<p>Local intel has determined where the pirates are coming from!</p>';
+          instructionPage += '<p>Your signals to each planet will attract different types of ships:</p>';
+      
+          for (var i = 0; i < planet_layout.length; i++) {
+            var planetSide = planet_layout[i];
+            var planetStim = stim_list[i];
+            var shipStim = ship_list[i];
+            var planetName, shipType, shipBehavior;
+      
+            if (i === pun_planet_side) {
+              planetName = pun_planet;
+              shipType = pun_ship;
+              shipBehavior = 'pirate ships that will steal your points';
+            } else {
+              planetName = unpun_planet;
+              shipType = unpun_ship;
+              shipBehavior = 'friendly ships';
+            }
+      
+            instructionPage += `<p><img src="${planetStim}" height="100"> (${planetName}, ${planetSide} side) will attract <img src="${shipStim}" height="100"> (Ship: Type ${shipType}), which are ${shipBehavior}.</p>`;
+          }
+      
+          var tenseModifier = (jsPsych.timelineVariable('condition') === 'early') ? 'will' : 'have been';
+          instructionPage += `<p>Your signals to the ${pun_planet} planet (${planet_layout[pun_planet_side]} side) ${tenseModifier} attracting pirate ships (Ship: Type ${pun_ship}), that ${tenseModifier} steal your points!</p>`;
+      
+          return instructionPage;
+        },
+        allow_keys: false,
+        show_clickable_nav: true,
+        post_trial_gap: iti,
+        data: {
+          phase: 'instruct contingencies'
+        }
+      };
 //----------------------------------------------------------------------------
 // --- Debrief and experiment end
 
@@ -865,12 +889,12 @@ var exit_experiment = {
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
 // Induction
-timeline.push(fullscreen);
+// timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
 // timeline.push(gen_ins_block);
 timeline.push(instructionCheckWithFeedback);
-// timeline.push(end_instruction);   
+timeline.push(end_instruction);   
 
 // // Phase 1, no ships
 // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
@@ -879,7 +903,7 @@ timeline.push(instructionCheckWithFeedback);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
 
-// timeline.push(slider_p1_q1); // replace with triangle
+// timeline.push(p2_triangle); // replace with triangle
 // timeline.push(slider_p1_q2); //
 // // timeline.push(slider_p1_q3); // replace with triangle
 // // timeline.push(slider_p1_q4); //
@@ -905,8 +929,9 @@ timeline.push(instructionCheckWithFeedback);
 
 
 
-// //Phase3, ships
+// // //Phase3, ships
 // timeline.push(cont_instructions);
+// // timeline.push(contingency_test); //not impliemnted
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
 // timeline.push(valence_p2);
 // timeline.push(infer_p2_A);

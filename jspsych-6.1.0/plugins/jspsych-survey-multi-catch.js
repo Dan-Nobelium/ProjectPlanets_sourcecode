@@ -194,7 +194,7 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
       display_element.appendChild(modalOverlay);
 
       // Set a timeout to hide the instructions after 10 seconds
-      instructionTimeout = setTimeout(hide_instructions, 10000);
+      instructionTimeout = setTimeout(hide_instructions, 5000);
     }
 
     function hide_instructions() {
