@@ -903,6 +903,74 @@ var cfi_block = {
   }
 };
 
+var htq_block = {
+  type: 'survey-likert',
+  preamble: htq.prompt,
+  questions: [
+    {prompt: htq.items[0], name: 'item1', labels: htq.labels, required: true},
+    {prompt: htq.items[1], name: 'item2', labels: htq.labels, required: true},
+    {prompt: htq.items[2], name: 'item3', labels: htq.labels, required: true},
+    {prompt: htq.items[3], name: 'item4', labels: htq.labels, required: true},
+    {prompt: htq.items[4], name: 'item5', labels: htq.labels, required: true},
+    {prompt: htq.items[5], name: 'item6', labels: htq.labels, required: true},
+    {prompt: htq.items[6], name: 'item7', labels: htq.labels, required: true},
+    {prompt: htq.items[7], name: 'item8', labels: htq.labels, required: true},
+    {prompt: htq.items[8], name: 'item9', labels: htq.labels, required: true},
+    {prompt: htq.items[9], name: 'item10', labels: htq.labels, required: true},
+    {prompt: htq.items[10], name: 'item11', labels: htq.labels, required: true}
+  ],
+  scale_width: inf_slider_width,
+  post_trial_gap: iti,
+  data: {
+    phase: 'ques_htq'
+  }
+};
+
+
+
+var audit_catch_flag = false;
+
+var audit_block = {
+  type: 'survey-likert',
+  preamble: audit.prompt,
+  questions: [
+    {prompt: audit.items[0], name: 'item1', labels: audit.labels1, required: true},
+    {prompt: audit.items[1], name: 'item2', labels: audit.labels2, required: true},
+    {prompt: audit.items[2], name: 'item3', labels: audit.labels3_9, required: true},
+    {prompt: audit.items[3], name: 'item4', labels: audit.labels3_9, required: true},
+    {prompt: audit.items[4], name: 'item5', labels: audit.labels3_9, required: true},
+    {prompt: audit.items[5], name: 'item6', labels: audit.labels3_9, required: true},
+    {prompt: audit.items[6], name: 'catch', labels: audit.labels3_9, required: true},
+    {prompt: audit.items[7], name: 'item7', labels: audit.labels3_9, required: true},
+    {prompt: audit.items[8], name: 'item8', labels: audit.labels3_9, required: true},
+    {prompt: audit.items[9], name: 'item9', labels: audit.labels10_11, required: true},
+    {prompt: audit.items[10], name: 'item10', labels: audit.labels10_11, required: true}
+  ],
+  scale_width: inf_slider_width,
+  post_trial_gap: iti,
+  data: {
+    phase: 'ques_audit'
+  },
+  on_finish: function(data) {
+    console.log(data.responses); //can delete afterwards
+    var obj_audit = JSON.parse(data.responses);
+    console.log(obj_audit); //can delete afterwards
+    console.log(obj_audit.catch); //can delete afterwards
+    if(obj_audit.catch !== 3) {
+      audit_catch_flag = true;
+    }
+    else if (obj_audit.catch == 3) {
+      audit_catch_flag = false;
+    };
+    console.log(audit_catch_flag); //can delete afterwards
+    if ((cfi_catch_flag == false) && (audit_catch_flag == false)) {
+      action = false;
+      catchcorrect = true;
+    };
+    console.log(catchcorrect); //can delete afterwards
+  }
+};
+
 
 
 
@@ -914,52 +982,56 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 // Induction
 
-timeline.push(cfi_block);
-timeline.push(fullscreen);
-timeline.push(consent_block);
-timeline.push(demographics_block);
-timeline.push(gen_ins_block);
-timeline.push(instructionCheckWithFeedback);
-timeline.push(end_instruction);   
+
+
+// timeline.push(fullscreen);
+// timeline.push(consent_block);
+// timeline.push(demographics_block);
+// timeline.push(gen_ins_block);
+// timeline.push(instructionCheckWithFeedback);
+// timeline.push(end_instruction);   
 
 // Phase 1, no ships
-addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-timeline.push(valence_p1);
-timeline.push(infer_p1_A);
-timeline.push(infer_p1_B);
-timeline.push(infer_p1_C);
-timeline.push(p1_q3_triangle);
-timeline.push(p1_q4_triangle);
+// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+// timeline.push(valence_p1);
+// timeline.push(infer_p1_A);
+// timeline.push(infer_p1_B);
+// timeline.push(infer_p1_C);
+// timeline.push(p1_q3_triangle);
+// timeline.push(p1_q4_triangle);
 
 // Phase 1.5 Psychometrics add these
+timeline.push(cfi_block);
+timeline.push(htq_block);
+timeline.push(audit_block);
 
 // Phase2, ships
-timeline.push(phaseTwoInstructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-timeline.push(valence_p2);
-timeline.push(infer_p2_A);
-timeline.push(infer_p2_B);
-timeline.push(infer_p2_C);
-timeline.push(infer_p2_ship1);
-timeline.push(infer_p2_ship2);
-timeline.push(infer_p2_ship3);
-timeline.push(p2_q3_triangle);
-timeline.push(p2_q4_triangle);
+// timeline.push(phaseTwoInstructions);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// timeline.push(valence_p2);
+// timeline.push(infer_p2_A);
+// timeline.push(infer_p2_B);
+// timeline.push(infer_p2_C);
+// timeline.push(infer_p2_ship1);
+// timeline.push(infer_p2_ship2);
+// timeline.push(infer_p2_ship3);
+// timeline.push(p2_q3_triangle);
+// timeline.push(p2_q4_triangle);
 
-//Phase3, ships
-timeline.push(cont_instructions); //add pictures and testing
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-timeline.push(valence_p2);
-timeline.push(infer_p2_A);
-timeline.push(infer_p2_B);
-timeline.push(infer_p2_C);
-timeline.push(p2_q3_triangle);
-timeline.push(p2_q4_triangle);
+// //Phase3, ships
+// timeline.push(cont_instructions); //add pictures and testing
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+// timeline.push(valence_p2);
+// timeline.push(infer_p2_A);
+// timeline.push(infer_p2_B);
+// timeline.push(infer_p2_C);
+// timeline.push(p2_q3_triangle);
+// timeline.push(p2_q4_triangle);
 
 
-// //Debrief
-timeline.push(debrief_block);
-timeline.push(contact_block);
+// // //Debrief
+// timeline.push(debrief_block);
+// timeline.push(contact_block);
 
 
 // timeline.push(exit_experiment);
