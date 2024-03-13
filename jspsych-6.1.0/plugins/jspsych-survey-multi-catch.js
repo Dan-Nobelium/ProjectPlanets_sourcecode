@@ -165,7 +165,8 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
     var instruction_count = 0;
     var start_time = performance.now();
     var responses = {};
-
+    var question_data = {}; // Define question_data here
+  
     function display_instructions() {
       instruction_count++;
       display_element.innerHTML = trial.instructions;
@@ -174,15 +175,14 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
         start_time = performance.now();
       }, 2000); // Adjust the delay as needed
     }
-
+  
     document.querySelector('form').addEventListener('submit', function(event) {
       event.preventDefault();
       // measure response time
       var end_time = performance.now();
       var response_time = end_time - start_time;
-
+  
       // create object to hold responses
-      var question_data = {};
       for (var i = 0; i < trial.questions.length; i++) {
         var match = display_element.querySelector('#jspsych-survey-multi-catch-' + i);
         var id = "Q" + i;
@@ -199,7 +199,7 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
         obje[name] = val;
         Object.assign(question_data, obje);
       }
-
+  
       // check answers
       var all_correct = true;
       for (var q in question_data) {
@@ -208,15 +208,17 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
           break;
         }
       }
-
+  
+      // save data
+      var trial_data = {
+        "rt": response_time,
+        "responses": JSON.stringify(question_data),
+        "question_order": JSON.stringify(question_order),
+        "instruction_count": instruction_count,
+        "all_correct": all_correct
+      };
+  
       if (all_correct) {
-        // save data
-        var trial_data = {
-          "rt": response_time,
-          "responses": JSON.stringify(question_data),
-          "question_order": JSON.stringify(question_order),
-          "instruction_count": instruction_count
-        };
         display_element.innerHTML = '';
         jsPsych.finishTrial(trial_data);
       } else {

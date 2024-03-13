@@ -124,76 +124,27 @@ let failedAttempts = 0;
 let startTime = null;
 
 // Define instruction check block
+
 let instructionCheckWithFeedback = {
-  type: "survey-multi-choice",
+  type: "survey-multi-catch",
   questions: questions.map(q => ({
     prompt: q.prompt,
     options: q.options,
     required: true
   })),
-  preamble: function() {
-    if (window.instructionFeedbackNeeded) {
-      // Dynamically insert overlay HTML with instruction content
-      const overlayHTML = `
-        <div id="instructionOverlay" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); color: white; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px;">
-          <div style="max-width: 80%;">
-            ${pretrain1, pretrain2, pretrain3}
-            <button id="closeOverlay" style="margin-top: 20px;">Acknowledge Instructions</button>
-          </div>
-        </div>
-      `;
-
-      // Insert the overlay HTML into the body
-      document.body.insertAdjacentHTML('beforeend', overlayHTML);
-
-      // Add event listener to the button to close the overlay
-      document.getElementById("closeOverlay").addEventListener("click", function() {
-        document.getElementById("instructionOverlay").style.display = "none";
-        window.instructionFeedbackNeeded = false; // Reset flag
-      });
-
-      return "<p><i>One of your answers was incorrect. Please review the instructions again.</i></p>";
-    } else {
-      return ""; // No feedback needed initially
-    }
-  },
-  on_start: function() {
-    if (startTime === null) {
-      startTime = new Date().getTime(); // Record the start time when the block starts
-    }
-  },
-
-  on_finish: function(data) {
-    // Parse the responses
-    let responses = JSON.parse(data.responses);
-    let allCorrect = true; // Assume true initially
-
-    // Check each answer
-    for (let i = 0; i < questions.length; i++) {
-      if (responses[`Q${i}`] !== questions[i].correct) {
-        allCorrect = false;
-        break; // Exit the loop as soon as one incorrect answer is found
-      }
-    }
-
-    // Update 'instructioncorrect' and feedback need flag based on the check
-    instructioncorrect = allCorrect;
-    window.instructionFeedbackNeeded = !allCorrect;
-  }
-}
-
-// Loop structure for retrying questionnaire with immediate feedback
-let instructionCheckLoopWithFeedback = {
-  timeline: [instructionCheckWithFeedback],
-  loop_function: function(data) {
-    return !instructioncorrect; // Continue looping if not correct
-  }
+  correct_answers: questions.reduce((obj, q, index) => {
+    obj[`Q${index}`] = q.correct;
+    return obj;
+  }, {}),
+  instructions: `
+    <div id="instructionOverlay" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); color: white; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px;">
+      <div style="max-width: 80%;">
+        ${pretrain1, pretrain2, pretrain3}
+        <button id="closeOverlay" style="margin-top: 20px;">Acknowledge Instructions</button>
+      </div>
+    </div>
+  `
 };
-
-// Initialize the feedback needed flag, to alert participants they need to retry the question
-window.instructionFeedbackNeeded = false;
-
-
 
 // End instruction phase
 var end_instruction = {
@@ -920,55 +871,55 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
 // timeline.push(gen_ins_block);
-timeline.push(instructionCheckLoopWithFeedback);
+timeline.push(instructionCheckWithFeedback);
 timeline.push(end_instruction);   
 
-// Phase 1, no ships
-addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-timeline.push(valence_p1);
-timeline.push(infer_p1_A);
-timeline.push(infer_p1_B);
-timeline.push(infer_p1_C);
+// // Phase 1, no ships
+// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+// timeline.push(valence_p1);
+// timeline.push(infer_p1_A);
+// timeline.push(infer_p1_B);
+// timeline.push(infer_p1_C);
 
-timeline.push(slider_p1_q1); // replace with triangle
-timeline.push(slider_p1_q2); //
-// timeline.push(slider_p1_q3); // replace with triangle
-// timeline.push(slider_p1_q4); //
+// timeline.push(slider_p1_q1); // replace with triangle
+// timeline.push(slider_p1_q2); //
+// // timeline.push(slider_p1_q3); // replace with triangle
+// // timeline.push(slider_p1_q4); //
 
-// Phase2, ships
-timeline.push(phaseTwoInstructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// // Phase2, ships
+// timeline.push(phaseTwoInstructions);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 
-timeline.push(valence_p2);
-timeline.push(infer_p2_A);
-timeline.push(infer_p2_B);
-timeline.push(infer_p2_C);
-timeline.push(infer_p2_ship1);
-timeline.push(infer_p2_ship2);
-timeline.push(infer_p2_ship3);
-timeline.push(slider_p2_q1); //
-timeline.push(slider_p2_q2); //
+// timeline.push(valence_p2);
+// timeline.push(infer_p2_A);
+// timeline.push(infer_p2_B);
+// timeline.push(infer_p2_C);
+// timeline.push(infer_p2_ship1);
+// timeline.push(infer_p2_ship2);
+// timeline.push(infer_p2_ship3);
+// timeline.push(slider_p2_q1); //
+// timeline.push(slider_p2_q2); //
 
-// timeline.push(slider_p2_q3); // replace with triangle
-// timeline.push(slider_p2_q4); //
-
-
+// // timeline.push(slider_p2_q3); // replace with triangle
+// // timeline.push(slider_p2_q4); //
 
 
 
-//Phase3, ships
-timeline.push(cont_instructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-timeline.push(valence_p2);
-timeline.push(infer_p2_A);
-timeline.push(infer_p2_B);
-timeline.push(infer_p2_C);
-// timeline.push(slider_p2_q3); // replace with triangle
-// timeline.push(slider_p2_q4); //
 
-//Debrief
-timeline.push(debrief_block);
-timeline.push(contact_block);
+
+// //Phase3, ships
+// timeline.push(cont_instructions);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+// timeline.push(valence_p2);
+// timeline.push(infer_p2_A);
+// timeline.push(infer_p2_B);
+// timeline.push(infer_p2_C);
+// // timeline.push(slider_p2_q3); // replace with triangle
+// // timeline.push(slider_p2_q4); //
+
+// //Debrief
+// timeline.push(debrief_block);
+// timeline.push(contact_block);
 
 
 
