@@ -132,7 +132,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
         clicks: []
       },
       locations: {
-        clicks: []
+        clicks: [],
       }
     };
 
