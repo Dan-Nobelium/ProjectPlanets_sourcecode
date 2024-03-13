@@ -119,6 +119,10 @@ let gen_ins_block = {
   },
 };
 
+// Initialize variables to track failed attempts and start time
+let failedAttempts = 0;
+let startTime = null;
+
 // Define instruction check block
 let instructionCheckWithFeedback = {
   type: "survey-multi-choice",
@@ -151,6 +155,11 @@ let instructionCheckWithFeedback = {
       return "<p><i>One of your answers was incorrect. Please review the instructions again.</i></p>";
     } else {
       return ""; // No feedback needed initially
+    }
+  },
+  on_start: function() {
+    if (startTime === null) {
+      startTime = new Date().getTime(); // Record the start time when the block starts
     }
   },
 
