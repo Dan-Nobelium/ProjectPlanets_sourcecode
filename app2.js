@@ -876,10 +876,11 @@ timeline.push(infer_p1_C);
 timeline.push(p1_q3_triangle);
 timeline.push(p1_q4_triangle);
 
+// Phase 1.5 Psychometrics add these
+
 // Phase2, ships
 timeline.push(phaseTwoInstructions);
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-
 timeline.push(valence_p2);
 timeline.push(infer_p2_A);
 timeline.push(infer_p2_B);
@@ -890,12 +891,8 @@ timeline.push(infer_p2_ship3);
 timeline.push(p2_q3_triangle);
 timeline.push(p2_q4_triangle);
 
-
-
-
-
 //Phase3, ships
-timeline.push(cont_instructions);
+timeline.push(cont_instructions); //add pictures and testing
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
 timeline.push(valence_p2);
 timeline.push(infer_p2_A);
@@ -908,10 +905,6 @@ timeline.push(p2_q4_triangle);
 // //Debrief
 timeline.push(debrief_block);
 timeline.push(contact_block);
-
-
-
-// planet A/B sliders (do we want more sliders for planet C?) 
 
 
 // timeline.push(exit_experiment);
