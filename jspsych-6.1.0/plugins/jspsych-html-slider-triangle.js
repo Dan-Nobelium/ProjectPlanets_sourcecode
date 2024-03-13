@@ -198,11 +198,21 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
         isDragging = true;
         handleMouseMove(e);
         response.clicked = true;
-        response.timestamps.clicks.push(performance.now());
-        response.locations.clicks.push({ x: e.clientX, y: e.clientY });
+        var timestamp = performance.now();
+        response.timestamps.clicks.push(timestamp);
+        
+        // Record the click location and proportions
+        response.locations.clicks.push({
+          x: e.clientX,
+          y: e.clientY,
+          proportions: {
+            left: proportions.left,
+            right: proportions.right,
+            top: proportions.top
+          }
+        });
       }
     }
-
     // Event listener for mouse button up
     function handleMouseUp(e) {
       if (e.button === 0) {
