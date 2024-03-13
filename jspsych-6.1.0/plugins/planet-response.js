@@ -344,6 +344,8 @@ jsPsych.plugins["planet-response"] = (function() {
 		html += '</div>'
 		//Render basic div structure
 		display_element.innerHTML = html;
+
+		
 		updateScore(trial.data.points)
 		//Initialise middle div details
 		display_element.querySelector('#ship-img-box').innerHTML = '<div id="ship-img-div" ' +
