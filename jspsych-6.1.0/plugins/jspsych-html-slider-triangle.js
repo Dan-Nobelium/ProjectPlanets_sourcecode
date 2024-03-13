@@ -57,9 +57,9 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       require_movement: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Require movement',
-        default: true,
+        default: false,
         description: 'If true, the participant will have to move the slider before continuing.'
-      }
+      },
     }
   };
 
@@ -71,6 +71,15 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       right: 33,
       top: 34
     };
+
+    console.log(planetColors);
+    
+    var colors = trial.colors || {
+      left: planetColors[0],
+      right: planetColors[1],
+      top: planetColors[2]
+    };
+
 
     var html = `
       <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
@@ -110,6 +119,8 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
     display_element.innerHTML = html;
 
+
+
     var triangle = display_element.querySelector('#jspsych-html-slider-triangle');
     var handle = display_element.querySelector('#jspsych-html-slider-triangle-handle');
     var pieChart = display_element.querySelector('#jspsych-html-slider-triangle-pie-chart');
@@ -133,7 +144,8 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       },
       locations: {
         clicks: [],
-      }
+      },
+      colors: colors,
     };
 
     // Record the start timestamp

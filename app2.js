@@ -12,6 +12,11 @@ let groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];
 let group = jsPsych.randomization.sampleWithReplacement(groups, 1);
 let samples = ["ProA", "others"];
 let sample = samples[0];  
+const planetColors = {
+  'img/planet_p.png': 'pink',
+  'img/planet_o.png': 'orange',
+  'img/planet_b.png': 'blue',
+};
 
 // randomise position of planets (left/middle/right as 0/1/2)
 let num_planets = 3;
@@ -698,6 +703,41 @@ var left_label = "";
 var right_label = "";
 
 // Question 3
+var p1_q3_triangle = {
+  type: 'html-slider-triangle',
+  prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with each planet:",
+  stimulus_left: stim_list[0],
+  stimulus_right: stim_list[1],
+  stimulus_top: stim_list[2],
+  stimulus_height: 250,
+  slider_width: 900, // Increased width to accommodate more space for labels
+  labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
+  require_movement: false,
+  data: {
+    phase: 'slider-response_p1_q3',
+    block_number: i + nBlocks_p1,
+  }
+};
+
+// Question 4
+var p1_q4_triangle = {
+  type: 'html-slider-triangle',
+  prompt: "<p>To maximise your points in the previous block, <p></p> what proportion of interactions would you allocate for</p>",
+          //  "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
+  stimulus_left: stim_list[0],
+  stimulus_right: stim_list[1],
+  stimulus_top: stim_list[2],
+  stimulus_height: 250,
+  slider_width: 900, // Increased width to accommodate more space for labels
+  labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
+  require_movement: false,
+  data: {
+    phase: 'slider-response_p1_q4',
+    block_number: i + nBlocks_p1,
+  }
+};
+
+// Question 3
 var p2_q3_triangle = {
   type: 'html-slider-triangle',
   prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with each planet:",
@@ -727,7 +767,7 @@ var p2_q4_triangle = {
   labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
   require_movement: false,
   data: {
-    phase: 'slider-response_p2_q3',
+    phase: 'slider-response_p2_q4',
     block_number: i + nBlocks_p1,
   }
 };
@@ -820,53 +860,54 @@ var exit_experiment = {
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
 // Induction
-// timeline.push(fullscreen);
-// timeline.push(consent_block);
-// timeline.push(demographics_block);
-// timeline.push(gen_ins_block);
-// timeline.push(instructionCheckWithFeedback);
-// timeline.push(end_instruction);   
+timeline.push(fullscreen);
+timeline.push(consent_block);
+timeline.push(demographics_block);
+timeline.push(gen_ins_block);
+timeline.push(instructionCheckWithFeedback);
+timeline.push(end_instruction);   
 
 // Phase 1, no ships
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-// timeline.push(valence_p1);
-// timeline.push(infer_p1_A);
-// timeline.push(infer_p1_B);
-// timeline.push(infer_p1_C);
-//replace slider q1/q2 with triangle q1/q2
+addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+timeline.push(valence_p1);
+timeline.push(infer_p1_A);
+timeline.push(infer_p1_B);
+timeline.push(infer_p1_C);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
 
-// // Phase2, ships
-// timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// Phase2, ships
+timeline.push(phaseTwoInstructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(infer_p2_ship1);
-// timeline.push(infer_p2_ship2);
-// timeline.push(infer_p2_ship3);
-// //replace slider q1/q2 with triangle q1/q2
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(infer_p2_ship1);
+timeline.push(infer_p2_ship2);
+timeline.push(infer_p2_ship3);
+timeline.push(p2_q3_triangle);
+timeline.push(p2_q4_triangle);
 
 
 
 
 
 //Phase3, ships
-// timeline.push(cont_instructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
+timeline.push(cont_instructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
 timeline.push(p2_q3_triangle);
 timeline.push(p2_q4_triangle);
 
-// replace slider q1/q2 with triangle q1/q2
 
 // //Debrief
-// timeline.push(debrief_block);
-// timeline.push(contact_block);
+timeline.push(debrief_block);
+timeline.push(contact_block);
 
 
 
