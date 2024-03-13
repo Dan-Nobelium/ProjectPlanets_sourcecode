@@ -853,12 +853,10 @@ var exit_experiment = {
 
 //CFI
 
-
-
 var cfi_catch_flag = false;
 
 var cfi_block = {
-  type: 'survey-likert',
+  type: 'survey-likert-catch',
   preamble: cfi.prompt,
   questions: [
     {prompt: cfi.items[0], name: 'item1', labels: cfi.labels, required: true},
@@ -867,7 +865,7 @@ var cfi_block = {
     {prompt: cfi.items[3], name: 'item4', labels: cfi.labels, required: true},
     {prompt: cfi.items[4], name: 'item5', labels: cfi.labels, required: true},
     {prompt: cfi.items[5], name: 'item6', labels: cfi.labels, required: true},
-    {prompt: cfi.items[6], name: 'catch', labels: cfi.labels, required: true},
+    {prompt: cfi.items[6], name: 'catch', labels: cfi.labels, required: true, catch: true, catch_response: 0},
     {prompt: cfi.items[7], name: 'item7', labels: cfi.labels, required: true},
     {prompt: cfi.items[8], name: 'item8', labels: cfi.labels, required: true},
     {prompt: cfi.items[9], name: 'item9', labels: cfi.labels, required: true},
@@ -892,13 +890,8 @@ var cfi_block = {
     console.log(data.responses); //can delete afterwards
     var obj_cfi = JSON.parse(data.responses);
     console.log(obj_cfi); //can delete afterwards
-    console.log(obj_cfi.catch); //can delete afterwards
-    if(obj_cfi.catch !== 0) {
-      cfi_catch_flag = true;
-    }
-    else if (obj_cfi.catch == 0) {
-      cfi_catch_flag = false;
-    };
+    console.log(data.catch_failed); //can delete afterwards
+    cfi_catch_flag = data.catch_failed;
     console.log(cfi_catch_flag); //can delete afterwards
   }
 };
@@ -1002,8 +995,8 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 // Phase 1.5 Psychometrics add these
 timeline.push(cfi_block);
-timeline.push(htq_block);
-timeline.push(audit_block);
+// timeline.push(htq_block);
+// timeline.push(audit_block);
 
 // Phase2, ships
 // timeline.push(phaseTwoInstructions);
