@@ -120,8 +120,6 @@ let gen_ins_block = {
 };
 
 // Initialize variables to track failed attempts and start time
-let failedAttempts = 0;
-let startTime = null;
 
 // Define instruction check block
 
@@ -867,12 +865,12 @@ var exit_experiment = {
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
 // Induction
-// timeline.push(fullscreen);
+timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
 // timeline.push(gen_ins_block);
 timeline.push(instructionCheckWithFeedback);
-timeline.push(end_instruction);   
+// timeline.push(end_instruction);   
 
 // // Phase 1, no ships
 // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
