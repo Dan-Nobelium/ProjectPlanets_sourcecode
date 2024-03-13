@@ -157,3 +157,31 @@ const demographics_block = {
       'How OFTEN did interacting with <b>Ship 2</b> lead to the above outcome?',
       'How OFTEN did interacting with <b>Ship 3</b> lead to the above outcome?',
     ];
+
+    const cfi = {};
+cfi.prompt = '<b>Please rate how much you agree with the following statements. There are no right or wrong answers.</b>';
+cfi.labels = ['strongly<br>disagree', 'disagree', 'somewhat<br>disagree', 'neutral', 'somewhat<br>agree', 'agree', 'strongly<br>agree'];
+
+cfi.items = [
+  "I am good at \"sizing up\" situations.",
+  "I have a hard time making decisions when faced with difficult situations.",
+  "I consider multiple options making a decision.",
+  "When I encounter difficult situations, I feel like I am losing control.",
+  "I like to look at difficult situations from many different angles.",
+  "I seek additional information not immediately available before attributing causes to behaviour.",
+  "Select the left-most option, strongly disagree, for this question.",
+  "When encountering difficult situations, I become so stressed that I can not think of a way to resolve the situation.",
+  "I try to think about things from another person's point of view.", 
+  "I find it troublesome that there are so many different ways to deal with difficult situations.",
+  "I am good at putting myself in others' shoes.",
+  "When I encounter difficult situations, I just don't know what to do.",
+  "It is important to look at difficult situations from many angles.",
+  "When in difficult situations, I consider multiple options before deciding how to behave.",
+  "I often look at a situation from different view-points.",
+  "I am capable of overcoming the difficulties in life that I face.",
+  "I consider all the available facts and information when attributing causes to behaviour.",
+  "I feel I have no power to change things in difficult situations.",
+  "When I encounter difficult situations, I stop and try to think of several ways to resolve it.",
+  "I can think of more than one way to resolve a difficult situation I'm confronted with.",
+  "I consider multiple options before responding to difficult situations."
+];

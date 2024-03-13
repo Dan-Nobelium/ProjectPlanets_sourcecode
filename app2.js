@@ -851,6 +851,59 @@ var exit_experiment = {
 //
 
 
+//CFI
+
+
+
+var cfi_catch_flag = false;
+
+var cfi_block = {
+  type: 'survey-likert',
+  preamble: cfi.prompt,
+  questions: [
+    {prompt: cfi.items[0], name: 'item1', labels: cfi.labels, required: true},
+    {prompt: cfi.items[1], name: 'item2', labels: cfi.labels, required: true},
+    {prompt: cfi.items[2], name: 'item3', labels: cfi.labels, required: true},
+    {prompt: cfi.items[3], name: 'item4', labels: cfi.labels, required: true},
+    {prompt: cfi.items[4], name: 'item5', labels: cfi.labels, required: true},
+    {prompt: cfi.items[5], name: 'item6', labels: cfi.labels, required: true},
+    {prompt: cfi.items[6], name: 'catch', labels: cfi.labels, required: true},
+    {prompt: cfi.items[7], name: 'item7', labels: cfi.labels, required: true},
+    {prompt: cfi.items[8], name: 'item8', labels: cfi.labels, required: true},
+    {prompt: cfi.items[9], name: 'item9', labels: cfi.labels, required: true},
+    {prompt: cfi.items[10], name: 'item10', labels: cfi.labels, required: true},
+    {prompt: cfi.items[11], name: 'item11', labels: cfi.labels, required: true},
+    {prompt: cfi.items[12], name: 'item12', labels: cfi.labels, required: true},
+    {prompt: cfi.items[13], name: 'item13', labels: cfi.labels, required: true},
+    {prompt: cfi.items[14], name: 'item14', labels: cfi.labels, required: true},
+    {prompt: cfi.items[15], name: 'item15', labels: cfi.labels, required: true},
+    {prompt: cfi.items[16], name: 'item16', labels: cfi.labels, required: true},
+    {prompt: cfi.items[17], name: 'item17', labels: cfi.labels, required: true},
+    {prompt: cfi.items[18], name: 'item18', labels: cfi.labels, required: true},
+    {prompt: cfi.items[19], name: 'item19', labels: cfi.labels, required: true},
+    {prompt: cfi.items[20], name: 'item20', labels: cfi.labels, required: true}
+  ],
+  scale_width: inf_slider_width,
+  post_trial_gap: iti,
+  data: {
+    phase: 'ques_cfi'
+  },
+  on_finish: function(data) {
+    console.log(data.responses); //can delete afterwards
+    var obj_cfi = JSON.parse(data.responses);
+    console.log(obj_cfi); //can delete afterwards
+    console.log(obj_cfi.catch); //can delete afterwards
+    if(obj_cfi.catch !== 0) {
+      cfi_catch_flag = true;
+    }
+    else if (obj_cfi.catch == 0) {
+      cfi_catch_flag = false;
+    };
+    console.log(cfi_catch_flag); //can delete afterwards
+  }
+};
+
+
 
 
 //TODO: cont instructions, 3 triangle for q1/q2 replacement, UI updates
@@ -860,6 +913,8 @@ var exit_experiment = {
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
 // Induction
+
+timeline.push(cfi_block);
 timeline.push(fullscreen);
 timeline.push(consent_block);
 timeline.push(demographics_block);
