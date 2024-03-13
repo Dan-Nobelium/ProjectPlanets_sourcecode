@@ -925,6 +925,7 @@ var audit_catch_flag = false;
 
 var audit_block = {
   type: 'survey-likert-catch',
+  catch_handling: "abort",
   preamble: audit.prompt,
   questions: [
     {prompt: audit.items[0], name: 'item1', labels: audit.labels1, required: true},
