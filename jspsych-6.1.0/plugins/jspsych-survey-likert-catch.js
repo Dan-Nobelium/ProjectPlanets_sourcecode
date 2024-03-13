@@ -56,6 +56,12 @@ jsPsych.plugins['survey-likert-catch'] = (function() {
             default: [0],
             description: 'The correct response index for the catch question'
           }
+          catch_handling: {
+            type: jsPsych.plugins.parameterType.STRING,
+            pretty_name: 'Catch Handling',
+            default: 'continue',
+            description: 'Specifies how to handle failed catch questions. "continue" will continue the experiment, "abort" will redirect to a screen notifying the participant they don\'t qualify for the study.'
+          }
         }
       },
       randomize_question_order: {

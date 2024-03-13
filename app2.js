@@ -895,9 +895,8 @@ var cfi_block = {
     console.log(cfi_catch_flag); //can delete afterwards
   }
 };
-
 var htq_block = {
-  type: 'survey-likert',
+  type: 'survey-likert-catch',
   preamble: htq.prompt,
   questions: [
     {prompt: htq.items[0], name: 'item1', labels: htq.labels, required: true},
@@ -919,12 +918,10 @@ var htq_block = {
   }
 };
 
-
-
 var audit_catch_flag = false;
 
 var audit_block = {
-  type: 'survey-likert',
+  type: 'survey-likert-catch',
   preamble: audit.prompt,
   questions: [
     {prompt: audit.items[0], name: 'item1', labels: audit.labels1, required: true},
@@ -933,7 +930,7 @@ var audit_block = {
     {prompt: audit.items[3], name: 'item4', labels: audit.labels3_9, required: true},
     {prompt: audit.items[4], name: 'item5', labels: audit.labels3_9, required: true},
     {prompt: audit.items[5], name: 'item6', labels: audit.labels3_9, required: true},
-    {prompt: audit.items[6], name: 'catch', labels: audit.labels3_9, required: true},
+    {prompt: audit.items[6], name: 'catch', labels: audit.labels3_9, required: true, catch: true, catch_response: 3},
     {prompt: audit.items[7], name: 'item7', labels: audit.labels3_9, required: true},
     {prompt: audit.items[8], name: 'item8', labels: audit.labels3_9, required: true},
     {prompt: audit.items[9], name: 'item9', labels: audit.labels10_11, required: true},
@@ -948,18 +945,10 @@ var audit_block = {
     console.log(data.responses); //can delete afterwards
     var obj_audit = JSON.parse(data.responses);
     console.log(obj_audit); //can delete afterwards
-    console.log(obj_audit.catch); //can delete afterwards
-    if(obj_audit.catch !== 3) {
-      audit_catch_flag = true;
-    }
-    else if (obj_audit.catch == 3) {
-      audit_catch_flag = false;
-    };
+    console.log(data.catch_failed); //can delete afterwards
+    audit_catch_flag = data.catch_failed;
     console.log(audit_catch_flag); //can delete afterwards
-    if ((cfi_catch_flag == false) && (audit_catch_flag == false)) {
-      action = false;
-      catchcorrect = true;
-    };
+    catchcorrect = !cfi_catch_flag && !audit_catch_flag;
     console.log(catchcorrect); //can delete afterwards
   }
 };
@@ -993,10 +982,10 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(p1_q3_triangle);
 // timeline.push(p1_q4_triangle);
 
-// Phase 1.5 Psychometrics add these
+// Phase 1.5 Psychometrics
 timeline.push(cfi_block);
-// timeline.push(htq_block);
-// timeline.push(audit_block);
+timeline.push(htq_block);
+timeline.push(audit_block);
 
 // Phase2, ships
 // timeline.push(phaseTwoInstructions);
