@@ -230,7 +230,7 @@ jsPsych.plugins['survey-likert-catch'] = (function() {
         display_element.innerHTML = '<p>Unfortunately, you do not meet the attention check criteria for this study. Please contact your researcher for further instructions.</p>';
         setTimeout(function() {
           jsPsych.endExperiment('Experiment ended due to failed attention check.');
-        }, 5000);
+        });
       } else {
         // Clear the display and finish the trial
         display_element.innerHTML = '';
