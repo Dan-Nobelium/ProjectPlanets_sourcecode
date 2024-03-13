@@ -120,6 +120,26 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
     var isDragging = false;
 
+
+    // Initialize the response object
+    var response = {
+      proportions: null,
+      clicked: false,
+      rt: null,
+      timestamps: {
+        start: null,
+        end: null,
+        clicks: []
+      },
+      locations: {
+        clicks: []
+      }
+    };
+
+    // Record the start timestamp
+    response.timestamps.start = performance.now();
+
+
     // Function to update the handle position
     function updateHandlePosition(x, y) {
       var triangleRect = triangle.getBoundingClientRect();
@@ -177,6 +197,9 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       if (e.button === 0) {
         isDragging = true;
         handleMouseMove(e);
+        response.clicked = true;
+        response.timestamps.clicks.push(performance.now());
+        response.locations.clicks.push({ x: e.clientX, y: e.clientY });
       }
     }
 
@@ -192,30 +215,37 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     triangle.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
 
-    // Function to end the trial
-    var end_trial = function() {
-      // Remove event listeners
-      triangle.removeEventListener('mousedown', handleMouseDown);
-      triangle.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+   // Function to end the trial
+   var end_trial = function() {
+    // Remove event listeners
+    triangle.removeEventListener('mousedown', handleMouseDown);
+    triangle.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
 
-      // Prepare the trial data
-      var trial_data = {
-        proportions: proportions
-      };
+    // Set the final proportions
+    response.proportions = proportions;
 
-      // Clear the display
-      display_element.innerHTML = '';
+    // Set the end timestamp and reaction time
+    response.timestamps.end = performance.now();
+    response.rt = response.timestamps.end - response.timestamps.start;
 
-      // End the trial
-      jsPsych.finishTrial(trial_data);
+    // Prepare the trial data
+    var trial_data = {
+      response: response
     };
 
-    // Event listener for the continue button
-    continueButton.addEventListener('click', function() {
-      end_trial();
-    });
+    // Clear the display
+    display_element.innerHTML = '';
+
+    // End the trial
+    jsPsych.finishTrial(trial_data);
   };
 
-  return plugin;
+  // Event listener for the continue button
+  continueButton.addEventListener('click', function() {
+    end_trial();
+  });
+};
+
+return plugin;
 })();
