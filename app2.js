@@ -12,6 +12,11 @@ let groups = ["early_0.1", "early_0.4", "late_0.1", "late_0.4"];
 let group = jsPsych.randomization.sampleWithReplacement(groups, 1);
 let samples = ["ProA", "others"];
 let sample = samples[0];  
+const planetColors = {
+  'img/planet_p.png': 'pink',
+  'img/planet_o.png': 'orange',
+  'img/planet_b.png': 'blue',
+};
 
 // randomise position of planets (left/middle/right as 0/1/2)
 let num_planets = 3;
@@ -119,72 +124,29 @@ let gen_ins_block = {
   },
 };
 
+// Initialize variables to track failed attempts and start time
+
 // Define instruction check block
+
 let instructionCheckWithFeedback = {
-  type: "survey-multi-choice",
+  type: "survey-multi-catch",
   questions: questions.map(q => ({
     prompt: q.prompt,
     options: q.options,
     required: true
   })),
-  preamble: function() {
-    if (window.instructionFeedbackNeeded) {
-      // Dynamically insert overlay HTML with instruction content
-      const overlayHTML = `
-        <div id="instructionOverlay" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); color: white; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px;">
-          <div style="max-width: 80%;">
-            ${pretrain1, pretrain2, pretrain3}
-            <button id="closeOverlay" style="margin-top: 20px;">Acknowledge Instructions</button>
-          </div>
-        </div>
-      `;
-
-      // Insert the overlay HTML into the body
-      document.body.insertAdjacentHTML('beforeend', overlayHTML);
-
-      // Add event listener to the button to close the overlay
-      document.getElementById("closeOverlay").addEventListener("click", function() {
-        document.getElementById("instructionOverlay").style.display = "none";
-        window.instructionFeedbackNeeded = false; // Reset flag
-      });
-
-      return "<p><i>One of your answers was incorrect. Please review the instructions again.</i></p>";
-    } else {
-      return ""; // No feedback needed initially
-    }
-  },
-
-  on_finish: function(data) {
-    // Parse the responses
-    let responses = JSON.parse(data.responses);
-    let allCorrect = true; // Assume true initially
-
-    // Check each answer
-    for (let i = 0; i < questions.length; i++) {
-      if (responses[`Q${i}`] !== questions[i].correct) {
-        allCorrect = false;
-        break; // Exit the loop as soon as one incorrect answer is found
-      }
-    }
-
-    // Update 'instructioncorrect' and feedback need flag based on the check
-    instructioncorrect = allCorrect;
-    window.instructionFeedbackNeeded = !allCorrect;
-  }
-}
-
-// Loop structure for retrying questionnaire with immediate feedback
-let instructionCheckLoopWithFeedback = {
-  timeline: [instructionCheckWithFeedback],
-  loop_function: function(data) {
-    return !instructioncorrect; // Continue looping if not correct
-  }
+  correct_answers: questions.reduce((obj, q, index) => {
+    obj[`Q${index}`] = q.correct;
+    return obj;
+  }, {}),
+  instructions: `
+    <div id="instructionOverlay" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); color: white; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px;">
+      <div style="max-width: 80%;">
+        ${pretrain1, pretrain2, pretrain3}
+      </div>
+    </div>
+  `
 };
-
-// Initialize the feedback needed flag, to alert participants they need to retry the question
-window.instructionFeedbackNeeded = false;
-
-
 
 // End instruction phase
 var end_instruction = {
@@ -320,18 +282,6 @@ var i = 1;
             };
           });
 
-          const valence_p1_all = {
-            type: 'valence-check-all',
-            "stimuli": mappedValImgP1,
-            text_descriptions: val_img_p1.map(entry => entry.text),
-            prompt: val_img_p1[0].text,
-            num_stimuli: 4,
-            button_label: 'Proceed',
-            data: {
-              phase: 'val_check_all',
-              block_number: 1
-            }
-          };
 
         // inference check p1 (planet A)
         var infer_p1_A = {
@@ -562,39 +512,25 @@ let planet_ship = {
           text: "Losing $"
         },
         {
-          stimulus: 'img/ship1.png',
+          stimulus: ship_list[0],
           text: "Ship 1"
         },
         {
-          stimulus: 'img/ship2.png',
+          stimulus: ship_list[1],
           text: "Ship 2"
         },
-      ];
-    
-      // phase 2, planet B
-      var inf_img_p2_B = [
         {
-          stimulus: 'img/win100.png',
-          text: "Winning $100"
-        },
-        {
-          stimulus: 'img/lose.png',
-          text: "Losing $"
-        },
-        {
-          stimulus: 'img/ship1.png',
-          text: "Ship 1"
-        },
-        {
-          stimulus: 'img/ship2.png',
-          text: "Ship 2"
+          stimulus: ship_list[2],
+          text: "Ship 3"
         },
       ];
 
+
 //TODO: create valance check 8 library and use it here
         // value check p2
+        
         var valence_p2 = {
-          type: 'valence-check-6',
+          type: 'valence-check-8',
           prompt: valence_q,
           stimulus_1: val_img_p2[0].stimulus,
           stim_text_1: val_img_p2[0].text,
@@ -621,10 +557,10 @@ let planet_ship = {
             block_number: i + nBlocks_p1
           }
         };
-    
+
         // inference check p2 (planet A)
         var infer_p2_A = {
-          type: 'inference-check-4',
+          type: 'inference-check-5',
           main_stimulus: stim_list[0],
           main_stimulus_height: main_stim_height,
           prompt: inference_prompt[0],
@@ -632,10 +568,12 @@ let planet_ship = {
           stimulus_2: inf_img_p2_A[1].stimulus,
           stimulus_3: inf_img_p2_A[2].stimulus,
           stimulus_4: inf_img_p2_A[3].stimulus,
+          stimulus_5: inf_img_p2_A[4].stimulus,
           stim_text_1: inf_img_p2_A[0].text,
           stim_text_2: inf_img_p2_A[1].text,
           stim_text_3: inf_img_p2_A[2].text,
           stim_text_4: inf_img_p2_A[3].text,
+          stim_text_5: inf_img_p2_A[4].text,
           slider_text_top: contingency_q[0],
           labels_top: contingency_labels,
           stimulus_height: inf_stim_height,
@@ -650,18 +588,20 @@ let planet_ship = {
         //create 5 item valance library check for p2 A/B/C
         // inference check p2 (planet B)
         var infer_p2_B = {
-          type: 'inference-check-4',
+          type: 'inference-check-5',
           main_stimulus: stim_list[1],
           main_stimulus_height: main_stim_height,
           prompt: inference_prompt[1],
-          stimulus_1: inf_img_p2_B[0].stimulus,
-          stimulus_2: inf_img_p2_B[1].stimulus,
-          stimulus_3: inf_img_p2_B[2].stimulus,
-          stimulus_4: inf_img_p2_B[3].stimulus,
-          stim_text_1: inf_img_p2_B[0].text,
-          stim_text_2: inf_img_p2_B[1].text,
-          stim_text_3: inf_img_p2_B[2].text,
-          stim_text_4: inf_img_p2_B[3].text,
+          stimulus_1: inf_img_p2_A[0].stimulus,
+          stimulus_2: inf_img_p2_A[1].stimulus,
+          stimulus_3: inf_img_p2_A[2].stimulus,
+          stimulus_4: inf_img_p2_A[3].stimulus,
+          stimulus_5: inf_img_p2_A[4].stimulus,
+          stim_text_1: inf_img_p2_A[0].text,
+          stim_text_2: inf_img_p2_A[1].text,
+          stim_text_3: inf_img_p2_A[2].text,
+          stim_text_4: inf_img_p2_A[3].text,
+          stim_text_5: inf_img_p2_A[4].text,
           slider_text_top: contingency_q[1],
           labels_top: contingency_labels,
           stimulus_height: inf_stim_height,
@@ -675,19 +615,21 @@ let planet_ship = {
 
         // inference check p2 (planet B)
         var infer_p2_C = {
-          type: 'inference-check-4',
+          type: 'inference-check-5',
           main_stimulus: stim_list[2],
           main_stimulus_height: main_stim_height,
-          prompt: inference_prompt[1],
-          stimulus_1: inf_img_p2_B[0].stimulus,
-          stimulus_2: inf_img_p2_B[1].stimulus,
-          stimulus_3: inf_img_p2_B[2].stimulus,
-          stimulus_4: inf_img_p2_B[3].stimulus,
-          stim_text_1: inf_img_p2_B[0].text,
-          stim_text_2: inf_img_p2_B[1].text,
-          stim_text_3: inf_img_p2_B[2].text,
-          stim_text_4: inf_img_p2_B[3].text,
-          slider_text_top: contingency_q[1],
+          prompt: inference_prompt[2],
+          stimulus_1: inf_img_p2_A[0].stimulus,
+          stimulus_2: inf_img_p2_A[1].stimulus,
+          stimulus_3: inf_img_p2_A[2].stimulus,
+          stimulus_4: inf_img_p2_A[3].stimulus,
+          stimulus_5: inf_img_p2_A[4].stimulus,
+          stim_text_1: inf_img_p2_A[0].text,
+          stim_text_2: inf_img_p2_A[1].text,
+          stim_text_3: inf_img_p2_A[2].text,
+          stim_text_4: inf_img_p2_A[3].text,
+          stim_text_5: inf_img_p2_A[4].text,
+          slider_text_top: contingency_q[2],
           labels_top: contingency_labels,
           stimulus_height: inf_stim_height,
           slider_width: inf_slider_width,
@@ -739,7 +681,7 @@ let planet_ship = {
         // inference check p2 (ship 2)
         var infer_p2_ship3 = {
           type: 'inference-check-1',
-          main_stimulus: 'img/ship2.png',
+          main_stimulus: 'img/ship3.png',
           main_stimulus_height: main_stim_height,
           prompt: inference_prompt[5],
           stimulus_1: 'img/lose.png',
@@ -755,65 +697,56 @@ let planet_ship = {
           }
         };
     
-        //NEW: slider questions p2
-        //NEW: define slider Qs variables
-        var left_label ="";
-        var right_label ="";
-        var slider_p2_q1 = {
-          type: 'html-slider-response',
-          prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with Planet A (left) versus Planet B (right)?</p>",
-          left_stimulus: slider_img_left[0].stimulus,
-          left_stim_text: slider_img_left[0].text,
-          right_stimulus: slider_img_right[0].stimulus,
-          right_stim_text: slider_img_right[0].text,
-          labels: ["100%/0%<p>(only click Planet A)</p>", "75%/25%", "50%/50%<p>(click both equally)</p>", "25%/75%", "0%/100%<p>(only click Planet B)</p>"],
-          stimulus_height: 250,
-          slider_width: 700,
-          require_movement: false,
-          data: {
-            phase: 'slider-response_p2_q1',
-            block_number: i + nBlocks_p1
-          }
-        };
-    
-        var slider_p2_q2 = {
-          type: 'html-slider-response',
-          prompt: "To maximise your points in the <b>previous block</b>, what proportion of interactions would you allocate for Planet A (left) versus Planet B (right)?",
-          left_stimulus: slider_img_left[0].stimulus,
-          left_stim_text: slider_img_left[0].text,
-          right_stimulus: slider_img_right[0].stimulus,
-          right_stim_text: slider_img_right[0].text,
-          labels: ["100%/0%<p>(only click Planet A)</p>", "75%/25%", "50%/50%<p>(click both equally)</p>", "25%/75%", "0%/100%<p>(only click Planet B)</p>"],
-          stimulus_height: 250,
-          slider_width: 700,
-          require_movement: false,
-          data: {
-            phase: 'slider-response_p2_q2',
-            block_number: i + nBlocks_p1
-          }
-        };
-    
-
 // NEW: slider questions p2
 // NEW: define slider Qs variables
 var left_label = "";
 var right_label = "";
-jsPsych.pluginAPI.registerPreload('image-mouseclick-response', 'stimulus', 'image');
+
 // Question 3
-var slider_p2_q3 = {
-  type: 'html-slider-response',
-  prompt: "<p>What proportion of your recent interactions were with:</p>" +
-           "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
-  left_stimulus: stim_list[0],
-  left_stim_text: ('a'),
-  middle_stimulus: stim_list[1],
-  middle_stim_text: ('b'),
-  right_stimulus: stim_list[2],
-  right_stim_text: ('c'),
-  slider_values: [33, 33, 34], // Initial slider values for the 3 items
+var p1_q3_triangle = {
+  type: 'html-slider-triangle',
+  prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with each planet:",
+  stimulus_left: stim_list[0],
+  stimulus_right: stim_list[1],
+  stimulus_top: stim_list[2],
   stimulus_height: 250,
   slider_width: 900, // Increased width to accommodate more space for labels
-  labels: ["100%/0%/0%<p>(only click Planetas A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
+  labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
+  require_movement: false,
+  data: {
+    phase: 'slider-response_p1_q3',
+    block_number: i + nBlocks_p1,
+  }
+};
+
+// Question 4
+var p1_q4_triangle = {
+  type: 'html-slider-triangle',
+  prompt: "<p>To maximise your points in the previous block, <p></p> what proportion of interactions would you allocate for</p>",
+          //  "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
+  stimulus_left: stim_list[0],
+  stimulus_right: stim_list[1],
+  stimulus_top: stim_list[2],
+  stimulus_height: 250,
+  slider_width: 900, // Increased width to accommodate more space for labels
+  labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
+  require_movement: false,
+  data: {
+    phase: 'slider-response_p1_q4',
+    block_number: i + nBlocks_p1,
+  }
+};
+
+// Question 3
+var p2_q3_triangle = {
+  type: 'html-slider-triangle',
+  prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with each planet:",
+  stimulus_left: stim_list[0],
+  stimulus_right: stim_list[1],
+  stimulus_top: stim_list[2],
+  stimulus_height: 250,
+  slider_width: 900, // Increased width to accommodate more space for labels
+  labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
   require_movement: false,
   data: {
     phase: 'slider-response_p2_q3',
@@ -821,50 +754,24 @@ var slider_p2_q3 = {
   }
 };
 
-// const slider_p2_q3 = {
-//   type: 'html-button-response',
-//   prompt: "<p>What proportion of your recent interactions were with:</p>" +
-//   "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
-//   left_stimulus: stim_list[0],
-//   left_stim_text: ('a'),
-//   middle_stimulus: stim_list[1],
-//   middle_stim_text: ('b'),
-//   right_stimulus: stim_list[2],
-//   right_stim_text: ('c'),
-//   slider_values: [33, 33, 34], // Initial slider values for the 3 items
-//   stimulus_height: 250,
-//   slider_width: 900, // Increased width to accommodate more space for labels
-//   labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
-//   require_movement: false,
-//   data: {
-//   phase: 'slider-response_p2_q3',
-//   block_number: i + nBlocks_p1,
-//   }
-//   };
+// Question 4
+var p2_q4_triangle = {
+  type: 'html-slider-triangle',
+  prompt: "<p>To maximise your points in the previous block, <p></p> what proportion of interactions would you allocate for</p>",
+          //  "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
+  stimulus_left: stim_list[0],
+  stimulus_right: stim_list[1],
+  stimulus_top: stim_list[2],
+  stimulus_height: 250,
+  slider_width: 900, // Increased width to accommodate more space for labels
+  labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
+  require_movement: false,
+  data: {
+    phase: 'slider-response_p2_q4',
+    block_number: i + nBlocks_p1,
+  }
+};
 
-// stim_list[0],
-
-// // Question 4
-// var slider_p2_q4 = {
-//   type: 'jspsych-html-slider-3items',
-//   prompt: "<p>To maximize your points in the <b>previous block</b>, what proportion of interactions would you allocate for:</p>" +
-//            "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
-//   left_stimulus: slider_img_left[0].stimulus,
-//   left_stim_text: slider_img_left[0].text,
-//   middle_stimulus: slider_img_center[0].stimulus,
-//   middle_stim_text: slider_img_center[0].text,
-//   right_stimulus: slider_img_right[0].stimulus,
-//   right_stim_text: slider_img_right[0].text,
-//   slider_values: [33, 33, 34], // Initial slider values for the 3 items
-//   stimulus_height: 250,
-//   slider_width: 900, // Increased width to accommodate more space for labels
-//   labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
-//   require_movement: false,
-//   data: {
-//     phase: 'slider-response_p2_q4',
-//     block_number: i + nBlocks_p1
-//   }
-// };
 
 //----------------------------------------------------------------------------
 // --- Phase 3
@@ -946,68 +853,61 @@ var exit_experiment = {
 
 
 
-
+//TODO: cont instructions, 3 triangle for q1/q2 replacement, UI updates
 
 
 // ---- Timeline creation ----
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
 // Induction
-// timeline.push(fullscreen);
-// timeline.push(consent_block);
-// timeline.push(demographics_block);
-// timeline.push(gen_ins_block);
-// timeline.push(instructionCheckLoopWithFeedback);
-// timeline.push(end_instruction);   
+timeline.push(fullscreen);
+timeline.push(consent_block);
+timeline.push(demographics_block);
+timeline.push(gen_ins_block);
+timeline.push(instructionCheckWithFeedback);
+timeline.push(end_instruction);   
 
 // Phase 1, no ships
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-// timeline.push(valence_p1);
-// timeline.push(valence_p1_all); //triangle
-// timeline.push(infer_p1_A);
-// timeline.push(infer_p1_B);
-// timeline.push(infer_p1_C);
-
-// timeline.push(slider_p1_q1); // replace with triangle
-// timeline.push(slider_p1_q2); //
-
-// timeline.push(slider_p1_q3); // replace with triangle
-// timeline.push(slider_p1_q4); //
+addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+timeline.push(valence_p1);
+timeline.push(infer_p1_A);
+timeline.push(infer_p1_B);
+timeline.push(infer_p1_C);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
 
 // Phase2, ships
-// timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+timeline.push(phaseTwoInstructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(infer_p2_ship1);
-// timeline.push(infer_p2_ship2);
-// timeline.push(infer_p2_ship3);
-// timeline.push(slider_p2_q1); //
-// timeline.push(slider_p2_q2); //
-
-// timeline.push(slider_p2_q3); // replace with triangle
-// timeline.push(slider_p2_q4); //
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(infer_p2_ship1);
+timeline.push(infer_p2_ship2);
+timeline.push(infer_p2_ship3);
+timeline.push(p2_q3_triangle);
+timeline.push(p2_q4_triangle);
 
 
 
 
 
 //Phase3, ships
-// timeline.push(cont_instructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-timeline.push(slider_p2_q3); // replace with triangle
-// timeline.push(slider_p2_q4); //
+timeline.push(cont_instructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(p2_q3_triangle);
+timeline.push(p2_q4_triangle);
 
-//Debrief
-// timeline.push(debrief_block);
-// timeline.push(contact_block);
+
+// //Debrief
+timeline.push(debrief_block);
+timeline.push(contact_block);
 
 
 
@@ -1040,4 +940,4 @@ timeline.push(slider_p2_q3); // replace with triangle
       jsPsych.data.displayData();
     }
   });
-}
+} 
