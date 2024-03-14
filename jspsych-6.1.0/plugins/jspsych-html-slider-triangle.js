@@ -1,76 +1,139 @@
 jsPsych.plugins['html-slider-triangle'] = (function() {
+  // This is an anonymous function that returns an object representing the plugin
   var plugin = {};
 
+  // This object contains metadata about the plugin
   plugin.info = {
-    name: 'html-slider-triangle',
-    description: 'A plugin for creating a 3D triangle slider',
+    name: 'html-slider-triangle', // Plugin name
+    description: 'A plugin for creating a 3D triangle slider', // Plugin description
     parameters: {
-      // 1. Update plugin parameters
+      // Plugin parameters
       stimulus_all: {
-        type: jsPsych.plugins.parameterType.ARRAY,
-        pretty_name: 'Stimulus all',
-        default: [],
-        description: 'Array of stimulus image paths'
+        type: jsPsych.plugins.parameterType.ARRAY, // Parameter type is an array
+        pretty_name: 'Stimulus all', // User-friendly name for the parameter
+        default: [], // Default value is an empty array
+        description: 'Array of stimulus image paths' // Parameter description
       },
       planetColors: {
-        type: jsPsych.plugins.parameterType.OBJECT,
-        pretty_name: 'Planet colors',
-        default: null,
-        description: 'Object mapping image paths to their respective colors'
+        type: jsPsych.plugins.parameterType.OBJECT, // Parameter type is an object
+        pretty_name: 'Planet colors', // User-friendly name for the parameter
+        default: null, // Default value is null
+        description: 'Object mapping image paths to their respective colors' // Parameter description
       },
       prompt: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Prompt',
-        default: null,
-        description: 'Any content here will be displayed above the triangle slider.'
+        type: jsPsych.plugins.parameterType.STRING, // Parameter type is a string
+        pretty_name: 'Prompt', // User-friendly name for the parameter
+        default: null, // Default value is null
+        description: 'Any content here will be displayed above the triangle slider.' // Parameter description
       },
       slider_width: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Slider width',
-        default: 500,
-        description: 'Width of the triangle slider in pixels.'
+        type: jsPsych.plugins.parameterType.INT, // Parameter type is an integer
+        pretty_name: 'Slider width', // User-friendly name for the parameter
+        default: 500, // Default value is 500
+        description: 'Width of the triangle slider in pixels.' // Parameter description
       },
       slider_height: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Slider height',
-        default: 400,
-        description: 'Height of the triangle slider in pixels.'
+        type: jsPsych.plugins.parameterType.INT, // Parameter type is an integer
+        pretty_name: 'Slider height', // User-friendly name for the parameter
+        default: 400, // Default value is 400
+        description: 'Height of the triangle slider in pixels.' // Parameter description
       },
       stimulus_height: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Stimulus height',
-        default: 100,
-        description: 'Height of the stimulus images in pixels.'
+        type: jsPsych.plugins.parameterType.INT, // Parameter type is an integer
+        pretty_name: 'Stimulus height', // User-friendly name for the parameter
+        default: 100, // Default value is 100
+        description: 'Height of the stimulus images in pixels.' // Parameter description
       },
       labels: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Labels',
-        default: [],
-        array: true,
-        description: 'Labels to display on the triangle slider.'
+        type: jsPsych.plugins.parameterType.STRING, // Parameter type is a string
+        pretty_name: 'Labels', // User-friendly name for the parameter
+        default: [], // Default value is an empty array
+        array: true, // This parameter is an array of strings
+        description: 'Labels to display on the triangle slider.' // Parameter description
       },
       require_movement: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: 'Require movement',
-        default: false,
-        description: 'If true, the participant will have to move the slider before continuing.'
+        type: jsPsych.plugins.parameterType.BOOL, // Parameter type is a boolean
+        pretty_name: 'Require movement', // User-friendly name for the parameter
+        default: false, // Default value is false
+        description: 'If true, the participant will have to move the slider before continuing.' // Parameter description
       }
     }
   };
 
-  var proportions = []; // Declare the proportions array outside the trial function
+  // Helper functions
+  // =================
+
+  // Calculate distance between two points
+  function dist(p1, p2) {
+    return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+  }
+
+  // Get image position for a given index
+  function getImagePosition(index, sliderWidth, sliderHeight, stimulusHeight) {
+    switch (index) {
+      case 0:
+        return `top: 0; left: 0; transform: translate(-50%, -${0 + stimulusHeight / 2}%);`;
+      case 1:
+        return `top: 0; right: 0; transform: translate(50%, -${0 + stimulusHeight / 2}%);`;
+      case 2:
+        return `bottom: 0; left: 50%; transform: translate(-50%, ${0 + stimulusHeight / 2}%);`;
+      default:
+        return '';
+    }
+  }
+
+  // Get label position for a given index
+  function getLabelPosition(index) {
+    switch (index) {
+      case 0:
+        return 'top: 0; left: 0; transform: translate(-50%, -100%);';
+      case 1:
+        return 'top: 0; right: 0; transform: translate(50%, -100%);';
+      case 2:
+        return 'bottom: 0; left: 50%; transform: translate(-50%, 100%);';
+      default:
+        return '';
+    }
+  }
+
+  // Get default proportion for a given index
+  function getDefaultProportion(index) {
+    return 33; // Equal proportions for all three planets
+  }
+
+  // Get pie chart gradient based on planet colors and proportions
+  function getPieChartGradient(planetColors, planetOrder, proportions = [33, 33, 34]) {
+    var colorStops = [];
+    var cumulativePercentage = 0;
+
+    for (var i = 0; i < planetOrder.length; i++) {
+      var planet = planetOrder[i];
+      var color = planetColors[planet];
+      var percentage = proportions[i];
+
+      colorStops.push(`${color} ${cumulativePercentage}% ${cumulativePercentage + percentage}%`);
+      cumulativePercentage += percentage;
+    }
+
+    return `conic-gradient(${colorStops.join(', ')})`;
+  }
+
+  // Trial function
+  // ==============
 
   plugin.trial = function(display_element, trial) {
-    // 3. Determine the order of planets
+    // Determine the order of planets
     var planetOrder = trial.stimulus_all;
 
-    // 2. Refactor the HTML structure
+    // HTML structure
+    // =============
+
     var html = `
       <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
         <div id="jspsych-html-slider-triangle-stimulus" style="position: relative; width: 100%; height: 100%;">
           <!-- Planet images -->
           ${planetOrder.map((planet, index) => `
-            <img src="${planet}" style="position: absolute; ${getImagePosition(index)}; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+            <img src="${planet}" style="position: absolute; ${getImagePosition(index, trial.slider_width, trial.slider_height, trial.stimulus_height)}; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
           `).join('')}
 
           <!-- Planet labels -->
@@ -99,14 +162,23 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
     display_element.innerHTML = html;
 
+    // DOM elements
+    // ============
+
     var triangle = display_element.querySelector('#jspsych-html-slider-triangle');
     var handle = display_element.querySelector('#jspsych-html-slider-triangle-handle');
     var pieChart = display_element.querySelector('#jspsych-html-slider-triangle-pie-chart');
     var continueButton = display_element.querySelector('#jspsych-html-slider-triangle-continue');
 
-    var isDragging = false;
+    // State variables
+    // ===============
 
-    // Initialize the response object
+    var isDragging = false;
+    var proportions = []; // Declare the proportions array
+
+    // Response object
+    // ===============
+
     var response = {
       proportions: null,
       clicked: false,
@@ -119,7 +191,6 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       locations: {
         clicks: [],
       },
-      // 8. Update the response object
       stimulus_all: trial.stimulus_all,
       planetColors: trial.planetColors
     };
@@ -127,31 +198,27 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     // Record the start timestamp
     response.timestamps.start = performance.now();
 
+    // Event handlers
+    // ==============
+
+    // Update handle position and proportions based on mouse position
     function updateHandlePosition(x, y) {
       var triangleRect = triangle.getBoundingClientRect();
     
-// Calculate the normalized coordinates within the triangle
-var b = Math.max(0, Math.min(1, x / triangleRect.width));
-var a = Math.max(0, Math.min(1, y / triangleRect.height));
-var c = 1 - a - b;
-
-// Invert the values for a and c
-a = 1 - a;
-c = 1 - c;
-
-// Clamp the values to ensure they are within the valid range
-a = Math.max(0, Math.min(1, a));
-b = Math.max(0, Math.min(a, b));
-c = Math.max(0, Math.min(1 - a, c));
+      // Calculate the normalized coordinates within the triangle
+      var b = Math.max(0, Math.min(1, x / (triangleRect.width / 2)));
+      var a = Math.max(0, Math.min(1, (triangleRect.height - y) / triangleRect.height));
+      var c = 1 - a - b;
+    
       // Update the handle position
       handle.style.left = `${b * 100}%`;
-      handle.style.top = `${a * 100}%`;
+      handle.style.top = `${(1 - a) * 100}%`;
     
       // Update the proportions calculation and store the returned value
       proportions = updateProportions(a, b, c);
     }
 
-    // 7. Update the proportions calculation
+    // Update proportions and labels
     function updateProportions(a, b, c) {
       proportions = [a, b, c].map(value => Math.round(value * 100));
 
@@ -161,15 +228,31 @@ c = Math.max(0, Math.min(1 - a, c));
         label.textContent = `Planet ${String.fromCharCode(65 + index)} (${proportions[index]}%)`;
       });
 
-      // 5. Update the pie chart rendering
+      // Update the pie chart rendering
       pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
 
       // Return the updated proportions array
       return proportions;
     }
 
-    // Event listener for mouse movement
-    function handleMouseMove(e) {
+    // Handle pointer down event
+    function handlePointerDown(e) {
+      isDragging = true;
+      handlePointerMove(e);
+      response.clicked = true;
+      var timestamp = performance.now();
+      response.timestamps.clicks.push(timestamp);
+
+      // Record the click location and proportions
+      response.locations.clicks.push({
+        x: e.clientX,
+        y: e.clientY,
+        proportions: proportions
+      });
+    }
+
+    // Handle pointer move event
+    function handlePointerMove(e) {
       if (!isDragging) return;
 
       var triangleRect = triangle.getBoundingClientRect();
@@ -179,42 +262,29 @@ c = Math.max(0, Math.min(1 - a, c));
       updateHandlePosition(x, y);
     }
 
-    // Event listener for mouse button down
-    function handleMouseDown(e) {
-      if (e.button === 0) {
-        isDragging = true;
-        handleMouseMove(e);
-        response.clicked = true;
-        var timestamp = performance.now();
-        response.timestamps.clicks.push(timestamp);
-
-        // Record the click location and proportions
-        response.locations.clicks.push({
-          x: e.clientX,
-          y: e.clientY,
-          proportions: proportions // Use the updated proportions array
-        });
-      }
+    // Handle pointer up event
+    function handlePointerUp(e) {
+      isDragging = false;
     }
 
-    // Event listener for mouse button up
-    function handleMouseUp(e) {
-      if (e.button === 0) {
-        isDragging = false;
-      }
+    // Handle pointer cancel event (e.g., when the user drags outside the window)
+    function handlePointerCancel(e) {
+      isDragging = false;
     }
 
-    // Add event listeners
-    triangle.addEventListener('mousedown', handleMouseDown);
-    triangle.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    // Event listeners for pointer events
+    triangle.addEventListener('pointerdown', handlePointerDown);
+    triangle.addEventListener('pointermove', handlePointerMove);
+    triangle.addEventListener('pointerup', handlePointerUp);
+    triangle.addEventListener('pointercancel', handlePointerCancel);
 
     // Function to end the trial
     var end_trial = function() {
       // Remove event listeners
-      triangle.removeEventListener('mousedown', handleMouseDown);
-      triangle.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+      triangle.removeEventListener('pointerdown', handlePointerDown);
+      triangle.removeEventListener('pointermove', handlePointerMove);
+      triangle.removeEventListener('pointerup', handlePointerUp);
+      triangle.removeEventListener('pointercancel', handlePointerCancel);
 
       // Set the final proportions
       response.proportions = proportions;
@@ -236,66 +306,8 @@ c = Math.max(0, Math.min(1 - a, c));
     };
 
     // Event listener for the continue button
-    continueButton.addEventListener('click', function() {
-      end_trial();
-    });
+    continueButton.addEventListener('click', end_trial);
   };
-
-  // Helper functions
-  function getImagePosition(index) {
-    switch (index) {
-      case 0:
-        return 'top: 0; left: 0; transform: translate(-50%, -150%);';
-      case 1:
-        return 'top: 0; right: 0; transform: translate(50%, -150%);';
-      case 2:
-        return 'bottom: 0; left: 50%; transform: translate(-50%, 150%);';
-      default:
-        return '';
-    }
-  }
-
-  function getLabelPosition(index) {
-    switch (index) {
-      case 0:
-        return 'top: 0; left: 0; transform: translate(-50%, -100%);';
-      case 1:
-        return 'top: 0; right: 0; transform: translate(50%, -100%);';
-      case 2:
-        return 'bottom: 0; left: 50%; transform: translate(-50%, 100%);';
-      default:
-        return '';
-    }
-  }
-
-  function getDefaultProportion(index) {
-    switch (index) {
-      case 0:
-        return 33;
-      case 1:
-        return 33;
-      case 2:
-        return 34;
-      default:
-        return 0;
-    }
-  }
-
-  function getPieChartGradient(planetColors, planetOrder, proportions = [33, 33, 34]) {
-    var colorStops = [];
-    var cumulativePercentage = 0;
-
-    for (var i = 0; i < planetOrder.length; i++) {
-      var planet = planetOrder[i];
-      var color = planetColors[planet];
-      var percentage = proportions[i];
-
-      colorStops.push(`${color} ${cumulativePercentage}% ${cumulativePercentage + percentage}%`);
-      cumulativePercentage += percentage;
-    }
-
-    return `conic-gradient(${colorStops.join(', ')})`;
-  }
 
   return plugin;
 })();
