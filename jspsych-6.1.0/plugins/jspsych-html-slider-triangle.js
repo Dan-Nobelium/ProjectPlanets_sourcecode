@@ -204,20 +204,35 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     // Update handle position and proportions based on mouse position
     function updateHandlePosition(x, y) {
       var triangleRect = triangle.getBoundingClientRect();
+      var triangleHeight = triangleRect.height;
+      var triangleWidth = triangleRect.width;
     
       // Calculate the normalized coordinates within the triangle
-      var b = Math.max(0, Math.min(1, x / (triangleRect.width / 2)));
-      var a = Math.max(0, Math.min(1, (triangleRect.height - y) / triangleRect.height));
-      var c = 1 - a - b;
+      var b = x / (triangleWidth / 2);
+      var a = (triangleHeight - y) / triangleHeight;
+      var c = 1 - Math.max(a, b);
     
-      // Update the handle position
-      handle.style.left = `${b * 100}%`;
-      handle.style.top = `${(1 - a) * 100}%`;
+      // Check if the mouse is within the triangle
+      if (a >= 0 && b >= 0 && c >= 0) {
+        // Ensure non-negative proportions
+        a = Math.max(0, a);
+        b = Math.max(0, b);
+        c = Math.max(0, c);
     
-      // Update the proportions calculation and store the returned value
-      proportions = updateProportions(a, b, c);
+        // Normalize the proportions to sum up to 1
+        var sum = a + b + c;
+        a /= sum;
+        b /= sum;
+        c /= sum;
+    
+        // Update the handle position
+        handle.style.left = `${b * 100}%`;
+        handle.style.top = `${(1 - a) * 100}%`;
+    
+        // Update the proportions calculation and store the returned value
+        proportions = updateProportions(a, b, c);
+      }
     }
-
     // Update proportions and labels
     function updateProportions(a, b, c) {
       proportions = [a, b, c].map(value => Math.round(value * 100));
