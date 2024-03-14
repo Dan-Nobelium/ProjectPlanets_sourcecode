@@ -127,25 +127,27 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     // Record the start timestamp
     response.timestamps.start = performance.now();
 
-    // 6. Update the handle position calculation
     function updateHandlePosition(x, y) {
       var triangleRect = triangle.getBoundingClientRect();
+    
+// Calculate the normalized coordinates within the triangle
+var b = Math.max(0, Math.min(1, x / triangleRect.width));
+var a = Math.max(0, Math.min(1, y / triangleRect.height));
+var c = 1 - a - b;
 
-      // Calculate the normalized coordinates within the triangle
-      var a = Math.max(0, Math.min(1, y / triangleRect.height));
-      var b = Math.max(0, Math.min(1, (triangleRect.width - x) / triangleRect.width));
-      var c = 1 - a - b;
+// Invert the values for a and c
+a = 1 - a;
+c = 1 - c;
 
-      // Clamp the values to ensure they are within the valid range
-      a = Math.max(0, Math.min(1, a));
-      b = Math.max(0, Math.min(1 - a, b));
-      c = 1 - a - b;
-
+// Clamp the values to ensure they are within the valid range
+a = Math.max(0, Math.min(1, a));
+b = Math.max(0, Math.min(a, b));
+c = Math.max(0, Math.min(1 - a, c));
       // Update the handle position
-      handle.style.left = `${(1 - b) * 100}%`;
+      handle.style.left = `${b * 100}%`;
       handle.style.top = `${a * 100}%`;
-
-      // 7. Update the proportions calculation and store the returned value
+    
+      // Update the proportions calculation and store the returned value
       proportions = updateProportions(a, b, c);
     }
 
