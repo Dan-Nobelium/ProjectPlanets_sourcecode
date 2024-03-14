@@ -232,6 +232,8 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
         // Update the proportions calculation and store the returned value
         proportions = updateProportions(a, b, c);
       }
+
+      
     }
     // Update proportions and labels
     function updateProportions(a, b, c) {
@@ -250,19 +252,39 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       return proportions;
     }
 
-    // Handle pointer down event
     function handlePointerDown(e) {
+      // Handle pointer down event
       isDragging = true;
       handlePointerMove(e);
       response.clicked = true;
       var timestamp = performance.now();
       response.timestamps.clicks.push(timestamp);
-
+    
       // Record the click location and proportions
+      var triangleRect = triangle.getBoundingClientRect();
+      var triangleHeight = triangleRect.height;
+      var triangleWidth = triangleRect.width;
+    
+      // Calculate the normalized coordinates within the triangle
+      var b = (e.clientX - triangleRect.left) / (triangleWidth / 2);
+      var a = (triangleHeight - (e.clientY - triangleRect.top)) / triangleHeight;
+      var c = 1 - Math.max(a, b);
+    
+      // Ensure non-negative proportions
+      a = Math.max(0, a);
+      b = Math.max(0, b);
+      c = Math.max(0, c);
+    
+      // Normalize the proportions to sum up to 1
+      var sum = a + b + c;
+      a /= sum;
+      b /= sum;
+      c /= sum;
+    
       response.locations.clicks.push({
         x: e.clientX,
         y: e.clientY,
-        proportions: proportions
+        proportions: [a, b, c]
       });
     }
 
