@@ -40,7 +40,7 @@ const planetColors = {
 let block_number = 0;
 let trial_number = 0;
 let points = 0;
-const block_duration = 180 * 10; // in milliseconds (3 mins)
+const block_duration = 180 * 100; // in milliseconds (3 mins)
 const iti = 1000;
 const inf_stim_height = 80;
 const inf_slider_width = 500;
@@ -356,44 +356,6 @@ var i = 1;
         text: "Planet B (right)"
       }]
 
-  // //NEW: slider questions p1 
-  // //NEW: define slider Qs variables
-  var left_label ="";
-  var right_label ="";
-  
-  var slider_p1_q1 = {
-    type: 'html-slider-response',
-    prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with Planet A (left) versus Planet B (right)?</p>",
-    left_stimulus: slider_img_left[0].stimulus,
-    left_stim_text: slider_img_left[0].text,
-    right_stimulus: slider_img_right[0].stimulus,
-    right_stim_text: slider_img_right[0].text,
-    labels: ["100%/0%<p>(only click Planet A)</p>", "75%/25%", "50%/50%<p>(click both equally)</p>", "25%/75%", "0%/100%<p>(only click Planet B)</p>"],
-    stimulus_height: 250,
-    slider_width: 700,
-    require_movement: false,
-    data: {
-      phase: 'slider-response_p1_q1',
-      block_number: i
-    }
-  };
-
-  var slider_p1_q2 = {
-    type: 'html-slider-response',
-    prompt: "To maximise your points in the <b>previous block</b>, what proportion of interactions would you allocate for Planet A (left) versus Planet B (right)?",
-    left_stimulus: slider_img_left[0].stimulus,
-    left_stim_text: slider_img_left[0].text,
-    right_stimulus: slider_img_right[0].stimulus,
-    right_stim_text: slider_img_right[0].text,
-    labels: ["100%/0%<p>(only click Planet A)</p>", "75%/25%", "50%/50%<p>(click both equally)</p>", "25%/75%", "0%/100%<p>(only click Planet B)</p>"],
-    stimulus_height: 250,
-    slider_width: 700,
-    require_movement: false,
-    data: {
-      phase: 'slider-response_p1_q2',
-      block_number: i
-    }
-  };
 
 //////////////////////
 
@@ -706,7 +668,7 @@ var right_label = "";
 // Question 3
 var p1_q3_triangle = {
   type: 'html-slider-triangle',
-  prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with each planet:",
+  prompt: "Reflecting back on what you did in the <b>most recent block</b>, <p>what proportion of your recent interactions were with each planet:",
   stimulus_left: stim_list[0],
   stimulus_right: stim_list[1],
   stimulus_bottom: stim_list[2],
@@ -725,7 +687,7 @@ var p1_q3_triangle = {
 // Question 4
 var p1_q4_triangle = {
   type: 'html-slider-triangle',
-  prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with each planet:",
+  prompt: "To maximise your points in the <b>previous block</b>, <p>what proportion of interactions would you allocate for each planet?",
   stimulus_all: stim_list,
   planetColors: planetColors,
   stimulus_height: 250,
@@ -741,7 +703,7 @@ var p1_q4_triangle = {
 // Question 3
 var p2_q3_triangle = {
   type: 'html-slider-triangle',
-  prompt: "Reflecting back on what you did in the most recent block, <p>what proportion of your recent interactions were with each planet:",
+  prompt: "Reflecting back on what you did in the <b>most recent block</b>, <p>what proportion of your recent interactions were with each planet:",
   stimulus_left: stim_list[0],
   stimulus_right: stim_list[1],
   stimulus_top: stim_list[2],
@@ -758,8 +720,7 @@ var p2_q3_triangle = {
 // Question 4
 var p2_q4_triangle = {
   type: 'html-slider-triangle',
-  prompt: "<p>To maximise your points in the previous block, <p></p> what proportion of interactions would you allocate for</p>",
-          //  "<ul><li>Planet A (left),</li><li>Planet B (middle), and</li><li>Planet C (right)?</li></ul>",
+  prompt: "To maximise your points in the <b>previous block</b>, <p>what proportion of interactions would you allocate for each planet?",
   stimulus_left: stim_list[0],
   stimulus_right: stim_list[1],
   stimulus_top: stim_list[2],
@@ -801,7 +762,8 @@ var p2_q4_triangle = {
 				type: 'instructions',
 				pages: [
 					'<p>Local intel has determined where the pirates are coming from!<br>Click Next to view this intel.</p>',
-          '<p>[decide how to present this information]</p>',
+          '<p>Add in a screen showing 3 ships and 3 related planets with attack values</p>',
+          '<p>Add in a likert-catch plugin which tests contingecy knowledge</p>',
         ],
 				allow_keys: false,
 				show_clickable_nav: true,
@@ -968,57 +930,56 @@ var audit_block = {
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
 // Induction
+timeline.push(fullscreen);
+timeline.push(consent_block);
+timeline.push(demographics_block);
+timeline.push(gen_ins_block);
+timeline.push(instructionCheckWithFeedback);
+timeline.push(end_instruction);   
 
-
-
-// timeline.push(fullscreen);
-// timeline.push(consent_block);
-// timeline.push(demographics_block);
-// timeline.push(gen_ins_block);
-// timeline.push(instructionCheckWithFeedback);
-// timeline.push(end_instruction);   
+// Attention check
+timeline.push(cfi_block);
+timeline.push(htq_block);
+timeline.push(audit_block);
 
 // Phase 1, no ships
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-// timeline.push(valence_p1);
-// timeline.push(infer_p1_A);
-// timeline.push(infer_p1_B);
-// timeline.push(infer_p1_C);
+addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+timeline.push(valence_p1);
+timeline.push(infer_p1_A);
+timeline.push(infer_p1_B);
+timeline.push(infer_p1_C);
 timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
+timeline.push(p1_q4_triangle);
 
-// Phase 1.5 Psychometrics
-// timeline.push(cfi_block);
-// timeline.push(htq_block);
-// timeline.push(audit_block);
+
 
 // Phase2, ships
-// timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(infer_p2_ship1);
-// timeline.push(infer_p2_ship2);
-// timeline.push(infer_p2_ship3);
-// timeline.push(p2_q3_triangle);
-// timeline.push(p2_q4_triangle);
+timeline.push(phaseTwoInstructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(infer_p2_ship1);
+timeline.push(infer_p2_ship2);
+timeline.push(infer_p2_ship3);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
 
 // //Phase3, ships
-// timeline.push(cont_instructions); //add pictures and testing
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(p2_q3_triangle);
-// timeline.push(p2_q4_triangle);
+timeline.push(cont_instructions); //add pictures and testing
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(p1_q3_triangle); //rename
+timeline.push(p1_q4_triangle); //rename
 
 
 // // //Debrief
-// timeline.push(debrief_block);
-// timeline.push(contact_block);
+timeline.push(debrief_block);
+timeline.push(contact_block);
 
 
 // timeline.push(exit_experiment);
