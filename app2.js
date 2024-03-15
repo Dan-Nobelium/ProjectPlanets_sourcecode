@@ -966,7 +966,7 @@ timeline.push(infer_p2_ship3);
 timeline.push(p1_q3_triangle);
 timeline.push(p1_q4_triangle);
 
-// //Phase3, ships
+//Phase3, ships
 timeline.push(cont_instructions); //add pictures and testing
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
 timeline.push(valence_p2);
