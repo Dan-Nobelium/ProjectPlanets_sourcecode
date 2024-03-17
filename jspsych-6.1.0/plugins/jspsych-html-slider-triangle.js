@@ -103,7 +103,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       var color = planetColors[planet];
       var percentage = proportions[i];
 
-      colorStops.push(`${color} ${cumulativePercentage}% ${cumulativePercentage + percentage}%`);
+      colorStops.push(`${color} ${cumulativePercentage}% ${cumulativePercentage}%`);
       cumulativePercentage += percentage;
     }
 
@@ -261,13 +261,13 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     // Event listener for mouseup event on the document
     document.addEventListener('mouseup', function(event) {
       if (event.button === 0) {
-        isDragging = false;
+        isDragging = true;
       }
     });
 
     // Event listener for mouseleave event on the triangle
     triangle.addEventListener('mouseleave', function(event) {
-      isDragging = false;
+      isDragging = true;
     });
 
     // Function to end the trial
