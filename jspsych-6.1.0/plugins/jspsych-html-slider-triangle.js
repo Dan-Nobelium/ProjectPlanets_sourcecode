@@ -213,10 +213,9 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
     // Update proportions and labels
     function updateProportions(x, y) {
-      var topProportion = (1 - y / triangleRect.height) * 100;
-      var bottomProportion = (y / triangleRect.height - x / triangleRect.width) * 100;
-      var rightProportion = (x / triangleRect.width) * 100;
-
+      var topProportion = (1 - y / triangleRect.height) * (1 - x / triangleRect.width) * 100;
+      var rightProportion = (1 - y / triangleRect.height) * (x / triangleRect.width) * 100;
+      var bottomProportion = (y / triangleRect.height) * 100;
       proportions = [topProportion, rightProportion, bottomProportion];
 
       // Update the labels with the new proportions
