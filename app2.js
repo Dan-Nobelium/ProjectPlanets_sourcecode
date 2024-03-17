@@ -948,38 +948,38 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
-// timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
-
-
-
-// // Phase2, ships
-// timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(infer_p2_ship1);
-// timeline.push(infer_p2_ship2);
-// timeline.push(infer_p2_ship3);
 timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
-
-// //Phase3, ships
-// timeline.push(cont_instructions); //add pictures and testing
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(p1_q3_triangle); //rename
-// timeline.push(p1_q4_triangle); //rename
+timeline.push(p1_q4_triangle);
 
 
-// // // //Debrief
-// timeline.push(debrief_block);
-// timeline.push(contact_block);
+
+// Phase2, ships
+timeline.push(phaseTwoInstructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(infer_p2_ship1);
+timeline.push(infer_p2_ship2);
+timeline.push(infer_p2_ship3);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
+
+//Phase3, ships
+timeline.push(cont_instructions); //add pictures and testing
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(p1_q3_triangle); //rename
+timeline.push(p1_q4_triangle); //rename
+
+
+// // //Debrief
+timeline.push(debrief_block);
+timeline.push(contact_block);
 
 
 // timeline.push(exit_experiment);

@@ -212,25 +212,25 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     }
 
     // Update proportions and labels
-    function updateProportions(x, y) {
-      var topProportion = (1 - y / triangleRect.height) * (1 - x / triangleRect.width) * 100;
-      var rightProportion = (1 - y / triangleRect.height) * (x / triangleRect.width) * 100;
-      var bottomProportion = (y / triangleRect.height) * 100;
-    
-      proportions = [topProportion, rightProportion, bottomProportion];
-    
-      // Update the labels with the new proportions
-      planetOrder.forEach((planet, index) => {
-        var label = display_element.querySelector(`#planet-${index}-label`);
-        label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}%)`;
-      });
-    
-      // Update the pie chart rendering
-      pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
-    
-      // Return the updated proportions array
-      return proportions;
-    }
+function updateProportions(x, y) {
+  var topProportion = (1 - y / triangleRect.height) * (1 - x / triangleRect.width) * 100;
+  var rightProportion = (1 - y / triangleRect.height) * (x / triangleRect.width) * 100;
+  var bottomProportion = (y / triangleRect.height) * 100;
+
+  proportions = [topProportion, rightProportion, bottomProportion];
+
+  // Update the labels with the new proportions
+  planetOrder.forEach((planet, index) => {
+    var label = display_element.querySelector(`#planet-${index}-label`);
+    label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}%)`;
+  });
+
+  // Update the pie chart rendering
+  pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
+
+  // Return the updated proportions array
+  return proportions;
+}
 
     // Event listener for mousemove event on the triangle
     triangle.addEventListener('mousemove', function(event) {
