@@ -195,10 +195,6 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     var topRightCorner = { x: triangleRect.right, y: triangleRect.top + triangleRect.height };
     var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.top };
 
-    // Log the coordinates of the triangle corners to the console
-    console.log("Top Left Corner:", topLeftCorner);
-    console.log("Top Right Corner:", topRightCorner);
-    console.log("Bottom Corner:", bottomCorner);
 
     // Update handle position and proportions based on mouse position
     function updateHandlePosition(mouseX, mouseY) {
@@ -262,13 +258,13 @@ function updateProportions(x, y) {
     // Event listener for mouseup event on the document
     document.addEventListener('mouseup', function(event) {
       if (event.button === 0) {
-        isDragging = true;
+        isDragging = false;
       }
     });
 
     // Event listener for mouseleave event on the triangle
     triangle.addEventListener('mouseleave', function(event) {
-      isDragging = true;
+      isDragging = false;
     });
 
     // Function to end the trial
