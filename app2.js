@@ -758,20 +758,41 @@ var p2_q4_triangle = {
 // 		if (i === nBlocks_p2-4) {
 			
 			// present correct contingencies
-			var cont_instructions = {
-				type: 'instructions',
-				pages: [
-					'<p>Local intel has determined where the pirates are coming from!<br>Click Next to view this intel.</p>',
-          '<p>Add in a screen showing 3 ships and 3 related planets with attack values</p>',
-          '<p>Add in a likert-catch plugin which tests contingecy knowledge</p>',
+      var cont_instructions = {
+        type: 'instructions',
+        pages: [
+          '<p>Local intel has determined where the pirates are coming from!<br>Click Next to view this intel.</p>',
+          function() {
+            var html = '<p>Your signals to the ' + stim_list[0] + ' planet (left side) will attract pirate ships (Ship: Type ' + ship_list[0] + ') and steal your points!</p>';
+            html += '<p><img src="' + stim_list[0] + '" height="100">';
+            html += '<img src="img/arrow.jpg" height="100">';
+            html += '<img src="' + ship_list[0] + '" height="100">';
+            html += '<img src="img/arrow.jpg" height="100">';
+            html += '<img src="img/lose.png" height="100"></p>';
+            html += '<br><br><br>';
+            html += '<p>Your signals to the ' + stim_list[1] + ' planet (middle side) will only attract friendly ships (Ship: Type ' + ship_list[1] + ').</p>';
+            html += '<p><img src="' + stim_list[1] + '" height="100">';
+            html += '<img src="img/arrow.jpg" height="100">';
+            html += '<img src="' + ship_list[1] + '" height="100">';
+            html += '<img src="img/blank_arrow.jpg" height="100">';
+            html += '<img src="img/blank_lose.jpg" height="100"></p>';
+            html += '<br><br><br>';
+            html += '<p>Your signals to the ' + stim_list[2] + ' planet (right side) will only attract friendly ships (Ship: Type ' + ship_list[2] + ').</p>';
+            html += '<p><img src="' + stim_list[2] + '" height="100">';
+            html += '<img src="img/arrow.jpg" height="100">';
+            html += '<img src="' + ship_list[2] + '" height="100">';
+            html += '<img src="img/blank_arrow.jpg" height="100">';
+            html += '<img src="img/blank_lose.jpg" height="100"></p>';
+            return html;
+          }
         ],
-				allow_keys: false,
-				show_clickable_nav: true,
-				post_trial_gap: iti,
-				data: {
-					phase: 'instruct contingencies'
-				}
-			};
+        allow_keys: false,
+        show_clickable_nav: true,
+        post_trial_gap: iti,
+        data: {
+          phase: 'instruct contingencies'
+        }
+      };
 
 //----------------------------------------------------------------------------
 // --- Debrief and experiment end
@@ -948,23 +969,23 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
-timeline.push(p1_q3_triangle);
-timeline.push(p1_q4_triangle);
+// timeline.push(p1_q3_triangle);
+// timeline.push(p1_q4_triangle);
 
 
 
 // Phase2, ships
-timeline.push(phaseTwoInstructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-timeline.push(valence_p2);
-timeline.push(infer_p2_A);
-timeline.push(infer_p2_B);
-timeline.push(infer_p2_C);
-timeline.push(infer_p2_ship1);
-timeline.push(infer_p2_ship2);
-timeline.push(infer_p2_ship3);
-timeline.push(p1_q3_triangle);
-timeline.push(p1_q4_triangle);
+// timeline.push(phaseTwoInstructions);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// timeline.push(valence_p2);
+// timeline.push(infer_p2_A);
+// timeline.push(infer_p2_B);
+// timeline.push(infer_p2_C);
+// timeline.push(infer_p2_ship1);
+// timeline.push(infer_p2_ship2);
+// timeline.push(infer_p2_ship3);
+// timeline.push(p1_q3_triangle);
+// timeline.push(p1_q4_triangle);
 
 //Phase3, ships
 timeline.push(cont_instructions); //add pictures and testing
