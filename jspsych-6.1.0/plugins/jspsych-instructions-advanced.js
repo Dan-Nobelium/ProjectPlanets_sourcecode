@@ -3,7 +3,7 @@ jsPsych.plugins['instructions-advanced'] = (function() {
 
   plugin.info = {
     name: 'instructions-advanced',
-    description: 'A plugin for displaying instructions with a grid of images and associated data, along with contingency check questions.',
+    description: 'A plugin for displaying instructions with a grid of images and associated data.',
     parameters: {
       pages: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
@@ -60,61 +60,61 @@ jsPsych.plugins['instructions-advanced'] = (function() {
         default: 'Next',
         description: 'The text that appears on the button to go forwards.'
       },
-      instructlate: {
-        type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'Instructions (Late)',
-        default: null,
-        description: 'The instruction information string for the late condition.'
-      },
-      instructearly: {
-        type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'Instructions (Early)',
-        default: null,
-        description: 'The instruction information string for the early condition.'
-      },
-      Q0_cont_text: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Q0 Text',
-        default: null,
-        description: 'The text for the first contingency check question.'
-      },
-      Q0_cont_answers: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Q0 Answers',
-        default: null,
-        array: true,
-        description: 'An array of answer options for the first contingency check question.'
-      },
-      Q1_cont_text: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Q1 Text',
-        default: null,
-        description: 'The text for the second contingency check question.'
-      },
-      Q1_cont_answers: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Q1 Answers',
-        default: null,
-        array: true,
-        description: 'An array of answer options for the second contingency check question.'
-      },
-      correctstring_cont: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Correct Answers',
-        default: null,
-        description: 'A string representing the correct answers for the contingency check questions.'
-      },
+
       image_data: {
         type: jsPsych.plugins.parameterType.OBJECT,
         pretty_name: 'Image Data',
         default: null,
         description: 'An object containing image data, such as ship type, damage value, and associated images.'
       },
-      condition: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Condition',
+      stim_list: {
+        type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'Planet Stimuli',
         default: null,
-        description: 'The condition (late or early) for displaying the appropriate instruction information.'
+        array: true,
+        description: 'An array of planet image paths.'
+      },
+      ship_list: {
+        type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'Ship Stimuli',
+        default: null,
+        array: true,
+        description: 'An array of ship image paths.'
+      },
+      damage: {
+        type: jsPsych.plugins.parameterType.INT,
+        pretty_name: 'Damage',
+        default: null,
+        array: true,
+        description: 'An array of damage values for each planet-ship pair.'
+      },
+      arrows: {
+        type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'Arrow Images',
+        default: null,
+        array: true,
+        description: 'An array of arrow image paths.'
+      },
+      planet_names: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Planet Names',
+        default: null,
+        array: true,
+        description: 'An array of planet names.'
+      },
+      ship_names: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Ship Names',
+        default: null,
+        array: true,
+        description: 'An array of ship names.'
+      },
+      outcomes: {
+        type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'Outcome Images',
+        default: null,
+        array: true,
+        description: 'An array of outcome image paths.'
       }
     }
   };
@@ -137,19 +137,7 @@ jsPsych.plugins['instructions-advanced'] = (function() {
 
     // Function to display the current page
     function show_current_page() {
-      var html = '';
-
-      // Check if the current page is an instruction page
-      if (current_page < trial.pages.length) {
-        html = trial.pages[current_page];
-      } else {
-        // Display the appropriate instruction information based on the condition
-        if (trial.condition === 'late') {
-          html = trial.instructlate;
-        } else if (trial.condition === 'early') {
-          html = trial.instructearly;
-        }
-      }
+      var html = trial.pages[current_page];
 
       var pagenum_display = "";
       if (trial.show_page_number) {
@@ -177,6 +165,25 @@ jsPsych.plugins['instructions-advanced'] = (function() {
         }
       }
 
+      // Generate the HTML for the image grid
+      html += '<div class="jspsych-instructions-advanced-grid">';
+      for (var i = 0; i < trial.images.length; i++) {
+        var ship = trial.image_data.ships[i];
+        var planet = trial.image_data.planets[i];
+        var damage = trial.image_data.damage[i];
+        var arrow = trial.image_data.arrows[i];
+        var outcome = damage === 0 ? trial.image_data.win100 : trial.image_data.lose;
+
+        html += '<div class="jspsych-instructions-advanced-row">';
+        html += '<img src="' + planet + '" class="jspsych-instructions-advanced-image">';
+        html += '<img src="' + arrow + '" class="jspsych-instructions-advanced-image">';
+        html += '<img src="' + ship + '" class="jspsych-instructions-advanced-image">';
+        html += '<img src="' + arrow + '" class="jspsych-instructions-advanced-image">';
+        html += '<img src="' + outcome + '" class="jspsych-instructions-advanced-image">';
+        html += '</div>';
+      }
+      html += '</div>';
+
       display_element.innerHTML = html;
 
       if (current_page !== 0 && trial.allow_backward && trial.show_clickable_nav) {
@@ -188,57 +195,15 @@ jsPsych.plugins['instructions-advanced'] = (function() {
       }
     }
 
-    // Function to display the contingency check questions and answers
-    function show_contingency_check() {
-      var html = '<div class="contingency-check">';
-
-      // Display the first contingency check question
-      html += '<p>' + trial.Q0_cont_text + '</p>';
-      for (var i = 0; i < trial.Q0_cont_answers.length; i++) {
-        html += '<label><input type="radio" name="Q0" value="' + trial.Q0_cont_answers[i] + '">' + trial.Q0_cont_answers[i] + '</label><br>';
-      }
-
-      // Display the second contingency check question
-      html += '<p>' + trial.Q1_cont_text + '</p>';
-      for (var i = 0; i < trial.Q1_cont_answers.length; i++) {
-        html += '<label><input type="radio" name="Q1" value="' + trial.Q1_cont_answers[i] + '">' + trial.Q1_cont_answers[i] + '</label><br>';
-      }
-
-      html += '<button id="contingency-check-submit">Submit</button>';
-      html += '</div>';
-
-      display_element.innerHTML = html;
-
-      // Add event listener for the submit button
-      display_element.querySelector('#contingency-check-submit').addEventListener('click', check_contingency_answers);
-    }
-
-    // Function to check the participant's answers to the contingency check questions
-    function check_contingency_answers() {
-      var Q0_answer = display_element.querySelector('input[name="Q0"]:checked').value;
-      var Q1_answer = display_element.querySelector('input[name="Q1"]:checked').value;
-
-      var correct_answers = JSON.parse(trial.correctstring_cont);
-
-      if (Q0_answer === correct_answers.Q0 && Q1_answer === correct_answers.Q1) {
-        // Answers are correct, proceed to the next part of the experiment
-        endTrial();
-      } else {
-        // Answers are incorrect, display the instruction pages again
-        current_page = 0;
-        show_current_page();
-      }
-    }
-
     // Function to move to the next page
     function next() {
       add_current_page_to_view_history();
       current_page++;
 
-      if (current_page < trial.pages.length) {
+      if (current_page >= trial.pages.length) {
+        endTrial();
+      } else {
         show_current_page();
-      } else if (current_page === trial.pages.length) {
-        show_contingency_check();
       }
     }
 
@@ -271,8 +236,8 @@ jsPsych.plugins['instructions-advanced'] = (function() {
       var trial_data = {
         "view_history": JSON.stringify(view_history),
         "rt": performance.now() - start_time,
-        "Q0_response": display_element.querySelector('input[name="Q0"]:checked').value,
-        "Q1_response": display_element.querySelector('input[name="Q1"]:checked').value
+        "images": JSON.stringify(trial.images),
+        "image_data": JSON.stringify(trial.image_data)
       };
 
       jsPsych.finishTrial(trial_data);
