@@ -756,10 +756,21 @@ var p2_q4_triangle = {
 // 	for (var i=0; i<nBlocks_p2; i++){
 
 // 		if (i === nBlocks_p2-4) {
+
+var instructlate = [
+  '<p>Your signals to theide) have been attracting pirate ships, that have been stealing your points!</p>'
+];
+
+// Define the instruction strings for the early condition
+var instructearly = [
+  '<p>Local intel has determined where the pirates are coming from!</p>',
+  '<p>Your signals to the </p>'
+];
+
 			
-			// present correct contingencies
-      var cont_instructions = {
-        type: 'instructions-advanced',
+// Define the contingency instructions trial
+var cont_instructions = {
+  type: 'instructions-advanced',
   pages: [
     '<h1>Welcome to the experiment!</h1>',
     '<p>In this task, you will be presented with a grid of images representing planets, ships, and outcomes.</p>',
@@ -770,17 +781,16 @@ var p2_q4_triangle = {
     'img/planet_p.png',
     'img/planet_b.png'
   ],
-
   image_data: {
     ships: [
       ship_list[0],
       ship_list[1],
-      ship_list[2],
+      ship_list[2]
     ],
     planets: [
       stim_list[0],
       stim_list[1],
-      stim_list[2],
+      stim_list[2]
     ],
     arrows: [
       'img/arrow.jpg',
@@ -790,21 +800,24 @@ var p2_q4_triangle = {
     stim_list: stim_list,
     ship_list: ship_list,
     damage: ship_attack_damage,
-    arrows: [
-      'img/arrow.jpg',
-      'img/arrow.jpg',
-      'img/arrow.jpg'
-    ],
     planet_names: ['Planet A', 'Planet B', 'Planet C'],
     ship_names: ['Ship 1', 'Ship 2', 'Ship 3'],
     outcomes: ['img/lose.png', 'img/win100.png', 'img/win100.png'],
     win100: 'img/win100.png',
-    lose: 'img/lose.png',
+    lose: 'img/lose.png'
   },
   show_clickable_nav: true,
   show_page_number: true,
   allow_backward: true,
-  allow_keys: true
+  allow_keys: true,
+  instructlate: instructlate,
+  instructearly: instructearly,
+  Q0_cont_text: "text",
+  Q0_cont_answers: "text",
+  Q1_cont_text: "text",
+  Q1_cont_answers: "text",
+  correctstring_cont: "text",
+  condition: group.includes("early") ? "early" : "late"
 };
 
 //----------------------------------------------------------------------------
