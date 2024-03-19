@@ -759,40 +759,53 @@ var p2_q4_triangle = {
 			
 			// present correct contingencies
       var cont_instructions = {
-        type: 'instructions',
-        pages: [
-          '<p>Local intel has determined where the pirates are coming from!<br>Click Next to view this intel.</p>',
-          function() {
-            var html = '<p>Your signals to the ' + stim_list[0] + ' planet (left side) will attract pirate ships (Ship: Type ' + ship_list[0] + ') and steal your points!</p>';
-            html += '<p><img src="' + stim_list[0] + '" height="100">';
-            html += '<img src="img/arrow.jpg" height="100">';
-            html += '<img src="' + ship_list[0] + '" height="100">';
-            html += '<img src="img/arrow.jpg" height="100">';
-            html += '<img src="img/lose.png" height="100"></p>';
-            html += '<br><br><br>';
-            html += '<p>Your signals to the ' + stim_list[1] + ' planet (middle side) will only attract friendly ships (Ship: Type ' + ship_list[1] + ').</p>';
-            html += '<p><img src="' + stim_list[1] + '" height="100">';
-            html += '<img src="img/arrow.jpg" height="100">';
-            html += '<img src="' + ship_list[1] + '" height="100">';
-            html += '<img src="img/blank_arrow.jpg" height="100">';
-            html += '<img src="img/blank_lose.jpg" height="100"></p>';
-            html += '<br><br><br>';
-            html += '<p>Your signals to the ' + stim_list[2] + ' planet (right side) will only attract friendly ships (Ship: Type ' + ship_list[2] + ').</p>';
-            html += '<p><img src="' + stim_list[2] + '" height="100">';
-            html += '<img src="img/arrow.jpg" height="100">';
-            html += '<img src="' + ship_list[2] + '" height="100">';
-            html += '<img src="img/blank_arrow.jpg" height="100">';
-            html += '<img src="img/blank_lose.jpg" height="100"></p>';
-            return html;
-          }
-        ],
-        allow_keys: false,
-        show_clickable_nav: true,
-        post_trial_gap: iti,
-        data: {
-          phase: 'instruct contingencies'
-        }
-      };
+        type: 'instructions-advanced',
+  pages: [
+    '<h1>Welcome to the experiment!</h1>',
+    '<p>In this task, you will be presented with a grid of images representing planets, ships, and outcomes.</p>',
+    '<p>Use the navigation buttons or the left/right arrow keys to move through the instructions.</p>'
+  ],
+  images: [
+    'img/planet_o.png',
+    'img/planet_p.png',
+    'img/planet_b.png'
+  ],
+
+  image_data: {
+    ships: [
+      ship_list[0],
+      ship_list[1],
+      ship_list[2],
+    ],
+    planets: [
+      stim_list[0],
+      stim_list[1],
+      stim_list[2],
+    ],
+    arrows: [
+      'img/arrow.jpg',
+      'img/arrow.jpg',
+      'img/arrow.jpg'
+    ],
+    stim_list: stim_list,
+    ship_list: ship_list,
+    damage: ship_attack_damage,
+    arrows: [
+      'img/arrow.jpg',
+      'img/arrow.jpg',
+      'img/arrow.jpg'
+    ],
+    planet_names: ['Planet A', 'Planet B', 'Planet C'],
+    ship_names: ['Ship 1', 'Ship 2', 'Ship 3'],
+    outcomes: ['img/lose.png', 'img/win100.png', 'img/win100.png'],
+    win100: 'img/win100.png',
+    lose: 'img/lose.png',
+  },
+  show_clickable_nav: true,
+  show_page_number: true,
+  allow_backward: true,
+  allow_keys: true
+};
 
 //----------------------------------------------------------------------------
 // --- Debrief and experiment end
