@@ -3,6 +3,8 @@
 Planets Task is a JavaScript-based application for conducting studies related to decision-making and probability. In this task, participants interact with a simulated environment where they can click on planets to receive probabilistic rewards and encounter various events like pirate attacks.
 This README is substantially outdated due to a rewrite
 
+
+
 ## Installation
 
 This project does not require any specific package manager for installation. Simply clone the repository from the code repo and include the JavaScript files in your project as needed.
@@ -10,6 +12,8 @@ This project does not require any specific package manager for installation. Sim
 ## Usage
 
 Here's how you can use the Planets Task in your project:
+
+
 
 ```javascript
 // Include the planet-response.js or planet-responseELife.js in your HTML file
@@ -23,43 +27,166 @@ var config = {
     // ... other parameters
 };
 ```
+Table of Contents
 
-### Implemented Parameters (explicitly set and utilized):
-- `stimulus`: Array[String]. Default: undefined. Paths to image files for the planets.
-- `stimulus_select`: String. Default: undefined. Path to the image used for stimulus selection on mouseover.
-- `prompt`: Array[String]. Default: ['Planet A', 'Planet B']. Text labels for each choice.
-- `block_duration`: Integer (ms). Default: 240*1000. Duration of each continuous block.
-- `feedback_duration`: Integer (ms). Default: 3000. Duration of feedback for trade and ship.
-- `probability_trade`: Array[Integer]. Default: [0.5, 0.5]. Probability of successful trade for each planet.
-- `show_ship`: Boolean. Default: false. Toggle for ship appearance in each block.
-- `show_ship_delay`: Integer (ms). Default: 2000. Delay between trade attempt and ship appearance.
-- `probability_ship`: Array[Float]. Default: [0.2, 0.2]. Probability of ship appearing after trade attempts.
-- `ship_stimulus`: Array[String]. Default: null. Image files for each ship.
+    Installation
+    Usage
+    File Structure
+    Dependencies
+    Configuration
+    Experiment Structure
+    Custom Plugins
+    Utility Functions
+    Contributing
+    License
 
-### Implicit Parameters (Not explicitly set, may be used implicitly or with default values):
-- `stimulus_height`: Integer (px). Default: null. Height of the planet image.
-- `stimulus_width`: Integer (px). Default: null. Width of the planet image.
-- `maintain-aspect-ratio`: Boolean. Default: true. Whether to maintain the aspect ratio of the image.
-- `show_total_points`: Boolean. Default: true. Toggle to show total points on the screen.
-- `ship_space`: Integer (px). Default: 300. Space between stimuli and the width of the ship div.
-- `end_trial_wait`: Integer (ms). Default: 1000. Duration before the block ends after the final action.
-- `signal_time`: Integer (ms). Default: 2000. Duration of the trade signal before reward delivery.
-- `signal_height`: Integer (px). Default: 100. Height of the signal image.
-- `signal_width`: Integer (px). Default: 80. Width of the signal image.
-- `signal_padding`: Integer (px). Default: 10. Padding around the signal image.
-- `rewards`: Array[Integer]. Default: [100, 100]. Points rewarded for each successful trade.
-- `ship_height`: Integer (px). Default: 200. Height of the ship image.
-- `ship_width`: Integer (px). Default: 300. Width of the ship image.
-- `ship_attack_time`: Integer (ms). Default: 400. Time between ship appearance and encounter.
-- `ship_attack_damage`: Float. Default: 0.2. Points lost in an undefended ship attack.
-- `ship_hostile_idx`: Integer. Default: 0. Index of the hostile ship (0 or 1).
-- `shield_charging_time`: Integer (ms). Default: 2000. Time required for the shield to charge.
-- `probability_shield`: Float. Default: 0.5. Probability of shield availability after charging.
-- `shield_prevent_trading`: Boolean. Default: true. Prevents trading when the shield is active.
-- `shield_cost_toggle`: Boolean. Default: true. Toggles the activation cost for the shield.
-- `shield_cost_amount`: Integer. Default: 50. Cost in points to activate the shield.
-- `cursor`: Array[String]. Default: ['img/cursor.png','img/cursordark.png']. Paths to cursor images for default and mousedown states.
+Installation
 
+    Clone the repository:
+
+git clone https://github.com/your-username/planets-and-pirates.git
+
+Navigate to the project directory:
+
+    cd planets-and-pirates
+
+    Open the index2.html file in a web browser to run the game.
+
+Usage
+
+To start the game, open the index2.html file in a web browser. The game will begin with an introduction and instructions. Follow the on-screen prompts to progress through the game.
+File Structure
+
+The project has the following file structure:
+
+planets-and-pirates/
+├── app2.js
+├── index2.html
+├── text.js
+├── jspsych-6.1.0/
+│   ├── css/
+│   │   └── jspsych.css
+│   ├── jspsych.js
+│   └── plugins/
+│       ├── jspsych-fullscreen.js
+│       ├── jspsych-html-button-response.js
+│       ├── jspsych-html-slider-triangle.js (?)
+│       ├── jspsych-image-keyboard-response.js
+│       ├── jspsych-inference-check-1.js
+│       ├── jspsych-inference-check-4.js (?)
+│       ├── jspsych-inference-check-5.js (?)
+│       ├── jspsych-instructions-advanced.js (?)
+│       ├── jspsych-instructions.js
+│       ├── jspsych-survey-html-form.js
+│       ├── jspsych-survey-likert-catch.js (?)
+│       ├── jspsych-survey-likert.js
+│       ├── jspsych-survey-multi-catch-image.js
+│       ├── jspsych-survey-multi-catch.js (?)
+│       ├── jspsych-survey-multi-choice.js
+│       ├── jspsych-survey-text.js
+│       ├── jspsych-valence-check-3.js
+│       ├── jspsych-valence-check-4.js
+│       ├── jspsych-valence-check-5.js (?)
+│       ├── jspsych-valence-check-6.js (?)
+│       ├── jspsych-valence-check-8.js (?)
+│       └── planet-response.js
+└── img/
+    └── (image files)
+
+    app2.js: The main JavaScript file containing the game logic and experiment structure.
+    index2.html: The HTML file that serves as the entry point for the game.
+    text.js: A JavaScript file containing text content used in the game.
+    jspsych-6.1.0/: Directory containing the jsPsych library files.
+        css/: Directory containing the jsPsych CSS file.
+        jspsych.js: The core jsPsych library file.
+        plugins/: Directory containing jsPsych plugin files.
+    img/: Directory containing image files used in the game.
+
+Dependencies
+
+The game relies on the following dependencies:
+
+    jsPsych (version 6.1.0): A JavaScript library for creating behavioral experiments.
+    jQuery: A JavaScript library for DOM manipulation and event handling.
+
+The necessary files for these dependencies are included in the project repository.
+Configuration
+
+The game can be configured by modifying the variables and parameters in the app2.js file. Some notable configuration options include:
+
+    groups: An array of group names for randomizing participant groups.
+    samples: An array of sample names for randomizing participant samples.
+    stim_list: An array of image file paths for the planet stimuli.
+    ship_list: An array of image file paths for the ship stimuli.
+    block_duration: The duration of each block in milliseconds.
+    probability_trade: The probability of successful trades for each planet.
+    probability_shield: The probability of successful shield activation for each planet.
+
+Please refer to the comments in the app2.js file for a complete list of configuration options.
+Experiment Structure
+
+The experiment consists of multiple phases and blocks. The main phases are:
+
+    Instructions: Participants are shown instructions and must pass a comprehension check to proceed.
+    Phase 1: Participants interact with planets without the presence of ships.
+    Phase 2: Participants interact with planets while ships appear and can attack.
+    Phase 3: Participants are informed about the contingencies between planets and ships.
+
+Each phase consists of multiple blocks, and each block contains a specified number of trials. The experiment timeline is constructed dynamically based on the configuration options.
+Custom Plugins
+
+The game utilizes several custom jsPsych plugins to implement specific functionality. These plugins are located in the jspsych-6.1.0/plugins/ directory. Some notable custom plugins include:
+
+    planet-response.js: A plugin for displaying planets and handling participant responses.
+        Parameters:
+            stimulus: An array of image file paths for the planet stimuli.
+            prompt: An array of labels for each planet.
+            show_ship: A boolean indicating whether to display ships.
+            ship_stimulus: An array of image file paths for the ship stimuli.
+            ship_attack_damage: An array specifying the attack damage for each ship.
+            block_duration: The duration of each block in milliseconds.
+        Function: Displays the planets and handles participant interactions, including trading, shield activation, and ship attacks.
+    jspsych-inference-check-1.js: A plugin for collecting inference ratings for a single stimulus.
+        Parameters:
+            main_stimulus: The image file path for the main stimulus.
+            stimulus_1: The image file path for the first additional stimulus.
+            stim_text_1: Text to display with the first additional stimulus.
+            slider_text_top: Text to display above the rating slider.
+            labels_top: Labels for the rating slider.
+        Function: Displays the main stimulus, an additional stimulus, and a rating slider to collect inference ratings.
+    jspsych-valence-check-3.js: A plugin for collecting valence ratings for three stimuli.
+        Parameters:
+            stimulus_1, stimulus_2, stimulus_3: Image file paths for the three stimuli.
+            stim_text_1, stim_text_2, stim_text_3: Text to display with each stimulus.
+            labels: Labels for the valence rating sliders.
+        Function: Displays three stimuli and corresponding valence rating sliders to collect valence ratings.
+    jspsych-survey-multi-catch-image.js: A plugin for multiple-choice survey questions with instruction looping and error catching.
+        Parameters:
+            options: An array of HTML strings representing the answer options.
+            correct_answers: An object specifying the correct answers for each question.
+            instructions: Instructions to display when an incorrect answer is given.
+        Function: Presents multiple-choice questions with images and handles instruction looping and error catching.
+
+Please refer to the respective plugin files for more details on their functionality and parameters.
+Utility Functions
+
+The app2.js file contains several utility functions that are used throughout the game. These functions perform tasks such as adding blocks to the timeline, initializing variables for balanced probability arrays, and shuffling arrays.
+
+Some notable utility functions include:
+
+    addBlocksToTimeline: Adds blocks to the experiment timeline based on the provided configuration.
+    initProbArray: Initializes variables for balanced probability arrays.
+    shuffleArray: Shuffles the elements of an array randomly.
+
+Please refer to the comments in the app2.js file for more details on each utility function.
+Contributing
+
+Contributions to the Planets and Pirates game are welcome! If you find any bugs, have suggestions for improvements, or want to add new features, please open an issue or submit a pull request on the GitHub repository.
+
+When contributing, please adhere to the existing code style and conventions. Make sure to test your changes thoroughly before submitting a pull request.
+License
+
+The Planets and Pirates game is open-source software licensed under the MIT License. You are free to use, modify, and distribute the game as per the terms of the license.
 
 ### Contribution
 
