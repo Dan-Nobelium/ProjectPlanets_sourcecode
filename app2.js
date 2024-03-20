@@ -805,7 +805,6 @@ var p2_q4_triangle = {
   allow_keys: true
 };
 
-
 var cont_instructions = {
   type: 'instructions',
   pages: [
@@ -813,28 +812,34 @@ var cont_instructions = {
     `
     <div class="jspsych-instructions-advanced-grid">
       <div class="jspsych-instructions-advanced-row">
-        <img src="${stim_list[0]}" class="jspsych-instructions-advanced-image">
-        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <img src="${ship_list[0]}" class="jspsych-instructions-advanced-image">
-        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <img src="${ship_attack_damage[0] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
-        <p>Planet A: ${ship_attack_damage[0] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
+        <div class="jspsych-instructions-advanced-cell">
+          <img src="${stim_list[0]}" class="jspsych-instructions-advanced-image">
+          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+          <img src="${ship_list[0]}" class="jspsych-instructions-advanced-image">
+          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+          <img src="${ship_attack_damage[0] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
+          <p>Planet A: ${ship_attack_damage[0] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
+        </div>
       </div>
       <div class="jspsych-instructions-advanced-row">
-        <img src="${stim_list[1]}" class="jspsych-instructions-advanced-image">
-        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <img src="${ship_list[1]}" class="jspsych-instructions-advanced-image">
-        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <img src="${ship_attack_damage[1] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
-        <p>Planet B: ${ship_attack_damage[1] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
+        <div class="jspsych-instructions-advanced-cell">
+          <img src="${stim_list[1]}" class="jspsych-instructions-advanced-image">
+          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+          <img src="${ship_list[1]}" class="jspsych-instructions-advanced-image">
+          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+          <img src="${ship_attack_damage[1] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
+          <p>Planet B: ${ship_attack_damage[1] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
+        </div>
       </div>
       <div class="jspsych-instructions-advanced-row">
-        <img src="${stim_list[2]}" class="jspsych-instructions-advanced-image">
-        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <img src="${ship_list[2]}" class="jspsych-instructions-advanced-image">
-        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <img src="${ship_attack_damage[2] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
-        <p>Planet C: ${ship_attack_damage[2] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
+        <div class="jspsych-instructions-advanced-cell">
+          <img src="${stim_list[2]}" class="jspsych-instructions-advanced-image">
+          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+          <img src="${ship_list[2]}" class="jspsych-instructions-advanced-image">
+          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+          <img src="${ship_attack_damage[2] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
+          <p>Planet C: ${ship_attack_damage[2] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
+        </div>
       </div>
     </div>
     <p>Based on the information above, please answer the following questions:</p>
@@ -852,7 +857,7 @@ var cont_instructions = {
     style.innerHTML = `
       .jspsych-instructions-advanced-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: 1fr;
         grid-gap: 20px;
         justify-items: center;
         align-items: center;
@@ -860,14 +865,20 @@ var cont_instructions = {
       }
       .jspsych-instructions-advanced-row {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+      }
+      .jspsych-instructions-advanced-cell {
+        display: flex;
+        flex-direction: row;
         align-items: center;
       }
       .jspsych-instructions-advanced-image {
         width: 100px;
         height: 100px;
         object-fit: contain;
-        margin-bottom: 10px;
+        margin-right: 10px;
       }
     `;
     document.head.appendChild(style);
