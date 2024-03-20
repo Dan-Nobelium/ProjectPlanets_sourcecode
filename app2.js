@@ -885,6 +885,93 @@ var cont_instructions = {
   }
 };
 
+var contingenciescorrect = false;
+
+var cont_catch = {
+  type: 'survey-multi-catch-image',
+  preamble: [
+    "<p align='center'><b>Check your knowledge before you continue.</b></p>", // Removed comma
+    "<p align='center'>Which pirate ships lead to attacks?</p>" // Removed comma
+  ],
+  questions: [
+    {
+      prompt: "", // Removed asterisk
+      options: [
+        `<div class="option-container">
+           <img src="${ship_list[0]}" class="option-image">
+           <button class="option-button" value="Ship 1">${ship_list[0]}</button> // Replaced undefined with ship_stim[0]
+         </div>`,
+        `<div class="option-container">
+           <img src="${ship_list[1]}" class="option-image">
+           <button class="option-button" value="Ship 2">${ship_list[1]}</button> // Replaced undefined with ship_stim[1]
+         </div>`,
+        `<div class="option-container">
+           <img src="${ship_list[2]}" class="option-image">
+           <button class="option-button" value="Ship 3">${ship_list[2]}</button> // Replaced undefined with ship_stim[2]
+         </div>`
+      ],
+      required: true,
+      name: 'Q0'
+    }
+  ],
+  correct_answers: {
+    Q0: "Ship 1"
+  },
+  instructions: '<p>Your answer is incorrect. Please review the information provided and try again.</p>',
+  on_finish: function(data) {
+    var responses = JSON.parse(data.responses);
+    if (responses.Q0 === this.correct_answers.Q0) {
+      contingenciescorrect = true;
+    }
+  },
+  data: {
+    phase: 'contingency quiz'
+  },
+  on_load: function() {
+    // Add custom CSS for styling
+    var style = document.createElement('style');
+    style.innerHTML = `
+      .option-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .option-image {
+        width: 200px;
+        height: 200px;
+        object-fit: contain;
+        margin-bottom: 10px;
+      }
+      .option-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #e0e0e0;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .option-button:hover {
+        background-color: #d0d0d0;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Add event listener to option buttons
+    var optionButtons = document.querySelectorAll('.option-button');
+    optionButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        var selectedOption = this.value;
+        var questionName = this.closest('.jspsych-survey-multi-catch-image-question').dataset.name;
+        var inputName = 'jspsych-survey-multi-catch-image-response-' + questionName;
+        var inputElement = document.querySelector('input[name="' + inputName + '"]');
+        inputElement.value = selectedOption;
+        inputElement.checked = true;
+      });
+    });
+  }
+};
+
 //----------------------------------------------------------------------------
 // --- Debrief and experiment end
 
@@ -1108,8 +1195,12 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(p1_q4_triangle);
 
 //Phase3, ships
-timeline.push(cont_instructions); //add pictures and testing
-timeline.push(cont_images); //add pictures and testing
+// timeline.push(cont_instructions); //add pictures and testing
+
+timeline.push(cont_catch); //add pictures and testing
+
+
+
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
 timeline.push(valence_p2);
 timeline.push(infer_p2_A);

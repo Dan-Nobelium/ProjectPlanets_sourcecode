@@ -81,85 +81,84 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       }
     }
   };
+plugin.trial = function(display_element, trial) {
+  var plugin_id_name = "jspsych-survey-multi-catch-image";
+  var html = "";
 
-  plugin.trial = function(display_element, trial) {
-    var plugin_id_name = "jspsych-survey-multi-catch";
-    var html = "";
+  // Inject CSS for styling the trial
+  html += '<style id="jspsych-survey-multi-catch-image-css">';
+  html += ".jspsych-survey-multi-catch-image-question { margin-top: 2em; margin-bottom: 2em; text-align: center; }" +
+    ".jspsych-survey-multi-catch-image-text span.required {color: darkred;}" +
+    ".jspsych-survey-multi-catch-image-option { display: inline-block; margin-left: 1em; margin-right: 1em; vertical-align: top; text-align: center; }" +
+    ".jspsych-survey-multi-catch-image-option img { display: block; margin: 0 auto 0.5em; }" +
+    "label.jspsych-survey-multi-catch-image-text input[type='radio'] {margin-right: 1em;}";
+  html += '</style>';
 
-    // inject CSS for trial
-    html += '<style id="jspsych-survey-multi-catch-css">';
-    html += ".jspsych-survey-multi-catch-question { margin-top: 2em; margin-bottom: 2em; text-align: left; }" +
-      ".jspsych-survey-multi-catch-text span.required {color: darkred;}" +
-      ".jspsych-survey-multi-catch-horizontal .jspsych-survey-multi-catch-text {  text-align: center;}" +
-      ".jspsych-survey-multi-catch-option { line-height: 2; }" +
-      ".jspsych-survey-multi-catch-horizontal .jspsych-survey-multi-catch-option {  display: inline-block;  margin-left: 1em;  margin-right: 1em;  vertical-align: top;}" +
-      "label.jspsych-survey-multi-catch-text input[type='radio'] {margin-right: 1em;}";
-    html += '</style>';
+  // Show preamble text
+  if (trial.preamble !== null) {
+    html += '<div id="jspsych-survey-multi-catch-image-preamble" class="jspsych-survey-multi-catch-image-preamble">' + trial.preamble + '</div>';
+  }
 
-    // show preamble text
-    if (trial.preamble !== null) {
-      html += '<div id="jspsych-survey-multi-catch-preamble" class="jspsych-survey-multi-catch-preamble">' + trial.preamble + '</div>';
+  // Add form element
+  html += '<form id="jspsych-survey-multi-catch-image-form">';
+
+  // Generate question order
+  var question_order = [];
+  for (var i = 0; i < trial.questions.length; i++) {
+    question_order.push(i);
+  }
+  if (trial.randomize_question_order) {
+    question_order = jsPsych.randomization.shuffle(question_order);
+  }
+
+  // Iterate over questions
+  for (var i = 0; i < trial.questions.length; i++) {
+    var question = trial.questions[question_order[i]];
+    var question_id = question_order[i];
+
+    // Create question container
+    html += '<div id="jspsych-survey-multi-catch-image-' + question_id + '" class="jspsych-survey-multi-catch-image-question" data-name="' + question.name + '">';
+
+    // Add question text
+    html += '<p class="jspsych-survey-multi-catch-image-text survey-multi-catch-image">' + question.prompt;
+    if (question.required) {
+      html += "<span class='required'>*</span>";
     }
+    html += '</p>';
 
-    // form element
-    html += '<form id="jspsych-survey-multi-catch-form">';
+    // Iterate over options
+    for (var j = 0; j < question.options.length; j++) {
+      var option_id_name = "jspsych-survey-multi-catch-image-option-" + question_id + "-" + j;
+      var input_name = 'jspsych-survey-multi-catch-image-response-' + question_id;
+      var input_id = 'jspsych-survey-multi-catch-image-response-' + question_id + '-' + j;
 
-    // generate question order
-    var question_order = [];
-    for (var i = 0; i < trial.questions.length; i++) {
-      question_order.push(i);
-    }
-    if (trial.randomize_question_order) {
-      question_order = jsPsych.randomization.shuffle(question_order);
-    }
+      var required_attr = question.required ? 'required' : '';
 
-    // add multiple-choice questions
-    for (var i = 0; i < trial.questions.length; i++) {
-      var question = trial.questions[question_order[i]];
-      var question_id = question_order[i];
-
-      // create question container
-      var question_classes = ['jspsych-survey-multi-catch-question'];
-      if (question.horizontal) {
-        question_classes.push('jspsych-survey-multi-catch-horizontal');
-      }
-
-      html += '<div id="jspsych-survey-multi-catch-' + question_id + '" class="' + question_classes.join(' ') + '"  data-name="' + question.name + '">';
-
-      // add question text
-      html += '<p class="jspsych-survey-multi-catch-text survey-multi-catch">' + question.prompt;
-      if (question.required) {
-        html += "<span class='required'>*</span>";
-      }
-      html += '</p>';
-
-      // create option radio buttons
-      for (var j = 0; j < question.options.length; j++) {
-        var option_id_name = "jspsych-survey-multi-catch-option-" + question_id + "-" + j;
-        var input_name = 'jspsych-survey-multi-catch-response-' + question_id;
-        var input_id = 'jspsych-survey-multi-catch-response-' + question_id + '-' + j;
-
-        var required_attr = question.required ? 'required' : '';
-
-        // add radio button container
-        html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-catch-option">';
-        html += '<label class="jspsych-survey-multi-catch-text" for="' + input_id + '">' + question.options[j] + '</label>';
-        html += '<input type="radio" name="' + input_name + '" id="' + input_id + '" value="' + question.options[j] + '" ' + required_attr + '></input>';
-        html += '</div>';
-      }
-
+      // Add option container
+      html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-catch-image-option">';
+      html += '<img src="' + question.options[j].image + '" alt="' + question.options[j].label + '">';
+      html += '<label class="jspsych-survey-multi-catch-image-text" for="' + input_id + '">';
+      html += '<input type="radio" name="' + input_name + '" id="' + input_id + '" value="' + question.options[j].label + '" ' + required_attr + '>' + question.options[j].label;
+      html += '</label>';
       html += '</div>';
     }
 
-    // add submit button
-    html += '<input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn"' + (trial.button_label ? ' value="' + trial.button_label + '"' : '') + '></input>';
-    html += '</form>';
+    html += '</div>';
+  }
 
-    var instruction_count = 0;
-    var start_time = performance.now();
-    var responses = {};
-    var question_data = {};
-    var instructionTimeout = null;
+  // Add submit button
+  html += '<div class="jspsych-survey-multi-catch-image-nav">';
+  html += '<input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn" value="Continue"></input>';
+  html += '</div>';
+
+  html += '</form>';
+
+  // Initialize variables
+  var instruction_count = 0;
+  var start_time = performance.now();
+  var responses = {};
+  var question_data = {};
+  var instructionTimeout = null;
 
     function display_instructions() {
       instruction_count++;
