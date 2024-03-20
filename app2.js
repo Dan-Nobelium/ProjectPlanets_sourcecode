@@ -756,55 +756,7 @@ var p2_q4_triangle = {
 // 	for (var i=0; i<nBlocks_p2; i++){
 
 // 		if (i === nBlocks_p2-4) {
-			
-			// present correct contingencies
-      var cont_images = {
-        type: 'instructions',
-  pages: [
-    '<h1>Welcome to the experiment!</h1>',
-  ],
-  images: [
-    'img/planet_o.png',
-    'img/planet_p.png',
-    'img/planet_b.png'
-  ],
-
-  image_data: {
-    ships: [
-      ship_list[0],
-      ship_list[1],
-      ship_list[2],
-    ],
-    planets: [
-      stim_list[0],
-      stim_list[1],
-      stim_list[2],
-    ],
-    arrows: [
-      'img/arrow.jpg',
-      'img/arrow.jpg',
-      'img/arrow.jpg'
-    ],
-    stim_list: stim_list,
-    ship_list: ship_list,
-    damage: ship_attack_damage,
-    arrows: [
-      'img/arrow.jpg',
-      'img/arrow.jpg',
-      'img/arrow.jpg'
-    ],
-    planet_names: ['Planet A', 'Planet B', 'Planet C'],
-    ship_names: ['Ship 1', 'Ship 2', 'Ship 3'],
-    outcomes: ['img/lose.png', 'img/win100.png', 'img/win100.png'],
-    win100: 'img/win100.png',
-    lose: 'img/lose.png',
-  },
-  show_clickable_nav: true,
-  show_page_number: true,
-  allow_backward: true,
-  allow_keys: true
-};
-
+		
 var cont_instructions = {
   type: 'instructions',
   pages: [
@@ -846,6 +798,8 @@ var cont_instructions = {
     `
   ],
   allow_keys: false,
+  stim_list: stim_list,
+  ship_list: ship_list,
   show_clickable_nav: true,
   post_trial_gap: iti,
   data: {
@@ -890,24 +844,24 @@ var contingenciescorrect = false;
 var cont_catch = {
   type: 'survey-multi-catch-image',
   preamble: [
-    "<p align='center'><b>Check your knowledge before you continue.</b></p>", // Removed comma
-    "<p align='center'>Which pirate ships lead to attacks?</p>" // Removed comma
+    "<p align='center'><b>Check your knowledge before you continue.</b></p>",
+    "<p align='center'>Which pirate ships lead to attacks?</p>"
   ],
   questions: [
     {
-      prompt: "", // Removed asterisk
+      prompt: "",
       options: [
         `<div class="option-container">
            <img src="${ship_list[0]}" class="option-image">
-           <button class="option-button" value="Ship 1">${ship_list[0]}</button> // Replaced undefined with ship_stim[0]
+           <button class="option-button" value="Ship 1">Ship 1</button>
          </div>`,
         `<div class="option-container">
            <img src="${ship_list[1]}" class="option-image">
-           <button class="option-button" value="Ship 2">${ship_list[1]}</button> // Replaced undefined with ship_stim[1]
+           <button class="option-button" value="Ship 2">Ship 2</button>
          </div>`,
         `<div class="option-container">
            <img src="${ship_list[2]}" class="option-image">
-           <button class="option-button" value="Ship 3">${ship_list[2]}</button> // Replaced undefined with ship_stim[2]
+           <button class="option-button" value="Ship 3">Ship 3</button>
          </div>`
       ],
       required: true,
@@ -919,57 +873,17 @@ var cont_catch = {
   },
   instructions: '<p>Your answer is incorrect. Please review the information provided and try again.</p>',
   on_finish: function(data) {
-    var responses = JSON.parse(data.responses);
-    if (responses.Q0 === this.correct_answers.Q0) {
-      contingenciescorrect = true;
+    var response = data.responses.Q0;
+    if (response === this.correct_answers.Q0) {
+      contingencies_correct = true;
     }
+    data.contingencies_correct = contingencies_correct;
+    data.responses = JSON.stringify(data.responses); // Store responses as a valid JSON string
   },
   data: {
     phase: 'contingency quiz'
   },
-  on_load: function() {
-    // Add custom CSS for styling
-    var style = document.createElement('style');
-    style.innerHTML = `
-      .option-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-      .option-image {
-        width: 200px;
-        height: 200px;
-        object-fit: contain;
-        margin-bottom: 10px;
-      }
-      .option-button {
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #e0e0e0;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      .option-button:hover {
-        background-color: #d0d0d0;
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Add event listener to option buttons
-    var optionButtons = document.querySelectorAll('.option-button');
-    optionButtons.forEach(function(button) {
-      button.addEventListener('click', function() {
-        var selectedOption = this.value;
-        var questionName = this.closest('.jspsych-survey-multi-catch-image-question').dataset.name;
-        var inputName = 'jspsych-survey-multi-catch-image-response-' + questionName;
-        var inputElement = document.querySelector('input[name="' + inputName + '"]');
-        inputElement.value = selectedOption;
-        inputElement.checked = true;
-      });
-    });
-  }
+  contingencies_correct: false
 };
 
 //----------------------------------------------------------------------------

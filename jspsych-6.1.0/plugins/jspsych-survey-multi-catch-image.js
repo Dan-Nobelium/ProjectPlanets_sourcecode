@@ -78,53 +78,66 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         pretty_name: 'Instructions',
         default: null,
         description: 'HTML-formatted string containing the instructions to display when an incorrect answer is given'
+      },
+      ship_list: {
+        type: jsPsych.plugins.parameterType.COMPLEX,
+        pretty_name: 'Ship List',
+        default: undefined,
+        description: 'An array containing the ship stimulus images and labels.'
+      },
+      contingencies_correct: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Contingencies Correct',
+        default: false,
+        description: 'Flag indicating whether the contingencies are correctly answered.'
       }
     }
   };
-plugin.trial = function(display_element, trial) {
-  var plugin_id_name = "jspsych-survey-multi-catch-image";
-  var html = "";
 
-  // Inject CSS for styling the trial
-  html += '<style id="jspsych-survey-multi-catch-image-css">';
-  html += ".jspsych-survey-multi-catch-image-question { margin-top: 2em; margin-bottom: 2em; text-align: center; }" +
-    ".jspsych-survey-multi-catch-image-text span.required {color: darkred;}" +
-    ".jspsych-survey-multi-catch-image-option { display: inline-block; margin-left: 1em; margin-right: 1em; vertical-align: top; text-align: center; }" +
-    ".jspsych-survey-multi-catch-image-option img { display: block; margin: 0 auto 0.5em; }" +
-    "label.jspsych-survey-multi-catch-image-text input[type='radio'] {margin-right: 1em;}";
-  html += '</style>';
+  plugin.trial = function(display_element, trial) {
+    var plugin_id_name = "jspsych-survey-multi-catch-image";
+    var html = "";
 
-  // Show preamble text
-  if (trial.preamble !== null) {
-    html += '<div id="jspsych-survey-multi-catch-image-preamble" class="jspsych-survey-multi-catch-image-preamble">' + trial.preamble + '</div>';
-  }
+    // Inject CSS for styling the trial
+    html += '<style id="jspsych-survey-multi-catch-image-css">';
+    html += ".jspsych-survey-multi-catch-image-question { margin-top: 2em; margin-bottom: 2em; text-align: center; }" +
+      ".jspsych-survey-multi-catch-image-text span.required {color: darkred;}" +
+      ".jspsych-survey-multi-catch-image-option { display: inline-block; margin-left: 1em; margin-right: 1em; vertical-align: top; text-align: center; }" +
+      ".jspsych-survey-multi-catch-image-option img { display: block; margin: 0 auto 0.5em; }" +
+      "label.jspsych-survey-multi-catch-image-text input[type='radio'] {margin-right: 1em;}";
+    html += '</style>';
 
-  // Add form element
-  html += '<form id="jspsych-survey-multi-catch-image-form">';
-
-  // Generate question order
-  var question_order = [];
-  for (var i = 0; i < trial.questions.length; i++) {
-    question_order.push(i);
-  }
-  if (trial.randomize_question_order) {
-    question_order = jsPsych.randomization.shuffle(question_order);
-  }
-
-  // Iterate over questions
-  for (var i = 0; i < trial.questions.length; i++) {
-    var question = trial.questions[question_order[i]];
-    var question_id = question_order[i];
-
-    // Create question container
-    html += '<div id="jspsych-survey-multi-catch-image-' + question_id + '" class="jspsych-survey-multi-catch-image-question" data-name="' + question.name + '">';
-
-    // Add question text
-    html += '<p class="jspsych-survey-multi-catch-image-text survey-multi-catch-image">' + question.prompt;
-    if (question.required) {
-      html += "<span class='required'>*</span>";
+    // Show preamble text
+    if (trial.preamble !== null) {
+      html += '<div id="jspsych-survey-multi-catch-image-preamble" class="jspsych-survey-multi-catch-image-preamble">' + trial.preamble + '</div>';
     }
-    html += '</p>';
+
+    // Add form element
+    html += '<form id="jspsych-survey-multi-catch-image-form">';
+
+    // Generate question order
+    var question_order = [];
+    for (var i = 0; i < trial.questions.length; i++) {
+      question_order.push(i);
+    }
+    if (trial.randomize_question_order) {
+      question_order = jsPsych.randomization.shuffle(question_order);
+    }
+
+    // Iterate over questions
+    for (var i = 0; i < trial.questions.length; i++) {
+      var question = trial.questions[question_order[i]];
+      var question_id = question_order[i];
+
+      // Create question container
+      html += '<div id="jspsych-survey-multi-catch-image-' + question_id + '" class="jspsych-survey-multi-catch-image-question" data-name="' + question.name + '">';
+
+      // Add question text
+      html += '<p class="jspsych-survey-multi-catch-image-text survey-multi-catch-image">' + question.prompt;
+      if (question.required) {
+        html += "<span class='required'>*</span>";
+      }
+      html += '</p>';
 
     // Iterate over options
     for (var j = 0; j < question.options.length; j++) {
@@ -136,33 +149,29 @@ plugin.trial = function(display_element, trial) {
 
       // Add option container
       html += '<div id="' + option_id_name + '" class="jspsych-survey-multi-catch-image-option">';
-      html += '<img src="' + question.options[j].image + '" alt="' + question.options[j].label + '">';
-      html += '<label class="jspsych-survey-multi-catch-image-text" for="' + input_id + '">';
-      html += '<input type="radio" name="' + input_name + '" id="' + input_id + '" value="' + question.options[j].label + '" ' + required_attr + '>' + question.options[j].label;
-      html += '</label>';
+      html += question.options[j]; // Use the HTML string directly
       html += '</div>';
     }
 
+      html += '</div>';
+    }
+
+    // Add submit button
+    html += '<div class="jspsych-survey-multi-catch-image-nav">';
+    html += '<input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn" value="Continue"></input>';
     html += '</div>';
-  }
 
-  // Add submit button
-  html += '<div class="jspsych-survey-multi-catch-image-nav">';
-  html += '<input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn" value="Continue"></input>';
-  html += '</div>';
+    html += '</form>';
 
-  html += '</form>';
-
-  // Initialize variables
-  var instruction_count = 0;
-  var start_time = performance.now();
-  var responses = {};
-  var question_data = {};
-  var instructionTimeout = null;
+    // Initialize variables
+    var instruction_count = 0;
+    var start_time = performance.now();
+    var responses = {};
+    var question_data = {};
+    var instructionTimeout = null;
 
     function display_instructions() {
       instruction_count++;
-
 
       // Create the modal overlay
       var modalOverlay = document.createElement('div');
@@ -268,6 +277,55 @@ plugin.trial = function(display_element, trial) {
     } else {
       console.error('Form element not found in the DOM.');
     }
+
+    // Add custom CSS for styling
+    var style = document.createElement('style');
+    style.innerHTML = `
+      .option-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .option-image {
+        width: 200px;
+        height: 200px;
+        object-fit: contain;
+        margin-bottom: 10px;
+      }
+      .option-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #e0e0e0;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .option-button:hover {
+        background-color: #d0d0d0;
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Add event listener to option buttons
+    var optionButtons = document.querySelectorAll('.option-button');
+    optionButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        var selectedOption = this.value;
+        var questionName = this.closest('.jspsych-survey-multi-catch-image-question').dataset.name;
+        var inputName = 'jspsych-survey-multi-catch-image-response-' + questionName;
+        var inputElement = document.querySelector('input[name="' + inputName + '"]');
+        inputElement.value = selectedOption;
+        inputElement.checked = true;
+      });
+    });
+
+    // Update contingencies_correct variable
+    // trial.contingencies_correct = trial.contingencies_correct || false;
+    // var responses = JSON.parse(trial.data.responses);
+    // if (responses.Q0 === trial.correct_answers.Q0) {
+    //   trial.contingencies_correct = true;
+    // }
   };
 
   return plugin;
