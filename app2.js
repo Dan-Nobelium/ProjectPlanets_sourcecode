@@ -1092,14 +1092,14 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(htq_block);
 // timeline.push(audit_block);
 
-// // Phase 1, no ships
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-// timeline.push(valence_p1);
-// timeline.push(infer_p1_A);
-// timeline.push(infer_p1_B);
-// timeline.push(infer_p1_C);
-// timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
+// Phase 1, no ships
+addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+timeline.push(valence_p1);
+timeline.push(infer_p1_A);
+timeline.push(infer_p1_B);
+timeline.push(infer_p1_C);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
 
 
 
