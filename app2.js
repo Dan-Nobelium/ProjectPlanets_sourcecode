@@ -758,12 +758,10 @@ var p2_q4_triangle = {
 // 		if (i === nBlocks_p2-4) {
 			
 			// present correct contingencies
-      var cont_instructions = {
-        type: 'instructions-advanced',
+      var cont_images = {
+        type: 'instructions',
   pages: [
     '<h1>Welcome to the experiment!</h1>',
-    '<p>In this task, you will be presented with a grid of images representing planets, ships, and outcomes.</p>',
-    '<p>Use the navigation buttons or the left/right arrow keys to move through the instructions.</p>'
   ],
   images: [
     'img/planet_o.png',
@@ -805,6 +803,75 @@ var p2_q4_triangle = {
   show_page_number: true,
   allow_backward: true,
   allow_keys: true
+};
+
+
+var cont_instructions = {
+  type: 'instructions',
+  pages: [
+    '<p>Local intel has determined where the pirates are coming from!<br>Click Next to view this intel.</p>',
+    `
+    <div class="jspsych-instructions-advanced-grid">
+      <div class="jspsych-instructions-advanced-row">
+        <img src="${stim_list[0]}" class="jspsych-instructions-advanced-image">
+        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+        <img src="${ship_list[0]}" class="jspsych-instructions-advanced-image">
+        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+        <img src="${ship_attack_damage[0] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
+        <p>Planet A: ${ship_attack_damage[0] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
+      </div>
+      <div class="jspsych-instructions-advanced-row">
+        <img src="${stim_list[1]}" class="jspsych-instructions-advanced-image">
+        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+        <img src="${ship_list[1]}" class="jspsych-instructions-advanced-image">
+        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+        <img src="${ship_attack_damage[1] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
+        <p>Planet B: ${ship_attack_damage[1] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
+      </div>
+      <div class="jspsych-instructions-advanced-row">
+        <img src="${stim_list[2]}" class="jspsych-instructions-advanced-image">
+        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+        <img src="${ship_list[2]}" class="jspsych-instructions-advanced-image">
+        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+        <img src="${ship_attack_damage[2] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
+        <p>Planet C: ${ship_attack_damage[2] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
+      </div>
+    </div>
+    <p>Based on the information above, please answer the following questions:</p>
+    `
+  ],
+  allow_keys: false,
+  show_clickable_nav: true,
+  post_trial_gap: iti,
+  data: {
+    phase: 'instruct contingencies'
+  },
+  on_load: function() {
+    // Add custom CSS for styling
+    var style = document.createElement('style');
+    style.innerHTML = `
+      .jspsych-instructions-advanced-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 20px;
+        justify-items: center;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .jspsych-instructions-advanced-row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .jspsych-instructions-advanced-image {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        margin-bottom: 10px;
+      }
+    `;
+    document.head.appendChild(style);
+  }
 };
 
 //----------------------------------------------------------------------------
@@ -990,7 +1057,7 @@ var contingency_catch = {
 // ---- Timeline creation ----
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
-timeline.push(contingency_catch)
+// timeline.push(contingency_catch)
 
 // Induction
 // timeline.push(fullscreen);
@@ -1031,6 +1098,7 @@ timeline.push(contingency_catch)
 
 //Phase3, ships
 timeline.push(cont_instructions); //add pictures and testing
+timeline.push(cont_images); //add pictures and testing
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
 timeline.push(valence_p2);
 timeline.push(infer_p2_A);
