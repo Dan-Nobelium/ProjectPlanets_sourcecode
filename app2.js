@@ -845,24 +845,44 @@ var cont_catch = {
   type: 'survey-multi-catch-image',
   preamble: [
     "<p align='center'><b>Check your knowledge before you continue.</b></p>",
-    "<p align='center'>Which pirate ships lead to attacks?</p>"
+    "<p align='center'>Which pirate ships lead to attacks?</p>",
+    "<p align='center'><b>Question 2:</b> Which planets have been attracting pirate ships?</p>"
   ],
   options: [
-    `<div class="option-container">
-       <img src="${ship_list[0]}" class="option-image">
-       <input type="checkbox" name="Q0" value="Ship 1">
-       <label>Ship 1</label>
-     </div>`,
-    `<div class="option-container">
-       <img src="${ship_list[1]}" class="option-image">
-       <input type="checkbox" name="Q0" value="Ship 2">
-       <label>Ship 2</label>
-     </div>`,
-    `<div class="option-container">
-       <img src="${ship_list[2]}" class="option-image">
-       <input type="checkbox" name="Q0" value="Ship 3">
-       <label>Ship 3</label>
-     </div>`
+    [
+      `<div class="option-container">
+         <img src="${ship_list[0]}" class="option-image">
+         <input type="checkbox" name="Q0" value="Ship 1">
+         <label>Ship 1</label>
+       </div>`,
+      `<div class="option-container">
+         <img src="${ship_list[1]}" class="option-image">
+         <input type="checkbox" name="Q0" value="Ship 2">
+         <label>Ship 2</label>
+       </div>`,
+      `<div class="option-container">
+         <img src="${ship_list[2]}" class="option-image">
+         <input type="checkbox" name="Q0" value="Ship 3">
+         <label>Ship 3</label>
+       </div>`
+    ],
+    [
+      `<div class="option-container">
+         <img src="${stim_list[0]}" class="option-image">
+         <input type="checkbox" name="Q1" value="Planet 1">
+         <label>Planet 1</label>
+       </div>`,
+      `<div class="option-container">
+         <img src="${stim_list[1]}" class="option-image">
+         <input type="checkbox" name="Q1" value="Planet 2">
+         <label>Planet 2</label>
+       </div>`,
+      `<div class="option-container">
+         <img src="${stim_list[2]}" class="option-image">
+         <input type="checkbox" name="Q1" value="Planet 3">
+         <label>Planet 3</label>
+       </div>`
+    ]
   ],
   ship_attack_damage: ship_attack_damage,
   instructions: '<p>Your answer is incorrect. Please review the information provided and try again.</p>',

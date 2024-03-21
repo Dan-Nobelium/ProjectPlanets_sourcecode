@@ -62,20 +62,22 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
 
     html += '<form id="jspsych-survey-multi-catch-image-form">';
 
-    var option_order = [];
-    for (var i = 0; i < trial.options.length; i++) {
-      option_order.push(i);
-    }
-    if (trial.randomize_option_order) {
-      option_order = jsPsych.randomization.shuffle(option_order);
-    }
+    for (var q = 0; q < trial.options.length; q++) {
+      var option_order = [];
+      for (var i = 0; i < trial.options[q].length; i++) {
+        option_order.push(i);
+      }
+      if (trial.randomize_option_order) {
+        option_order = jsPsych.randomization.shuffle(option_order);
+      }
 
-    for (var i = 0; i < trial.options.length; i++) {
-      var option_index = option_order[i];
+      for (var i = 0; i < trial.options[q].length; i++) {
+        var option_index = option_order[i];
 
-      html += '<div id="jspsych-survey-multi-catch-image-option-' + option_index + '" class="jspsych-survey-multi-catch-image-option">';
-      html += trial.options[option_index].replace('type="radio"', 'type="checkbox"');
-      html += '</div>';
+        html += '<div id="jspsych-survey-multi-catch-image-option-' + q + '-' + option_index + '" class="jspsych-survey-multi-catch-image-option">';
+        html += trial.options[q][option_index];
+        html += '</div>';
+      }
     }
 
     html += '<div class="jspsych-survey-multi-catch-image-nav">';
@@ -133,28 +135,45 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
 
     function check_answers() {
       var selected_ships = [];
-      var checkboxes = document.querySelectorAll('input[name="Q0"]:checked');
-      for (var i = 0; i < checkboxes.length; i++) {
-        var ship_index = parseInt(checkboxes[i].value.split(' ')[1]) - 1;
+      var checkboxes_ships = document.querySelectorAll('input[name="Q0"]:checked');
+      for (var i = 0; i < checkboxes_ships.length; i++) {
+        var ship_index = parseInt(checkboxes_ships[i].value.split(' ')[1]) - 1;
         selected_ships.push(ship_index);
       }
 
+      var selected_planets = [];
+      var checkboxes_planets = document.querySelectorAll('input[name="Q1"]:checked');
+      for (var i = 0; i < checkboxes_planets.length; i++) {
+        var planet_index = parseInt(checkboxes_planets[i].value.split(' ')[1]) - 1;
+        selected_planets.push(planet_index);
+      }
+
       var correct_ships = [];
+      var correct_planets = [];
       for (var i = 0; i < trial.ship_attack_damage.length; i++) {
         if (trial.ship_attack_damage[i] !== 0) {
           correct_ships.push(i);
+          correct_planets.push(i);
         }
       }
 
-      var all_correct = selected_ships.length === correct_ships.length;
+      var all_correct_ships = selected_ships.length === correct_ships.length;
       for (var i = 0; i < correct_ships.length; i++) {
         if (!selected_ships.includes(correct_ships[i])) {
-          all_correct = false;
+          all_correct_ships = false;
           break;
         }
       }
 
-      if (all_correct) {
+      var all_correct_planets = selected_planets.length === correct_planets.length;
+      for (var i = 0; i < correct_planets.length; i++) {
+        if (!selected_planets.includes(correct_planets[i])) {
+          all_correct_planets = false;
+          break;
+        }
+      }
+
+      if (all_correct_ships && all_correct_planets) {
         contingencies_correct = true;
         display_element.innerHTML = '';
         var trial_data = {
