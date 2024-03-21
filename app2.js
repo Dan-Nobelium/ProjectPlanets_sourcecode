@@ -840,7 +840,6 @@ var cont_instructions = {
 };
 
 var contingenciescorrect = false;
-
 var cont_catch = {
   type: 'survey-multi-catch-image',
   preamble: [

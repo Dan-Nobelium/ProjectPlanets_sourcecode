@@ -51,7 +51,8 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     var html = "";
 
     html += '<style id="jspsych-survey-multi-catch-image-css">';
-    html += '.jspsych-survey-multi-catch-image-option { display: inline-block; margin-left: 1em; margin-right: 1em; vertical-align: top; text-align: center; }';
+    html += '.jspsych-survey-multi-catch-image-options-row { display: flex; justify-content: center; margin-bottom: 20px; }';
+    html += '.jspsych-survey-multi-catch-image-option { flex: 1; margin-left: 10px; margin-right: 10px; text-align: center; }';
     html += '.jspsych-survey-multi-catch-image-option img { display: block; margin: 0 auto 0.5em; }';
     html += 'label.jspsych-survey-multi-catch-image-text input[type="checkbox"] { margin-right: 1em; }';
     html += '</style>';
@@ -62,23 +63,28 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
 
     html += '<form id="jspsych-survey-multi-catch-image-form">';
 
-    for (var q = 0; q < trial.options.length; q++) {
-      var option_order = [];
-      for (var i = 0; i < trial.options[q].length; i++) {
-        option_order.push(i);
-      }
-      if (trial.randomize_option_order) {
-        option_order = jsPsych.randomization.shuffle(option_order);
-      }
+    
+  for (var q = 0; q < trial.options.length; q++) {
+    html += '<div class="jspsych-survey-multi-catch-image-options-row">';
 
-      for (var i = 0; i < trial.options[q].length; i++) {
-        var option_index = option_order[i];
-
-        html += '<div id="jspsych-survey-multi-catch-image-option-' + q + '-' + option_index + '" class="jspsych-survey-multi-catch-image-option">';
-        html += trial.options[q][option_index];
-        html += '</div>';
-      }
+    var option_order = [];
+    for (var i = 0; i < trial.options[q].length; i++) {
+      option_order.push(i);
     }
+    if (trial.randomize_option_order) {
+      option_order = jsPsych.randomization.shuffle(option_order);
+    }
+
+    for (var i = 0; i < trial.options[q].length; i++) {
+      var option_index = option_order[i];
+
+      html += '<div id="jspsych-survey-multi-catch-image-option-' + q + '-' + option_index + '" class="jspsych-survey-multi-catch-image-option">';
+      html += trial.options[q][option_index];
+      html += '</div>';
+    }
+
+    html += '</div>';
+  }
 
     html += '<div class="jspsych-survey-multi-catch-image-nav">';
     html += '<input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn" value="' + trial.button_label + '"></input>';
