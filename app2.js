@@ -840,47 +840,25 @@ var cont_instructions = {
 };
 
 var contingenciescorrect = false;
+
 var cont_catch = {
   type: 'survey-multi-catch-image',
   preamble: [
     "<p align='center'><b>Check your knowledge before you continue.</b></p>",
-    "<p align='center'>Which pirate ships lead to attacks?</p>",
+    "<p align='center'><b>Question 1:</b> Which pirate ships lead to attacks?</p>",
     "<p align='center'><b>Question 2:</b> Which planets have been attracting pirate ships?</p>"
   ],
   options: [
     [
-      `<div class="option-container">
-         <img src="${ship_list[0]}" class="option-image">
-         <input type="checkbox" name="Q0" value="Ship 1">
-         <label>Ship 1</label>
-       </div>`,
-      `<div class="option-container">
-         <img src="${ship_list[1]}" class="option-image">
-         <input type="checkbox" name="Q0" value="Ship 2">
-         <label>Ship 2</label>
-       </div>`,
-      `<div class="option-container">
-         <img src="${ship_list[2]}" class="option-image">
-         <input type="checkbox" name="Q0" value="Ship 3">
-         <label>Ship 3</label>
-       </div>`
+      { imageSrc: ship_list[0], name: 'Q0', value: 'Ship 1', label: 'Ship 1' },
+      { imageSrc: ship_list[1], name: 'Q0', value: 'Ship 2', label: 'Ship 2' },
+      { imageSrc: ship_list[2], name: 'Q0', value: 'Ship 3', label: 'Ship 3' },
     ],
+    '<p align="center"><b>Question 2:</b> Which planets have been attracting pirate ships?</p>',
     [
-      `<div class="option-container">
-         <img src="${stim_list[0]}" class="option-image">
-         <input type="checkbox" name="Q1" value="Planet 1">
-         <label>Planet 1</label>
-       </div>`,
-      `<div class="option-container">
-         <img src="${stim_list[1]}" class="option-image">
-         <input type="checkbox" name="Q1" value="Planet 2">
-         <label>Planet 2</label>
-       </div>`,
-      `<div class="option-container">
-         <img src="${stim_list[2]}" class="option-image">
-         <input type="checkbox" name="Q1" value="Planet 3">
-         <label>Planet 3</label>
-       </div>`
+      { imageSrc: stim_list[0], name: 'Q1', value: 'Planet 1', label: 'Planet 1' },
+      { imageSrc: stim_list[1], name: 'Q1', value: 'Planet 2', label: 'Planet 2' },
+      { imageSrc: stim_list[2], name: 'Q1', value: 'Planet 3', label: 'Planet 3' },
     ]
   ],
   ship_attack_damage: ship_attack_damage,
@@ -1124,18 +1102,18 @@ timeline.push(cont_catch); //add pictures and testing
 
 
 
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-timeline.push(valence_p2);
-timeline.push(infer_p2_A);
-timeline.push(infer_p2_B);
-timeline.push(infer_p2_C);
-timeline.push(p1_q3_triangle); //rename
-timeline.push(p1_q4_triangle); //rename
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+// timeline.push(valence_p2);
+// timeline.push(infer_p2_A);
+// timeline.push(infer_p2_B);
+// timeline.push(infer_p2_C);
+// timeline.push(p1_q3_triangle); //rename
+// timeline.push(p1_q4_triangle); //rename
 
 
-// // //Debrief
-timeline.push(debrief_block);
-timeline.push(contact_block);
+// // // //Debrief
+// timeline.push(debrief_block);
+// timeline.push(contact_block);
 
 
 // timeline.push(exit_experiment);
