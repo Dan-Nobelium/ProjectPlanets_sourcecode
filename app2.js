@@ -840,7 +840,6 @@ var cont_instructions = {
 };
 
 var contingenciescorrect = false;
-
 var cont_catch = {
   type: 'survey-multi-catch-image',
   preamble: [
@@ -853,32 +852,29 @@ var cont_catch = {
       options: [
         `<div class="option-container">
            <img src="${ship_list[0]}" class="option-image">
-           <button class="option-button" value="Ship 1">Ship 1</button>
+           <input type="radio" name="Q0" value="Ship 1">
+           <label>Ship 1</label>
          </div>`,
         `<div class="option-container">
            <img src="${ship_list[1]}" class="option-image">
-           <button class="option-button" value="Ship 2">Ship 2</button>
+           <input type="radio" name="Q0" value="Ship 2">
+           <label>Ship 2</label>
          </div>`,
         `<div class="option-container">
            <img src="${ship_list[2]}" class="option-image">
-           <button class="option-button" value="Ship 3">Ship 3</button>
+           <input type="radio" name="Q0" value="Ship 3">
+           <label>Ship 3</label>
          </div>`
       ],
       required: true,
       name: 'Q0'
     }
   ],
-  correct_answers: {
-    Q0: "Ship 1"
-  },
+  ship_attack_damage: ship_attack_damage,
   instructions: '<p>Your answer is incorrect. Please review the information provided and try again.</p>',
   on_finish: function(data) {
-    var response = data.responses.Q0;
-    if (response === this.correct_answers.Q0) {
-      contingencies_correct = true;
-    }
     data.contingencies_correct = contingencies_correct;
-    data.responses = JSON.stringify(data.responses); // Store responses as a valid JSON string
+    data.responses = JSON.stringify(data.responses);
   },
   data: {
     phase: 'contingency quiz'

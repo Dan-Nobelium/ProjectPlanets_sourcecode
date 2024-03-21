@@ -205,6 +205,43 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       instructionTimeout = setTimeout(hide_instructions, 5000);
     }
 
+    function check_answers() {
+      var selected_ships = [];
+      var checkboxes = document.querySelectorAll('input[name="Q0"]:checked');
+      for (var i = 0; i < checkboxes.length; i++) {
+        selected_ships.push(checkboxes[i].value);
+      }
+  
+      var correct_ships = [];
+      for (var i = 0; i < trial.ship_attack_damage.length; i++) {
+        if (trial.ship_attack_damage[i] !== 0) {
+          correct_ships.push('Ship ' + (i + 1));
+        }
+      }
+  
+      var all_correct = true;
+      for (var i = 0; i < correct_ships.length; i++) {
+        if (!selected_ships.includes(correct_ships[i])) {
+          all_correct = false;
+          break;
+        }
+      }
+      for (var i = 0; i < selected_ships.length; i++) {
+        if (!correct_ships.includes(selected_ships[i])) {
+          all_correct = false;
+          break;
+        }
+      }
+  
+      if (all_correct) {
+        contingencies_correct = true;
+        display_element.innerHTML = '';
+        jsPsych.finishTrial(trial_data);
+      } else {
+        display_instructions();
+      }
+    }
+
     function hide_instructions() {
       var modalOverlay = document.getElementById('instructionModal');
       if (modalOverlay) {
