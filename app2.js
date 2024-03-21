@@ -1079,7 +1079,7 @@ var contingency_catch = {
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
 
-Induction
+// Induction
 timeline.push(fullscreen);
 timeline.push(consent_block);
 timeline.push(demographics_block);
@@ -1103,7 +1103,7 @@ timeline.push(p1_q4_triangle);
 
 
 
-Phase2, ships
+// Phase2, ships
 timeline.push(phaseTwoInstructions);
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 timeline.push(valence_p2);
@@ -1116,7 +1116,7 @@ timeline.push(infer_p2_ship3);
 timeline.push(p1_q3_triangle);
 timeline.push(p1_q4_triangle);
 
-Phase3, contingencies
+// Phase3, contingencies
 timeline.push(cont_instructions); //add pictures and testing
 timeline.push(cont_catch); //add pictures and testing
 
@@ -1131,7 +1131,7 @@ timeline.push(p1_q3_triangle); //rename
 timeline.push(p1_q4_triangle); //rename
 
 
-// // //Debrief
+//Debrief
 timeline.push(debrief_block);
 timeline.push(contact_block);
 
