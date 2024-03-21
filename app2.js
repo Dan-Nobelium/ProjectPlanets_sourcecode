@@ -840,7 +840,6 @@ var cont_instructions = {
 };
 
 var contingenciescorrect = false;
-
 var cont_catch = {
   type: 'survey-multi-catch-image',
   preamble: [
@@ -850,15 +849,38 @@ var cont_catch = {
   ],
   options: [
     [
-      { imageSrc: ship_list[0], name: 'Q0', value: 'Ship 1', label: 'Ship 1' },
-      { imageSrc: ship_list[1], name: 'Q0', value: 'Ship 2', label: 'Ship 2' },
-      { imageSrc: ship_list[2], name: 'Q0', value: 'Ship 3', label: 'Ship 3' },
+      `<div class="option-container">
+         <img src="${ship_list[0]}" class="option-image">
+         <input type="checkbox" name="Q0" value="Ship 1">
+         <label>Ship 1</label>
+       </div>`,
+      `<div class="option-container">
+         <img src="${ship_list[1]}" class="option-image">
+         <input type="checkbox" name="Q0" value="Ship 2">
+         <label>Ship 2</label>
+       </div>`,
+      `<div class="option-container">
+         <img src="${ship_list[2]}" class="option-image">
+         <input type="checkbox" name="Q0" value="Ship 3">
+         <label>Ship 3</label>
+       </div>`
     ],
-    '<p align="center"><b>Question 2:</b> Which planets have been attracting pirate ships?</p>',
     [
-      { imageSrc: stim_list[0], name: 'Q1', value: 'Planet 1', label: 'Planet 1' },
-      { imageSrc: stim_list[1], name: 'Q1', value: 'Planet 2', label: 'Planet 2' },
-      { imageSrc: stim_list[2], name: 'Q1', value: 'Planet 3', label: 'Planet 3' },
+      `<div class="option-container">
+         <img src="${stim_list[0]}" class="option-image">
+         <input type="checkbox" name="Q1" value="Planet 1">
+         <label>Planet 1</label>
+       </div>`,
+      `<div class="option-container">
+         <img src="${stim_list[1]}" class="option-image">
+         <input type="checkbox" name="Q1" value="Planet 2">
+         <label>Planet 2</label>
+       </div>`,
+      `<div class="option-container">
+         <img src="${stim_list[2]}" class="option-image">
+         <input type="checkbox" name="Q1" value="Planet 3">
+         <label>Planet 3</label>
+       </div>`
     ]
   ],
   ship_attack_damage: ship_attack_damage,

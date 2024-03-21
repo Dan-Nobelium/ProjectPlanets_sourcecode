@@ -64,40 +64,23 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
 
     html += '<form id="jspsych-survey-multi-catch-image-form">';
 
-    const createOptionElement = (option) => {
-      const optionElement = document.createElement('div');
-      optionElement.classList.add('option-container');
-
-      const imageElement = document.createElement('img');
-      imageElement.src = option.imageSrc;
-      imageElement.classList.add('option-image');
-      optionElement.appendChild(imageElement);
-
-      const inputElement = document.createElement('input');
-      inputElement.type = 'checkbox';
-      inputElement.name = option.name;
-      inputElement.value = option.value;
-      optionElement.appendChild(inputElement);
-
-      const labelElement = document.createElement('label');
-      labelElement.textContent = option.label;
-      optionElement.appendChild(labelElement);
-
-      return optionElement;
-    };
-
-    const renderOptions = (options) => {
-      return options.map(createOptionElement);
-    };
-
     for (var q = 0; q < trial.options.length; q++) {
       html += '<div class="jspsych-survey-multi-catch-image-options-row">';
 
-      if (Array.isArray(trial.options[q])) {
-        const optionElements = renderOptions(trial.options[q]);
-        optionElements.forEach(element => html += element.outerHTML);
-      } else {
-        html += trial.options[q];
+      var option_order = [];
+      for (var i = 0; i < trial.options[q].length; i++) {
+        option_order.push(i);
+      }
+      if (trial.randomize_option_order) {
+        option_order = jsPsych.randomization.shuffle(option_order);
+      }
+
+      for (var i = 0; i < trial.options[q].length; i++) {
+        var option_index = option_order[i];
+
+        html += '<div id="jspsych-survey-multi-catch-image-option-' + q + '-' + option_index + '" class="jspsych-survey-multi-catch-image-option">';
+        html += trial.options[q][option_index];
+        html += '</div>';
       }
 
       html += '</div>';
@@ -155,6 +138,8 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     }
 
     display_element.innerHTML = html;
+
+    console.log('Options rendered:', display_element.innerHTML); // Test Case 1
 
     function check_answers() {
       var selected_ships = [];
