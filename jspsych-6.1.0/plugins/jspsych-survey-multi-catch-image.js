@@ -53,7 +53,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     html += '<style id="jspsych-survey-multi-catch-image-css">';
     html += '.jspsych-survey-multi-catch-image-option { display: inline-block; margin-left: 1em; margin-right: 1em; vertical-align: top; text-align: center; }';
     html += '.jspsych-survey-multi-catch-image-option img { display: block; margin: 0 auto 0.5em; }';
-    html += 'label.jspsych-survey-multi-catch-image-text input[type="radio"] { margin-right: 1em; }';
+    html += 'label.jspsych-survey-multi-catch-image-text input[type="checkbox"] { margin-right: 1em; }';
     html += '</style>';
 
     if (trial.preamble !== null) {
@@ -74,7 +74,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       var option_index = option_order[i];
 
       html += '<div id="jspsych-survey-multi-catch-image-option-' + option_index + '" class="jspsych-survey-multi-catch-image-option">';
-      html += trial.options[option_index];
+      html += trial.options[option_index].replace('type="radio"', 'type="checkbox"');
       html += '</div>';
     }
 
@@ -133,9 +133,9 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
 
     function check_answers() {
       var selected_ships = [];
-      var radio_buttons = document.querySelectorAll('input[name="Q0"]:checked');
-      for (var i = 0; i < radio_buttons.length; i++) {
-        var ship_index = parseInt(radio_buttons[i].value.split(' ')[1]) - 1;
+      var checkboxes = document.querySelectorAll('input[name="Q0"]:checked');
+      for (var i = 0; i < checkboxes.length; i++) {
+        var ship_index = parseInt(checkboxes[i].value.split(' ')[1]) - 1;
         selected_ships.push(ship_index);
       }
 

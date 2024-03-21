@@ -841,7 +841,6 @@ var cont_instructions = {
 
 var contingenciescorrect = false;
 
-
 var cont_catch = {
   type: 'survey-multi-catch-image',
   preamble: [
@@ -851,17 +850,17 @@ var cont_catch = {
   options: [
     `<div class="option-container">
        <img src="${ship_list[0]}" class="option-image">
-       <input type="radio" name="Q0" value="Ship 1">
+       <input type="checkbox" name="Q0" value="Ship 1">
        <label>Ship 1</label>
      </div>`,
     `<div class="option-container">
        <img src="${ship_list[1]}" class="option-image">
-       <input type="radio" name="Q0" value="Ship 2">
+       <input type="checkbox" name="Q0" value="Ship 2">
        <label>Ship 2</label>
      </div>`,
     `<div class="option-container">
        <img src="${ship_list[2]}" class="option-image">
-       <input type="radio" name="Q0" value="Ship 3">
+       <input type="checkbox" name="Q0" value="Ship 3">
        <label>Ship 3</label>
      </div>`
   ],
