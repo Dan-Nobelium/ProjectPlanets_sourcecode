@@ -164,14 +164,16 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
     function showInstructionPage() {
       console.log('Showing instruction page', currentInstructionPage);
       instruction_count++;
-
+    
       display_element.innerHTML = `
-        <div id="instructionContainer">
-          ${trial.instructions[currentInstructionPage]}
-          <button id="backButton" style="display: ${currentInstructionPage === 0 ? 'none' : 'inline'};">Back</button>
-          <button id="nextButton">Next</button>
+      <div id="instructionContainer">
+        ${trial.instructions[currentInstructionPage]}
+        <div class="jspsych-survey-multi-catch-nav">
+          <button id="backButton" class="jspsych-btn" style="display: ${currentInstructionPage === 0 ? 'none' : 'inline'};">Back</button>
+          <button id="nextButton" class="jspsych-btn">Next</button>
         </div>
-      `;
+      </div>
+    `;
 
       display_element.querySelector('#nextButton').addEventListener('click', function() {
         currentInstructionPage++;
@@ -188,18 +190,18 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
         showInstructionPage();
       });
     }
-    function showCatchQuestions() {
-      console.log('Showing catch questions');
-      // display the catch questions
-      display_element.innerHTML = html;
-    
-      // add 'Back' and 'Next' buttons
-      display_element.innerHTML += `
-        <div>
-          <button id="backButton">Back</button>
-          <button id="nextButton">Next</button>
-        </div>
-      `;
+function showCatchQuestions() {
+  console.log('Showing catch questions');
+  // display the catch questions
+  display_element.innerHTML = html;
+
+  // add 'Back' and 'Next' buttons
+  display_element.innerHTML += `
+    <div class="jspsych-survey-multi-catch-nav">
+      <button id="backButton" class="jspsych-btn">Back</button>
+      <button id="nextButton" class="jspsych-btn">Next</button>
+    </div>
+  `;
     
       // set up form submission event listener after rendering the form
       var formElement = display_element.querySelector('form');
