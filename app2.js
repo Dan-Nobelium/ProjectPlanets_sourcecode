@@ -1075,7 +1075,7 @@ timeline.push(instructionCheckWithFeedback);
 // timeline.push(p1_q4_triangle);
 
 // // Phase3, contingencies
-timeline.push(cont_catch); //add pictures and testing
+timeline.push(cont_catch);
 
 
 // // // Phase3, ships
