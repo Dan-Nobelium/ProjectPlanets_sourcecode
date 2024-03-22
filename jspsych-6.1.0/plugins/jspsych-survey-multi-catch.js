@@ -79,6 +79,10 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
   plugin.trial = function(display_element, trial) {
     var plugin_id_name = "jspsych-survey-multi-catch";
     var html = "";
+    let failedSubmissionData = {
+      count: 0,
+      timestamps: []
+    };
 
     // inject CSS for trial
     html += '<style id="jspsych-survey-multi-catch-css">';
@@ -158,8 +162,9 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
     let instructionTimeout = null;
 
     function showInstructionPage() {
+      console.log('Showing instruction page', currentInstructionPage);
       instruction_count++;
-    
+
       display_element.innerHTML = `
         <div id="instructionContainer">
           ${trial.instructions[currentInstructionPage]}
@@ -167,7 +172,7 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
           <button id="nextButton">Next</button>
         </div>
       `;
-    
+
       display_element.querySelector('#nextButton').addEventListener('click', function() {
         currentInstructionPage++;
         if (currentInstructionPage < trial.instructions.length) {
@@ -177,17 +182,25 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
           showCatchQuestions();
         }
       });
-    
+
       display_element.querySelector('#backButton').addEventListener('click', function() {
         currentInstructionPage--;
         showInstructionPage();
       });
     }
-
     function showCatchQuestions() {
+      console.log('Showing catch questions');
       // display the catch questions
       display_element.innerHTML = html;
-
+    
+      // add 'Back' and 'Next' buttons
+      display_element.innerHTML += `
+        <div>
+          <button id="backButton">Back</button>
+          <button id="nextButton">Next</button>
+        </div>
+      `;
+    
       // set up form submission event listener after rendering the form
       var formElement = display_element.querySelector('form');
       if (formElement) {
@@ -196,7 +209,7 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
           // measure response time
           var end_time = performance.now();
           var response_time = end_time - start_time;
-
+    
           // create object to hold responses
           for (var i = 0; i < trial.questions.length; i++) {
             var match = display_element.querySelector('#jspsych-survey-multi-catch-' + i);
@@ -214,7 +227,7 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
             obje[name] = val;
             Object.assign(question_data, obje);
           }
-
+    
           // check answers
           var all_correct = true;
           for (var q in question_data) {
@@ -223,24 +236,33 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
               break;
             }
           }
-
+    
           if (all_correct) {
-            display_element.innerHTML = '';
-            var trial_data = {
-              "rt": response_time,
-              "responses": JSON.stringify(question_data),
-              "question_order": JSON.stringify(question_order),
-              "instruction_count": instruction_count,
-              "all_correct": all_correct,
-              "failed_submission_count": failedSubmissionData.count,
-              "failed_submission_timestamps": JSON.stringify(failedSubmissionData.timestamps)
-            };
-            jsPsych.finishTrial(trial_data);
+            // Display the end instruction screen
+            display_element.innerHTML = `
+              <div id="endInstructionContainer">
+                <center>Well done!</center>
+                <button id="startPhase1Button">Click here to start Phase 1</button>
+              </div>
+            `;
+    
+            display_element.querySelector('#startPhase1Button').addEventListener('click', function() {
+              var trial_data = {
+                "rt": response_time,
+                "responses": JSON.stringify(question_data),
+                "question_order": JSON.stringify(question_order),
+                "instruction_count": instruction_count,
+                "all_correct": all_correct,
+                "failed_submission_count": failedSubmissionData.count,
+                "failed_submission_timestamps": JSON.stringify(failedSubmissionData.timestamps)
+              };
+              jsPsych.finishTrial(trial_data);
+            });
           } else {
             // Increment failed submission count and store timestamp
             failedSubmissionData.count++;
             failedSubmissionData.timestamps.push(performance.now());
-
+    
             responses = question_data;
             display_element.innerHTML = `
               <p>Wrong answer, please review the instructions.</p>
@@ -256,6 +278,21 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
       } else {
         console.error('Form element not found in the DOM.');
       }
+    
+      // add event listeners for 'Back' and 'Next' buttons
+      display_element.querySelector('#backButton').addEventListener('click', function() {
+        currentInstructionPage--;
+        showInstructionPage();
+      });
+    
+      display_element.querySelector('#nextButton').addEventListener('click', function() {
+        var formElement = display_element.querySelector('form');
+        if (formElement) {
+          formElement.requestSubmit();
+        } else {
+          console.error('Form element not found in the DOM.');
+        }
+      });
     }
 
     showInstructionPage();
