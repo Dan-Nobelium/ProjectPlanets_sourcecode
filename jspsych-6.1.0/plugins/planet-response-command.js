@@ -277,22 +277,23 @@ plugin.trial = function(display_element, trial)
     planetContainer.style.justifyContent = 'space-between';
     planetContainer.style.alignItems = 'center';
 
-    // Create planet divs and add them to the planet container
-    for (var i = 0; i < trial.stimulus.length; i++) {
-        var planetDiv = document.createElement('div');
-        planetDiv.classList.add('planet');
-        planetDiv.style.flexGrow = '1';
-        planetDiv.style.flexShrink = '1';
-        planetDiv.style.textAlign = 'center';
-        planetDiv.innerHTML = `
-            <div class="planet-score" id="planet-score-${i}"></div>
-            <img class="planet-image" src="${trial.stimulus[i]}" id="planet-${i}" data-choice="${i}" draggable="false">
-            <div class="planet-prompt" id="planet-prompt-${i}">${trial.prompt[i]}</div>
-            <div class="planet-signal" id="planet-signal-${i}"></div>
-            <img class="planet-select" id="planet-select-${i}">
-        `;
-        planetContainer.appendChild(planetDiv);
-    }
+// Create planet divs and add them to the planet container
+for (var i = 0; i < trial.stimulus.length; i++) {
+    var planetDiv = document.createElement('div');
+    planetDiv.classList.add('planet');
+    planetDiv.style.flexGrow = '1';
+    planetDiv.style.flexShrink = '1';
+    planetDiv.style.textAlign = 'center';
+    planetDiv.style.margin = '0 10px'; // Add margin for spacing between planets
+    planetDiv.innerHTML = `
+        <div class="planet-score" id="planet-score-${i}"></div>
+        <img class="planet-image" src="${trial.stimulus[i]}" id="planet-${i}" data-choice="${i}" draggable="false">
+        <div class="planet-prompt" id="planet-prompt-${i}">${trial.prompt[i]}</div>
+        <div class="planet-signal" id="planet-signal-${i}"></div>
+        <img class="planet-select" id="planet-select-${i}">
+    `;
+    planetContainer.appendChild(planetDiv);
+}
 
     // Create the info container div
     var infoContainer = document.createElement('div');
@@ -1052,30 +1053,34 @@ plugin.trial = function(display_element, trial)
         });
     }
 
-    function replaceStyle(element, styleChange) {
-        // Handle find and replace in style attribute
-        for (var i = 0; i < styleChange.length; i++) {
-            // Make pattern, extract style name and value
-            var newPatt = new RegExp('(.*?):(.*?);');
-            var styleFull = styleChange[i];
-            var styleMatch = styleFull.match(newPatt);
-            var styleName = styleMatch[1];
-            var styleValue = styleMatch[2];
-            var findPatt = new RegExp(';\\s*' + styleName + '\\s*:.*?;');
-            var findPattStart = new RegExp('^' + styleName + '\\s*:.*?;');
-            // Get current style
-            var currStyle = element.getAttribute('style');
-            // Add to style changes, check if at the start first
-            if (currStyle.search(findPattStart) > 0) {
-                var newStyle = currStyle.replace(findPattStart, styleFull);
-            } else if (currStyle.search(findPatt) > 0) {
-                var newStyle = currStyle.replace(findPatt, '; ' + styleFull);
-            } else {
-                var newStyle = currStyle + styleFull;
-            }
-            element.setAttribute('style', newStyle);
-        }
-    }
+	function replaceStyle(element, styleChange) {
+		// Handle find and replace in style attribute
+		if (element.hasAttribute('style')) {
+			var currStyle = element.getAttribute('style');
+			for (var i = 0; i < styleChange.length; i++) {
+				// Make pattern, extract style name and value
+				var newPatt = new RegExp('(.*?):(.*?);');
+				var styleFull = styleChange[i];
+				var styleMatch = styleFull.match(newPatt);
+				var styleName = styleMatch[1];
+				var styleValue = styleMatch[2];
+				var findPatt = new RegExp(';\\s*' + styleName + '\\s*:.*?;');
+				var findPattStart = new RegExp('^' + styleName + '\\s*:.*?;');
+				// Add to style changes, check if at the start first
+				if (currStyle.search(findPattStart) > 0) {
+					var newStyle = currStyle.replace(findPattStart, styleFull);
+				} else if (currStyle.search(findPatt) > 0) {
+					var newStyle = currStyle.replace(findPatt, '; ' + styleFull);
+				} else {
+					var newStyle = currStyle + styleFull;
+				}
+				element.setAttribute('style', newStyle);
+			}
+		} else {
+			// Initialize style attribute if it doesn't exist
+			element.setAttribute('style', styleChange.join(''));
+		}
+	}
 
     // Resetting functions
     function reset_planet(planet, choice) {
