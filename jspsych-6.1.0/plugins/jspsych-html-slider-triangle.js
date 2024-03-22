@@ -165,13 +165,13 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     // ===============
 
     var isDragging = false;
-    var proportions = []; // Declare the proportions array
+    var proportions = [33, 33, 34]; // Initialize with default proportions
 
     // Response object
     // ===============
 
     var response = {
-      proportions: null,
+      proportions: proportions,
       clicked: false,
       rt: null,
       timestamps: {
@@ -185,16 +185,14 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       stimulus_all: trial.stimulus_all,
       planetColors: trial.planetColors
     };
-
     // Record the start timestamp
     response.timestamps.start = performance.now();
 
     // Calculate the coordinates of the triangle corners relative to the document
     var triangleRect = triangle.getBoundingClientRect();
-    var topLeftCorner = { x: triangleRect.left, y: triangleRect.top + triangleRect.height };
-    var topRightCorner = { x: triangleRect.right, y: triangleRect.top + triangleRect.height };
-    var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.top };
-
+    var topLeftCorner = { x: triangleRect.left, y: triangleRect.top };
+    var topRightCorner = { x: triangleRect.right, y: triangleRect.top };
+    var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.bottom };
 
     // Update handle position and proportions based on mouse position
     function updateHandlePosition(mouseX, mouseY) {

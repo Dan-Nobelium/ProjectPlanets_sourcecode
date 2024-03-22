@@ -642,13 +642,10 @@ var right_label = "";
 var p1_q3_triangle = {
   type: 'html-slider-triangle',
   prompt: "Reflecting back on what you did in the <b>most recent block</b>, <p>what proportion of your recent interactions were with each planet:",
-  stimulus_left: stim_list[0],
-  stimulus_right: stim_list[1],
-  stimulus_bottom: stim_list[2],
   stimulus_all: stim_list,
   planetColors: planetColors,
   stimulus_height: 250,
-  slider_width: 900, // Increased width to accommodate more space for labels
+  slider_width: 900,
   labels: ["100%/0%/0%<p>(only click Planet A)</p>", "66%/33%/0%", "50%/50%/0%<p>(click all equally)</p>", "33%/66%/0%", "0%/100%/0%<p>(only click Planet B)</p>", "0%/0%/100%<p>(only click Planet C)</p>"],
   require_movement: false,
   data: {
