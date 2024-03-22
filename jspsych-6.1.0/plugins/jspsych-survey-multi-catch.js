@@ -159,15 +159,15 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
 
     function showInstructionPage() {
       instruction_count++;
-
+    
       display_element.innerHTML = `
         <div id="instructionContainer">
           ${trial.instructions[currentInstructionPage]}
-          <button id="nextButton">Next</button>
           <button id="backButton" style="display: ${currentInstructionPage === 0 ? 'none' : 'inline'};">Back</button>
+          <button id="nextButton">Next</button>
         </div>
       `;
-
+    
       display_element.querySelector('#nextButton').addEventListener('click', function() {
         currentInstructionPage++;
         if (currentInstructionPage < trial.instructions.length) {
@@ -177,7 +177,7 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
           showCatchQuestions();
         }
       });
-
+    
       display_element.querySelector('#backButton').addEventListener('click', function() {
         currentInstructionPage--;
         showInstructionPage();
