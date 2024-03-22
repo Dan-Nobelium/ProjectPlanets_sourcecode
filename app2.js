@@ -819,7 +819,7 @@ var cont_catch = {
   pages: [
     '<p>Local intel has determined where the pirates are coming from!<br>Click Next to view this intel.</p>',
     `
-    <div class="jspsych-instructions-advanced-grid">
+    <div class="jspsych-instructions-advanced-container">
       <div class="jspsych-instructions-advanced-row">
         <div class="jspsych-instructions-advanced-cell">
           <img src="${stim_list[0]}" class="jspsych-instructions-advanced-image">
@@ -855,45 +855,45 @@ var cont_catch = {
     `
   ],
   preamble: [
-    "<p align='center'><b>Check your knowledge before you continue.</b></p>",
-    "<p align='center'><b>Question 1:</b> Which pirate ships lead to attacks?</p>",
-    "<p align='center'><b>Question 2:</b> Which planets have been attracting pirate ships?</p>"
-  ],
-  options: [
-    [
-      `<div class="option-container">
-         <img src="${ship_list[0]}" class="option-image">
-         <input type="checkbox" name="Q0" value="Ship 1">
-         <label>Ship 1</label>
-       </div>`,
-      `<div class="option-container">
-         <img src="${ship_list[1]}" class="option-image">
-         <input type="checkbox" name="Q0" value="Ship 2">
-         <label>Ship 2</label>
-       </div>`,
-      `<div class="option-container">
-         <img src="${ship_list[2]}" class="option-image">
-         <input type="checkbox" name="Q0" value="Ship 3">
-         <label>Ship 3</label>
-       </div>`
-    ],
-    [
-      `<div class="option-container">
-         <img src="${stim_list[0]}" class="option-image">
-         <input type="checkbox" name="Q1" value="Planet 1">
-         <label>Planet 1</label>
-       </div>`,
-      `<div class="option-container">
-         <img src="${stim_list[1]}" class="option-image">
-         <input type="checkbox" name="Q1" value="Planet 2">
-         <label>Planet 2</label>
-       </div>`,
-      `<div class="option-container">
-         <img src="${stim_list[2]}" class="option-image">
-         <input type="checkbox" name="Q1" value="Planet 3">
-         <label>Planet 3</label>
-       </div>`
-    ]
+    `
+    <p align='center'><b>Check your knowledge before you continue.</b></p>
+    <p align='center'><b>Question 1:</b> Which pirate ships lead to attacks?</p>
+    <div class="jspsych-survey-multi-catch-options">
+      <div class="option-container">
+        <img src="${ship_list[0]}" class="option-image">
+        <input type="checkbox" name="Q0" value="Ship 1">
+        <label>Ship 1</label>
+      </div>
+      <div class="option-container">
+        <img src="${ship_list[1]}" class="option-image">
+        <input type="checkbox" name="Q0" value="Ship 2">
+        <label>Ship 2</label>
+      </div>
+      <div class="option-container">
+        <img src="${ship_list[2]}" class="option-image">
+        <input type="checkbox" name="Q0" value="Ship 3">
+        <label>Ship 3</label>
+      </div>
+    </div>
+    <p align='center'><b>Question 2:</b> Which planets have been attracting pirate ships?</p>
+    <div class="jspsych-survey-multi-catch-options">
+      <div class="option-container">
+        <img src="${stim_list[0]}" class="option-image">
+        <input type="checkbox" name="Q1" value="Planet 1">
+        <label>Planet 1</label>
+      </div>
+      <div class="option-container">
+        <img src="${stim_list[1]}" class="option-image">
+        <input type="checkbox" name="Q1" value="Planet 2">
+        <label>Planet 2</label>
+      </div>
+      <div class="option-container">
+        <img src="${stim_list[2]}" class="option-image">
+        <input type="checkbox" name="Q1" value="Planet 3">
+        <label>Planet 3</label>
+      </div>
+    </div>
+    `
   ],
   ship_attack_damage: ship_attack_damage,
   instructions: '<p>Your answer is incorrect. Please review the information provided and try again.</p>',
@@ -907,6 +907,51 @@ var cont_catch = {
   },
   data: {
     phase: 'contingency quiz'
+  },
+  on_load: function() {
+    // Add custom CSS for styling
+    var style = document.createElement('style');
+    style.innerHTML = `
+      .jspsych-instructions-advanced-container {
+        display: flex;
+        flex-direction: column;
+      }
+      .jspsych-instructions-advanced-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .jspsych-instructions-advanced-cell {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      .jspsych-instructions-advanced-image {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        margin-right: 10px;
+      }
+      .jspsych-survey-multi-catch-options {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+      .option-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 10px;
+      }
+      .option-image {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        margin-bottom: 5px;
+      }
+    `;
+    document.head.appendChild(style);
   }
 };
 

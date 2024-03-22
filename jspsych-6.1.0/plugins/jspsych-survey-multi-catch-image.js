@@ -90,41 +90,73 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     }
   };
 
+  
   plugin.trial = function(display_element, trial) {
     var currentInstructionPage = 0;
     var startTime = performance.now();
     var instructionPages = trial.pages;
     var catchQuestions = {
       preamble: trial.preamble,
-      options: trial.options,
       ship_attack_damage: trial.ship_attack_damage
     };
     var catchResponses = {};
     var contingencies_correct = false;
-
+  
+    // Function to create the HTML for an instruction page
+    function createInstructionPage(pageContent) {
+      var pageHtml = `
+        <div class="jspsych-content">
+          ${pageContent}
+        </div>
+      `;
+      return pageHtml;
+    }
+  
+    // Function to create the HTML for the catch questions
+    function createCatchQuestions() {
+      var preamble = catchQuestions.preamble.join('') || '';
+  
+      var html = `
+        ${preamble}
+        <form id="jspsych-survey-multi-catch-form">
+          <div class="jspsych-survey-multi-catch-nav">
+            <button id="backButton" class="jspsych-btn">${trial.button_label_previous}</button>
+            <button type="submit" id="submitButton" class="jspsych-btn">${trial.button_label_next}</button>
+          </div>
+        </form>
+      `;
+  
+      return html;
+    }
+  
+    // Function to show an instruction page
     function showInstructionPage() {
       var pageContent = instructionPages[currentInstructionPage];
-
-      var navButtons = '';
+      var pageHtml = createInstructionPage(pageContent);
+      display_element.innerHTML = pageHtml;
+  
       if (trial.show_clickable_nav) {
-        var previousButton = trial.allow_backward && currentInstructionPage > 0 ?
-          '<button id="previousButton" class="jspsych-btn">' + trial.button_label_previous + '</button>' :
-          '<button id="previousButton" class="jspsych-btn" disabled>' + trial.button_label_previous + '</button>';
-        var nextButton = currentInstructionPage < instructionPages.length - 1 ?
-          '<button id="nextButton" class="jspsych-btn">' + trial.button_label_next + '</button>' :
-          '<button id="nextButton" class="jspsych-btn">' + trial.button_label_next + '</button>';
-        navButtons = previousButton + nextButton;
-      }
-
-      var pageNumber = trial.show_page_number ? '<div class="page-number">Page ' + (currentInstructionPage + 1) + '/' + instructionPages.length + '</div>' : '';
-
-      display_element.innerHTML = pageContent + navButtons + pageNumber;
-
-      if (trial.show_clickable_nav) {
-        display_element.querySelector('#previousButton').addEventListener('click', previousPage);
+        var navButtons = `
+          <div class="jspsych-instructions-nav">
+            <button id="prevButton" class="jspsych-btn">${trial.button_label_previous}</button>
+            <button id="nextButton" class="jspsych-btn">${trial.button_label_next}</button>
+          </div>
+        `;
+        display_element.insertAdjacentHTML('beforeend', navButtons);
+  
+        display_element.querySelector('#prevButton').addEventListener('click', previousPage);
         display_element.querySelector('#nextButton').addEventListener('click', nextPage);
       }
-
+  
+      if (trial.show_page_number) {
+        var pageNumber = `
+          <div class="jspsych-instructions-page-number">
+            Page ${currentInstructionPage + 1} of ${instructionPages.length}
+          </div>
+        `;
+        display_element.insertAdjacentHTML('beforeend', pageNumber);
+      }
+  
       if (trial.allow_keys) {
         var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
           callback_function: keyHandler,
@@ -134,56 +166,17 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         });
       }
     }
-
-    function previousPage() {
-      if (currentInstructionPage > 0) {
-        currentInstructionPage--;
-        showInstructionPage();
-      }
-    }
-
-    function nextPage() {
-      if (currentInstructionPage < instructionPages.length - 1) {
-        currentInstructionPage++;
-        showInstructionPage();
-      } else {
-        showCatchQuestions();
-      }
-    }
-
-    function keyHandler(info) {
-      if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_backward) && trial.allow_backward) {
-        previousPage();
-      } else if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_forward)) {
-        nextPage();
-      }
-    }
-
+  
+    // Function to show the catch questions
     function showCatchQuestions() {
-      var preamble = catchQuestions.preamble.join('<br>') || '';
-      var questions = catchQuestions.options.map(function(option, index) {
-        var questionHtml = option.map(function(item) {
-          return item;
-        }).join('');
-        return '<div class="jspsych-survey-multi-catch-question">' + questionHtml + '</div>';
-      }).join('');
-
-      var html = preamble +
-        '<form id="jspsych-survey-multi-catch-form">' +
-        questions +
-        '<div class="jspsych-survey-multi-catch-nav">' +
-        '<button id="backButton" class="jspsych-btn">' + trial.button_label_previous + '</button>' +
-        '<button type="submit" id="submitButton" class="jspsych-btn">' + trial.button_label_next + '</button>' +
-        '</div>' +
-        '</form>';
-
-      display_element.innerHTML = html;
-
+      var catchQuestionsHtml = createCatchQuestions();
+      display_element.innerHTML = catchQuestionsHtml;
+  
       display_element.querySelector('#backButton').addEventListener('click', function() {
         currentInstructionPage = instructionPages.length - 1;
         showInstructionPage();
       });
-
+  
       display_element.querySelector('#jspsych-survey-multi-catch-form').addEventListener('submit', function(event) {
         event.preventDefault();
         var selectedShips = [];
@@ -192,14 +185,14 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
           var ship_index = parseInt(checkboxes_ships[i].value.split(' ')[1]) - 1;
           selectedShips.push(ship_index);
         }
-
+  
         var selectedPlanets = [];
         var checkboxes_planets = document.querySelectorAll('input[name="Q1"]:checked');
         for (var i = 0; i < checkboxes_planets.length; i++) {
           var planet_index = parseInt(checkboxes_planets[i].value.split(' ')[1]) - 1;
           selectedPlanets.push(planet_index);
         }
-
+  
         var correctShips = [];
         var correctPlanets = [];
         for (var i = 0; i < catchQuestions.ship_attack_damage.length; i++) {
@@ -208,7 +201,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
             correctPlanets.push(i);
           }
         }
-
+  
         var allCorrectShips = selectedShips.length === correctShips.length;
         for (var i = 0; i < correctShips.length; i++) {
           if (!selectedShips.includes(correctShips[i])) {
@@ -216,7 +209,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
             break;
           }
         }
-
+  
         var allCorrectPlanets = selectedPlanets.length === correctPlanets.length;
         for (var i = 0; i < correctPlanets.length; i++) {
           if (!selectedPlanets.includes(correctPlanets[i])) {
@@ -224,14 +217,14 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
             break;
           }
         }
-
+  
         catchResponses = {
           ships: selectedShips,
           planets: selectedPlanets
         };
-
+  
         contingencies_correct = allCorrectShips && allCorrectPlanets;
-
+  
         if (contingencies_correct) {
           endTrial();
         } else {
@@ -239,7 +232,35 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         }
       });
     }
-
+  
+    // Function to handle navigation to the previous page
+    function previousPage() {
+      if (currentInstructionPage > 0) {
+        currentInstructionPage--;
+        showInstructionPage();
+      }
+    }
+  
+    // Function to handle navigation to the next page
+    function nextPage() {
+      if (currentInstructionPage < instructionPages.length - 1) {
+        currentInstructionPage++;
+        showInstructionPage();
+      } else {
+        showCatchQuestions();
+      }
+    }
+  
+    // Function to handle key presses for navigation
+    function keyHandler(info) {
+      if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_backward) && trial.allow_backward) {
+        previousPage();
+      } else if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_forward)) {
+        nextPage();
+      }
+    }
+  
+    // Function to display instructions when an incorrect answer is given
     function displayInstructions() {
       var modalOverlay = document.createElement('div');
       modalOverlay.id = 'instructionModal';
@@ -253,14 +274,14 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       modalOverlay.style.display = 'flex';
       modalOverlay.style.justifyContent = 'center';
       modalOverlay.style.alignItems = 'center';
-
+  
       var modalContent = document.createElement('div');
       modalContent.style.backgroundColor = 'white';
       modalContent.style.padding = '20px';
       modalContent.style.borderRadius = '5px';
       modalContent.style.maxWidth = '80%';
       modalContent.innerHTML = trial.instructions;
-
+  
       var closeButton = document.createElement('button');
       closeButton.innerText = 'Close';
       closeButton.style.marginTop = '10px';
@@ -269,16 +290,17 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         currentInstructionPage = instructionPages.length - 1;
         showInstructionPage();
       });
-
+  
       modalContent.appendChild(closeButton);
       modalOverlay.appendChild(modalContent);
       display_element.appendChild(modalOverlay);
     }
-
+  
+    // Function to end the trial
     function endTrial() {
       var endTime = performance.now();
       var responseTime = endTime - startTime;
-
+  
       var trialData = {
         instruction_pages: JSON.stringify(instructionPages),
         catch_questions: JSON.stringify(catchQuestions),
@@ -286,11 +308,12 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         contingencies_correct: contingencies_correct,
         rt: responseTime
       };
-
+  
       display_element.innerHTML = '';
       jsPsych.finishTrial(trialData);
     }
-
+  
+    // Start the trial by showing the first instruction page
     showInstructionPage();
   };
 
