@@ -725,88 +725,6 @@ var p2_q4_triangle = {
 // 	for (var i=0; i<nBlocks_p2; i++){
 
 // 		if (i === nBlocks_p2-4) {
-		
-var cont_instructions = {
-  type: 'instructions',
-  pages: [
-    '<p>Local intel has determined where the pirates are coming from!<br>Click Next to view this intel.</p>',
-    `
-    <div class="jspsych-instructions-advanced-grid">
-      <div class="jspsych-instructions-advanced-row">
-        <div class="jspsych-instructions-advanced-cell">
-          <img src="${stim_list[0]}" class="jspsych-instructions-advanced-image">
-          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-          <img src="${ship_list[0]}" class="jspsych-instructions-advanced-image">
-          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-          <img src="${ship_attack_damage[0] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
-          <p>Planet A: ${ship_attack_damage[0] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
-        </div>
-      </div>
-      <div class="jspsych-instructions-advanced-row">
-        <div class="jspsych-instructions-advanced-cell">
-          <img src="${stim_list[1]}" class="jspsych-instructions-advanced-image">
-          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-          <img src="${ship_list[1]}" class="jspsych-instructions-advanced-image">
-          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-          <img src="${ship_attack_damage[1] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
-          <p>Planet B: ${ship_attack_damage[1] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
-        </div>
-      </div>
-      <div class="jspsych-instructions-advanced-row">
-        <div class="jspsych-instructions-advanced-cell">
-          <img src="${stim_list[2]}" class="jspsych-instructions-advanced-image">
-          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-          <img src="${ship_list[2]}" class="jspsych-instructions-advanced-image">
-          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-          <img src="${ship_attack_damage[2] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
-          <p>Planet C: ${ship_attack_damage[2] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
-        </div>
-      </div>
-    </div>
-    <p>Based on the information above, please answer the following questions:</p>
-    `
-  ],
-  allow_keys: false,
-  stim_list: stim_list,
-  ship_list: ship_list,
-  show_clickable_nav: true,
-  post_trial_gap: iti,
-  data: {
-    phase: 'instruct contingencies'
-  },
-  on_load: function() {
-    // Add custom CSS for styling
-    var style = document.createElement('style');
-    style.innerHTML = `
-      .jspsych-instructions-advanced-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-gap: 20px;
-        justify-items: center;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-      .jspsych-instructions-advanced-row {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-      }
-      .jspsych-instructions-advanced-cell {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-      }
-      .jspsych-instructions-advanced-image {
-        width: 100px;
-        height: 100px;
-        object-fit: contain;
-        margin-right: 10px;
-      }
-    `;
-    document.head.appendChild(style);
-  }
-};
 
 var contingenciescorrect = false;
 
@@ -855,39 +773,23 @@ var cont_catch = {
     <p align='center'><b>Check your knowledge before you continue.</b></p>
     <p align='center'><b>Question 1:</b> Which pirate ships lead to attacks?</p>
     <div class="jspsych-survey-multi-catch-options">
-      <div class="option-container">
-        <img src="${ship_list[0]}" class="option-image">
-        <input type="checkbox" name="Q0" value="Ship 1">
-        <label>Ship 1</label>
-      </div>
-      <div class="option-container">
-        <img src="${ship_list[1]}" class="option-image">
-        <input type="checkbox" name="Q0" value="Ship 2">
-        <label>Ship 2</label>
-      </div>
-      <div class="option-container">
-        <img src="${ship_list[2]}" class="option-image">
-        <input type="checkbox" name="Q0" value="Ship 3">
-        <label>Ship 3</label>
-      </div>
+      ${ship_list.map((ship, index) => `
+        <div class="option-container">
+          <img src="${ship}" class="option-image">
+          <input type="checkbox" name="Q0" value="Ship ${index + 1}">
+          <label>Ship ${String.fromCharCode(65 + index)}</label>
+        </div>
+      `).join('')}
     </div>
     <p align='center'><b>Question 2:</b> Which planets have been attracting pirate ships?</p>
     <div class="jspsych-survey-multi-catch-options">
-      <div class="option-container">
-        <img src="${stim_list[0]}" class="option-image">
-        <input type="checkbox" name="Q1" value="Planet 1">
-        <label>Planet 1</label>
-      </div>
-      <div class="option-container">
-        <img src="${stim_list[1]}" class="option-image">
-        <input type="checkbox" name="Q1" value="Planet 2">
-        <label>Planet 2</label>
-      </div>
-      <div class="option-container">
-        <img src="${stim_list[2]}" class="option-image">
-        <input type="checkbox" name="Q1" value="Planet 3">
-        <label>Planet 3</label>
-      </div>
+      ${stim_list.map((planet, index) => `
+        <div class="option-container">
+          <img src="${planet}" class="option-image">
+          <input type="checkbox" name="Q1" value="Planet ${String.fromCharCode(65 + index)}">
+          <label>Planet ${String.fromCharCode(65 + index)}</label>
+        </div>
+      `).join('')}
     </div>
     `
   ],
@@ -1140,7 +1042,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
-timeline.push(instructionCheckWithFeedback);
+// timeline.push(instructionCheckWithFeedback);
 
 // // Attention check
 // timeline.push(cfi_block);
@@ -1160,7 +1062,7 @@ timeline.push(instructionCheckWithFeedback);
 
 // // Phase2, ships
 // timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 // timeline.push(valence_p2);
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);
