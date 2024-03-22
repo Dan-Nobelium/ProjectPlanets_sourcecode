@@ -1,12 +1,6 @@
 jsPsych.plugins['survey-multi-catch'] = (function() {
   var plugin = {};
 
-  // Initialize failed submission data
-  var failedSubmissionData = {
-    count: 0,
-    timestamps: []
-  };
-
   plugin.info = {
     name: 'survey-multi-catch',
     description: 'A plugin for multiple-choice survey questions with instruction looping and error catching',
@@ -77,7 +71,7 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
         type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name: 'Instructions',
         default: null,
-        description: 'HTML-formatted string containing the instructions to display when an incorrect answer is given'
+        description: 'HTML-formatted string containing the instructions to display'
       }
     }
   };
@@ -155,120 +149,116 @@ jsPsych.plugins['survey-multi-catch'] = (function() {
     html += '<input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn"' + (trial.button_label ? ' value="' + trial.button_label + '"' : '') + '></input>';
     html += '</form>';
 
-    var instruction_count = 0;
-    var start_time = performance.now();
-    var responses = {};
-    var question_data = {};
-    var instructionTimeout = null;
+    let currentInstructionPage = 0;
+    let showingInstructions = true;
+    let instruction_count = 0;
+    let start_time = performance.now();
+    let responses = {};
+    let question_data = {};
+    let instructionTimeout = null;
 
-    function display_instructions() {
+    function showInstructionPage() {
       instruction_count++;
 
+      display_element.innerHTML = `
+        <div id="instructionContainer">
+          ${trial.instructions[currentInstructionPage]}
+          <button id="nextButton">Next</button>
+          <button id="backButton" style="display: ${currentInstructionPage === 0 ? 'none' : 'inline'};">Back</button>
+        </div>
+      `;
 
-      // Create the modal overlay
-      var modalOverlay = document.createElement('div');
-      modalOverlay.id = 'instructionModal';
-      modalOverlay.style.position = 'fixed';
-      modalOverlay.style.top = '0';
-      modalOverlay.style.left = '0';
-      modalOverlay.style.width = '100%';
-      modalOverlay.style.height = '100%';
-      modalOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-      modalOverlay.style.zIndex = '9999';
-      modalOverlay.style.display = 'flex';
-      modalOverlay.style.justifyContent = 'center';
-      modalOverlay.style.alignItems = 'center';
+      display_element.querySelector('#nextButton').addEventListener('click', function() {
+        currentInstructionPage++;
+        if (currentInstructionPage < trial.instructions.length) {
+          showInstructionPage();
+        } else {
+          showingInstructions = false;
+          showCatchQuestions();
+        }
+      });
 
-      // Create the modal content
-      var modalContent = document.createElement('div');
-      modalContent.style.backgroundColor = 'white';
-      modalContent.style.padding = '20px';
-      modalContent.style.borderRadius = '5px';
-      modalContent.style.maxWidth = '80%';
-      modalContent.innerHTML = `${trial.instructions}`;
-
-      // Append the modal content to the overlay
-      modalOverlay.appendChild(modalContent);
-
-      // Append the modal overlay to the display element
-      display_element.appendChild(modalOverlay);
-
-      // Set a timeout to hide the instructions after 10 seconds
-      instructionTimeout = setTimeout(hide_instructions, 5000);
+      display_element.querySelector('#backButton').addEventListener('click', function() {
+        currentInstructionPage--;
+        showInstructionPage();
+      });
     }
 
-    function hide_instructions() {
-      var modalOverlay = document.getElementById('instructionModal');
-      if (modalOverlay) {
-        modalOverlay.remove();
-        start_time = performance.now();
-        instructionTimeout = null;
+    function showCatchQuestions() {
+      // display the catch questions
+      display_element.innerHTML = html;
+
+      // set up form submission event listener after rendering the form
+      var formElement = display_element.querySelector('form');
+      if (formElement) {
+        formElement.addEventListener('submit', function(event) {
+          event.preventDefault();
+          // measure response time
+          var end_time = performance.now();
+          var response_time = end_time - start_time;
+
+          // create object to hold responses
+          for (var i = 0; i < trial.questions.length; i++) {
+            var match = display_element.querySelector('#jspsych-survey-multi-catch-' + i);
+            var id = "Q" + i;
+            if (match.querySelector("input[type=radio]:checked") !== null) {
+              var val = match.querySelector("input[type=radio]:checked").value;
+            } else {
+              var val = "";
+            }
+            var obje = {};
+            var name = id;
+            if (match.attributes['data-name'].value !== '') {
+              name = match.attributes['data-name'].value;
+            }
+            obje[name] = val;
+            Object.assign(question_data, obje);
+          }
+
+          // check answers
+          var all_correct = true;
+          for (var q in question_data) {
+            if (question_data[q] !== trial.correct_answers[q]) {
+              all_correct = false;
+              break;
+            }
+          }
+
+          if (all_correct) {
+            display_element.innerHTML = '';
+            var trial_data = {
+              "rt": response_time,
+              "responses": JSON.stringify(question_data),
+              "question_order": JSON.stringify(question_order),
+              "instruction_count": instruction_count,
+              "all_correct": all_correct,
+              "failed_submission_count": failedSubmissionData.count,
+              "failed_submission_timestamps": JSON.stringify(failedSubmissionData.timestamps)
+            };
+            jsPsych.finishTrial(trial_data);
+          } else {
+            // Increment failed submission count and store timestamp
+            failedSubmissionData.count++;
+            failedSubmissionData.timestamps.push(performance.now());
+
+            responses = question_data;
+            display_element.innerHTML = `
+              <p>Wrong answer, please review the instructions.</p>
+              <button id="reviewButton">Review Instructions</button>
+            `;
+            display_element.querySelector('#reviewButton').addEventListener('click', function() {
+              showingInstructions = true;
+              currentInstructionPage = 0;
+              showInstructionPage();
+            });
+          }
+        });
+      } else {
+        console.error('Form element not found in the DOM.');
       }
     }
 
-    // Render the initial form HTML
-    display_element.innerHTML = html;
-
-    // Set up form submission event listener after rendering the form
-    var formElement = display_element.querySelector('form');
-    if (formElement) {
-      formElement.addEventListener('submit', function(event) {
-        event.preventDefault();
-        // measure response time
-        var end_time = performance.now();
-        var response_time = end_time - start_time;
-
-        // create object to hold responses
-        for (var i = 0; i < trial.questions.length; i++) {
-          var match = display_element.querySelector('#jspsych-survey-multi-catch-' + i);
-          var id = "Q" + i;
-          if (match.querySelector("input[type=radio]:checked") !== null) {
-            var val = match.querySelector("input[type=radio]:checked").value;
-          } else {
-            var val = "";
-          }
-          var obje = {};
-          var name = id;
-          if (match.attributes['data-name'].value !== '') {
-            name = match.attributes['data-name'].value;
-          }
-          obje[name] = val;
-          Object.assign(question_data, obje);
-        }
-
-        // check answers
-        var all_correct = true;
-        for (var q in question_data) {
-          if (question_data[q] !== trial.correct_answers[q]) {
-            all_correct = false;
-            break;
-          }
-        }
-
-        if (all_correct) {
-          display_element.innerHTML = '';
-          var trial_data = {
-            "rt": response_time,
-            "responses": JSON.stringify(question_data),
-            "question_order": JSON.stringify(question_order),
-            "instruction_count": instruction_count,
-            "all_correct": all_correct,
-            "failed_submission_count": failedSubmissionData.count,
-            "failed_submission_timestamps": JSON.stringify(failedSubmissionData.timestamps)
-          };
-          jsPsych.finishTrial(trial_data);
-        } else {
-          // Increment failed submission count and store timestamp
-          failedSubmissionData.count++;
-          failedSubmissionData.timestamps.push(performance.now());
-
-          responses = question_data;
-          display_instructions();
-        }
-      });
-    } else {
-      console.error('Form element not found in the DOM.');
-    }
+    showInstructionPage();
   };
 
   return plugin;

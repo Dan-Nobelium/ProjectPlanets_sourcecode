@@ -55,16 +55,6 @@ const demographics_block = {
         '<p><b>There will be monetary prizes for participants with high scores (top 10% of the cohort) and <i>timely</i> answers </b>, so try do your best! </p>'
       ];
 
-          // if (sample === "ProA") {
-    //   var ProA_insert = [
-    //     '<p>If anything goes wrong during the experiment, please take a screenshot and notify the requester. Please <b>DO NOT</b> hit refresh or the back button on your browser. This will make it hard for you to get paid.</p>' +
-    //     '<p>If you complete the task and pass the attention check, you will get your payment no matter what. Please take your time and think about your predictions and judgements seriously. </p>'
-    //   ]
-    // } else {
-    //   var ProA_insert = '';
-    // }
-
-
     const questions = [
         {
           prompt: "<b>Question 1:</b> The aim of the task is to:",

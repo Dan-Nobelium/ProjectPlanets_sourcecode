@@ -130,7 +130,8 @@ let gen_ins_block = {
 // Define instruction check block
 
 let instructionCheckWithFeedback = {
-  type: "survey-multi-catch",
+  type: 'survey-multi-catch',
+  instructions: [pretrain1, pretrain2, pretrain3],
   questions: questions.map(q => ({
     prompt: q.prompt,
     options: q.options,
@@ -139,14 +140,7 @@ let instructionCheckWithFeedback = {
   correct_answers: questions.reduce((obj, q, index) => {
     obj[`Q${index}`] = q.correct;
     return obj;
-  }, {}),
-  instructions: `
-    <div id="instructionOverlay" style="position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); color: white; z-index: 1000; display: flex; justify-content: center; align-items: center; text-align: center; padding: 20px;">
-      <div style="max-width: 80%;">
-        ${pretrain1, pretrain2, pretrain3}
-      </div>
-    </div>
-  `
+  }, {})
 };
 
 // End instruction phase
@@ -1083,9 +1077,9 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
-timeline.push(gen_ins_block);
+// timeline.push(gen_ins_block);
 timeline.push(instructionCheckWithFeedback);
-timeline.push(end_instruction);   
+// timeline.push(end_instruction);   
 
 // // Attention check
 // timeline.push(cfi_block);
