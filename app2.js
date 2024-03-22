@@ -1056,7 +1056,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
-timeline.push(instructionCheckWithFeedback);
+// timeline.push(instructionCheckWithFeedback);
 
 // // Attention check
 // timeline.push(cfi_block);
@@ -1089,7 +1089,7 @@ timeline.push(instructionCheckWithFeedback);
 
 // // Phase3, contingencies
 // timeline.push(cont_instructions); //add pictures and testing
-// timeline.push(cont_catch); //add pictures and testing
+timeline.push(cont_catch); //add pictures and testing
 
 
 // // // Phase3, ships
