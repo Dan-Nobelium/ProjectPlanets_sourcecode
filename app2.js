@@ -114,19 +114,6 @@ function addBlocksToTimeline(timeline, blockConfig, nBlocks, nTrialsPerBlock) {
 //----------------------------------------------------------------------------
 // ----- Participant instructions -----
 
-let gen_ins_block = {
-  type: "instructions",
-  pages: [preques, pretrain1, pretrain2, pretrain3],
-  allow_keys: false,
-  show_clickable_nav: true,
-  post_trial_gap: iti,
-  data: {
-    phase: "instructions",
-  },
-};
-
-// Initialize variables to track failed attempts and start time
-
 // Define instruction check block
 
 let instructionCheckWithFeedback = {
@@ -141,14 +128,6 @@ let instructionCheckWithFeedback = {
     obj[`Q${index}`] = q.correct;
     return obj;
   }, {})
-};
-
-// End instruction phase
-var end_instruction = {
-  type: 'html-button-response',
-  post_trial_gap: 0,
-  choices: ['Click here to start Phase 1'],
-  stimulus: '<center>Well done!</center>'
 };
 
 //----------------------------------------------------------------------------
@@ -1077,9 +1056,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
-// timeline.push(gen_ins_block);
 timeline.push(instructionCheckWithFeedback);
-// timeline.push(end_instruction);   
 
 // // Attention check
 // timeline.push(cfi_block);

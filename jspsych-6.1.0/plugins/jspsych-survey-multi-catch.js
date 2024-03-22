@@ -243,8 +243,7 @@ function showCatchQuestions() {
             // Display the end instruction screen
             display_element.innerHTML = `
               <div id="endInstructionContainer">
-                <center>Well done!</center>
-                <button id="startPhase1Button">Click here to start Phase 1</button>
+              <button id="startPhase1Button" class="jspsych-btn">Start Phase 1</button>
               </div>
             `;
     
