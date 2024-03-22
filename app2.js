@@ -135,48 +135,47 @@ let instructionCheckWithFeedback = {
 
 // define task blocks with no ships
 let planet_noship = {
-    type: 'planet-response-command',
-    show_ship: false,
-    ship_hostile_idx: planet_side,
-    prompt: planet_labels,
-    stimulus: stim_list,
-    stimulus_select: stim_selector_highlight,
-    ship_stimulus: ship_list,              
-    reset_planet_wait: reset_planet_wait_const,
-    shield_charging_time: shield_charging_time_const,
-    ship_attack_time: ship_attack_time_const,
-    ship_attack_damage: ship_attack_damage,
-    block_duration: block_duration,
-    data: {
-        phase: 'phase1',
-        block_type: 'planet_noship'
-    },
-    on_start: function(trial) {
-        trial.data.points = points;
-        trial.data.block_number = block_number;
-        trial.data.trial_number = trial_number;
-    },
-    on_finish: function(data){
-        points = data.points_total;
-        trial_number = data.trial_number;
-        trial_number++;
-        // script for continuous response block
-        if (continuousResp) {
-            jsPsych.endCurrentTimeline();
-            block_number = data.block_number;
-            block_number++
-            console.log('Block ' + block_number)
-        } else {
-            if (trial_number >= nTrialspBlk) {
-                trial_number = 0
-                block_number = data.block_number;
-                block_number++
-                console.log('Block ' + block_number)
-            }
-        }
+  type: 'planet-response-command',
+  show_ship: false,
+  ship_hostile_idx: planet_side,
+  prompt: planet_labels,
+  stimulus: stim_list,
+  stimulus_select: stim_selector_highlight,
+  ship_stimulus: ship_list,              
+  reset_planet_wait: reset_planet_wait_const,
+  shield_charging_time: shield_charging_time_const,
+  ship_attack_time: ship_attack_time_const,
+  ship_attack_damage: ship_attack_damage,
+  block_duration: block_duration,
+  data: {
+    phase: 'phase1',
+    block_type: 'planet_noship'
+  },
+  on_start: function(trial) {
+    trial.data.points = points;
+    trial.data.block_number = block_number;
+    trial.data.trial_number = trial_number;
+  },
+  on_finish: function(data){
+    points = data.points_total;
+    trial_number = data.trial_number;
+    trial_number++;
+    // Script for continuous response block
+    if (continuousResp) {
+      jsPsych.endCurrentTimeline();
+      block_number = data.block_number;
+      block_number++;
+      console.log('Block ' + block_number);
+    } else {
+      if (trial_number >= nTrialspBlk) {
+        trial_number = 0;
+        block_number = data.block_number;
+        block_number++;
+        console.log('Block ' + block_number);
+      }
     }
-}
-
+  }
+};
 
 
 
@@ -1149,12 +1148,12 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(audit_block);
 
 // // Phase 1, no ships
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 // timeline.push(valence_p1);
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
-timeline.push(p1_q3_triangle);
+// timeline.push(p1_q3_triangle);
 // timeline.push(p1_q4_triangle);
 
 
