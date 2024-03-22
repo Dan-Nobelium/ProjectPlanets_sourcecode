@@ -19,13 +19,6 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         default: null,
         description: 'HTML-formatted string to display at the top of the page above all the questions.'
       },
-      options: {
-        type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'Options',
-        array: true,
-        default: undefined,
-        description: 'An array of HTML strings representing the options.'
-      },
       ship_attack_damage: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Ship Attack Damage',
@@ -90,7 +83,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     }
   };
 
-  
+
   plugin.trial = function(display_element, trial) {
     var currentInstructionPage = 0;
     var startTime = performance.now();
@@ -101,6 +94,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     };
     var catchResponses = {};
     var contingencies_correct = false;
+    var failedSubmissionCount = 0;
   
     // Function to create the HTML for an instruction page
     function createInstructionPage(pageContent) {
@@ -171,12 +165,12 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     function showCatchQuestions() {
       var catchQuestionsHtml = createCatchQuestions();
       display_element.innerHTML = catchQuestionsHtml;
-  
+
       display_element.querySelector('#backButton').addEventListener('click', function() {
         currentInstructionPage = instructionPages.length - 1;
         showInstructionPage();
       });
-  
+
       display_element.querySelector('#jspsych-survey-multi-catch-form').addEventListener('submit', function(event) {
         event.preventDefault();
         var selectedShips = [];
@@ -185,14 +179,14 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
           var ship_index = parseInt(checkboxes_ships[i].value.split(' ')[1]) - 1;
           selectedShips.push(ship_index);
         }
-  
+
         var selectedPlanets = [];
         var checkboxes_planets = document.querySelectorAll('input[name="Q1"]:checked');
         for (var i = 0; i < checkboxes_planets.length; i++) {
           var planet_index = parseInt(checkboxes_planets[i].value.split(' ')[1]) - 1;
           selectedPlanets.push(planet_index);
         }
-  
+
         var correctShips = [];
         var correctPlanets = [];
         for (var i = 0; i < catchQuestions.ship_attack_damage.length; i++) {
@@ -201,7 +195,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
             correctPlanets.push(i);
           }
         }
-  
+
         var allCorrectShips = selectedShips.length === correctShips.length;
         for (var i = 0; i < correctShips.length; i++) {
           if (!selectedShips.includes(correctShips[i])) {
@@ -209,7 +203,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
             break;
           }
         }
-  
+
         var allCorrectPlanets = selectedPlanets.length === correctPlanets.length;
         for (var i = 0; i < correctPlanets.length; i++) {
           if (!selectedPlanets.includes(correctPlanets[i])) {
@@ -217,17 +211,18 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
             break;
           }
         }
-  
+
         catchResponses = {
           ships: selectedShips,
           planets: selectedPlanets
         };
-  
+
         contingencies_correct = allCorrectShips && allCorrectPlanets;
-  
+
         if (contingencies_correct) {
           endTrial();
         } else {
+          failedSubmissionCount++;
           displayInstructions();
         }
       });
@@ -296,19 +291,21 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       display_element.appendChild(modalOverlay);
     }
   
+  
     // Function to end the trial
     function endTrial() {
       var endTime = performance.now();
       var responseTime = endTime - startTime;
-  
+
       var trialData = {
         instruction_pages: JSON.stringify(instructionPages),
         catch_questions: JSON.stringify(catchQuestions),
         catch_responses: JSON.stringify(catchResponses),
         contingencies_correct: contingencies_correct,
+        failed_submission_count: failedSubmissionCount,
         rt: responseTime
       };
-  
+
       display_element.innerHTML = '';
       jsPsych.finishTrial(trialData);
     }

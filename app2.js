@@ -902,7 +902,7 @@ var cont_catch = {
   button_label_next: 'Next',
   allow_keys: false,
   on_finish: function(data) {
-    data.contingencies_correct = contingencies_correct;
+    data.contingencies_correct = data.contingencies_correct;
     data.responses = JSON.stringify(data.responses);
   },
   data: {
