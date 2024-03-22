@@ -3,8 +3,22 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
 
   plugin.info = {
     name: 'survey-multi-catch-image',
-    description: 'A plugin for multiple-choice survey questions with instruction looping and error catching',
+    description: 'Displays instruction pages with catch questions and images',
     parameters: {
+      pages: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Pages',
+        default: undefined,
+        array: true,
+        description: 'Each element of the array is the content for a single page.'
+      },
+      preamble: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Preamble',
+        array: true,
+        default: null,
+        description: 'HTML-formatted string to display at the top of the page above all the questions.'
+      },
       options: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name: 'Options',
@@ -12,95 +26,221 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         default: undefined,
         description: 'An array of HTML strings representing the options.'
       },
-      randomize_option_order: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: 'Randomize Option Order',
-        default: false,
-        description: 'If true, the order of the options will be randomized.'
-      },
-      preamble: {
-        type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'Preamble',
-        default: null,
-        description: 'HTML-formatted string to display at the top of the page above the options.'
-      },
-      button_label: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Button label',
-        default: 'Continue',
-        description: 'Label of the button.'
-      },
-      instructions: {
-        type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'Instructions',
-        default: null,
-        description: 'HTML-formatted string containing the instructions to display when an incorrect answer is given.'
-      },
       ship_attack_damage: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Ship Attack Damage',
         array: true,
         default: undefined,
         description: 'An array of integers representing the attack damage for each ship.'
+      },
+      key_forward: {
+        type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Key forward',
+        default: 'rightarrow',
+        description: 'The key the subject can press in order to advance to the next page.'
+      },
+      key_backward: {
+        type: jsPsych.plugins.parameterType.KEYCODE,
+        pretty_name: 'Key backward',
+        default: 'leftarrow',
+        description: 'The key that the subject can press to return to the previous page.'
+      },
+      allow_backward: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow backward',
+        default: true,
+        description: 'If true, the subject can return to the previous page of the instructions.'
+      },
+      allow_keys: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow keys',
+        default: true,
+        description: 'If true, the subject can use keyboard keys to navigate the pages.'
+      },
+      show_clickable_nav: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Show clickable nav',
+        default: false,
+        description: 'If true, then a "Previous" and "Next" button will be displayed beneath the instructions.'
+      },
+      show_page_number: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Show page number',
+        default: false,
+        description: 'If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons.'
+      },
+      button_label_previous: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button label previous',
+        default: 'Previous',
+        description: 'The text that appears on the button to go backwards.'
+      },
+      button_label_next: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Button label next',
+        default: 'Next',
+        description: 'The text that appears on the button to go forwards.'
+      },
+      instructions: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Instructions',
+        default: null,
+        description: 'HTML-formatted string containing the instructions to display when an incorrect answer is given.'
       }
     }
   };
 
   plugin.trial = function(display_element, trial) {
-    var plugin_id_name = "jspsych-survey-multi-catch-image";
-    var html = "";
+    var currentInstructionPage = 0;
+    var startTime = performance.now();
+    var instructionPages = trial.pages;
+    var catchQuestions = {
+      preamble: trial.preamble,
+      options: trial.options,
+      ship_attack_damage: trial.ship_attack_damage
+    };
+    var catchResponses = {};
+    var contingencies_correct = false;
 
-    html += '<style id="jspsych-survey-multi-catch-image-css">';
-    html += '.jspsych-survey-multi-catch-image-options-row { display: flex; justify-content: center; margin-bottom: 20px; }';
-    html += '.jspsych-survey-multi-catch-image-option { flex: 1; margin-left: 10px; margin-right: 10px; text-align: center; }';
-    html += '.jspsych-survey-multi-catch-image-option img { display: block; margin: 0 auto 0.5em; }';
-    html += 'label.jspsych-survey-multi-catch-image-text input[type="checkbox"] { margin-right: 1em; }';
-    html += '.jspsych-survey-multi-catch-image-preamble p { margin-bottom: 10px; }'; // Add margin bottom to preamble paragraphs
-    html += '</style>';
+    function showInstructionPage() {
+      var pageContent = instructionPages[currentInstructionPage];
 
-    if (trial.preamble !== null) {
-      html += '<div id="jspsych-survey-multi-catch-image-preamble" class="jspsych-survey-multi-catch-image-preamble">' + trial.preamble + '</div>';
+      var navButtons = '';
+      if (trial.show_clickable_nav) {
+        var previousButton = trial.allow_backward && currentInstructionPage > 0 ?
+          '<button id="previousButton" class="jspsych-btn">' + trial.button_label_previous + '</button>' :
+          '<button id="previousButton" class="jspsych-btn" disabled>' + trial.button_label_previous + '</button>';
+        var nextButton = currentInstructionPage < instructionPages.length - 1 ?
+          '<button id="nextButton" class="jspsych-btn">' + trial.button_label_next + '</button>' :
+          '<button id="nextButton" class="jspsych-btn">' + trial.button_label_next + '</button>';
+        navButtons = previousButton + nextButton;
+      }
+
+      var pageNumber = trial.show_page_number ? '<div class="page-number">Page ' + (currentInstructionPage + 1) + '/' + instructionPages.length + '</div>' : '';
+
+      display_element.innerHTML = pageContent + navButtons + pageNumber;
+
+      if (trial.show_clickable_nav) {
+        display_element.querySelector('#previousButton').addEventListener('click', previousPage);
+        display_element.querySelector('#nextButton').addEventListener('click', nextPage);
+      }
+
+      if (trial.allow_keys) {
+        var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
+          callback_function: keyHandler,
+          valid_responses: [trial.key_backward, trial.key_forward],
+          rt_method: 'performance',
+          persist: false
+        });
+      }
     }
 
-    html += '<form id="jspsych-survey-multi-catch-image-form">';
-
-    for (var q = 0; q < trial.options.length; q++) {
-      html += '<div class="jspsych-survey-multi-catch-image-options-row">';
-
-      var option_order = [];
-      for (var i = 0; i < trial.options[q].length; i++) {
-        option_order.push(i);
+    function previousPage() {
+      if (currentInstructionPage > 0) {
+        currentInstructionPage--;
+        showInstructionPage();
       }
-      if (trial.randomize_option_order) {
-        option_order = jsPsych.randomization.shuffle(option_order);
-      }
-
-      for (var i = 0; i < trial.options[q].length; i++) {
-        var option_index = option_order[i];
-
-        html += '<div id="jspsych-survey-multi-catch-image-option-' + q + '-' + option_index + '" class="jspsych-survey-multi-catch-image-option">';
-        html += trial.options[q][option_index];
-        html += '</div>';
-      }
-
-      html += '</div>';
     }
 
-    html += '<div class="jspsych-survey-multi-catch-image-nav">';
-    html += '<input type="submit" id="' + plugin_id_name + '-next" class="' + plugin_id_name + ' jspsych-btn" value="' + trial.button_label + '"></input>';
-    html += '</div>';
+    function nextPage() {
+      if (currentInstructionPage < instructionPages.length - 1) {
+        currentInstructionPage++;
+        showInstructionPage();
+      } else {
+        showCatchQuestions();
+      }
+    }
 
-    html += '</form>';
+    function keyHandler(info) {
+      if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_backward) && trial.allow_backward) {
+        previousPage();
+      } else if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_forward)) {
+        nextPage();
+      }
+    }
 
-    var instruction_count = 0;
-    var start_time = performance.now();
-    var responses = {};
-    var question_data = {};
-    var instructionTimeout = null;
+    function showCatchQuestions() {
+      var preamble = catchQuestions.preamble.join('<br>') || '';
+      var questions = catchQuestions.options.map(function(option, index) {
+        var questionHtml = option.map(function(item) {
+          return item;
+        }).join('');
+        return '<div class="jspsych-survey-multi-catch-question">' + questionHtml + '</div>';
+      }).join('');
 
-    function display_instructions() {
-      instruction_count++;
+      var html = preamble +
+        '<form id="jspsych-survey-multi-catch-form">' +
+        questions +
+        '<div class="jspsych-survey-multi-catch-nav">' +
+        '<button id="backButton" class="jspsych-btn">' + trial.button_label_previous + '</button>' +
+        '<button type="submit" id="submitButton" class="jspsych-btn">' + trial.button_label_next + '</button>' +
+        '</div>' +
+        '</form>';
 
+      display_element.innerHTML = html;
+
+      display_element.querySelector('#backButton').addEventListener('click', function() {
+        currentInstructionPage = instructionPages.length - 1;
+        showInstructionPage();
+      });
+
+      display_element.querySelector('#jspsych-survey-multi-catch-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var selectedShips = [];
+        var checkboxes_ships = document.querySelectorAll('input[name="Q0"]:checked');
+        for (var i = 0; i < checkboxes_ships.length; i++) {
+          var ship_index = parseInt(checkboxes_ships[i].value.split(' ')[1]) - 1;
+          selectedShips.push(ship_index);
+        }
+
+        var selectedPlanets = [];
+        var checkboxes_planets = document.querySelectorAll('input[name="Q1"]:checked');
+        for (var i = 0; i < checkboxes_planets.length; i++) {
+          var planet_index = parseInt(checkboxes_planets[i].value.split(' ')[1]) - 1;
+          selectedPlanets.push(planet_index);
+        }
+
+        var correctShips = [];
+        var correctPlanets = [];
+        for (var i = 0; i < catchQuestions.ship_attack_damage.length; i++) {
+          if (catchQuestions.ship_attack_damage[i] !== 0) {
+            correctShips.push(i);
+            correctPlanets.push(i);
+          }
+        }
+
+        var allCorrectShips = selectedShips.length === correctShips.length;
+        for (var i = 0; i < correctShips.length; i++) {
+          if (!selectedShips.includes(correctShips[i])) {
+            allCorrectShips = false;
+            break;
+          }
+        }
+
+        var allCorrectPlanets = selectedPlanets.length === correctPlanets.length;
+        for (var i = 0; i < correctPlanets.length; i++) {
+          if (!selectedPlanets.includes(correctPlanets[i])) {
+            allCorrectPlanets = false;
+            break;
+          }
+        }
+
+        catchResponses = {
+          ships: selectedShips,
+          planets: selectedPlanets
+        };
+
+        contingencies_correct = allCorrectShips && allCorrectPlanets;
+
+        if (contingencies_correct) {
+          endTrial();
+        } else {
+          displayInstructions();
+        }
+      });
+    }
+
+    function displayInstructions() {
       var modalOverlay = document.createElement('div');
       modalOverlay.id = 'instructionModal';
       modalOverlay.style.position = 'fixed';
@@ -121,84 +261,37 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       modalContent.style.maxWidth = '80%';
       modalContent.innerHTML = trial.instructions;
 
-      modalOverlay.appendChild(modalContent);
-
-      display_element.appendChild(modalOverlay);
-
-      instructionTimeout = setTimeout(hide_instructions, 5000);
-    }
-
-    function hide_instructions() {
-      var modalOverlay = document.getElementById('instructionModal');
-      if (modalOverlay) {
+      var closeButton = document.createElement('button');
+      closeButton.innerText = 'Close';
+      closeButton.style.marginTop = '10px';
+      closeButton.addEventListener('click', function() {
         modalOverlay.remove();
-        start_time = performance.now();
-        instructionTimeout = null;
-      }
+        currentInstructionPage = instructionPages.length - 1;
+        showInstructionPage();
+      });
+
+      modalContent.appendChild(closeButton);
+      modalOverlay.appendChild(modalContent);
+      display_element.appendChild(modalOverlay);
     }
 
-    display_element.innerHTML = html;
+    function endTrial() {
+      var endTime = performance.now();
+      var responseTime = endTime - startTime;
 
-    console.log('Options rendered:', display_element.innerHTML); // Test Case 1
+      var trialData = {
+        instruction_pages: JSON.stringify(instructionPages),
+        catch_questions: JSON.stringify(catchQuestions),
+        catch_responses: JSON.stringify(catchResponses),
+        contingencies_correct: contingencies_correct,
+        rt: responseTime
+      };
 
-    function check_answers() {
-      var selected_ships = [];
-      var checkboxes_ships = document.querySelectorAll('input[name="Q0"]:checked');
-      for (var i = 0; i < checkboxes_ships.length; i++) {
-        var ship_index = parseInt(checkboxes_ships[i].value.split(' ')[1]) - 1;
-        selected_ships.push(ship_index);
-      }
-
-      var selected_planets = [];
-      var checkboxes_planets = document.querySelectorAll('input[name="Q1"]:checked');
-      for (var i = 0; i < checkboxes_planets.length; i++) {
-        var planet_index = parseInt(checkboxes_planets[i].value.split(' ')[1]) - 1;
-        selected_planets.push(planet_index);
-      }
-
-      var correct_ships = [];
-      var correct_planets = [];
-      for (var i = 0; i < trial.ship_attack_damage.length; i++) {
-        if (trial.ship_attack_damage[i] !== 0) {
-          correct_ships.push(i);
-          correct_planets.push(i);
-        }
-      }
-
-      var all_correct_ships = selected_ships.length === correct_ships.length;
-      for (var i = 0; i < correct_ships.length; i++) {
-        if (!selected_ships.includes(correct_ships[i])) {
-          all_correct_ships = false;
-          break;
-        }
-      }
-
-      var all_correct_planets = selected_planets.length === correct_planets.length;
-      for (var i = 0; i < correct_planets.length; i++) {
-        if (!selected_planets.includes(correct_planets[i])) {
-          all_correct_planets = false;
-          break;
-        }
-      }
-
-      if (all_correct_ships && all_correct_planets) {
-        contingencies_correct = true;
-        display_element.innerHTML = '';
-        var trial_data = {
-          "responses": JSON.stringify(responses),
-          "instruction_count": instruction_count,
-          "contingencies_correct": contingencies_correct
-        };
-        jsPsych.finishTrial(trial_data);
-      } else {
-        display_instructions();
-      }
+      display_element.innerHTML = '';
+      jsPsych.finishTrial(trialData);
     }
 
-    document.querySelector('#jspsych-survey-multi-catch-image-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      check_answers();
-    });
+    showInstructionPage();
   };
 
   return plugin;

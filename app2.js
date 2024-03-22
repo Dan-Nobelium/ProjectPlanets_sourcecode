@@ -813,8 +813,47 @@ var cont_instructions = {
 };
 
 var contingenciescorrect = false;
+
 var cont_catch = {
   type: 'survey-multi-catch-image',
+  pages: [
+    '<p>Local intel has determined where the pirates are coming from!<br>Click Next to view this intel.</p>',
+    `
+    <div class="jspsych-instructions-advanced-grid">
+      <div class="jspsych-instructions-advanced-row">
+        <div class="jspsych-instructions-advanced-cell">
+          <img src="${stim_list[0]}" class="jspsych-instructions-advanced-image">
+          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+          <img src="${ship_list[0]}" class="jspsych-instructions-advanced-image">
+          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+          <img src="${ship_attack_damage[0] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
+          <p>Planet A: ${ship_attack_damage[0] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
+        </div>
+      </div>
+      <div class="jspsych-instructions-advanced-row">
+        <div class="jspsych-instructions-advanced-cell">
+          <img src="${stim_list[1]}" class="jspsych-instructions-advanced-image">
+          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+          <img src="${ship_list[1]}" class="jspsych-instructions-advanced-image">
+          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+          <img src="${ship_attack_damage[1] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
+          <p>Planet B: ${ship_attack_damage[1] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
+        </div>
+      </div>
+      <div class="jspsych-instructions-advanced-row">
+        <div class="jspsych-instructions-advanced-cell">
+          <img src="${stim_list[2]}" class="jspsych-instructions-advanced-image">
+          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+          <img src="${ship_list[2]}" class="jspsych-instructions-advanced-image">
+          <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+          <img src="${ship_attack_damage[2] === 0 ? 'img/win100.png' : 'img/lose.png'}" class="jspsych-instructions-advanced-image">
+          <p>Planet C: ${ship_attack_damage[2] === 0 ? 'Friendly ships (no damage)' : 'Pirate ships (damage)'}</p>
+        </div>
+      </div>
+    </div>
+    <p>Based on the information above, please answer the following questions:</p>
+    `
+  ],
   preamble: [
     "<p align='center'><b>Check your knowledge before you continue.</b></p>",
     "<p align='center'><b>Question 1:</b> Which pirate ships lead to attacks?</p>",
@@ -858,15 +897,19 @@ var cont_catch = {
   ],
   ship_attack_damage: ship_attack_damage,
   instructions: '<p>Your answer is incorrect. Please review the information provided and try again.</p>',
+  show_clickable_nav: true,
+  button_label_previous: 'Back',
+  button_label_next: 'Next',
+  allow_keys: false,
   on_finish: function(data) {
     data.contingencies_correct = contingencies_correct;
     data.responses = JSON.stringify(data.responses);
   },
   data: {
     phase: 'contingency quiz'
-  },
-  contingencies_correct: false
+  }
 };
+
 
 //----------------------------------------------------------------------------
 // --- Debrief and experiment end
