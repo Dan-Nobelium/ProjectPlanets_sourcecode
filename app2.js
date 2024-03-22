@@ -135,7 +135,7 @@ let instructionCheckWithFeedback = {
 
 // define task blocks with no ships
 let planet_noship = {
-  type: 'planet-response-command',
+  type: 'planet-response',
   show_ship: false,
   ship_hostile_idx: planet_side,
   prompt: planet_labels,
@@ -1148,7 +1148,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(audit_block);
 
 // // Phase 1, no ships
-addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 // timeline.push(valence_p1);
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
@@ -1173,7 +1173,7 @@ addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 
 // // Phase3, contingencies
 // timeline.push(cont_instructions); //add pictures and testing
-// timeline.push(cont_catch); //add pictures and testing
+timeline.push(cont_catch); //add pictures and testing
 
 
 // // // Phase3, ships
