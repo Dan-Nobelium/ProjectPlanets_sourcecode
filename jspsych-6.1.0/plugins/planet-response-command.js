@@ -331,22 +331,23 @@ plugin.trial = function(display_element, trial)
     //Render basic div structure
     display_element.innerHTML = html;
 
-    // Apply CSS grid to the game container
-    var gameContainer = display_element.querySelector('#game-container');
-    gameContainer.style.display = 'grid';
-    gameContainer.style.gridTemplateColumns = '3fr 1fr';
-    gameContainer.style.gridGap = '20px';
+// Apply CSS grid to the game container
+var gameContainer = display_element.querySelector('#game-container');
+gameContainer.style.display = 'grid';
+gameContainer.style.gridTemplateColumns = '5fr 1fr'; // Allocate 2/3 width to planet row and 1/3 to command info
+gameContainer.style.gridGap = '800px';
 
     // Position planets and command info elements in the grid
     var planetsDiv = display_element.querySelector('#planet-row');
     planetsDiv.style.display = 'flex';
     planetsDiv.style.justifyContent = 'space-between';
-    planetsDiv.style.alignItems = 'center';
+    planetsDiv.style.alignItems = 'left';
 
     var commandInfo = display_element.querySelector('#command-info');
     commandInfo.style.display = 'flex';
     commandInfo.style.flexDirection = 'column';
     commandInfo.style.justifyContent = 'space-between';
+    
 
     // Update planet creation to include selection ring and planet name within the planet element
     var planetDivs = display_element.querySelectorAll('.planet-div');
@@ -359,25 +360,26 @@ plugin.trial = function(display_element, trial)
         planetDiv.appendChild(planetName);
     });
 
-    // Update ship creation to include ship image and shield elements within the ship placeholder
-    var shipPlaceholder = display_element.querySelector('#ship-placeholder');
-    shipPlaceholder.innerHTML = '<div id="ship-img-div" ' +
-        'style="position:relative; top:0px; border: 0px; ' +
-        'height: ' + trial.ship_height  + 'px ;' +
-        'width: ' + trial.ship_width + 'px;" ' +
-        'draggable="false" ' +
-        '> ' +
-        '<img src="' + trial.ship_stimulus[0] +  '" ' +
-        'id="ship-img" ' +
-        'class="ship"' +
-        'height="' + trial.ship_height +'" ' +
-        'width="' + trial.ship_width +'" ' +
-        'style="position:relative; top:0px; border: 0px; visibility:visible;z-index:11;" ' +
-        'draggable="false" ' +
-        '> ' +
-        '</div>' +
-        '<div class="ship" id="ship-attack-text"></div>'+
-        '<div class="ship" id="ship-status-text"></div>';
+// Update ship creation to include ship image and shield elements within the ship placeholder
+var shipPlaceholder = display_element.querySelector('#ship-placeholder');
+shipPlaceholder.innerHTML = '<div id="ship-img-div" ' +
+    'style="position:relative; top:0px; border: 0px; ' +
+    'height: ' + trial.ship_height  + 'px ;' +
+    'width: ' + trial.ship_width + 'px;" ' +
+    'draggable="false" ' +
+    '> ' +
+    '<img src="' + trial.ship_stimulus[0] +  '" ' +
+    'id="ship-img" ' +
+    'class="ship"' +
+    'height="' + trial.ship_height +'" ' +
+    'width="' + trial.ship_width +'" ' +
+    'style="position:relative; top:0px; border: 0px; visibility:hidden;z-index:11;" ' + // Set initial visibility to hidden
+    'draggable="false" ' +
+    '> ' +
+    '</div>' +
+    '<div class="ship" id="ship-attack-text"></div>'+
+    '<div class="ship" id="ship-status-text"></div>';
+
 
     // Create shield elements and append them to the shield placeholder
     var shieldPlaceholder = display_element.querySelector('#shield-placeholder');
@@ -644,11 +646,14 @@ function proceed_trade(choice){
 }
 
 
+
+
 // function to show ship img and subsequent procedure
 function show_ship(choice) {
     //Put stuff into the ship divs
     var shipImgDiv = display_element.querySelector('#ship-img-div');
-    shipImgDiv.style.visibility = 'visible';
+    shipImgDiv.style.visibility = 'visible'; // Update visibility to visible when the ship is activated
+    // ...
     shipImgDiv.innerHTML = '<img src="' + trial.ship_stimulus[choice] +  '" ' +
         'id="ship-img" ' +
         'class="ship"' +
