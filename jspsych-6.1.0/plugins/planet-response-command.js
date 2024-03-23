@@ -271,6 +271,7 @@ plugin.trial = function(display_element, trial)
     display_wrapper.style.backgroundColor = "black"
     display_element.style.color = "green"
 
+    
     // Create general div structure: Planet Row | Command Info
     if (Array.isArray(trial.stimulus)){
         for (var i = 0; i < trial.stimulus.length; i ++){
@@ -278,19 +279,19 @@ plugin.trial = function(display_element, trial)
             html += '<div id="planet-div-' + i + '" class="planet-div"> ';
             html += '<div class="clickid planet-score-box" id="planet-score-box-' + i + '"></div> ';
 
-            //Write img tag
-            html += '<img class="clickid planet-img" src="'+trial.stimulus[i] + '" ' +
-                'id="planet-' + i + '" ' +
-                'allowclick="1" ' +  //allow clicks?
-                'style="' ;
-            html += 'z-index: 20;';
-            html += 'position: relative;';
-            html += 'display: block;';
-            if(trial.stimulus_height !== null){
-                html += 'height:'+trial.stimulus_height+'px; '
-                if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
-                    html += 'width: auto; ';
-                }
+        //Write img tag
+        html += '<img class="clickid planet-img" src="'+trial.stimulus[i] + '" ' +
+            'id="planet-' + i + '" ' +
+            'allowclick="1" ' +  //allow clicks?
+            'style="' ;
+        html += 'z-index: 20;';
+        html += 'position: relative;';
+        html += 'display: block;';
+        if(trial.stimulus_height !== null){
+            html += 'height:'+trial.stimulus_height+'px; '
+            if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
+                html += 'width: auto; ';
+            }
             }
             if(trial.stimulus_width !== null){
                 html += 'width:'+trial.stimulus_width+'px; '
@@ -334,7 +335,7 @@ plugin.trial = function(display_element, trial)
 // Apply CSS grid to the game container
 var gameContainer = display_element.querySelector('#game-container');
 gameContainer.style.display = 'grid';
-gameContainer.style.gridTemplateColumns = '5fr 1fr'; // Allocate 2/3 width to planet row and 1/3 to command info
+gameContainer.style.gridTemplateColumns = '3fr 1fr'; // Allocate 2/3 width to planet row and 1/3 to command info
 gameContainer.style.gridGap = '400px';
 
     // Position planets and command info elements in the grid
@@ -389,6 +390,8 @@ shipPlaceholder.innerHTML = '<div id="ship-img-div" ' +
         '<div class="ship" id="ship-shield-charger"></div>';
 
     updateScore(trial.data.points)
+
+    
 
     // Initialise response variable
     var response = {
