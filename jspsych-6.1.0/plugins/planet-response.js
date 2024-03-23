@@ -862,7 +862,7 @@ jsPsych.plugins["planet-response"] = (function() {
 				updateScore(trial.data.points)
 
                 //Update status
-                var statusmsg = 'Ship engaged for: <b>-' + appliedDamage + ' points</b>'
+                var statusmsg = 'Ship engaged: <b>-' + appliedDamage + ' points</b>'
                 var statusclr = 'grey' //some shade of red - optionally make this green/orange/red for tiers of damage for each damage level
             } else if (shield_activated) {
                 var statusmsg = 'Shield successfully deflected attack'
