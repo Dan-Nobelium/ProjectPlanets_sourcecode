@@ -308,12 +308,12 @@ plugin.trial = function(display_element, trial)
             
             //show planet names below the planet
             if (trial.prompt !== null) {
-                html += '<div class="clickid planet-prompt" id="planet-prompt-' + i + '">'
+                html += '<div class="clickid planet-prompt" id="planet-prompt-' + i + '" style="position:relative;">'
                 html += trial.prompt[i];
                 html += '</div>'
             }
-            //Add signal box
-            html += '<div class="clickid planet-signal-box" id="planet-signal-box-' + i + '"></div> ';
+//Add signal box
+html += '<div class="clickid planet-signal-box" id="planet-signal-box-' + i + '" style="position:absolute; top:100px;"></div> ';
             //Add select ring divs
             html += '<img class="planet-select" id="planet-select-' + i + '"> ';
             //End planet div
@@ -507,6 +507,11 @@ function proceed_trade(choice){
     var planetWidth = planet.getBoundingClientRect().width
     var planetX = planet.getBoundingClientRect().x
     var signalLeft = planetWidth/2 - (trial.signal_width + signalPadding*2)/2
+
+    // Get the position of the planet prompt
+    var planetPrompt = display_element.querySelector('#planet-prompt-' + choice)
+    var promptRect = planetPrompt.getBoundingClientRect()
+
     //Display signal image and status
     document.querySelector('#planet-signal-box-'+choice).innerHTML = '<img src="img/signal1.png" ' +
         'id="planet-signal-img-' + choice + '" ' +
@@ -514,6 +519,7 @@ function proceed_trade(choice){
         'height: ' + (trial.signal_width-10) + 'px; ' +
         'width: ' + trial.signal_width + 'px; ' +
         'left:' + signalLeft + 'px;' +
+        'top:' + (promptRect.bottom + 1) + 'px;' +
         'padding: ' + signalPadding + 'px;' +
         'visibility: visible;' +
         '">'
