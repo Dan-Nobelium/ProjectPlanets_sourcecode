@@ -1040,59 +1040,59 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 
 // // Induction
-// timeline.push(fullscreen);
-// timeline.push(consent_block);
-// timeline.push(demographics_block);
+timeline.push(fullscreen);
+timeline.push(consent_block);
+timeline.push(demographics_block);
 timeline.push(instructionCheckWithFeedback);
 
 // // Attention check
-// timeline.push(cfi_block);
-// timeline.push(htq_block);
-// timeline.push(audit_block);
+timeline.push(cfi_block);
+timeline.push(htq_block);
+timeline.push(audit_block);
 
 // // Phase 1, no ships
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-// timeline.push(valence_p1);
-// timeline.push(infer_p1_A);
-// timeline.push(infer_p1_B);
-// timeline.push(infer_p1_C);
-// timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
+addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+timeline.push(valence_p1);
+timeline.push(infer_p1_A);
+timeline.push(infer_p1_B);
+timeline.push(infer_p1_C);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
 
 
 
 // // Phase2, ships
-// timeline.push(phaseTwoInstructions);
+timeline.push(phaseTwoInstructions);
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(infer_p2_ship1);
-// timeline.push(infer_p2_ship2);
-// timeline.push(infer_p2_ship3);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(infer_p2_ship1);
+timeline.push(infer_p2_ship2);
+timeline.push(infer_p2_ship3);
 timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
+timeline.push(p1_q4_triangle);
 
 // // Phase3, contingencies
 timeline.push(cont_catch);
 
 
 // // // Phase3, ships
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(p1_q3_triangle); //rename
-// timeline.push(p1_q4_triangle); //rename
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(p1_q3_triangle); //rename
+timeline.push(p1_q4_triangle); //rename
 
 
 // //Debrief
-// timeline.push(debrief_block);
-// timeline.push(contact_block);
+timeline.push(debrief_block);
+timeline.push(contact_block);
 
-
+//Exit experiment (uncomment this when running live experiments)
 // timeline.push(exit_experiment);
 
 // Run the experiment
