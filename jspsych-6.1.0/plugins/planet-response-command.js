@@ -335,7 +335,7 @@ plugin.trial = function(display_element, trial)
 // Apply CSS grid to the game container
 var gameContainer = display_element.querySelector('#game-container');
 gameContainer.style.display = 'grid';
-gameContainer.style.gridTemplateColumns = '3fr 1fr'; // Allocate 2/3 width to planet row and 1/3 to command info
+gameContainer.style.gridTemplateColumns = '5fr 1fr'; // Allocate 2/3 width to planet row and 1/3 to command info
 gameContainer.style.gridGap = '400px';
 
     // Position planets and command info elements in the grid
