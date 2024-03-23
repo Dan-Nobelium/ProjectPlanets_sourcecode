@@ -350,7 +350,7 @@ var phaseTwoInstructions = {
 
 // define task blocks with ships
 let planet_ship = {
-  type: 'planet-response',
+  type: 'planet-response-command',
   show_ship: true,
   ship_hostile_idx: planet_side,
   prompt: planet_labels,
@@ -1043,7 +1043,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
-timeline.push(instructionCheckWithFeedback);
+// timeline.push(instructionCheckWithFeedback);
 
 // // Attention check
 // timeline.push(cfi_block);
@@ -1063,7 +1063,7 @@ timeline.push(instructionCheckWithFeedback);
 
 // // Phase2, ships
 // timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 // timeline.push(valence_p2);
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);
@@ -1075,7 +1075,7 @@ timeline.push(instructionCheckWithFeedback);
 // timeline.push(p1_q4_triangle);
 
 // // Phase3, contingencies
-timeline.push(cont_catch);
+// timeline.push(cont_catch);
 
 
 // // // Phase3, ships
