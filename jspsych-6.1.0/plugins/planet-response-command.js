@@ -258,237 +258,241 @@ jsPsych.plugins["planet-response-command"] = (function() {
 }
 
 
-                
-                    plugin.trial = function(display_element, trial) 
-                    {
-                        var html = ''
-                        html += '<div id="game-container">'
-                        html += '<div id="planets">'
-                
-                        var display_wrapper = document.getElementsByClassName('jspsych-content-wrapper')[0]
-                
-                        //Some general custom styles (cursor, text color, bgcolor)
-                        display_element.style.cursor = "url('" + trial.cursor[0] + "'),pointer"
-                        display_wrapper.style.backgroundColor = "black"
-                        display_element.style.color = "green"
-                
-                        // Create general div structure: Planet | Ship+Shield | Planet
-                        if (Array.isArray(trial.stimulus)){
-                            for (var i = 0; i < trial.stimulus.length; i ++){
-                                // Set up space for score, signal, and planet
-                                html += '<div id="planet-div-' + i + '" class="planet-div"> ';
-                                html += '<div class="clickid planet-score-box" id="planet-score-box-' + i + '"></div> ';
-                
-                                //Write img tag
-                                html += '<img class="clickid planet-img" src="'+trial.stimulus[i] + '" ' +
-                                    'id="planet-' + i + '" ' +
-                                    'allowclick="1" ' +  //allow clicks?
-                                    'style="' ;
-                                html += 'z-index: 20;';
-                                html += 'position: relative;';
-                                html += 'display: block;';
-                                if(trial.stimulus_height !== null){
-                                    html += 'height:'+trial.stimulus_height+'px; '
-                                    if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
-                                        html += 'width: auto; ';
-                                    }
-                                }
-                                if(trial.stimulus_width !== null){
-                                    html += 'width:'+trial.stimulus_width+'px; '
-                                    if(trial.stimulus_height == null && trial.maintain_aspect_ratio){
-                                        html += 'height: auto; ';
-                                    }
-                                }
-                                html += '"' //End the style property quote
-                                html += 'data-choice="'+i + '" '
-                                //Make images undraggable
-                                html += 'draggable="false" ';
-                                html +='></img>'
-                                ;
-                                
-                                //show planet names below the planet
-                                if (trial.prompt !== null) {
-                                    html += '<div class="clickid planet-prompt" id="planet-prompt-' + i + '">'
-                                    html += trial.prompt[i];
-                                    html += '</div>'
-                                }
-                                //Add signal box
-                                html += '<div class="clickid planet-signal-box" id="planet-signal-box-' + i + '"></div> ';
-                                //Add select ring divs
-                                html += '<img class="planet-select" id="planet-select-' + i + '"> ';
-                                //End planet div
-                                html +='</div>';
-                            }
-                        }
-                
-                        html += '</div>'
-                        html += '<div id="command-info">'
-                        html += '<div class="clickid" id="total-score-box"></div>'
-                        html += '<div id="ship-img-box"></div>'
-                        html += '<div id="ship-shield-box"></div>'
-                        html += '</div>'
-                        html += '</div>'
-                
-                        //Render basic div structure
-                        display_element.innerHTML = html;
-                
-                        // Apply CSS grid to the game container
-                        var gameContainer = display_element.querySelector('#game-container');
-                        gameContainer.style.display = 'grid';
-                        gameContainer.style.gridTemplateColumns = 'repeat(4, 1fr)';
-                        gameContainer.style.gridTemplateRows = 'auto';
-                        gameContainer.style.gridGap = '20px';
-                
-                        // Position planets and command info elements in the grid
-                        var planetsDiv = display_element.querySelector('#planets');
-                        planetsDiv.style.gridColumn = '1 / span 3';
-                
-                        var commandInfo = display_element.querySelector('#command-info');
-                        commandInfo.style.gridColumn = '4';
-                
-                        // Update planet creation to include selection ring and planet name within the planet element
-                        var planetDivs = display_element.querySelectorAll('.planet-div');
-                        planetDivs.forEach(function(planetDiv, i) {
-                            var planetImg = planetDiv.querySelector('.planet-img');
-                            var selectionRing = planetDiv.querySelector('.planet-select');
-                            var planetName = planetDiv.querySelector('.planet-prompt');
-                
-                            planetDiv.appendChild(selectionRing);
-                            planetDiv.appendChild(planetName);
-                        });
-                // Update ship creation to include ship image and shield elements within the ship element
-var shipImgBox = display_element.querySelector('#ship-img-box');
-shipImgBox.innerHTML = '<div id="ship-img-div" ' +
-    'style="position:relative; top:0px; border: 0px; ' +
-    'height: ' + trial.ship_height  + 'px ;' +
-    'width: ' + trial.ship_width + 'px;" ' +
-    'draggable="false" ' +
-    '> ' +
-    '<img src="' + trial.ship_stimulus[0] +  '" ' +
-    'id="ship-img" ' +
-    'class="ship"' +
-    'height="' + trial.ship_height +'" ' +
-    'width="' + trial.ship_width +'" ' +
-    'style="position:relative; top:0px; border: 0px; visibility:visible;z-index:11;" ' +
-    'draggable="false" ' +
-    '> ' +
-    '</div>' +
-    '<div class="ship" id="ship-attack-text"></div>'+
-    '<div class="ship" id="ship-status-text"></div>';
+plugin.trial = function(display_element, trial) 
+{
+    var html = ''
+    html += '<div id="game-container">'
+    html += '<div id="planet-row">'
 
-// Create shield elements and append them to the ship element
-var shieldBoxDiv = display_element.querySelector('#ship-shield-box');
-shieldBoxDiv.innerHTML = '<div class="ship" id="ship-shield-text"></div>' +
-    '<div class="ship" id="ship-shield-button"></div>' +
-    '<div class="ship" id="ship-shield-charger"></div>';
+    var display_wrapper = document.getElementsByClassName('jspsych-content-wrapper')[0]
 
-updateScore(trial.data.points)
+    //Some general custom styles (cursor, text color, bgcolor)
+    display_element.style.cursor = "url('" + trial.cursor[0] + "'),pointer"
+    display_wrapper.style.backgroundColor = "black"
+    display_element.style.color = "green"
 
-// Initialise response variable
-var response = {
-    planets: {click_idx:[],select:[],time_select:[],outcome:[],time_outcome:[]},
-    ships: {type:[],time_appear:[],shield_available:[],shield_activated:[],rt_shield_activated:[],outcome:[],time_outcome:[]},
-    all_outcomes: {outcome:[],time_outcome:[],total: []},
-    clicks: {
-        idx: [],
-        timestamp: [],
-        loc: [],
-        element:[],
+    // Create general div structure: Planet Row | Command Info
+    if (Array.isArray(trial.stimulus)){
+        for (var i = 0; i < trial.stimulus.length; i ++){
+            // Set up space for score, signal, and planet
+            html += '<div id="planet-div-' + i + '" class="planet-div"> ';
+            html += '<div class="clickid planet-score-box" id="planet-score-box-' + i + '"></div> ';
+
+            //Write img tag
+            html += '<img class="clickid planet-img" src="'+trial.stimulus[i] + '" ' +
+                'id="planet-' + i + '" ' +
+                'allowclick="1" ' +  //allow clicks?
+                'style="' ;
+            html += 'z-index: 20;';
+            html += 'position: relative;';
+            html += 'display: block;';
+            if(trial.stimulus_height !== null){
+                html += 'height:'+trial.stimulus_height+'px; '
+                if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
+                    html += 'width: auto; ';
+                }
+            }
+            if(trial.stimulus_width !== null){
+                html += 'width:'+trial.stimulus_width+'px; '
+                if(trial.stimulus_height == null && trial.maintain_aspect_ratio){
+                    html += 'height: auto; ';
+                }
+            }
+            html += '"' //End the style property quote
+            html += 'data-choice="'+i + '" '
+            //Make images undraggable
+            html += 'draggable="false" ';
+            html +='></img>'
+            ;
+            
+            //show planet names below the planet
+            if (trial.prompt !== null) {
+                html += '<div class="clickid planet-prompt" id="planet-prompt-' + i + '">'
+                html += trial.prompt[i];
+                html += '</div>'
+            }
+            //Add signal box
+            html += '<div class="clickid planet-signal-box" id="planet-signal-box-' + i + '"></div> ';
+            //Add select ring divs
+            html += '<img class="planet-select" id="planet-select-' + i + '"> ';
+            //End planet div
+            html +='</div>';
+        }
     }
-};
 
-// These functions log mouseclicks throughout the experiment
-document.addEventListener('mousedown', getPositions)
-document.addEventListener('mouseup', resetCursor)
+    html += '</div>'
+    html += '<div id="command-info">'
+    html += '<div class="clickid" id="total-score-box"></div>'
+    html += '<div id="ship-placeholder"></div>'
+    html += '<div id="shield-placeholder"></div>'
+    html += '</div>'
+    html += '</div>'
 
-// Important plugin-global variables
-var clickcnt = 0 // Track number of clicks
-var final_action = false // flag this as true when time is more than block_duration
-var shipVisible = false // Visibility state of ship img
-var shield_activated = null //Shield state
+    //Render basic div structure
+    display_element.innerHTML = html;
 
-//Define variables for balanced probability arrays
-if (trial.trade_balance){
-    var tradeProbArrs = initProbArray(trial.probability_trade)
-    var trade_orderbase = tradeProbArrs[0]  // Base set to randomise availability of trades
-    var trade_log = tradeProbArrs[1] // Arr to read future trade success
-    var trade_read = tradeProbArrs[2] // Arr to log trade success
-}
-if (trial.ship_balance){
-    var shipProbArrs = initProbArray(trial.probability_ship)
-    var ship_orderbase = shipProbArrs[0]
-    var ship_log = shipProbArrs[1] 
-    var ship_read = shipProbArrs[2]
-}
-if (trial.shield_balance){
-    var shieldProbArrs = initProbArray(trial.probability_shield)
-    var shield_orderbase = shieldProbArrs[0] 
-    var shield_log = shieldProbArrs[1] 
-    var shield_read = shieldProbArrs[2] 
-}
+    // Apply CSS grid to the game container
+    var gameContainer = display_element.querySelector('#game-container');
+    gameContainer.style.display = 'grid';
+    gameContainer.style.gridTemplateColumns = '3fr 1fr';
+    gameContainer.style.gridGap = '20px';
 
-// Go through each choice and implement conditional mouseclick events, also mouseover, and select ring
-for (var i = 0; i < trial.stimulus.length; i++) {
-    var element = display_element.querySelector('#planet-' + i)
-    var conditionStr = 'element.getAttribute("allowclick")=="1" && shield_activated!=true'//'response.option==null'
-    var styleDef = ['opacity:1;'];
-    var styleChange = ['opacity:.5;'];
-    var result = after_response;
-    var clickOnMouseDown = true; //activate click immediately on mousedown
-    cond_click(element,result,conditionStr,styleDef,styleChange,clickOnMouseDown)
-    //Handle mouseover
-    //have to make mouseover imgs global
-    element.addEventListener('mouseover', planet_mOver);
-    element.addEventListener('mouseout', planet_mOut);
-    //Disable selection of images
-    element.addEventListener('click', function(e){});
+    // Position planets and command info elements in the grid
+    var planetsDiv = display_element.querySelector('#planet-row');
+    planetsDiv.style.display = 'flex';
+    planetsDiv.style.justifyContent = 'space-between';
+    planetsDiv.style.alignItems = 'center';
 
-    //Also fix width of scorebox
-    var planetRect = element.getBoundingClientRect()
-    var elementbx = display_element.querySelector('#planet-score-box-' + i)
-    elementbx.style.display = 'block';
-    elementbx.style.fontSize = '25px';
-    elementbx.style.height = '50px';
-    elementbx.style.padding = '20px 0px';
-    elementbx.style.width = planetRect.width+'px';
+    var commandInfo = display_element.querySelector('#command-info');
+    commandInfo.style.display = 'flex';
+    commandInfo.style.flexDirection = 'column';
+    commandInfo.style.justifyContent = 'space-between';
 
-    //Implement selectring positioning
-    var planetRect = element.getBoundingClientRect() //fetch this a second time because the planet-score-box can mess with coordinates
-    var selectring = display_element.querySelector('#planet-select-' + i)
-    selectring.src = trial.stimulus_select;
-    selectring.style.visibility = 'hidden';
-    selectring.style.top = planetRect.top + 'px';
-    selectring.style.left = planetRect.left + 'px';
-    selectring.style.width = planetRect.width + 'px';
-    selectring.style.height = planetRect.height + 'px';
-    selectring.style.zIndex = '0';
-}
+    // Update planet creation to include selection ring and planet name within the planet element
+    var planetDivs = display_element.querySelectorAll('.planet-div');
+    planetDivs.forEach(function(planetDiv, i) {
+        var planetImg = planetDiv.querySelector('.planet-img');
+        var selectionRing = planetDiv.querySelector('.planet-select');
+        var planetName = planetDiv.querySelector('.planet-prompt');
 
-// function to handle procedure following a valid planet-choice response
-function after_response(element) {
-    // Lock clicking
-    element.setAttribute('allowclick',0)
-    var choice = element.getAttribute('data-choice')
-    // measure timestamp
-    var end_time = performance.now();
-    var rt = end_time - start_time;
-    var click_idx = response.clicks.idx.slice(-1)[0] //idx of this click is the last element in clicks
-    //Since response.clicks.idx is updated only after this script though, add 1 to the number
-    if(click_idx==null){
-        click_idx = 0
-    } else {
-        click_idx++
+        planetDiv.appendChild(selectionRing);
+        planetDiv.appendChild(planetName);
+    });
+
+    // Update ship creation to include ship image and shield elements within the ship placeholder
+    var shipPlaceholder = display_element.querySelector('#ship-placeholder');
+    shipPlaceholder.innerHTML = '<div id="ship-img-div" ' +
+        'style="position:relative; top:0px; border: 0px; ' +
+        'height: ' + trial.ship_height  + 'px ;' +
+        'width: ' + trial.ship_width + 'px;" ' +
+        'draggable="false" ' +
+        '> ' +
+        '<img src="' + trial.ship_stimulus[0] +  '" ' +
+        'id="ship-img" ' +
+        'class="ship"' +
+        'height="' + trial.ship_height +'" ' +
+        'width="' + trial.ship_width +'" ' +
+        'style="position:relative; top:0px; border: 0px; visibility:visible;z-index:11;" ' +
+        'draggable="false" ' +
+        '> ' +
+        '</div>' +
+        '<div class="ship" id="ship-attack-text"></div>'+
+        '<div class="ship" id="ship-status-text"></div>';
+
+    // Create shield elements and append them to the shield placeholder
+    var shieldPlaceholder = display_element.querySelector('#shield-placeholder');
+    shieldPlaceholder.innerHTML = '<div class="ship" id="ship-shield-text"></div>' +
+        '<div class="ship" id="ship-shield-button"></div>' +
+        '<div class="ship" id="ship-shield-charger"></div>';
+
+    updateScore(trial.data.points)
+
+    // Initialise response variable
+    var response = {
+        planets: {click_idx:[],select:[],time_select:[],outcome:[],time_outcome:[]},
+        ships: {type:[],time_appear:[],shield_available:[],shield_activated:[],rt_shield_activated:[],outcome:[],time_outcome:[]},
+        all_outcomes: {outcome:[],time_outcome:[],total: []},
+        clicks: {
+            idx: [],
+            timestamp: [],
+            loc: [],
+            element:[],
+        }
+    };
+
+    // These functions log mouseclicks throughout the experiment
+    document.addEventListener('mousedown', getPositions)
+    document.addEventListener('mouseup', resetCursor)
+
+    // Important plugin-global variables
+    var clickcnt = 0 // Track number of clicks
+    var final_action = false // flag this as true when time is more than block_duration
+    var shipVisible = false // Visibility state of ship img
+    var shield_activated = null //Shield state
+
+    //Define variables for balanced probability arrays
+    if (trial.trade_balance){
+        var tradeProbArrs = initProbArray(trial.probability_trade)
+        var trade_orderbase = tradeProbArrs[0]  // Base set to randomise availability of trades
+        var trade_log = tradeProbArrs[1] // Arr to read future trade success
+        var trade_read = tradeProbArrs[2] // Arr to log trade success
     }
-    // Log response details
-    response.planets.select.push(Number(choice));
-    response.planets.time_select.push(rt);
-    response.planets.click_idx.push(click_idx)
+    if (trial.ship_balance){
+        var shipProbArrs = initProbArray(trial.probability_ship)
+        var ship_orderbase = shipProbArrs[0]
+        var ship_log = shipProbArrs[1] 
+        var ship_read = shipProbArrs[2]
+    }
+    if (trial.shield_balance){
+        var shieldProbArrs = initProbArray(trial.probability_shield)
+        var shield_orderbase = shieldProbArrs[0] 
+        var shield_log = shieldProbArrs[1] 
+        var shield_read = shieldProbArrs[2] 
+    }
 
-    //Run trade procedure
-    proceed_trade(choice);
-};
+    // Go through each choice and implement conditional mouseclick events, also mouseover, and select ring
+    for (var i = 0; i < trial.stimulus.length; i++) {
+        var element = display_element.querySelector('#planet-' + i)
+        var conditionStr = 'element.getAttribute("allowclick")=="1" && shield_activated!=true'//'response.option==null'
+        var styleDef = ['opacity:1;'];
+        var styleChange = ['opacity:.5;'];
+        var result = after_response;
+        var clickOnMouseDown = true; //activate click immediately on mousedown
+        cond_click(element,result,conditionStr,styleDef,styleChange,clickOnMouseDown)
+        //Handle mouseover
+        //have to make mouseover imgs global
+        element.addEventListener('mouseover', planet_mOver);
+        element.addEventListener('mouseout', planet_mOut);
+        //Disable selection of images
+        element.addEventListener('click', function(e){});
 
+        //Also fix width of scorebox
+        var planetRect = element.getBoundingClientRect()
+        var elementbx = display_element.querySelector('#planet-score-box-' + i)
+        elementbx.style.display = 'block';
+        elementbx.style.fontSize = '25px';
+        elementbx.style.height = '50px';
+        elementbx.style.padding = '20px 0px';
+        elementbx.style.width = planetRect.width+'px';
 
+        //Implement selectring positioning
+        var planetRect = element.getBoundingClientRect() //fetch this a second time because the planet-score-box can mess with coordinates
+        var selectring = display_element.querySelector('#planet-select-' + i)
+        selectring.src = trial.stimulus_select;
+        selectring.style.visibility = 'hidden';
+        selectring.style.position = 'absolute';
+        selectring.style.top = planetRect.top + 'px';
+        selectring.style.left = planetRect.left + 'px';
+        selectring.style.width = planetRect.width + 'px';
+        selectring.style.height = planetRect.height + 'px';
+        selectring.style.zIndex = '0';
+    }
+
+    // function to handle procedure following a valid planet-choice response
+    function after_response(element) {
+        // Lock clicking
+        element.setAttribute('allowclick',0)
+        var choice = element.getAttribute('data-choice')
+        // measure timestamp
+        var end_time = performance.now();
+        var rt = end_time - start_time;
+        var click_idx = response.clicks.idx.slice(-1)[0] //idx of this click is the last element in clicks
+        //Since response.clicks.idx is updated only after this script though, add 1 to the number
+        if(click_idx==null){
+            click_idx = 0
+        } else {
+            click_idx++
+        }
+        // Log response details
+        response.planets.select.push(Number(choice));
+        response.planets.time_select.push(rt);
+        response.planets.click_idx.push(click_idx)
+
+        //Run trade procedure
+        proceed_trade(choice);
+    };
+
+    
 // function to show the signal, run trade, then show outcome
 function proceed_trade(choice){
     //Get planet position
@@ -639,12 +643,13 @@ function proceed_trade(choice){
     
 }
 
+
 // function to show ship img and subsequent procedure
 function show_ship(choice) {
     //Put stuff into the ship divs
-    var shipDiv = display_element.querySelector('#ship-img-div');
-    shipDiv.style.visibility = 'visible';
-    shipDiv.innerHTML = '<img src="' + trial.ship_stimulus[choice] +  '" ' +
+    var shipImgDiv = display_element.querySelector('#ship-img-div');
+    shipImgDiv.style.visibility = 'visible';
+    shipImgDiv.innerHTML = '<img src="' + trial.ship_stimulus[choice] +  '" ' +
         'id="ship-img" ' +
         'class="ship"' +
         'height="' + trial.ship_height +'" ' +
@@ -679,7 +684,7 @@ function show_ship(choice) {
     }
     logIDonMouseDown(shipAtTxt)
 
-    var shieldBoxDiv = display_element.querySelector('#ship-shield-box');
+    var shieldBoxDiv = display_element.querySelector('#shield-placeholder');
     shieldBoxDiv.innerHTML = '<div class="ship" id="ship-shield-text"></div>' +
         '<div class="ship" id="ship-shield-button"></div>' +
         '<div class="ship" id="ship-shield-charger"></div>';
@@ -840,8 +845,8 @@ function ship_attack(choice){
 
     // Calculate damage based on the attacking ship's index and the ship_attack_damage parameter
     const damageTypes = trial.ship_attack_damage;
-     const appliedDamage = typeof damageTypes[choice] === 'number' ? damageTypes[choice] :
-         damageTypes[choice](trial.data.points);
+      const appliedDamage = typeof damageTypes[choice] === 'number' ? damageTypes[choice] :
+          damageTypes[choice](trial.data.points);
 
     /**
      * Apply points loss depending on the choice and the shield activation
@@ -1171,7 +1176,6 @@ function reset_ship(){
     }
 
 }
-
 function checkTimeExceed(){
     // Check if time exceeded, and if so, disable choices
     var checkTime = (performance.now() - start_time) >= trial.block_duration
@@ -1237,134 +1241,134 @@ function timer_end(duration){
 // ---------------------------------------------------------------------
 // Miscellaneous utility functions
 function roundTo(n, digits) {
-if (digits === undefined) {
-    digits = 0;
-}
+    if (digits === undefined) {
+        digits = 0;
+    }
 
-var multiplicator = Math.pow(10, digits);
-n = parseFloat((n * multiplicator).toFixed(11));
-var test =(Math.round(n) / multiplicator);
-return +(test.toFixed(digits));
+    var multiplicator = Math.pow(10, digits);
+    n = parseFloat((n * multiplicator).toFixed(11));
+    var test =(Math.round(n) / multiplicator);
+    return +(test.toFixed(digits));
 }
 
 //function genOrderBase(probSuccess,maxlength=10){
 window.genOrderBase = function(probSuccess,maxlength=10){
-//Function to generate a finite array of 1 (success) and (0) fails that closely approximates (if not exact) to some probability.
-// So if probSuccess is .5, this should return [0,1].
-// For a given max array length, generate all floating point numbers for all possible proportions
-var outarr = []
-var numList = []
-var denList = []
-var floatList = []
-var diffList = []
-for (var i=0;i<maxlength;i++){
-    var denom = i + 1;
-    for (var ii=0; ii<maxlength;ii++){
-        var numer = ii+1;
-        if (numer>denom){
-            //Ignore float values greater than 1
-            continue
-        }
-        var flt = numer/denom
-        var diff = Math.abs(flt-probSuccess)
-        numList.push(numer)
-        denList.push(denom)
-        floatList.push(flt)
-        diffList.push(diff)
-    }						
-}
+    //Function to generate a finite array of 1 (success) and (0) fails that closely approximates (if not exact) to some probability.
+    // So if probSuccess is .5, this should return [0,1].
+    // For a given max array length, generate all floating point numbers for all possible proportions
+    var outarr = []
+    var numList = []
+    var denList = []
+    var floatList = []
+    var diffList = []
+    for (var i=0;i<maxlength;i++){
+        var denom = i + 1;
+        for (var ii=0; ii<maxlength;ii++){
+            var numer = ii+1;
+            if (numer>denom){
+                //Ignore float values greater than 1
+                continue
+            }
+            var flt = numer/denom
+            var diff = Math.abs(flt-probSuccess)
+            numList.push(numer)
+            denList.push(denom)
+            floatList.push(flt)
+            diffList.push(diff)
+        }						
+    }
 
-//Find float with smallest difference from specified probSuccess
-var minDiff = Math.min(...diffList)
-// Get indices of the smallest differences
-var minIdx = indexOfAll(diffList,minDiff)
-// Pick the one with lowest denominator		
-var minDens = []
-var minNums = []
-for (var i=0;i<minIdx.length;i++){
-    var mini = minIdx[i]
-    minDens.push(denList[mini])
-    minNums.push(numList[mini])
-}
-var minDen = Math.min(...minDens)
-//Get index of minDen and extract corresponding numerator
-var minDenIdx = minDens.indexOf(minDen)
-var minNum = minNums[minDenIdx]
-//Generate array of zeros (denom-numer)  and ones (numer)
-var zeros = []; for (var i=0; i < minDen-minNum; i++){zeros.push(0)};
-var ones = []; for (var i=0; i < minNum; i++){ones.push(1)};
-var outarray = zeros.concat(ones)
-return outarray
+    //Find float with smallest difference from specified probSuccess
+    var minDiff = Math.min(...diffList)
+    // Get indices of the smallest differences
+    var minIdx = indexOfAll(diffList,minDiff)
+    // Pick the one with lowest denominator		
+    var minDens = []
+    var minNums = []
+    for (var i=0;i<minIdx.length;i++){
+        var mini = minIdx[i]
+        minDens.push(denList[mini])
+        minNums.push(numList[mini])
+    }
+    var minDen = Math.min(...minDens)
+    //Get index of minDen and extract corresponding numerator
+    var minDenIdx = minDens.indexOf(minDen)
+    var minNum = minNums[minDenIdx]
+    //Generate array of zeros (denom-numer)  and ones (numer)
+    var zeros = []; for (var i=0; i < minDen-minNum; i++){zeros.push(0)};
+    var ones = []; for (var i=0; i < minNum; i++){ones.push(1)};
+    var outarray = zeros.concat(ones)
+    return outarray
 };
 
 
 function balanceSuccess(orderbase,arr_log,arr_read,choice,verbose=false,vstr=''){
-//Function to output single samples from semi-random series of booleans
-// First, check shield arr_log
-var baselength = orderbase[choice].length
-var arr_length = arr_log[choice].length
-var arr_next = arr_length
-// Multiples of shield appearances have shield availability sampled from uniform random
-if (arr_length/baselength == Math.round(arr_length/baselength)){
-    var arr_order = shuffleArray(orderbase[choice])
-    for (var ii=0; ii<arr_order.length; ii++){
-        arr_read[choice].push(arr_order[ii])
+    //Function to output single samples from semi-random series of booleans
+    // First, check shield arr_log
+    var baselength = orderbase[choice].length
+    var arr_length = arr_log[choice].length
+    var arr_next = arr_length
+    // Multiples of shield appearances have shield availability sampled from uniform random
+    if (arr_length/baselength == Math.round(arr_length/baselength)){
+        var arr_order = shuffleArray(orderbase[choice])
+        for (var ii=0; ii<arr_order.length; ii++){
+            arr_read[choice].push(arr_order[ii])
+        }
     }
-}
-arr_success = Boolean(arr_read[choice][arr_next])
-if (verbose){
-    // console.log(vstr + ' array read: ' + String(arr_read[0]) + '; ' + String(arr_read[1]))
-    // console.log(vstr + ' array log (before event): ' + String(arr_log[0]) + '; ' + String(arr_log[1]))
-}
+    arr_success = Boolean(arr_read[choice][arr_next])
+    if (verbose){
+        // console.log(vstr + ' array read: ' + String(arr_read[0]) + '; ' + String(arr_read[1]))
+        // console.log(vstr + ' array log (before event): ' + String(arr_log[0]) + '; ' + String(arr_log[1]))
+    }
 
-// Update log
-arr_log[choice].push(Number(arr_success))
-if (verbose){
-    // console.log(vstr + ' array log (after event): ' + String(arr_log[0]) + '; ' + String(arr_log[1]))
-}
-//Return arguments
-return([arr_success,arr_log,arr_read])
+    // Update log
+    arr_log[choice].push(Number(arr_success))
+    if (verbose){
+        // console.log(vstr + ' array log (after event): ' + String(arr_log[0]) + '; ' + String(arr_log[1]))
+    }
+    //Return arguments
+    return([arr_success,arr_log,arr_read])
 
 }
 
 // initialise variables for balanced probability arrays
 function initProbArray(probSuccess){
-var numOptions = 3; //determines number of planets 3 = 3 planets
-var orderbase = [];
-var arr_log = [];
-var arr_read = [];
-for (var i=0; i<numOptions; i++){
-    orderbase.push(genOrderBase(probSuccess[i]))
-    arr_log.push([])
-    arr_read.push([])
-}
-return([orderbase,arr_log,arr_read])
+    var numOptions = 3; //determines number of planets 3 = 3 planets
+    var orderbase = [];
+    var arr_log = [];
+    var arr_read = [];
+    for (var i=0; i<numOptions; i++){
+        orderbase.push(genOrderBase(probSuccess[i]))
+        arr_log.push([])
+        arr_read.push([])
+    }
+    return([orderbase,arr_log,arr_read])
 }
 
 // indexOf that returns all matches
 function indexOfAll(array, searchItem) {
-var i = array.indexOf(searchItem),
-    indices = [];
-while (i !== -1) {
-    indices.push(i);
-    i = array.indexOf(searchItem, ++i);
-}
-return indices;
+    var i = array.indexOf(searchItem),
+        indices = [];
+    while (i !== -1) {
+        indices.push(i);
+        i = array.indexOf(searchItem, ++i);
+    }
+    return indices;
 }
 
 function shuffleArray(array) {
-let curId = array.length;
-// There remain elements to shuffle
-while (0 !== curId) {
-    // Pick a remaining element
-    let randId = Math.floor(Math.random() * curId);
-    curId -= 1;
-    // Swap it with the current element.
-    let tmp = array[curId];
-    array[curId] = array[randId];
-    array[randId] = tmp;
-}
-return array;
+    let curId = array.length;
+    // There remain elements to shuffle
+    while (0 !== curId) {
+        // Pick a remaining element
+        let randId = Math.floor(Math.random() * curId);
+        curId -= 1;
+        // Swap it with the current element.
+        let tmp = array[curId];
+        array[curId] = array[randId];
+        array[randId] = tmp;
+    }
+    return array;
 }
 
 
