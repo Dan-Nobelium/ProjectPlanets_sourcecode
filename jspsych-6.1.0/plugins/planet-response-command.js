@@ -335,7 +335,7 @@ plugin.trial = function(display_element, trial)
 var gameContainer = display_element.querySelector('#game-container');
 gameContainer.style.display = 'grid';
 gameContainer.style.gridTemplateColumns = '5fr 1fr'; // Allocate 2/3 width to planet row and 1/3 to command info
-gameContainer.style.gridGap = '800px';
+gameContainer.style.gridGap = '400px';
 
     // Position planets and command info elements in the grid
     var planetsDiv = display_element.querySelector('#planet-row');
@@ -347,6 +347,7 @@ gameContainer.style.gridGap = '800px';
     commandInfo.style.display = 'flex';
     commandInfo.style.flexDirection = 'column';
     commandInfo.style.justifyContent = 'space-between';
+    commandInfo.style.alignItems = 'right';
     
 
     // Update planet creation to include selection ring and planet name within the planet element
@@ -688,6 +689,8 @@ function show_ship(choice) {
         }
     }
     logIDonMouseDown(shipAtTxt)
+
+    
 
     var shieldBoxDiv = display_element.querySelector('#shield-placeholder');
     shieldBoxDiv.innerHTML = '<div class="ship" id="ship-shield-text"></div>' +
