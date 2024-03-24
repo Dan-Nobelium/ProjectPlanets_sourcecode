@@ -1,5 +1,3 @@
-// Add a grey bar
-
 jsPsych.plugins['html-slider-triangle'] = (function() {
   var plugin = {};
 
@@ -190,11 +188,11 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     // Record the start timestamp
     response.timestamps.start = performance.now();
 
-`    // Calculate the coordinates of the triangle corners relative to the document
+    // Calculate the coordinates of the triangle corners relative to the document
     var triangleRect = triangle.getBoundingClientRect();
     var topLeftCorner = { x: triangleRect.left, y: triangleRect.top };
     var topRightCorner = { x: triangleRect.right, y: triangleRect.top };
-    var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.bottom };`
+    var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.bottom };
 
     // Update handle position and proportions based on mouse position
     function updateHandlePosition(mouseX, mouseY) {
