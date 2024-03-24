@@ -40,7 +40,7 @@ const planetColors = {
 let block_number = 0;
 let trial_number = 0;
 let points = 0;
-const block_duration = 180 * 1000; // in milliseconds (3 mins)
+const block_duration = 180 * 500; // in milliseconds (3 mins)
 const iti = 1000;
 const inf_stim_height = 80;
 const inf_slider_width = 500;
@@ -67,7 +67,7 @@ if (group[0].includes("0.1")) {
   var probability_ship = [[0.4],[0.4],[0.4]];
 } else (console.error("ERROR: group is not defined as 0.1 or 0.4"))
 
-var probability_ship = [[1],[1],[1]]; 
+// var probability_ship = [[1],[1],[1]]; 
 
 // // manipulate early/late instruction by block sizes of phase 2/3
 // if (group[0].includes("early")) {
@@ -1039,7 +1039,7 @@ var contingency_catch = {
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
 
-// // Induction
+// Induction
 timeline.push(fullscreen);
 timeline.push(consent_block);
 timeline.push(demographics_block);
@@ -1050,7 +1050,7 @@ timeline.push(cfi_block);
 timeline.push(htq_block);
 timeline.push(audit_block);
 
-// // Phase 1, no ships
+// Phase 1, no ships
 addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 timeline.push(valence_p1);
 timeline.push(infer_p1_A);
@@ -1061,7 +1061,7 @@ timeline.push(p1_q4_triangle);
 
 
 
-// // Phase2, ships
+// Phase2, ships
 timeline.push(phaseTwoInstructions);
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 timeline.push(valence_p2);
@@ -1074,8 +1074,8 @@ timeline.push(infer_p2_ship3);
 timeline.push(p1_q3_triangle);
 timeline.push(p1_q4_triangle);
 
-// // Phase3, contingencies
-timeline.push(cont_catch);
+// // // Phase3, contingencies
+// timeline.push(cont_catch);
 
 
 // // // Phase3, ships
