@@ -194,6 +194,14 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     var topRightCorner = { x: triangleRect.right, y: triangleRect.top };
     var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.bottom };
 
+    // Calculate the equilateral triangle height based on the width
+    var triangleHeight = trial.slider_width * (Math.sqrt(3) / 2);
+
+ // Update the triangle dimensions to ensure an equilateral triangle
+ triangle.style.height = `${triangleHeight}px`;
+ triangle.style.clipPath = `polygon(50% ${triangleHeight}px, 0 0, ${trial.slider_width}px 0)`;
+
+
     // Update handle position and proportions based on mouse position
     function updateHandlePosition(mouseX, mouseY) {
       var x = mouseX - triangleRect.left;
