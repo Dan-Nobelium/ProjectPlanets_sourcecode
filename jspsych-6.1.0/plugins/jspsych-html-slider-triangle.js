@@ -115,8 +115,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
   plugin.trial = function(display_element, trial) {
     var planetOrder = trial.stimulus_all;
-
-    // HTML structure
+// HTML structure
     // =============
 
     var html = `
@@ -133,7 +132,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
           `).join('')}
 
           <!-- Triangle -->
-          <div id="jspsych-html-slider-triangle" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;"></div>
+          <div id="jspsych-html-slider-triangle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: ${trial.slider_width * 0.6}px; height: ${trial.slider_height * 0.6}px; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;"></div>
 
           <!-- Handle -->
           <div id="jspsych-html-slider-triangle-handle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; background-color: #333; border-radius: 50%; cursor: pointer;"></div>
@@ -152,6 +151,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     }
 
     display_element.innerHTML = html;
+
 
     // DOM elements
     // ============
@@ -195,12 +195,11 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.bottom };
 
     // Calculate the equilateral triangle height based on the width
-    var triangleHeight = trial.slider_width * (Math.sqrt(3) / 2);
+    var triangleHeight = triangleRect.width * (Math.sqrt(3) / 2);
 
- // Update the triangle dimensions to ensure an equilateral triangle
- triangle.style.height = `${triangleHeight}px`;
- triangle.style.clipPath = `polygon(50% ${triangleHeight}px, 0 0, ${trial.slider_width}px 0)`;
-
+    // Update the triangle dimensions to ensure an equilateral triangle
+    triangle.style.height = `${triangleHeight}px`;
+    triangle.style.clipPath = `polygon(50% ${triangleHeight}px, 0 0, ${triangleRect.width}px 0)`;
 
     // Update handle position and proportions based on mouse position
     function updateHandlePosition(mouseX, mouseY) {
@@ -214,25 +213,26 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     }
 
     // Update proportions and labels
-function updateProportions(x, y) {
-  var topProportion = (1 - y / triangleRect.height) * (1 - x / triangleRect.width) * 100;
-  var rightProportion = (1 - y / triangleRect.height) * (x / triangleRect.width) * 100;
-  var bottomProportion = (y / triangleRect.height) * 100;
+    function updateProportions(x, y) {
+      var topProportion = (1 - y / triangleHeight) * (1 - x / triangleRect.width) * 100;
+      var rightProportion = (1 - y / triangleHeight) * (x / triangleRect.width) * 100;
+      var bottomProportion = (y / triangleHeight) * 100;
 
-  proportions = [topProportion, rightProportion, bottomProportion];
+      proportions = [topProportion, rightProportion, bottomProportion];
 
-  // Update the labels with the new proportions
-  planetOrder.forEach((planet, index) => {
-    var label = display_element.querySelector(`#planet-${index}-label`);
-    label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}%)`;
-  });
+      // Update the labels with the new proportions
+      planetOrder.forEach((planet, index) => {
+        var label = display_element.querySelector(`#planet-${index}-label`);
+        label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}%)`;
+      });
 
-  // Update the pie chart rendering
-  pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
+      // Update the pie chart rendering
+      pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
 
-  // Return the updated proportions array
-  return proportions;
-}
+      // Return the updated proportions array
+      return proportions;
+    }
+
 
     // Event listener for mousemove event on the triangle
     triangle.addEventListener('mousemove', function(event) {
