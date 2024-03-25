@@ -67,7 +67,7 @@ if (group[0].includes("0.1")) {
   var probability_ship = [[0.4],[0.4],[0.4]];
 } else (console.error("ERROR: group is not defined as 0.1 or 0.4"))
 
-// var probability_ship = [[1],[1],[1]]; 
+var probability_ship = [[1],[1],[1]]; 
 
 // // manipulate early/late instruction by block sizes of phase 2/3
 // if (group[0].includes("early")) {
