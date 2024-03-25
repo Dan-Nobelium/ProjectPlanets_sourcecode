@@ -40,7 +40,7 @@ const planetColors = {
 let block_number = 0;
 let trial_number = 0;
 let points = 0;
-const block_duration = 180 * 100; // in milliseconds (3 mins)
+const block_duration = 180 * 200; // in milliseconds (3 mins)
 const iti = 1000;
 const inf_stim_height = 80;
 const inf_slider_width = 500;
@@ -1039,31 +1039,31 @@ var contingency_catch = {
 let timeline = []; // This is the master timeline, the experiment runs sequentially based on the objects pushed into this array.
 
 
-// Induction
+// Induction //DONE
 // timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
 // timeline.push(instructionCheckWithFeedback);
 
-// // // Attention check
+// Attention check //DONE
 // timeline.push(cfi_block);
 // timeline.push(htq_block);
 // timeline.push(audit_block);
 
 // Phase 1, no ships
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk); //
 // timeline.push(valence_p1);
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
-// timeline.push(p1_q3_triangle);
-timeline.push(p1_q4_triangle);
+// timeline.push(p1_q3_triangle); //
+// timeline.push(p1_q4_triangle);   ///---//
 
 
 
 // Phase2, ships
 // timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk); //
 // timeline.push(valence_p2);
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);
@@ -1071,15 +1071,15 @@ timeline.push(p1_q4_triangle);
 // timeline.push(infer_p2_ship1);
 // timeline.push(infer_p2_ship2);
 // timeline.push(infer_p2_ship3);
-// timeline.push(p1_q3_triangle);
+timeline.push(p1_q3_triangle);
 // timeline.push(p1_q4_triangle);
 
 // // // Phase3, contingencies
-timeline.push(cont_catch);
+// timeline.push(cont_catch);
 
 
 // // // Phase3, ships
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
 // timeline.push(valence_p2);
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);
@@ -1088,9 +1088,9 @@ timeline.push(cont_catch);
 // timeline.push(p1_q4_triangle); //rename
 
 
-// // //Debrief
+//Debrief
 // timeline.push(debrief_block);
-// timeline.push(contact_block);
+// timeline.push(contact_block); // disabled
 
 //Exit experiment (uncomment this when running live experiments)
 // timeline.push(exit_experiment);
