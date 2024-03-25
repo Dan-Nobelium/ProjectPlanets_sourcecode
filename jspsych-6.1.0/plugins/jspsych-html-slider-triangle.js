@@ -118,33 +118,42 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 // HTML structure
     // =============
 
-    var html = `
-      <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
-        <div id="jspsych-html-slider-triangle-stimulus" style="position: relative; width: 100%; height: 100%;">
-          <!-- Planet images -->
-          ${planetOrder.map((planet, index) => `
-            <img src="${planet}" style="position: absolute; ${getImagePosition(index, trial.slider_width, trial.slider_height, trial.stimulus_height)}; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          `).join('')}
 
-          <!-- Planet labels -->
-          ${planetOrder.map((planet, index) => `
-            <div id="planet-${index}-label" style="position: absolute; ${getLabelPosition(index)}; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)} (${getDefaultProportion(index)}%)</div>
-          `).join('')}
+var html = `
+  <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
+    <!-- Label -->
+    <div style="position: absolute; top: -400px; left: 50%; transform: translateX(-50%);">
+      To maximise your points in the <b>previous block</b>, what proportion of interactions would you allocate for each planet?
+    </div>
 
-          <!-- Triangle -->
-          <div id="jspsych-html-slider-triangle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: ${trial.slider_width * 0.6}px; height: ${trial.slider_height * 0.6}px; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;"></div>
+    <div id="jspsych-html-slider-triangle-stimulus" style="position: relative; width: 100%; height: 100%;">
+      <!-- Planet images -->
+      ${planetOrder.map((planet, index) => `
+        <img src="${planet}" style="position: absolute; ${getImagePosition(index, trial.slider_width, trial.slider_height, trial.stimulus_height)}; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+      `).join('')}
 
-          <!-- Handle -->
-          <div id="jspsych-html-slider-triangle-handle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; background-color: #333; border-radius: 50%; cursor: pointer;"></div>
-        </div>
+      <!-- Planet labels -->
+      ${planetOrder.map((planet, index) => `
+        <div id="planet-${index}-label" style="position: absolute; ${getLabelPosition(index)}; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)} (${getDefaultProportion(index)}%)</div>
+      `).join('')}
 
-        <!-- Pie chart -->
-        <div id="jspsych-html-slider-triangle-pie-chart" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 150px; height: 150px; border-radius: 50%; background-image: ${getPieChartGradient(trial.planetColors, planetOrder)}"></div>
+      <!-- Triangle -->
+      <div id="jspsych-html-slider-triangle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: ${trial.slider_width * 0.6}px; height: ${trial.slider_height * 0.6}px; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;"></div>
+
+      <!-- Handle -->
+      <div id="jspsych-html-slider-triangle-handle" style="position: absolute; width: ${trial.slider_width * 0.6}px; height: ${trial.slider_height * 0.6}px; clip-path: polygon(50% 100%, 0 0, 100% 0); pointer-events: none;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; background-color: #000; border-radius: 50%;"></div>
       </div>
+    </div>
 
-      <!-- Continue button -->
-      <button id="jspsych-html-slider-triangle-continue" class="jspsych-btn" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">Continue</button>
-    `;
+    <!-- Pie chart -->
+    <div id="jspsych-html-slider-triangle-pie-chart" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 150px; height: 150px; border-radius: 50%; background-image: ${getPieChartGradient(trial.planetColors, planetOrder)}"></div>
+  </div>
+
+  <!-- Continue button -->
+  <button id="jspsych-html-slider-triangle-continue" class="jspsych-btn" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">Continue</button>
+`;
+  
 
     if (trial.prompt !== null) {
       html = `<div>${trial.prompt}</div>` + html;
