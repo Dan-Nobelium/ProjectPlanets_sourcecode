@@ -58,6 +58,7 @@ let nBlocks_p3 = 1;
 //let ship_attack_damage_index = [0(non-attack), fixed 100pts,25%]
 let planet_labels = ['Planet A','Planet B','Planet C'];
 let ship_attack_damage = [0, 100, 0.2];
+// let ship_attack_damage = [0, 100, 0.2]; ship outcomes 1/2/3
 
 
 // manipulate response-ship Rft rate
@@ -227,7 +228,7 @@ var i = 1;
        
         // valence check phase 1
             const valence_p1 = {
-              type: 'valence-check-4',
+              type: 'valence-check-all',
               prompt: valence_q,
               stimulus_1: val_img_p1[0].stimulus,
               stim_text_1: val_img_p1[0].text,
@@ -1052,7 +1053,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 // Phase 1, no ships
 // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk); //
-// timeline.push(valence_p1);
+timeline.push(valence_p1);
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
@@ -1071,7 +1072,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(infer_p2_ship1);
 // timeline.push(infer_p2_ship2);
 // timeline.push(infer_p2_ship3);
-timeline.push(p1_q3_triangle);
+// timeline.push(p1_q3_triangle);
 // timeline.push(p1_q4_triangle);
 
 // // // Phase3, contingencies
@@ -1079,8 +1080,8 @@ timeline.push(p1_q3_triangle);
 
 
 // // // Phase3, ships
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-// timeline.push(valence_p2);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+timeline.push(valence_p2);
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);
 // timeline.push(infer_p2_C);
