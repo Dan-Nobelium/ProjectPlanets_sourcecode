@@ -58,7 +58,10 @@ let nBlocks_p3 = 1;
 //let ship_attack_damage_index = [0(non-attack), fixed 100pts,25%]
 let planet_labels = ['Planet A','Planet B','Planet C'];
 let ship_attack_damage = [0, 100, 0.2];
-// let ship_attack_damage = [0, 100, 0.2]; ship outcomes 1/2/3
+const ship_outcome_1_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: red; -webkit-text-stroke: 0.5px black;'>Attack! -$</p>";
+const ship_outcome_2_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: darkorange; -webkit-text-stroke: 0.5px yellow;'>Attack! -$</p>";
+const ship_outcome_3_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: green;'>Bonus! +$</p>";
+const ship_outcome_3_shielded = "<p style='font-family: Arial; font-size: 36px; color: yellow;'>Shield prevented a bonus</p>";
 
 
 // manipulate response-ship Rft rate
@@ -224,31 +227,36 @@ let planet_noship = {
   
     //* inference and valence checks end *-----------------
 
+    // Inference and valence checks end
+
 var i = 1;
-       
-        // valence check phase 1
-            const valence_p1 = {
-              type: 'valence-check-5',
-              prompt: valence_q,
-              stimulus_1: val_img_p1[0].stimulus,
-              stim_text_1: val_img_p1[0].text,
-              stimulus_2: val_img_p1[1].stimulus,
-              stim_text_2: val_img_p1[1].text,
-              stimulus_3: val_img_p1[2].stimulus,
-              stim_text_3: val_img_p1[2].text,
-              stimulus_4: val_img_p1[3].stimulus,
-              stim_text_4: val_img_p1[3].text,
-              stimulus_5: val_img_p1[3].stimulus,
-              stim_text_5: val_img_p1[3].text,
-              labels: valence_labels,
-              stimulus_height: inf_stim_height,
-              slider_width: inf_slider_width,
-              require_movement: false,
-              data: {
-                phase: 'val_check_4',
-                block_number: i
-              }
-            };
+
+// Define ship outcome variables
+
+
+
+const valence_p1 = {
+  type: 'valence-check-5',
+  prompt: valence_q,
+  stimulus_1: ship_outcome_1_unshielded,
+  stim_text_1: '',
+  stimulus_2: ship_outcome_2_unshielded,
+  stim_text_2: '',
+  stimulus_3: stim_list[0],
+  stim_text_3: 'Planet A (left)',
+  stimulus_4: stim_list[1],
+  stim_text_4: 'Planet B (middle)',
+  stimulus_5: stim_list[2],
+  stim_text_5: 'Planet C (right)',
+  labels: valence_labels,
+  stimulus_height: inf_stim_height,
+  slider_width: inf_slider_width,
+  require_movement: false,
+  data: {
+    phase: 'val_check_5',
+    block_number: i
+  }
+};
 
 
 
