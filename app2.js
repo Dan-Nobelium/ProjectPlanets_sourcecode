@@ -228,7 +228,7 @@ var i = 1;
        
         // valence check phase 1
             const valence_p1 = {
-              type: 'valence-check-all',
+              type: 'valence-check-5',
               prompt: valence_q,
               stimulus_1: val_img_p1[0].stimulus,
               stim_text_1: val_img_p1[0].text,
@@ -238,6 +238,8 @@ var i = 1;
               stim_text_3: val_img_p1[2].text,
               stimulus_4: val_img_p1[3].stimulus,
               stim_text_4: val_img_p1[3].text,
+              stimulus_5: val_img_p1[3].stimulus,
+              stim_text_5: val_img_p1[3].text,
               labels: valence_labels,
               stimulus_height: inf_stim_height,
               slider_width: inf_slider_width,
@@ -248,13 +250,9 @@ var i = 1;
               }
             };
 
-          // Map the Stimuli for Valence Check All
-          const mappedValImgP1 = val_img_p1.map((entry) => {
-            return {
-              picture: entry.stimulus,
-              id: entry.text,
-            };
-          });
+
+
+let blockNumber = 1;
 
 
         // inference check p1 (planet A)
@@ -1054,6 +1052,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // Phase 1, no ships
 // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk); //
 timeline.push(valence_p1);
+// timeline.push(valence_p9);
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
@@ -1081,7 +1080,9 @@ timeline.push(valence_p1);
 
 // // // Phase3, ships
 // addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-timeline.push(valence_p2);
+// timeline.push(valence_p2);
+
+
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);
 // timeline.push(infer_p2_C);
