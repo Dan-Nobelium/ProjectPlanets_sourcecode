@@ -62,7 +62,7 @@ const ship_outcome_1_unshielded = "<p style='font-family: Arial; font-weight: bo
 const ship_outcome_2_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: darkorange; -webkit-text-stroke: 0.5px yellow;'>Attack! -$</p>";
 const ship_outcome_3_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: green;'>Bonus! +$</p>";
 const ship_outcome_3_shielded = "<p style='font-family: Arial; font-size: 36px; color: yellow;'>Shield prevented a bonus</p>";
-
+const win_100_text = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: green;'>Success $100</p>";
 
 // manipulate response-ship Rft rate
 if (group[0].includes("0.1")) {
@@ -188,25 +188,6 @@ let planet_noship = {
 
     // valence check
       const valence_q = `How do you feel about each of these game elements: `;
-  
-       const val_img_p1 = [
-    {
-      stimulus: 'img/win100.png',
-      text: "Winning $100"
-    },
-    {
-      stimulus: stim_list[0],
-      text: "Planet A (left)"
-    },
-    {
-      stimulus: stim_list[1],
-      text: "Planet B (middle)"
-    },
-    {
-      stimulus: stim_list[2],
-      text: "Planet C (right)"
-    }
-    ];
   
       // phase 1, winning $100 image/text
       var inf_img_p1_winning100 = [
@@ -1059,9 +1040,9 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 // Phase 1, no ships
 // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk); //
-timeline.push(valence_p1);
+// timeline.push(valence_p1);
 // timeline.push(valence_p9);
-// timeline.push(infer_p1_A);
+timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
 // timeline.push(p1_q3_triangle); //
