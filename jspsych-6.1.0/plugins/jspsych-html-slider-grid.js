@@ -3,7 +3,7 @@ jsPsych.plugins['html-slider-grid'] = (function() {
 
   plugin.info = {
     name: 'html-slider-grid',
-    description: 'A plugin for creating a grid-based proportion selector',
+    description: 'A plugin for creating a 3D triangle slider',
     parameters: {
       stimulus_all: {
         type: jsPsych.plugins.parameterType.ARRAY,
@@ -21,19 +21,19 @@ jsPsych.plugins['html-slider-grid'] = (function() {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
         default: null,
-        description: 'Any content here will be displayed above the grid.'
+        description: 'Any content here will be displayed above the triangle slider.'
       },
-      grid_width: {
+      slider_width: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Grid width',
+        pretty_name: 'Slider width',
         default: 500,
-        description: 'Width of the grid in pixels.'
+        description: 'Width of the triangle slider in pixels.'
       },
-      grid_height: {
+      slider_height: {
         type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Grid height',
-        default: 500,
-        description: 'Height of the grid in pixels.'
+        pretty_name: 'Slider height',
+        default: 400,
+        description: 'Height of the triangle slider in pixels.'
       },
       stimulus_height: {
         type: jsPsych.plugins.parameterType.INT,
@@ -46,133 +46,260 @@ jsPsych.plugins['html-slider-grid'] = (function() {
         pretty_name: 'Labels',
         default: [],
         array: true,
-        description: 'Labels to display on the grid.'
+        description: 'Labels to display on the triangle slider.'
       },
       require_movement: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Require movement',
         default: false,
-        description: 'If true, the participant will have to interact with the grid before continuing.'
+        description: 'If true, the participant will have to move the slider before continuing.'
       }
     }
   };
 
+  // Helper functions
+  // =================
+
+  function getImagePosition(index, sliderWidth, sliderHeight, stimulusHeight) {
+    switch (index) {
+      case 0:
+        return `top: 0; left: 0; transform: translate(-50%, -${0 + stimulusHeight / 2}%);`;
+      case 1:
+        return `top: 0; right: 0; transform: translate(50%, -${0 + stimulusHeight / 2}%);`;
+      case 2:
+        return `bottom: 0; left: 50%; transform: translate(-50%, ${0 + stimulusHeight / 2}%);`;
+      default:
+        return '';
+    }
+  }
+
+  function getLabelPosition(index) {
+    switch (index) {
+      case 0:
+        return 'top: 0; left: 0; transform: translate(-50%, -100%);';
+      case 1:
+        return 'top: 0; right: 0; transform: translate(50%, -100%);';
+      case 2:
+        return 'bottom: 0; left: 50%; transform: translate(-50%, 100%);';
+      default:
+        return '';
+    }
+  }
+
+  function getDefaultProportion(index) {
+    return 33; // Equal proportions for all three planets
+  }
+
+  function getPieChartGradient(planetColors, planetOrder, proportions = [33, 33, 34]) {
+    var colorStops = [];
+    var cumulativePercentage = 0;
+
+    for (var i = 0; i < planetOrder.length; i++) {
+      var planet = planetOrder[i];
+      var color = planetColors[planet];
+      var percentage = proportions[i];
+
+      colorStops.push(`${color} ${cumulativePercentage}% ${cumulativePercentage + percentage}%`);
+      cumulativePercentage += percentage;
+    }
+
+    return `conic-gradient(${colorStops.join(', ')})`;
+  }
+
+  // Trial function
+  // ==============
+
   plugin.trial = function(display_element, trial) {
-    var numRows = 3;
-    var numCols = 101;
+    var planetOrder = trial.stimulus_all;
+
+    // HTML structure
+    // =============
 
     var html = `
-      <div id="jspsych-html-slider-grid-container" style="position: relative; width: ${trial.grid_width}px; height: ${trial.grid_height}px;">
-        <div id="jspsych-html-slider-grid" style="width: 100%; height: 100%;"></div>
-        <div id="jspsych-html-slider-grid-labels" style="position: absolute; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between;">
-          ${trial.labels.map((label, index) => `
-            <div style="text-align: center;">
-              <img src="${trial.stimulus_all[index]}" style="height: ${trial.stimulus_height}px;"/>
-              <div>${label}</div>
-            </div>
-          `).join('')}
+      <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
+        <div style="position: absolute; top: -400px; left: 50%; transform: translateX(-50%);">
+          ${trial.prompt}
         </div>
-        <div id="jspsych-html-slider-grid-pie-chart" style="position: absolute; bottom: 0; right: 0; width: 150px; height: 150px; border-radius: 50%;"></div>
+
+        <div id="jspsych-html-slider-triangle-stimulus" style="position: relative; width: 100%; height: 100%;">
+          ${planetOrder.map((planet, index) => `
+            <img src="${planet}" style="position: absolute; ${getImagePosition(index, trial.slider_width, trial.slider_height, trial.stimulus_height)}; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+          `).join('')}
+
+          ${planetOrder.map((planet, index) => `
+            <div id="planet-${index}-label" style="position: absolute; ${getLabelPosition(index)}; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)} (${getDefaultProportion(index)}%)</div>
+          `).join('')}
+
+          <div id="jspsych-html-slider-triangle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: ${trial.slider_width * 0.6}px; height: ${trial.slider_height * 0.6}px; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;"></div>
+
+          <div id="jspsych-html-slider-triangle-handle" style="position: absolute; width: ${trial.slider_width * 0.6}px; height: ${trial.slider_height * 0.6}px; clip-path: polygon(50% 100%, 0 0, 100% 0); pointer-events: none;">
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10px; height: 10px; background-color: #000; border-radius: 50%;"></div>
+          </div>
+        </div>
+
+        <div id="jspsych-html-slider-triangle-pie-chart" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 150px; height: 150px; border-radius: 50%; background-image: ${getPieChartGradient(trial.planetColors, planetOrder)}"></div>
       </div>
-      <button id="jspsych-html-slider-grid-submit" class="jspsych-btn" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">Submit</button>
+
+      <button id="jspsych-html-slider-triangle-continue" class="jspsych-btn" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">Continue</button>
     `;
 
     display_element.innerHTML = html;
 
-    var gridContainer = display_element.querySelector('#jspsych-html-slider-grid');
-    var pieChart = display_element.querySelector('#jspsych-html-slider-grid-pie-chart');
-    var submitButton = display_element.querySelector('#jspsych-html-slider-grid-submit');
+    // DOM elements
+    // ============
 
-    var proportions = new Array(numRows).fill(0);
-    var selectedCells = new Array(numRows).fill(null);
+    var triangle = display_element.querySelector('#jspsych-html-slider-triangle');
+    var handle = display_element.querySelector('#jspsych-html-slider-triangle-handle');
+    var pieChart = display_element.querySelector('#jspsych-html-slider-triangle-pie-chart');
+    var continueButton = display_element.querySelector('#jspsych-html-slider-triangle-continue');
 
-    function generateGrid(numRows, numCols, gridWidth, gridHeight) {
-      var cellWidth = gridWidth / numCols;
-      var cellHeight = gridHeight / numRows;
+    // State variables
+    // ===============
 
-      var gridHtml = '';
+    var isDragging = false;
+    var proportions = [33, 33, 34]; // Initialize with default proportions
 
-      for (var row = 0; row < numRows; row++) {
-        gridHtml += '<div class="jspsych-html-slider-grid-row" style="display: flex;">';
-        for (var col = 0; col < numCols; col++) {
-          gridHtml += `<div class="jspsych-html-slider-grid-cell" data-row="${row}" data-col="${col}" style="width: ${cellWidth}px; height: ${cellHeight}px; border: 1px solid #ccc;"></div>`;
-        }
-        gridHtml += '</div>';
+    // Response object
+    // ===============
+
+    var response = {
+      proportions: proportions,
+      clicked: false,
+      rt: null,
+      timestamps: {
+        start: null,
+        end: null,
+        clicks: []
+      },
+      locations: {
+        clicks: [],
+      },
+      stimulus_all: trial.stimulus_all,
+      planetColors: trial.planetColors
+    };
+
+    // Record the start timestamp
+    response.timestamps.start = performance.now();
+
+    // Calculate the coordinates of the triangle corners relative to the document
+    var triangleRect = triangle.getBoundingClientRect();
+    var topLeftCorner = { x: triangleRect.left, y: triangleRect.top };
+    var topRightCorner = { x: triangleRect.right, y: triangleRect.top };
+    var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.bottom };
+
+    // Calculate the equilateral triangle height based on the width
+    var triangleHeight = triangleRect.width * (Math.sqrt(3) / 2);
+
+    // Update the triangle dimensions to ensure an equilateral triangle
+    triangle.style.height = `${triangleHeight}px`;
+    triangle.style.clipPath = `polygon(50% ${triangleHeight}px, 0 0, ${triangleRect.width}px 0)`;
+
+    // Calculate the proportions based on handle position using indexing
+    function calculateProportions(x, y) {
+      var triangleWidth = triangleRect.width;
+      var triangleHeight = triangleRect.height;
+      var numRows = 10;
+      var numCols = 10;
+      var cellWidth = triangleWidth / numCols;
+      var cellHeight = triangleHeight / numRows;
+
+      var row = Math.floor(y / cellHeight);
+      var col = Math.floor(x / cellWidth);
+
+      var topProportion = ((numRows - row - 1) * (numCols - col)) / (numRows * numCols) * 100;
+      var rightProportion = ((numRows - row - 1) * col) / (numRows * numCols) * 100;
+      var bottomProportion = (row * numCols) / (numRows * numCols) * 100;
+
+      return [topProportion, rightProportion, bottomProportion];
+    }
+
+    // Update handle position and proportions based on mouse position
+    function updateHandlePosition(mouseX, mouseY) {
+      var x = mouseX - triangleRect.left;
+      var y = mouseY - triangleRect.top;
+
+      handle.style.left = `${x}px`;
+      handle.style.top = `${y}px`;
+
+      proportions = calculateProportions(x, y);
+
+      // Update the labels with the new proportions
+      planetOrder.forEach((planet, index) => {
+        var label = display_element.querySelector(`#planet-${index}-label`);
+        label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}%)`;
+      });
+
+      // Update the pie chart rendering
+      pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
+    }
+
+    // Event listeners
+    // ==============
+
+    triangle.addEventListener('mousemove', function(event) {
+      if (isDragging) {
+        var mouseX = event.clientX;
+        var mouseY = event.clientY;
+        updateHandlePosition(mouseX, mouseY);
       }
-
-      return gridHtml;
-    }
-
-    function getCellPercentages(rowIndex, colIndex, numRows, numCols) {
-      var percentages = new Array(numRows).fill(0);
-      percentages[rowIndex] = (colIndex + 1) / numCols * 100;
-      return percentages;
-    }
-
-    function updateLabels(proportions) {
-      var labels = display_element.querySelectorAll('#jspsych-html-slider-grid-labels > div > div');
-      labels.forEach((label, index) => {
-        label.textContent = `${Math.round(proportions[index])}%`;
-      });
-    }
-
-    function updatePieChart(proportions) {
-      var colors = trial.stimulus_all.map(stimulus => trial.planetColors[stimulus]);
-      var chartHtml = `
-        <svg viewBox="0 0 32 32">
-          ${proportions.map((proportion, index) => {
-            var startAngle = index === 0 ? 0 : proportions.slice(0, index).reduce((sum, p) => sum + p, 0) / 100 * 360;
-            var endAngle = startAngle + proportion / 100 * 360;
-            var largeArc = endAngle - startAngle > 180 ? 1 : 0;
-            var x1 = 16 + Math.cos(startAngle * Math.PI / 180) * 16;
-            var y1 = 16 + Math.sin(startAngle * Math.PI / 180) * 16;
-            var x2 = 16 + Math.cos(endAngle * Math.PI / 180) * 16;
-            var y2 = 16 + Math.sin(endAngle * Math.PI / 180) * 16;
-            return `<path d="M16,16 L${x1},${y1} A16,16 0 ${largeArc},1 ${x2},${y2} Z" fill="${colors[index]}"/>`;
-          }).join('')}
-        </svg>
-      `;
-      pieChart.innerHTML = chartHtml;
-    }
-
-    function handleCellClick(event) {
-      var cell = event.target;
-      var rowIndex = parseInt(cell.dataset.row);
-      var colIndex = parseInt(cell.dataset.col);
-
-      selectedCells[rowIndex] = cell;
-      proportions = getCellPercentages(rowIndex, colIndex, numRows, numCols);
-
-      selectedCells.forEach((selectedCell, index) => {
-        if (selectedCell !== null && index !== rowIndex) {
-          selectedCell.style.backgroundColor = '';
-        }
-      });
-
-      cell.style.backgroundColor = 'lightblue';
-
-      updateLabels(proportions);
-      updatePieChart(proportions);
-    }
-
-    function endTrial() {
-      var response = {
-        proportions: proportions,
-        rt: performance.now() - startTime
-      };
-
-      display_element.innerHTML = '';
-      jsPsych.finishTrial(response);
-    }
-
-    gridContainer.innerHTML = generateGrid(numRows, numCols, trial.grid_width, trial.grid_height);
-    var cells = gridContainer.querySelectorAll('.jspsych-html-slider-grid-cell');
-    cells.forEach(cell => {
-      cell.addEventListener('click', handleCellClick);
     });
 
-    var startTime = performance.now();
-    submitButton.addEventListener('click', endTrial);
+    triangle.addEventListener('mousedown', function(event) {
+      if (event.button === 0) {
+        isDragging = true;
+        var mouseX = event.clientX;
+        var mouseY = event.clientY;
+        updateHandlePosition(mouseX, mouseY);
+        response.clicked = true;
+        var timestamp = performance.now();
+        response.timestamps.clicks.push(timestamp);
+        response.locations.clicks.push({
+          x: mouseX,
+          y: mouseY,
+          proportions: proportions
+        });
+      }
+    });
+
+    document.addEventListener('mouseup', function(event) {
+      if (event.button === 0) {
+        isDragging = false;
+      }
+    });
+
+    triangle.addEventListener('mouseleave', function(event) {
+      isDragging = false;
+    });
+
+    // Function to end the trial
+    var end_trial = function() {
+      // Remove event listeners
+      triangle.removeEventListener('mousemove', updateHandlePosition);
+      triangle.removeEventListener('mousedown', updateHandlePosition);
+      document.removeEventListener('mouseup', updateHandlePosition);
+      triangle.removeEventListener('mouseleave', updateHandlePosition);
+
+      // Set the final proportions
+      response.proportions = proportions;
+
+      // Set the end timestamp and reaction time
+      response.timestamps.end = performance.now();
+      response.rt = response.timestamps.end - response.timestamps.start;
+
+      // Prepare the trial data
+      var trial_data = {
+        response: response
+      };
+
+      // Clear the display
+      display_element.innerHTML = '';
+
+      // End the trial
+      jsPsych.finishTrial(trial_data);
+    };
+
+    // Event listener for the continue button
+    continueButton.addEventListener('click', end_trial);
   };
 
   return plugin;
