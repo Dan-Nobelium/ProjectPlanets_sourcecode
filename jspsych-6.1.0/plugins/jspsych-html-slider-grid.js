@@ -1,10 +1,10 @@
 //rework this with indexing
 
-jsPsych.plugins['html-slider-triangle'] = (function() {
+jsPsych.plugins['html-slider-grid'] = (function() {
   var plugin = {};
 
   plugin.info = {
-    name: 'html-slider-triangle',
+    name: 'html-slider-grid',
     description: 'A plugin for creating a 3D triangle slider',
     parameters: {
       stimulus_all: {
