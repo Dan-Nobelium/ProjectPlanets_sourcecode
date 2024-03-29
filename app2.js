@@ -627,7 +627,7 @@ var right_label = "";
 
 // Question 3
 var p1_q3_triangle = {
-  type: 'html-slider-grid',
+  type: 'html-slider-triangle',
   prompt: "Reflecting back on what you did in the <b>most recent block</b>, <p>what proportion of your recent interactions were with each planet:",
   stimulus_all: stim_list,
   planetColors: planetColors,
