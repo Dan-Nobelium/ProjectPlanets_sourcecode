@@ -67,6 +67,18 @@ jsPsych.plugins['inference-check-6'] = (function() {
         default: null,
         description: 'Any content here will be displayed with stimulus 5.'
       },
+      stimulus_6: {
+        type: jsPsych.plugins.parameterType.IMAGE,
+        pretty_name: 'Stimulus 6',
+        default: undefined,
+        description: 'The sixth image to be displayed'
+      },
+      stim_text_6: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Stimulus text 6',
+        default: null,
+        description: 'Any content here will be displayed with stimulus 6.'
+      },
       stimulus_height: {
         type: jsPsych.plugins.parameterType.INT,
         pretty_name: 'Image height',
@@ -170,10 +182,10 @@ jsPsych.plugins['inference-check-6'] = (function() {
 
   plugin.trial = function(display_element, trial) {
 
-    var html = '<div id="jspsych-inference-check-5-wrapper" style="margin: 100px 0px;">';
+    var html = '<div id="jspsych-inference-check-6-wrapper" style="margin: 100px 0px;">';
 
     // main stimulus
-    html += '<div id="jspsych-inference-check-5-stimulus">';
+    html += '<div id="jspsych-inference-check-6-stimulus">';
     html += '<img src="'+trial.main_stimulus+'" style="';
     if(trial.main_stimulus_height !== null){
       html += 'height:'+trial.main_stimulus_height+'px; '
@@ -197,16 +209,16 @@ jsPsych.plugins['inference-check-6'] = (function() {
     }
 
     // stimuli and sliders
-    for (var i = 1; i <= 5; i++) {
+    for (var i = 1; i <= 6; i++) {
       // ship outcome content for the first 3 stimuli
       if (i <= 3) {
-        html += '<div id="jspsych-inference-check-5-stimulus">';
+        html += '<div id="jspsych-inference-check-6-stimulus">';
         html += trial['ship_outcome_' + i];
         html += '</div>';
       }
-      // image for the last 2 stimuli
+      // image for the last 3 stimuli
       else {
-        html += '<div id="jspsych-inference-check-5-stimulus">';
+        html += '<div id="jspsych-inference-check-6-stimulus">';
         html += '<img src="'+trial['stimulus_' + i]+'" style="';
         if(trial.stimulus_height !== null){
           html += 'height:'+trial.stimulus_height+'px; '
@@ -235,12 +247,12 @@ jsPsych.plugins['inference-check-6'] = (function() {
         html += trial.slider_text_top;
       }
 
-      html += '<div class="jspsych-inference-check-5-container" style="position:relative; margin: 0 auto 3em auto; ';
+      html += '<div class="jspsych-inference-check-6-container" style="position:relative; margin: 0 auto 3em auto; ';
       if(trial.slider_width !== null){
         html += 'width:'+trial.slider_width+'px;';
       }
       html += '">';
-      html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-inference-check-5-response-' + i + '"></input>';
+      html += '<input type="range" value="'+trial.start+'" min="'+trial.min+'" max="'+trial.max+'" step="'+trial.step+'" style="width: 100%;" id="jspsych-inference-check-6-response-' + i + '"></input>';
       html += '<div>'
       for(var j=0; j < trial.labels_top.length; j++){
         var width = 100/(trial.labels_top.length-1);
@@ -253,41 +265,41 @@ jsPsych.plugins['inference-check-6'] = (function() {
       html += '</div>';
       html += '</div>';
 
-      if (i < 5) {
+      if (i < 6) {
         html += '<br><br><br><hr><br><br><br>';
       }
     }
 
     // add submit button
-    html += '<button id="jspsych-inference-check-5-next" class="jspsych-btn" '+ (trial.require_movement ? "disabled" : "") + '>'+trial.button_label+'</button>';
+    html += '<button id="jspsych-inference-check-6-next" class="jspsych-btn" '+ (trial.require_movement ? "disabled" : "") + '>'+trial.button_label+'</button>';
 
     display_element.innerHTML = html;
 
     var response = {
       rt: null,
-      responses: new Array(5).fill(null)
+      responses: new Array(6).fill(null)
     };
 
     if(trial.require_movement){
-      display_element.querySelector('#jspsych-inference-check-5-response-5').addEventListener('change', function(){
-        display_element.querySelector('#jspsych-inference-check-5-next').disabled = false;
+      display_element.querySelector('#jspsych-inference-check-6-response-6').addEventListener('change', function(){
+        display_element.querySelector('#jspsych-inference-check-6-next').disabled = false;
       })
     }
 
-    display_element.querySelector('#jspsych-inference-check-5-next').addEventListener('click', function() {
+    display_element.querySelector('#jspsych-inference-check-6-next').addEventListener('click', function() {
       // measure response time
       var endTime = performance.now();
       response.rt = endTime - startTime;
 
       // save responses
-      for (var i = 1; i <= 5; i++) {
-        response.responses[i - 1] = display_element.querySelector('#jspsych-inference-check-5-response-' + i).value;
+      for (var i = 1; i <= 6; i++) {
+        response.responses[i - 1] = display_element.querySelector('#jspsych-inference-check-6-response-' + i).value;
       }
 
       if(trial.response_ends_trial){
         end_trial();
       } else {
-        display_element.querySelector('#jspsych-inference-check-5-next').disabled = true;
+        display_element.querySelector('#jspsych-inference-check-6-next').disabled = true;
       }
 
     });
@@ -310,7 +322,7 @@ jsPsych.plugins['inference-check-6'] = (function() {
 
     if (trial.stimulus_duration !== null) {
       jsPsych.pluginAPI.setTimeout(function() {
-        display_element.querySelector('#jspsych-inference-check-5-stimulus').style.visibility = 'hidden';
+        display_element.querySelector('#jspsych-inference-check-6-stimulus').style.visibility = 'hidden';
       }, trial.stimulus_duration);
     }
 
