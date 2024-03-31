@@ -244,7 +244,7 @@ const valence_p1 = {
 let blockNumber = 1;
 
 
-        // inference check p1 (planet A)
+        //p1 (planet A)
         var infer_p1_A = {
           type: 'inference-check-1',
           main_stimulus: stim_list[0],
@@ -481,20 +481,16 @@ let planet_ship = {
           }
         };
 
-        // inference check p2 (planet A)
         var infer_p2_A = {
-          type: 'inference-check-5',
+          type: 'inference-check-6',
           main_stimulus: stim_list[0],
           main_stimulus_height: main_stim_height,
           prompt: inference_prompt[0],
-          stimulus_1: inf_img_p2_A[0].stimulus,
-          stimulus_2: inf_img_p2_A[1].stimulus,
-          stimulus_3: inf_img_p2_A[2].stimulus,
+          ship_outcome_1: ship_outcome_1_unshielded,
+          ship_outcome_2: ship_outcome_2_unshielded,
+          ship_outcome_3: ship_outcome_3_unshielded,
           stimulus_4: inf_img_p2_A[3].stimulus,
           stimulus_5: inf_img_p2_A[4].stimulus,
-          stim_text_1: inf_img_p2_A[0].text,
-          stim_text_2: inf_img_p2_A[1].text,
-          stim_text_3: inf_img_p2_A[2].text,
           stim_text_4: inf_img_p2_A[3].text,
           stim_text_5: inf_img_p2_A[4].text,
           slider_text_top: contingency_q[0],
