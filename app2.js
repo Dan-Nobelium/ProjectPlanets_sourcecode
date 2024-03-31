@@ -554,64 +554,74 @@ let planet_ship = {
             block_number: i + nBlocks_p1
           }
         };
-    
-        // inference check p2 (ship 1)
-        var infer_p2_ship1 = {
-          type: 'inference-check-1',
-          main_stimulus: 'img/ship1.png',
-          main_stimulus_height: main_stim_height,
-          prompt: inference_prompt[3],
-          stimulus_1: 'img/lose.png',
-          stim_text_1: 'Losing $',
-          slider_text_top: contingency_q[3],
-          labels_top: contingency_labels,
-          stimulus_height: inf_stim_height,
-          slider_width: inf_slider_width,
-          require_movement: false,
-          data: {
-            phase: 'inf_check_2_ship1',
-            block_number: i + nBlocks_p1
-          }
-        };
-    
-        // inference check p2 (ship 2)
-        var infer_p2_ship2 = {
-          type: 'inference-check-1',
-          main_stimulus: 'img/ship2.png',
-          main_stimulus_height: main_stim_height,
-          prompt: inference_prompt[4],
-          stimulus_1: 'img/lose.png',
-          stim_text_1: 'Losing $',
-          slider_text_top: contingency_q[4],
-          labels_top: contingency_labels,
-          stimulus_height: inf_stim_height,
-          slider_width: inf_slider_width,
-          require_movement: false,
-          data: {
-            phase: 'inf_check_2_ship2',
-            block_number: i + nBlocks_p1
-          }
-        };
+    // inference check p2 (ship 1)
+var infer_p2_ship1 = {
+  type: 'inference-check-2',
+  main_stimulus: 'img/ship1.png',
+  main_stimulus_height: main_stim_height,
+  prompt: inference_prompt[3],
+  ship_outcome_1: ship_outcome_1_unshielded,
+  ship_outcome_2: ship_outcome_2_unshielded,
+  stim_text_1: '',
+  stim_text_2: '',
+  slider_text_top: contingency_q[3],
+  slider_text_bottom: contingency_q[4],
+  labels_top: contingency_labels,
+  labels_bottom: contingency_labels,
+  stimulus_height: inf_stim_height,
+  slider_width: inf_slider_width,
+  require_movement: false,
+  data: {
+    phase: 'inf_check_2_ship1',
+    block_number: i + nBlocks_p1
+  }
+};
 
-        // inference check p2 (ship 2)
-        var infer_p2_ship3 = {
-          type: 'inference-check-1',
-          main_stimulus: 'img/ship3.png',
-          main_stimulus_height: main_stim_height,
-          prompt: inference_prompt[5],
-          stimulus_1: 'img/lose.png',
-          stim_text_1: 'Losing $',
-          slider_text_top: contingency_q[5],
-          labels_top: contingency_labels,
-          stimulus_height: inf_stim_height,
-          slider_width: inf_slider_width,
-          require_movement: false,
-          data: {
-            phase: 'inf_check_2_ship2',
-            block_number: i + nBlocks_p1
-          }
-        };
-    
+// inference check p2 (ship 2)
+var infer_p2_ship2 = {
+  type: 'inference-check-2',
+  main_stimulus: 'img/ship2.png',
+  main_stimulus_height: main_stim_height,
+  prompt: inference_prompt[4],
+  ship_outcome_1: ship_outcome_1_unshielded,
+  ship_outcome_2: ship_outcome_2_unshielded,
+  stim_text_1: '',
+  stim_text_2: '',
+  slider_text_top: contingency_q[4],
+  slider_text_bottom: contingency_q[5],
+  labels_top: contingency_labels,
+  labels_bottom: contingency_labels,
+  stimulus_height: inf_stim_height,
+  slider_width: inf_slider_width,
+  require_movement: false,
+  data: {
+    phase: 'inf_check_2_ship2',
+    block_number: i + nBlocks_p1
+  }
+};
+
+// inference check p2 (ship 3)
+var infer_p2_ship3 = {
+  type: 'inference-check-2',
+  main_stimulus: 'img/ship3.png',
+  main_stimulus_height: main_stim_height,
+  prompt: inference_prompt[5],
+  ship_outcome_1: ship_outcome_1_unshielded,
+  ship_outcome_2: ship_outcome_2_unshielded,
+  stim_text_1: '',
+  stim_text_2: '',
+  slider_text_top: contingency_q[5],
+  slider_text_bottom: contingency_q[6],
+  labels_top: contingency_labels,
+  labels_bottom: contingency_labels,
+  stimulus_height: inf_stim_height,
+  slider_width: inf_slider_width,
+  require_movement: false,
+  data: {
+    phase: 'inf_check_2_ship3',
+    block_number: i + nBlocks_p1
+  }
+};
 // NEW: slider questions p2
 // NEW: define slider Qs variables
 var left_label = "";
