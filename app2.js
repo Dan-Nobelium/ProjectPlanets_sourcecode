@@ -40,7 +40,7 @@ const planetColors = {
 let block_number = 0;
 let trial_number = 0;
 let points = 0;
-const block_duration = 180 * 100; // in milliseconds (3 mins)
+const block_duration = 180 * 200; // in milliseconds (3 mins)
 const iti = 1000;
 const inf_stim_height = 80;
 const inf_slider_width = 500;
@@ -1051,8 +1051,8 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 // Phase2, ships
 // timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk); //
-timeline.push(valence_p2);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk); //
+// timeline.push(valence_p2);
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);
 // timeline.push(infer_p2_C);
