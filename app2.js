@@ -40,7 +40,7 @@ const planetColors = {
 let block_number = 0;
 let trial_number = 0;
 let points = 0;
-const block_duration = 180 * 200; // in milliseconds (3 mins)
+const block_duration = 180 * 100; // in milliseconds (3 mins)
 const iti = 1000;
 const inf_stim_height = 80;
 const inf_slider_width = 500;
@@ -1039,12 +1039,12 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(audit_block);
 
 // Phase 1, no ships
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk); //
-// timeline.push(valence_p1);
+addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk); //
+timeline.push(valence_p1);
 // timeline.push(valence_p9);
-// timeline.push(infer_p1_A);
-// timeline.push(infer_p1_B);
-// timeline.push(infer_p1_C);
+timeline.push(infer_p1_A);
+timeline.push(infer_p1_B);
+timeline.push(infer_p1_C);
 timeline.push(p1_q3_triangle); //
 // timeline.push(p1_q4_triangle);   ///---//
 

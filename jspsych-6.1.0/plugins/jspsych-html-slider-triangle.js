@@ -110,6 +110,24 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     return `conic-gradient(${colorStops.join(', ')})`;
   }
 
+  // Function to calculate the distances and percentages based on the handle position
+  function calcDistance(x, y, width, height) {
+    x += nwidth;
+    y -= nheight;
+
+    var pixels = [ // pythagoras!
+      Math.sqrt(Math.pow(Math.abs(x - width / 2), 2) + Math.pow(y, 2)),
+      Math.sqrt(Math.pow(x, 2) + Math.pow(height - y, 2)),
+      Math.sqrt(Math.pow(width - x, 2) + Math.pow(height - y, 2))
+    ];
+
+    var sum = pixels[0] + pixels[1] + pixels[2]; // == 100%
+
+    proportions = pixels.map(function(pixel) {
+      return Math.round((100 - (100 / sum * pixel)) * 100) / 100;
+    });
+  }
+
   // Trial function
   // ==============
 
@@ -165,13 +183,13 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     // ===============
 
     var isDragging = false;
-    var proportions = []; // Declare the proportions array
+    var proportions = [33, 33, 34]; // Initialize with default proportions
 
     // Response object
     // ===============
 
     var response = {
-      proportions: null,
+      proportions: proportions,
       clicked: false,
       rt: null,
       timestamps: {
@@ -189,44 +207,55 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     // Record the start timestamp
     response.timestamps.start = performance.now();
 
-    // Calculate the coordinates of the triangle corners relative to the document
-    var triangleRect = triangle.getBoundingClientRect();
-    var topLeftCorner = { x: triangleRect.left, y: triangleRect.top + triangleRect.height };
-    var topRightCorner = { x: triangleRect.right, y: triangleRect.top + triangleRect.height };
-    var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.top };
+    // Calculate the bounding coordinates of the triangle
+    var width = triangle.offsetWidth;
+    var height = triangle.offsetHeight;
+    var nwidth = handle.offsetWidth / 2;
+    var nheight = handle.offsetHeight / 2;
 
+    // Function to calculate the valid x and y coordinates for the handle position within the triangle boundaries
+    function calcXY(left, top) {
+      var x = left + nwidth;
+      var y = top - nheight;
+      var difference = Math.abs(x - width / 2);
+      var min_y = height * (difference / (width / 2));
+
+      if (y < min_y) y = min_y;
+      if (x < 0) x = 0;
+      if (y < 0) y = 0;
+      if (x > width) x = width;
+      if (y > height) y = height;
+
+      return {
+        top: y + nheight,
+        left: x - nwidth
+      };
+    }
 
     // Update handle position and proportions based on mouse position
     function updateHandlePosition(mouseX, mouseY) {
-      var x = mouseX - triangleRect.left;
-      var y = mouseY - triangleRect.top;
-
-      handle.style.left = `${x}px`;
-      handle.style.top = `${y}px`;
-
-      proportions = updateProportions(x, y);
+      var xy = calcXY(mouseX - triangle.getBoundingClientRect().left, mouseY - triangle.getBoundingClientRect().top);
+      handle.style.left = xy.left + 'px';
+      handle.style.top = xy.top + 'px';
+      proportions = updateProportions(xy.left - nwidth, xy.top + nwidth);
     }
 
     // Update proportions and labels
-function updateProportions(x, y) {
-  var topProportion = (1 - y / triangleRect.height) * (1 - x / triangleRect.width) * 100;
-  var rightProportion = (1 - y / triangleRect.height) * (x / triangleRect.width) * 100;
-  var bottomProportion = (y / triangleRect.height) * 100;
+    function updateProportions(x, y) {
+      calcDistance(x, y, width, height);
 
-  proportions = [topProportion, rightProportion, bottomProportion];
+      // Update the labels with the new proportions
+      planetOrder.forEach((planet, index) => {
+        var label = display_element.querySelector(`#planet-${index}-label`);
+        label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}%)`;
+      });
 
-  // Update the labels with the new proportions
-  planetOrder.forEach((planet, index) => {
-    var label = display_element.querySelector(`#planet-${index}-label`);
-    label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}%)`;
-  });
+      // Update the pie chart rendering
+      pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
 
-  // Update the pie chart rendering
-  pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
-
-  // Return the updated proportions array
-  return proportions;
-}
+      // Return the updated proportions array
+      return proportions;
+    }
 
     // Event listener for mousemove event on the triangle
     triangle.addEventListener('mousemove', function(event) {
