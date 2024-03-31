@@ -1,3 +1,5 @@
+//this plugin actually does 5 inference checks, but loads text variables for the first 2
+
 jsPsych.plugins['inference-check-6'] = (function() {
   var plugin = {};
 
@@ -10,20 +12,14 @@ jsPsych.plugins['inference-check-6'] = (function() {
       ship_outcome_1: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Ship outcome 1',
-        default: null,
+        default: '',
         description: 'The HTML content for ship outcome 1'
       },
       ship_outcome_2: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Ship outcome 2',
-        default: null,
+        default: '',
         description: 'The HTML content for ship outcome 2'
-      },
-      ship_outcome_3: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Ship outcome 3',
-        default: null,
-        description: 'The HTML content for ship outcome 3'
       },
       main_stimulus: {
         type: jsPsych.plugins.parameterType.IMAGE,
@@ -52,7 +48,7 @@ jsPsych.plugins['inference-check-6'] = (function() {
       stim_text_4: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Stimulus text 4',
-        default: null,
+        default: '',
         description: 'Any content here will be displayed with stimulus 4.'
       },
       stimulus_5: {
@@ -64,7 +60,7 @@ jsPsych.plugins['inference-check-6'] = (function() {
       stim_text_5: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Stimulus text 5',
-        default: null,
+        default: '',
         description: 'Any content here will be displayed with stimulus 5.'
       },
       stimulus_6: {
@@ -76,7 +72,7 @@ jsPsych.plugins['inference-check-6'] = (function() {
       stim_text_6: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Stimulus text 6',
-        default: null,
+        default: '',
         description: 'Any content here will be displayed with stimulus 6.'
       },
       stimulus_height: {
@@ -124,7 +120,7 @@ jsPsych.plugins['inference-check-6'] = (function() {
       slider_text_top: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Top slider text',
-        default: null,
+        default: '',
         description: 'Any content here will be displayed with the top slider.'
       },
       labels_top: {
@@ -156,7 +152,7 @@ jsPsych.plugins['inference-check-6'] = (function() {
       prompt: {
         type: jsPsych.plugins.parameterType.STRING,
         pretty_name: 'Prompt',
-        default: null,
+        default: '',
         description: 'Any content here will be displayed at the top of the screen.'
       },
       stimulus_duration: {
@@ -209,9 +205,9 @@ jsPsych.plugins['inference-check-6'] = (function() {
     }
 
     // stimuli and sliders
-    for (var i = 1; i <= 6; i++) {
-      // ship outcome content for the first 3 stimuli
-      if (i <= 3) {
+    for (var i = 1; i <= 5; i++) {
+      // ship outcome content for the first 2 stimuli
+      if (i <= 2) {
         html += '<div id="jspsych-inference-check-6-stimulus">';
         html += trial['ship_outcome_' + i];
         html += '</div>';
@@ -219,7 +215,7 @@ jsPsych.plugins['inference-check-6'] = (function() {
       // image for the last 3 stimuli
       else {
         html += '<div id="jspsych-inference-check-6-stimulus">';
-        html += '<img src="'+trial['stimulus_' + i]+'" style="';
+        html += '<img src="'+trial['stimulus_' + (i+1)]+'" style="';
         if(trial.stimulus_height !== null){
           html += 'height:'+trial.stimulus_height+'px; '
           if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
@@ -237,8 +233,8 @@ jsPsych.plugins['inference-check-6'] = (function() {
       }
 
       // stimulus text
-      if (trial['stim_text_' + i] !== null){
-        html += trial['stim_text_' + i];
+      if (trial['stim_text_' + (i <= 2 ? i : i+1)] !== null){
+        html += trial['stim_text_' + (i <= 2 ? i : i+1)];
       }
       html += '<br><br>';
 
@@ -265,7 +261,7 @@ jsPsych.plugins['inference-check-6'] = (function() {
       html += '</div>';
       html += '</div>';
 
-      if (i < 6) {
+      if (i < 5) {
         html += '<br><br><br><hr><br><br><br>';
       }
     }
@@ -277,11 +273,11 @@ jsPsych.plugins['inference-check-6'] = (function() {
 
     var response = {
       rt: null,
-      responses: new Array(6).fill(null)
+      responses: new Array(5).fill(null)
     };
 
     if(trial.require_movement){
-      display_element.querySelector('#jspsych-inference-check-6-response-6').addEventListener('change', function(){
+      display_element.querySelector('#jspsych-inference-check-6-response-5').addEventListener('change', function(){
         display_element.querySelector('#jspsych-inference-check-6-next').disabled = false;
       })
     }
@@ -292,7 +288,7 @@ jsPsych.plugins['inference-check-6'] = (function() {
       response.rt = endTime - startTime;
 
       // save responses
-      for (var i = 1; i <= 6; i++) {
+      for (var i = 1; i <= 5; i++) {
         response.responses[i - 1] = display_element.querySelector('#jspsych-inference-check-6-response-' + i).value;
       }
 
