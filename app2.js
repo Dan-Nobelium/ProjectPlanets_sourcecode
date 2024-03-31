@@ -452,7 +452,7 @@ let planet_ship = {
 //TODO: create valance check 8 library and use it here
         // value check p2
         var valence_p2 = {
-          type: 'valence-check-10',
+          type: 'valence-check-9',
           prompt: valence_q,
           win_100_text: win_100_text,
           ship_outcome_1_unshielded: ship_outcome_1_unshielded,
@@ -467,10 +467,8 @@ let planet_ship = {
           stim_text_7: val_img_p2[5].text,
           stimulus_8: val_img_p2[6].stimulus,
           stim_text_8: val_img_p2[6].text,
-          stimulus_8: val_img_p2[7].stimulus,
-          stim_text_8: val_img_p2[6].text,
           stimulus_9: val_img_p2[7].stimulus,
-          stim_text_9: val_img_p2[6].text,
+          stim_text_9: val_img_p2[7].text,
           labels: valence_labels,
           stimulus_height: inf_stim_height,
           slider_width: inf_slider_width,

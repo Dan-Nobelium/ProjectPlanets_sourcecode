@@ -1,8 +1,9 @@
-jsPsych.plugins['valence-check-10'] = (function () {
+
+jsPsych.plugins['valence-check-9'] = (function () {
   var plugin = {};
 
   // Register preloads for images
-  jsPsych.pluginAPI.registerPreload('valence-check-10', 'stimulus', 'image');
+  jsPsych.pluginAPI.registerPreload('valence-check-9', 'stimulus', 'image');
 
   plugin.info = {
     name: 'valence-check-10',
