@@ -50,8 +50,8 @@ const rf_ship_delay = 1500;
 const probability_trade = [[.5], [.5], [.5]];
 const probability_shield = [[.5], [.5], [.5]];
 const reset_planet_wait_const = 1000;
-const shield_charging_time_const = 3000;
 const ship_attack_time_const = 6000;
+const shield_charging_time_const = (ship_attack_time_const / 2);
 const nBlocks_p1 = 1;
 let nBlocks_p2 = 1;
 let nBlocks_p3 = 1;
@@ -353,6 +353,11 @@ let planet_ship = {
   probability_trade: probability_trade,
   probability_ship: probability_ship,
   probability_shield: probability_shield,
+  ship_outcome_1_unshielded: ship_outcome_1_unshielded,
+  ship_outcome_2_unshielded: ship_outcome_2_unshielded,
+  ship_outcome_3_unshielded: ship_outcome_3_unshielded,
+  ship_outcome_3_shielded: ship_outcome_3_shielded,
+  win_100_text: win_100_text,
   data: {
       phase: 'phase2',
       block_type: 'planet_ship'
