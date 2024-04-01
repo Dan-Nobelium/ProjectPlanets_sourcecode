@@ -12,55 +12,56 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         array: true,
         description: 'Each element of the array is the content for a single page.'
       },
-      preamble: {
+      question_prompts: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'Preamble',
-        array: true,
+        pretty_name: 'Question prompts',
         default: null,
-        description: 'HTML-formatted string to display at the top of the page above all the questions.'
-      },
-      ship_attack_damage: {
-        type: jsPsych.plugins.parameterType.INT,
-        pretty_name: 'Ship Attack Damage',
         array: true,
-        default: undefined,
-        description: 'An array of integers representing the attack damage for each ship.'
+        description: 'Array of HTML strings representing the question prompts.'
       },
-      key_forward: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
-        pretty_name: 'Key forward',
-        default: 'rightarrow',
-        description: 'The key the subject can press in order to advance to the next page.'
+      planet_options: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Planet options',
+        default: null,
+        array: true,
+        description: 'Array of HTML strings representing the planet options.'
       },
-      key_backward: {
-        type: jsPsych.plugins.parameterType.KEYCODE,
-        pretty_name: 'Key backward',
-        default: 'leftarrow',
-        description: 'The key that the subject can press to return to the previous page.'
+      ship_option_1: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Ship option 1',
+        default: null,
+        description: 'The image source for ship option 1.'
       },
-      allow_backward: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: 'Allow backward',
-        default: true,
-        description: 'If true, the subject can return to the previous page of the instructions.'
+      ship_option_2: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Ship option 2',
+        default: null,
+        description: 'The image source for ship option 2.'
       },
-      allow_keys: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: 'Allow keys',
-        default: true,
-        description: 'If true, the subject can use keyboard keys to navigate the pages.'
+      ship_option_3: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Ship option 3',
+        default: null,
+        description: 'The image source for ship option 3.'
+      },
+      correct_answers: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Correct answers',
+        default: null,
+        array: true,
+        description: 'Array of strings representing the correct answers for each question.'
+      },
+      instructions: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Instructions',
+        default: null,
+        description: 'HTML-formatted string containing the instructions to display when an incorrect answer is given.'
       },
       show_clickable_nav: {
         type: jsPsych.plugins.parameterType.BOOL,
         pretty_name: 'Show clickable nav',
         default: false,
         description: 'If true, then a "Previous" and "Next" button will be displayed beneath the instructions.'
-      },
-      show_page_number: {
-        type: jsPsych.plugins.parameterType.BOOL,
-        pretty_name: 'Show page number',
-        default: false,
-        description: 'If true, and clickable navigation is enabled, then Page x/y will be shown between the nav buttons.'
       },
       button_label_previous: {
         type: jsPsych.plugins.parameterType.STRING,
@@ -74,37 +75,11 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         default: 'Next',
         description: 'The text that appears on the button to go forwards.'
       },
-      instructions: {
-        type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'Instructions',
-        default: null,
-        description: 'HTML-formatted string containing the instructions to display when an incorrect answer is given.'
-      },
-      attack_text: {
-        type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'Attack Text',
-        default: null,
-        description: 'HTML-formatted string representing the attack text to display.'
-      },
-      attack_text_2: {
-        type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'Attack Text',
-        default: null,
-        description: 'HTML-formatted string representing the attack text to display.'
-      },
-      question_prompts: {
-        type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'Question prompts',
-        default: null,
-        array: true,
-        description: 'Array of HTML strings representing the question prompts.'
-      },
-      question_options: {
-        type: jsPsych.plugins.parameterType.HTML_STRING,
-        pretty_name: 'Question options',
-        default: null,
-        array: true,
-        description: 'Array of HTML strings representing the options for each question.'
+      allow_keys: {
+        type: jsPsych.plugins.parameterType.BOOL,
+        pretty_name: 'Allow keys',
+        default: true,
+        description: 'If true, the subject can use keyboard keys to navigate the pages.'
       }
     }
   };
@@ -114,8 +89,12 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     var startTime = performance.now();
     var instructionPages = trial.pages;
     var catchQuestions = {
-      preamble: trial.preamble,
-      ship_attack_damage: trial.ship_attack_damage
+      question_prompts: trial.question_prompts,
+      planet_options: trial.planet_options,
+      ship_option_1: trial.ship_option_1,
+      ship_option_2: trial.ship_option_2,
+      ship_option_3: trial.ship_option_3,
+      correct_answers: trial.correct_answers
     };
     var catchResponses = {};
     var contingencies_correct = false;
@@ -134,19 +113,31 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       var html = `
         <form id="jspsych-survey-multi-catch-form">
           <p align='center'><b>Check your knowledge before you continue.</b></p>
-          ${trial.attack_text_1}
           ${trial.question_prompts.map((prompt, index) => `
             <p align='center'><b>Question ${index + 1}:</b> ${prompt}</p>
             <div class="jspsych-survey-multi-catch-options">
-              ${trial.question_options[index].map((option, optionIndex) => `
+              ${index === 1 || index === 3 ? `
                 <div class="option-container">
-                  <img src="${option.image}" class="option-image">
-                  <input type="radio" name="Q${index}" value="${option.value}" required>
-                  <label>${option.value}</label>
+                  <img src="${trial.ship_option_1}" class="option-image">
+                  <input type="radio" name="Q${index}" value="${trial.ship_option_1}" required>
                 </div>
-              `).join('')}
+                <div class="option-container">
+                  <img src="${trial.ship_option_2}" class="option-image">
+                  <input type="radio" name="Q${index}" value="${trial.ship_option_2}" required>
+                </div>
+                <div class="option-container">
+                  <img src="${trial.ship_option_3}" class="option-image">
+                  <input type="radio" name="Q${index}" value="${trial.ship_option_3}" required>
+                </div>
+              ` : `
+                ${trial.planet_options.map((planet, planetIndex) => `
+                  <div class="option-container">
+                    <img src="${planet}" class="option-image">
+                    <input type="radio" name="Q${index}" value="${String.fromCharCode(65 + planetIndex)}" required>
+                  </div>
+                `).join('')}
+              `}
             </div>
-            ${index === 1 ? trial.attack_text_2 : ''}
           `).join('')}
           <div class="jspsych-survey-multi-catch-nav">
             <button id="backButton" class="jspsych-btn" type="button">${trial.button_label_previous}</button>
@@ -175,15 +166,6 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         display_element.querySelector('#nextButton').addEventListener('click', nextPage);
       }
 
-      if (trial.show_page_number) {
-        var pageNumber = `
-          <div class="jspsych-instructions-page-number">
-            Page ${currentInstructionPage + 1} of ${instructionPages.length}
-          </div>
-        `;
-        display_element.insertAdjacentHTML('beforeend', pageNumber);
-      }
-
       if (trial.allow_keys) {
         var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
           callback_function: keyHandler,
@@ -193,48 +175,36 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         });
       }
     }
-  function showCatchQuestions() {
-  var catchQuestionsHtml = createCatchQuestions();
-  display_element.innerHTML = catchQuestionsHtml;
 
-  var form = document.querySelector('#jspsych-survey-multi-catch-form');
-  if (form) {
-    form.addEventListener('submit', function(event) {
-      event.preventDefault();
-      var selectedAnswers = [];
-      for (var i = 0; i < trial.question_prompts.length; i++) {
-        var selectedOption = document.querySelector(`input[name="Q${i}"]:checked`).value;
-        selectedAnswers.push(selectedOption);
-      }
-      catchResponses = selectedAnswers;
+    function showCatchQuestions() {
+      var catchQuestionsHtml = createCatchQuestions();
+      display_element.innerHTML = catchQuestionsHtml;
 
-      var correctAnswers = [
-        'B', // Planet B
-        '1', // Ship 3 (empty label)
-        'C', // Planet C
-        '1' // Ship 1 (empty label)
-      ];
+      var form = document.querySelector('#jspsych-survey-multi-catch-form');
+      if (form) {
+        form.addEventListener('submit', function(event) {
+          event.preventDefault();
+          var selectedAnswers = [];
+          for (var i = 0; i < trial.question_prompts.length; i++) {
+            var selectedOption = document.querySelector(`input[name="Q${i}"]:checked`).value;
+            selectedAnswers.push(selectedOption);
+          }
+          catchResponses = selectedAnswers;
 
-      console.log('Correct Answers:', correctAnswers);
-      console.log('Selected Answers:', selectedAnswers);
+          console.log('Correct Answers:', trial.correct_answers);
+          console.log('Selected Answers:', selectedAnswers);
 
-      contingencies_correct = true;
-      for (var i = 0; i < correctAnswers.length; i++) {
-        if (selectedAnswers[i] !== correctAnswers[i]) {
-          contingencies_correct = false;
-          break;
-        }
-      }
+          contingencies_correct = trial.correct_answers.every((answer, index) => answer === selectedAnswers[index]);
 
-      console.log('Contingencies Correct:', contingencies_correct);
+          console.log('Contingencies Correct:', contingencies_correct);
 
-      if (contingencies_correct) {
-        endTrial();
-      } else {
-        failedSubmissionCount++;
-        displayInstructions();
-      }
-    });
+          if (contingencies_correct) {
+            endTrial();
+          } else {
+            failedSubmissionCount++;
+            displayInstructions();
+          }
+        });
       }
     }
 

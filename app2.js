@@ -775,27 +775,15 @@ var cont_catch = {
     'Which planet leads to this attack?',
     'Which ship leads to this attack?'
   ],
-  
-  // Array of arrays representing the options for each question
-  question_options: [
-    stim_list.map((planet, index) => ({
-      image: planet,
-      value: `Planet ${String.fromCharCode(65 + index)}`
-    })),
-    [
-      { image: 'img/ship1.png', value: 'Ship 1' },
-      { image: 'img/ship2.png', value: 'Ship 2' },
-      { image: 'img/ship3.png', value: 'Ship 3' }
-    ],
-    stim_list.map((planet, index) => ({
-      image: planet,
-      value: `Planet ${String.fromCharCode(65 + index)}`
-    })),
-    [
-      { image: 'img/ship1.png', value: 'Ship 1' },
-      { image: 'img/ship2.png', value: 'Ship 2' },
-      { image: 'img/ship3.png', value: 'Ship 3' }
-    ]
+  planet_options: stim_list,
+  ship_option_1: ship_list[0],
+  ship_option_2: ship_list[1],
+  ship_option_3: ship_list[2],
+  correct_answers: [
+    'B', // Planet B
+    ship_list[1], // Ship 3
+    'C', // Planet C
+    ship_list[0] // Ship 1
   ],
   
   // Object representing the mapping between ships and planets
