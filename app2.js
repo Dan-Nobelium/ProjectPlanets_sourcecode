@@ -791,7 +791,7 @@ var cont_catch = {
       `).join('')}
     </div>
     <br>
-    <p align='center'><b>Check your knowledge before you continue.</b></p>
+    
     <p align='center'>${ship_outcome_2_unshielded}</p>
     <p align='center'><b>Question 3:</b> Which planet leads to this attack?</p>
     <div class="jspsych-survey-multi-catch-options">

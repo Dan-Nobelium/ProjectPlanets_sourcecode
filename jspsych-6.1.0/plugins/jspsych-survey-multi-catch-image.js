@@ -1,6 +1,7 @@
 jsPsych.plugins['survey-multi-catch-image'] = (function() {
   var plugin = {};
 
+  // Define plugin information
   plugin.info = {
     name: 'survey-multi-catch-image',
     description: 'Displays instruction pages with catch questions and images',
@@ -80,7 +81,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         default: null,
         description: 'HTML-formatted string containing the instructions to display when an incorrect answer is given.'
       },
-      attack_text: {
+      attack_text_1: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name: 'Attack Text',
         default: null,
