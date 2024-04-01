@@ -79,6 +79,18 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         pretty_name: 'Instructions',
         default: null,
         description: 'HTML-formatted string containing the instructions to display when an incorrect answer is given.'
+      },
+      attack_text: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Attack Text',
+        default: null,
+        description: 'HTML-formatted string representing the attack text to display.'
+      },
+      attack_text_2: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Attack Text',
+        default: null,
+        description: 'HTML-formatted string representing the attack text to display.'
       }
     }
   };

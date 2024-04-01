@@ -769,23 +769,47 @@ var cont_catch = {
   preamble: [
     `
     <p align='center'><b>Check your knowledge before you continue.</b></p>
-    <p align='center'><b>Question 1:</b> Which pirate ships lead to attacks?</p>
-    <div class="jspsych-survey-multi-catch-options">
-      ${ship_list.map((ship, index) => `
-        <div class="option-container">
-          <img src="${ship}" class="option-image">
-          <input type="checkbox" name="Q0" value="Ship ${index + 1}">
-          <label>Ship ${String.fromCharCode(65 + index)}</label>
-        </div>
-      `).join('')}
-    </div>
-    <p align='center'><b>Question 2:</b> Which planets have been attracting pirate ships?</p>
+    <p align='center'>${ship_outcome_1_unshielded}</p>
+    <p align='center'><b>Question 1:</b> Which planet leads to this attack?</p>
     <div class="jspsych-survey-multi-catch-options">
       ${stim_list.map((planet, index) => `
         <div class="option-container">
           <img src="${planet}" class="option-image">
-          <input type="checkbox" name="Q1" value="Planet ${String.fromCharCode(65 + index)}">
+          <input type="checkbox" name="Q0" value="Planet ${String.fromCharCode(65 + index)}">
           <label>Planet ${String.fromCharCode(65 + index)}</label>
+        </div>
+      `).join('')}
+    </div>
+    <p align='center'><b>Question 2:</b> Which ship leads to this attack?</p>
+    <div class="jspsych-survey-multi-catch-options">
+      ${ship_list.map((ship, index) => `
+        <div class="option-container">
+          <img src="${ship}" class="option-image">
+          <input type="checkbox" name="Q1" value="Ship ${index + 1}">
+          <label>Ship ${String.fromCharCode(65 + index)}</label>
+        </div>
+      `).join('')}
+    </div>
+    <br>
+    <p align='center'><b>Check your knowledge before you continue.</b></p>
+    <p align='center'>${ship_outcome_2_unshielded}</p>
+    <p align='center'><b>Question 3:</b> Which planet leads to this attack?</p>
+    <div class="jspsych-survey-multi-catch-options">
+      ${stim_list.map((planet, index) => `
+        <div class="option-container">
+          <img src="${planet}" class="option-image">
+          <input type="checkbox" name="Q0" value="Planet ${String.fromCharCode(65 + index)}">
+          <label>Planet ${String.fromCharCode(65 + index)}</label>
+        </div>
+      `).join('')}
+    </div>
+    <p align='center'><b>Question 4:</b> Which ship leads to this attack?</p>
+    <div class="jspsych-survey-multi-catch-options">
+      ${ship_list.map((ship, index) => `
+        <div class="option-container">
+          <img src="${ship}" class="option-image">
+          <input type="checkbox" name="Q1" value="Ship ${index + 1}">
+          <label>Ship ${String.fromCharCode(65 + index)}</label>
         </div>
       `).join('')}
     </div>
