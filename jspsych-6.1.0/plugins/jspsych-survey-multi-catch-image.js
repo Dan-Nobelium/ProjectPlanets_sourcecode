@@ -1,7 +1,6 @@
 jsPsych.plugins['survey-multi-catch-image'] = (function() {
   var plugin = {};
 
-  // Define plugin information
   plugin.info = {
     name: 'survey-multi-catch-image',
     description: 'Displays instruction pages with catch questions and images',
@@ -106,18 +105,10 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         default: null,
         array: true,
         description: 'Array of HTML strings representing the options for each question.'
-      },
-      correct_answers: {
-        type: jsPsych.plugins.parameterType.STRING,
-        pretty_name: 'Correct answers',
-        default: null,
-        array: true,
-        description: 'Array of strings representing the correct answers for each question.'
       }
-
-      
     }
   };
+
   plugin.trial = function(display_element, trial) {
     var currentInstructionPage = 0;
     var startTime = performance.now();
@@ -129,8 +120,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     var catchResponses = {};
     var contingencies_correct = false;
     var failedSubmissionCount = 0;
-  
-    // Function to create the HTML for an instruction page
+
     function createInstructionPage(pageContent) {
       var pageHtml = `
         <div class="jspsych-content">
@@ -139,34 +129,39 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       `;
       return pageHtml;
     }
-  
-// Modify createCatchQuestions function
-function createCatchQuestions() {
-  var html = `
-    <p align='center'><b>Check your knowledge before you continue.</b></p>
-    ${trial.attack_text_1}
-    ${trial.question_prompts.map((prompt, index) => `
-      <p align='center'><b>Question ${index + 1}:</b> ${prompt}</p>
-      <div class="jspsych-survey-multi-catch-options">
-        ${trial.question_options[index].map((option, optionIndex) => `
-          <div class="option-container">
-            <img src="${option.image}" class="option-image">
-            <input type="radio" name="Q${index}" value="${option.value}" required>
-            <label>${option.label}</label>
+
+    function createCatchQuestions() {
+      var html = `
+        <form id="jspsych-survey-multi-catch-form">
+          <p align='center'><b>Check your knowledge before you continue.</b></p>
+          ${trial.attack_text_1}
+          ${trial.question_prompts.map((prompt, index) => `
+            <p align='center'><b>Question ${index + 1}:</b> ${prompt}</p>
+            <div class="jspsych-survey-multi-catch-options">
+              ${trial.question_options[index].map((option, optionIndex) => `
+                <div class="option-container">
+                  <img src="${option.image}" class="option-image">
+                  <input type="radio" name="Q${index}" value="${option.value}" required>
+                  <label>${option.value}</label>
+                </div>
+              `).join('')}
+            </div>
+            ${index === 1 ? trial.attack_text_2 : ''}
+          `).join('')}
+          <div class="jspsych-survey-multi-catch-nav">
+            <button id="backButton" class="jspsych-btn" type="button">${trial.button_label_previous}</button>
+            <button id="submitButton" class="jspsych-btn" type="submit">${trial.button_label_next}</button>
           </div>
-        `).join('')}
-      </div>
-    `).join('')}
-  `;
-  return html;
-}
-  
-    // Function to show an instruction page
+        </form>
+      `;
+      return html;
+    }
+
     function showInstructionPage() {
       var pageContent = instructionPages[currentInstructionPage];
       var pageHtml = createInstructionPage(pageContent);
       display_element.innerHTML = pageHtml;
-  
+
       if (trial.show_clickable_nav) {
         var navButtons = `
           <div class="jspsych-instructions-nav">
@@ -175,11 +170,11 @@ function createCatchQuestions() {
           </div>
         `;
         display_element.insertAdjacentHTML('beforeend', navButtons);
-  
+
         display_element.querySelector('#prevButton').addEventListener('click', previousPage);
         display_element.querySelector('#nextButton').addEventListener('click', nextPage);
       }
-  
+
       if (trial.show_page_number) {
         var pageNumber = `
           <div class="jspsych-instructions-page-number">
@@ -188,7 +183,7 @@ function createCatchQuestions() {
         `;
         display_element.insertAdjacentHTML('beforeend', pageNumber);
       }
-  
+
       if (trial.allow_keys) {
         var keyListener = jsPsych.pluginAPI.getKeyboardResponse({
           callback_function: keyHandler,
@@ -198,62 +193,58 @@ function createCatchQuestions() {
         });
       }
     }
-  
-    // Function to show the catch questions
-    function showCatchQuestions() {
-      var catchQuestionsHtml = createCatchQuestions();
-      display_element.innerHTML = catchQuestionsHtml;
-  
-      display_element.querySelector('#backButton').addEventListener('click', function() {
-        currentInstructionPage = instructionPages.length - 1;
-        showInstructionPage();
-      });
-  
-      display_element.querySelector('#jspsych-survey-multi-catch-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-  
-        var selectedAnswer1 = document.querySelector('input[name="Q0"]:checked').value;
-        var selectedAnswer2 = document.querySelector('input[name="Q1"]:checked').value;
-        var selectedAnswer3 = document.querySelector('input[name="Q2"]:checked').value;
-        var selectedAnswer4 = document.querySelector('input[name="Q3"]:checked').value;
-  
-        var correctAnswer1 = catchQuestions.ship_attack_damage[0] !== 0 ? 'Planet A' : 'Planet B';
-        var correctAnswer2 = catchQuestions.ship_attack_damage[0] !== 0 ? 'Ship 1' : 'Ship 2';
-        var correctAnswer3 = catchQuestions.ship_attack_damage[1] !== 0 ? 'Planet B' : 'Planet C';
-        var correctAnswer4 = catchQuestions.ship_attack_damage[1] !== 0 ? 'Ship 2' : 'Ship 3';
-  
-        catchResponses = {
-          answer1: selectedAnswer1,
-          answer2: selectedAnswer2,
-          answer3: selectedAnswer3,
-          answer4: selectedAnswer4
-        };
-  
-        contingencies_correct = (
-          selectedAnswer1 === correctAnswer1 &&
-          selectedAnswer2 === correctAnswer2 &&
-          selectedAnswer3 === correctAnswer3 &&
-          selectedAnswer4 === correctAnswer4
-        );
-  
-        if (contingencies_correct) {
-          endTrial();
-        } else {
-          failedSubmissionCount++;
-          displayInstructions();
+  function showCatchQuestions() {
+  var catchQuestionsHtml = createCatchQuestions();
+  display_element.innerHTML = catchQuestionsHtml;
+
+  var form = document.querySelector('#jspsych-survey-multi-catch-form');
+  if (form) {
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      var selectedAnswers = [];
+      for (var i = 0; i < trial.question_prompts.length; i++) {
+        var selectedOption = document.querySelector(`input[name="Q${i}"]:checked`).value;
+        selectedAnswers.push(selectedOption);
+      }
+      catchResponses = selectedAnswers;
+
+      var correctAnswers = [
+        'B', // Planet B
+        '1', // Ship 3 (empty label)
+        'C', // Planet C
+        '1' // Ship 1 (empty label)
+      ];
+
+      console.log('Correct Answers:', correctAnswers);
+      console.log('Selected Answers:', selectedAnswers);
+
+      contingencies_correct = true;
+      for (var i = 0; i < correctAnswers.length; i++) {
+        if (selectedAnswers[i] !== correctAnswers[i]) {
+          contingencies_correct = false;
+          break;
         }
-      });
+      }
+
+      console.log('Contingencies Correct:', contingencies_correct);
+
+      if (contingencies_correct) {
+        endTrial();
+      } else {
+        failedSubmissionCount++;
+        displayInstructions();
+      }
+    });
+      }
     }
-  
-    // Function to handle navigation to the previous page
+
     function previousPage() {
       if (currentInstructionPage > 0) {
         currentInstructionPage--;
         showInstructionPage();
       }
     }
-  
-    // Function to handle navigation to the next page
+
     function nextPage() {
       if (currentInstructionPage < instructionPages.length - 1) {
         currentInstructionPage++;
@@ -262,8 +253,7 @@ function createCatchQuestions() {
         showCatchQuestions();
       }
     }
-  
-    // Function to handle key presses for navigation
+
     function keyHandler(info) {
       if (jsPsych.pluginAPI.compareKeys(info.key, trial.key_backward) && trial.allow_backward) {
         previousPage();
@@ -271,8 +261,7 @@ function createCatchQuestions() {
         nextPage();
       }
     }
-  
-    // Function to display instructions when an incorrect answer is given
+
     function displayInstructions() {
       var modalOverlay = document.createElement('div');
       modalOverlay.id = 'instructionModal';
@@ -286,14 +275,14 @@ function createCatchQuestions() {
       modalOverlay.style.display = 'flex';
       modalOverlay.style.justifyContent = 'center';
       modalOverlay.style.alignItems = 'center';
-  
+
       var modalContent = document.createElement('div');
       modalContent.style.backgroundColor = 'white';
       modalContent.style.padding = '20px';
       modalContent.style.borderRadius = '5px';
       modalContent.style.maxWidth = '80%';
       modalContent.innerHTML = trial.instructions;
-  
+
       var closeButton = document.createElement('button');
       closeButton.innerText = 'Close';
       closeButton.style.marginTop = '10px';
@@ -302,17 +291,16 @@ function createCatchQuestions() {
         currentInstructionPage = instructionPages.length - 1;
         showInstructionPage();
       });
-  
+
       modalContent.appendChild(closeButton);
       modalOverlay.appendChild(modalContent);
       display_element.appendChild(modalOverlay);
     }
-  
-    // Function to end the trial
+
     function endTrial() {
       var endTime = performance.now();
       var responseTime = endTime - startTime;
-  
+
       var trialData = {
         instruction_pages: JSON.stringify(instructionPages),
         catch_questions: JSON.stringify(catchQuestions),
@@ -321,13 +309,13 @@ function createCatchQuestions() {
         failed_submission_count: failedSubmissionCount,
         rt: responseTime
       };
-  
+
       display_element.innerHTML = '';
       jsPsych.finishTrial(trialData);
     }
-  
-    // Start the trial by showing the first instruction page
+
     showInstructionPage();
   };
+
   return plugin;
 })();

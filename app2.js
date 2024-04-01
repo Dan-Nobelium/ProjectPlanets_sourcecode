@@ -721,9 +721,10 @@ var p2_q4_triangle = {
 
 var contingenciescorrect = false;
 
-
 var cont_catch = {
   type: 'survey-multi-catch-image',
+  
+  // Array of HTML strings representing the content for each instruction page
   pages: [
     '<p>Local intel has determined where the pirates are coming from!<br>Click Next to view this intel.</p>',
     `
@@ -766,72 +767,82 @@ var cont_catch = {
   <p>Based on the information above, please answer the following questions:</p>
     `
   ],
-  preamble: [
-    `
-    <p align='center'><b>Check your knowledge before you continue.</b></p>
-    <p align='center'>${ship_outcome_1_unshielded}</p>
-    <p align='center'><b>Question 1:</b> Which planet leads to this attack?</p>
-    <div class="jspsych-survey-multi-catch-options">
-      ${stim_list.map((planet, index) => `
-        <div class="option-container">
-          <img src="${planet}" class="option-image">
-          <input type="radio" name="Q0" value="Planet ${String.fromCharCode(65 + index)}">
-          <label>Planet ${String.fromCharCode(65 + index)}</label>
-        </div>
-      `).join('')}
-    </div>
-    <p align='center'><b>Question 2:</b> Which ship leads to this attack?</p>
-    <div class="jspsych-survey-multi-catch-options">
-      ${ship_list.map((ship, index) => `
-        <div class="option-container">
-          <img src="${ship}" class="option-image">
-          <input type="radio" name="Q1" value="Ship ${index + 1}">
-          <label>Ship ${String.fromCharCode(65 + index)}</label>
-        </div>
-      `).join('')}
-    </div>
-    <br>
-    
-    <p align='center'>${ship_outcome_2_unshielded}</p>
-    <p align='center'><b>Question 3:</b> Which planet leads to this attack?</p>
-    <div class="jspsych-survey-multi-catch-options">
-      ${stim_list.map((planet, index) => `
-        <div class="option-container">
-          <img src="${planet}" class="option-image">
-          <input type="radio" name="Q2" value="Planet ${String.fromCharCode(65 + index)}">
-          <label>Planet ${String.fromCharCode(65 + index)}</label>
-        </div>
-      `).join('')}
-    </div>
-    <p align='center'><b>Question 4:</b> Which ship leads to this attack?</p>
-    <div class="jspsych-survey-multi-catch-options">
-      ${ship_list.map((ship, index) => `
-        <div class="option-container">
-          <img src="${ship}" class="option-image">
-          <input type="radio" name="Q3" value="Ship ${index + 1}">
-          <label>Ship ${String.fromCharCode(65 + index)}</label>
-        </div>
-      `).join('')}
-    </div>
-    `
+  
+  // Array of HTML strings representing the question prompts
+  question_prompts: [
+    'Which planet leads to this attack?',
+    'Which ship leads to this attack?',
+    'Which planet leads to this attack?',
+    'Which ship leads to this attack?'
   ],
+  
+  // Array of arrays representing the options for each question
+  question_options: [
+    stim_list.map((planet, index) => ({
+      image: planet,
+      value: `Planet ${String.fromCharCode(65 + index)}`
+    })),
+    [
+      { image: 'img/ship1.png', value: 'Ship 1' },
+      { image: 'img/ship2.png', value: 'Ship 2' },
+      { image: 'img/ship3.png', value: 'Ship 3' }
+    ],
+    stim_list.map((planet, index) => ({
+      image: planet,
+      value: `Planet ${String.fromCharCode(65 + index)}`
+    })),
+    [
+      { image: 'img/ship1.png', value: 'Ship 1' },
+      { image: 'img/ship2.png', value: 'Ship 2' },
+      { image: 'img/ship3.png', value: 'Ship 3' }
+    ]
+  ],
+  
+  // Object representing the mapping between ships and planets
+  ship_planet_mapping: {
+    'img/ship1.png': 'Planet B',
+    'img/ship2.png': 'Planet C'
+  },
+  
+  // HTML-formatted string representing the text for winning 100 points
   win_text: win_100_text,
+  
+  // HTML-formatted string representing the first attack text
   attack_text_1: ship_outcome_1_unshielded,
+
+  // HTML-formatted string representing the second attack text
   attack_text_2: ship_outcome_2_unshielded,
-  instructions: '<p>Your answer is incorrect. Please review the information provided and try again.</p>',
+  
+  // Array of integers representing the attack damage for each ship
   ship_attack_damage: ship_attack_damage,
+  
+  // HTML-formatted string containing the instructions to display when an incorrect answer is given
   instructions: '<p>Your answer is incorrect. Please review the information provided and try again.</p>',
+  
+  // Boolean indicating whether to display "Previous" and "Next" buttons for navigation
   show_clickable_nav: true,
+  
+  // The label for the "Previous" button
   button_label_previous: 'Back',
+  
+  // The label for the "Next" button
   button_label_next: 'Next',
+  
+  // Boolean indicating whether to disable keyboard navigation
   allow_keys: false,
+  
+  // Custom callback function that is called when the trial finishes
   on_finish: function(data) {
     data.contingencies_correct = data.contingencies_correct;
     data.responses = JSON.stringify(data.responses);
   },
+  
+  // Object to store any additional data associated with the trial
   data: {
     phase: 'contingency quiz'
   },
+  
+  // Custom callback function that is called when the trial loads
   on_load: function() {
     // Add custom CSS for styling
     var style = document.createElement('style');
