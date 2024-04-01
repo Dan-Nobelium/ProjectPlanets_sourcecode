@@ -791,14 +791,14 @@ var cont_catch = {
       `).join('')}
     </div>
     <br>
-
+    <p align='center'><b>Check your knowledge before you continue.</b></p>
     <p align='center'>${ship_outcome_2_unshielded}</p>
     <p align='center'><b>Question 3:</b> Which planet leads to this attack?</p>
     <div class="jspsych-survey-multi-catch-options">
       ${stim_list.map((planet, index) => `
         <div class="option-container">
           <img src="${planet}" class="option-image">
-          <input type="radio" name="Q0" value="Planet ${String.fromCharCode(65 + index)}">
+          <input type="radio" name="Q2" value="Planet ${String.fromCharCode(65 + index)}">
           <label>Planet ${String.fromCharCode(65 + index)}</label>
         </div>
       `).join('')}
@@ -808,7 +808,7 @@ var cont_catch = {
       ${ship_list.map((ship, index) => `
         <div class="option-container">
           <img src="${ship}" class="option-image">
-          <input type="radio" name="Q1" value="Ship ${index + 1}">
+          <input type="radio" name="Q3" value="Ship ${index + 1}">
           <label>Ship ${String.fromCharCode(65 + index)}</label>
         </div>
       `).join('')}
