@@ -58,7 +58,7 @@ let nBlocks_p3 = 1;
 //let ship_attack_damage_index = [0(non-attack), fixed 100pts,25%]
 let planet_labels = ['Planet A','Planet B','Planet C'];
 let ship_attack_damage = [0, 100, 0.2];
-const win_100_text = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: green;'>Success $100</p>";
+const win_100_text = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: green;'>Success +$100</p>";
 const ship_outcome_1_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: red; -webkit-text-stroke: 0.5px black;'>Attack! -$</p>";
 const ship_outcome_2_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: darkorange; -webkit-text-stroke: 0.5px yellow;'>Attack! -$</p>";
 const ship_outcome_3_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: green;'>Bonus! +$</p>";
@@ -732,11 +732,11 @@ var cont_catch = {
       <div class="jspsych-instructions-advanced-cell">
 
         <img src="${stim_list[0]}" class="jspsych-instructions-advanced-image">
-        <p>Planet A:</p>
+        <p>Planet A: </p>
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
         <img src="${ship_list[0]}" class="jspsych-instructions-advanced-image">
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <div class="jspsych-instructions-advanced-outcome">${win_100_text}</div>
+        <div class="jspsych-instructions-advanced-outcome">${win_100_text }</div>
 
       </div>
     </div>
@@ -754,12 +754,12 @@ var cont_catch = {
     <div class="jspsych-instructions-advanced-row">
       <div class="jspsych-instructions-advanced-cell">
         <img src="${stim_list[2]}" class="jspsych-instructions-advanced-image">
-        <p>Planet C:</p>
+        <p>Planet C: </p>
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
         <img src="${ship_list[2]}" class="jspsych-instructions-advanced-image">
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
         <div class="jspsych-instructions-advanced-outcome">${ship_outcome_2_unshielded}</div>
-
+        <p> </p>
       </div>
     </div>
   </div>
@@ -831,6 +831,14 @@ var cont_catch = {
         height: 100px;
         object-fit: contain;
         margin-right: 10px;
+      }
+      .jspsych-instructions-advanced-text {
+        display: flex;
+        flex-direction: column;
+        margin-right: 10px;
+      }
+      .jspsych-instructions-advanced-outcome {
+        margin-top: 5px;
       }
       .jspsych-survey-multi-catch-options {
         display: flex;
