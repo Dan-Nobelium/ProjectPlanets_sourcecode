@@ -92,7 +92,30 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         pretty_name: 'Attack Text',
         default: null,
         description: 'HTML-formatted string representing the attack text to display.'
+      },
+      question_prompts: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Question prompts',
+        default: null,
+        array: true,
+        description: 'Array of HTML strings representing the question prompts.'
+      },
+      question_options: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Question options',
+        default: null,
+        array: true,
+        description: 'Array of HTML strings representing the options for each question.'
+      },
+      correct_answers: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Correct answers',
+        default: null,
+        array: true,
+        description: 'Array of strings representing the correct answers for each question.'
       }
+
+      
     }
   };
   plugin.trial = function(display_element, trial) {
@@ -117,54 +140,26 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       return pageHtml;
     }
   
-    // Function to create the HTML for the catch questions
-    function createCatchQuestions() {
-      var preamble = catchQuestions.preamble.join('') || '';
-  
-      var html = `
-        ${preamble}
-        <form id="jspsych-survey-multi-catch-form">
-          <div class="jspsych-survey-multi-catch-question">
-            <p>${trial.attack_text}</p>
-            <div class="jspsych-survey-multi-catch-options">
-              <label><input type="radio" name="Q0" value="Planet A" required>Planet A</label>
-              <label><input type="radio" name="Q0" value="Planet B" required>Planet B</label>
-              <label><input type="radio" name="Q0" value="Planet C" required>Planet C</label>
-            </div>
+// Modify createCatchQuestions function
+function createCatchQuestions() {
+  var html = `
+    <p align='center'><b>Check your knowledge before you continue.</b></p>
+    ${trial.attack_text_1}
+    ${trial.question_prompts.map((prompt, index) => `
+      <p align='center'><b>Question ${index + 1}:</b> ${prompt}</p>
+      <div class="jspsych-survey-multi-catch-options">
+        ${trial.question_options[index].map((option, optionIndex) => `
+          <div class="option-container">
+            <img src="${option.image}" class="option-image">
+            <input type="radio" name="Q${index}" value="${option.value}" required>
+            <label>${option.label}</label>
           </div>
-          <div class="jspsych-survey-multi-catch-question">
-            <p>Which ship leads to this attack?</p>
-            <div class="jspsych-survey-multi-catch-options">
-              <label><input type="radio" name="Q1" value="Ship 1" required>Ship 1</label>
-              <label><input type="radio" name="Q1" value="Ship 2" required>Ship 2</label>
-              <label><input type="radio" name="Q1" value="Ship 3" required>Ship 3</label>
-            </div>
-          </div>
-          <div class="jspsych-survey-multi-catch-question">
-            <p>${trial.attack_text_2}</p>
-            <div class="jspsych-survey-multi-catch-options">
-              <label><input type="radio" name="Q2" value="Planet A" required>Planet A</label>
-              <label><input type="radio" name="Q2" value="Planet B" required>Planet B</label>
-              <label><input type="radio" name="Q2" value="Planet C" required>Planet C</label>
-            </div>
-          </div>
-          <div class="jspsych-survey-multi-catch-question">
-            <p>Which ship leads to this attack?</p>
-            <div class="jspsych-survey-multi-catch-options">
-              <label><input type="radio" name="Q3" value="Ship 1" required>Ship 1</label>
-              <label><input type="radio" name="Q3" value="Ship 2" required>Ship 2</label>
-              <label><input type="radio" name="Q3" value="Ship 3" required>Ship 3</label>
-            </div>
-          </div>
-          <div class="jspsych-survey-multi-catch-nav">
-            <button id="backButton" class="jspsych-btn">${trial.button_label_previous}</button>
-            <button type="submit" id="submitButton" class="jspsych-btn">${trial.button_label_next}</button>
-          </div>
-        </form>
-      `;
-  
-      return html;
-    }
+        `).join('')}
+      </div>
+    `).join('')}
+  `;
+  return html;
+}
   
     // Function to show an instruction page
     function showInstructionPage() {
