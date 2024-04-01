@@ -730,32 +730,36 @@ var cont_catch = {
     <div class="jspsych-instructions-advanced-container">
     <div class="jspsych-instructions-advanced-row">
       <div class="jspsych-instructions-advanced-cell">
+
         <img src="${stim_list[0]}" class="jspsych-instructions-advanced-image">
+        <p>Planet A:</p>
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
         <img src="${ship_list[0]}" class="jspsych-instructions-advanced-image">
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
         <div class="jspsych-instructions-advanced-outcome">${win_100_text}</div>
-        <p>Planet A: Friendly ships (no damage)</p>
+
       </div>
     </div>
     <div class="jspsych-instructions-advanced-row">
       <div class="jspsych-instructions-advanced-cell">
         <img src="${stim_list[1]}" class="jspsych-instructions-advanced-image">
+        <p>Planet B:</p>
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
         <img src="${ship_list[1]}" class="jspsych-instructions-advanced-image">
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
         <div class="jspsych-instructions-advanced-outcome">${ship_outcome_1_unshielded}</div>
-        <p>Planet B: Pirate ships (damage)</p>
+
       </div>
     </div>
     <div class="jspsych-instructions-advanced-row">
       <div class="jspsych-instructions-advanced-cell">
         <img src="${stim_list[2]}" class="jspsych-instructions-advanced-image">
+        <p>Planet C:</p>
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
         <img src="${ship_list[2]}" class="jspsych-instructions-advanced-image">
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
         <div class="jspsych-instructions-advanced-outcome">${ship_outcome_2_unshielded}</div>
-        <p>Planet C: Pirate ships (damage)</p>
+
       </div>
     </div>
   </div>
