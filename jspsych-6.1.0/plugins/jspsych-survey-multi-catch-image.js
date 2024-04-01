@@ -81,7 +81,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         default: null,
         description: 'HTML-formatted string containing the instructions to display when an incorrect answer is given.'
       },
-      attack_text_1: {
+      attack_text: {
         type: jsPsych.plugins.parameterType.HTML_STRING,
         pretty_name: 'Attack Text',
         default: null,
@@ -95,8 +95,6 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       }
     }
   };
-
-
   plugin.trial = function(display_element, trial) {
     var currentInstructionPage = 0;
     var startTime = performance.now();
@@ -126,6 +124,38 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       var html = `
         ${preamble}
         <form id="jspsych-survey-multi-catch-form">
+          <div class="jspsych-survey-multi-catch-question">
+            <p>${trial.attack_text}</p>
+            <div class="jspsych-survey-multi-catch-options">
+              <label><input type="radio" name="Q0" value="Planet A" required>Planet A</label>
+              <label><input type="radio" name="Q0" value="Planet B" required>Planet B</label>
+              <label><input type="radio" name="Q0" value="Planet C" required>Planet C</label>
+            </div>
+          </div>
+          <div class="jspsych-survey-multi-catch-question">
+            <p>Which ship leads to this attack?</p>
+            <div class="jspsych-survey-multi-catch-options">
+              <label><input type="radio" name="Q1" value="Ship 1" required>Ship 1</label>
+              <label><input type="radio" name="Q1" value="Ship 2" required>Ship 2</label>
+              <label><input type="radio" name="Q1" value="Ship 3" required>Ship 3</label>
+            </div>
+          </div>
+          <div class="jspsych-survey-multi-catch-question">
+            <p>${trial.attack_text_2}</p>
+            <div class="jspsych-survey-multi-catch-options">
+              <label><input type="radio" name="Q2" value="Planet A" required>Planet A</label>
+              <label><input type="radio" name="Q2" value="Planet B" required>Planet B</label>
+              <label><input type="radio" name="Q2" value="Planet C" required>Planet C</label>
+            </div>
+          </div>
+          <div class="jspsych-survey-multi-catch-question">
+            <p>Which ship leads to this attack?</p>
+            <div class="jspsych-survey-multi-catch-options">
+              <label><input type="radio" name="Q3" value="Ship 1" required>Ship 1</label>
+              <label><input type="radio" name="Q3" value="Ship 2" required>Ship 2</label>
+              <label><input type="radio" name="Q3" value="Ship 3" required>Ship 3</label>
+            </div>
+          </div>
           <div class="jspsych-survey-multi-catch-nav">
             <button id="backButton" class="jspsych-btn">${trial.button_label_previous}</button>
             <button type="submit" id="submitButton" class="jspsych-btn">${trial.button_label_next}</button>
@@ -178,60 +208,39 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     function showCatchQuestions() {
       var catchQuestionsHtml = createCatchQuestions();
       display_element.innerHTML = catchQuestionsHtml;
-
+  
       display_element.querySelector('#backButton').addEventListener('click', function() {
         currentInstructionPage = instructionPages.length - 1;
         showInstructionPage();
       });
-
+  
       display_element.querySelector('#jspsych-survey-multi-catch-form').addEventListener('submit', function(event) {
         event.preventDefault();
-        var selectedShips = [];
-        var checkboxes_ships = document.querySelectorAll('input[name="Q0"]:checked');
-        for (var i = 0; i < checkboxes_ships.length; i++) {
-          var ship_index = parseInt(checkboxes_ships[i].value.split(' ')[1]) - 1;
-          selectedShips.push(ship_index);
-        }
-
-        var selectedPlanets = [];
-        var checkboxes_planets = document.querySelectorAll('input[name="Q1"]:checked');
-        for (var i = 0; i < checkboxes_planets.length; i++) {
-          var planet_index = parseInt(checkboxes_planets[i].value.split(' ')[1]) - 1;
-          selectedPlanets.push(planet_index);
-        }
-
-        var correctShips = [];
-        var correctPlanets = [];
-        for (var i = 0; i < catchQuestions.ship_attack_damage.length; i++) {
-          if (catchQuestions.ship_attack_damage[i] !== 0) {
-            correctShips.push(i);
-            correctPlanets.push(i);
-          }
-        }
-
-        var allCorrectShips = selectedShips.length === correctShips.length;
-        for (var i = 0; i < correctShips.length; i++) {
-          if (!selectedShips.includes(correctShips[i])) {
-            allCorrectShips = false;
-            break;
-          }
-        }
-
-        var allCorrectPlanets = selectedPlanets.length === correctPlanets.length;
-        for (var i = 0; i < correctPlanets.length; i++) {
-          if (!selectedPlanets.includes(correctPlanets[i])) {
-            allCorrectPlanets = false;
-            break;
-          }
-        }
-
+  
+        var selectedAnswer1 = document.querySelector('input[name="Q0"]:checked').value;
+        var selectedAnswer2 = document.querySelector('input[name="Q1"]:checked').value;
+        var selectedAnswer3 = document.querySelector('input[name="Q2"]:checked').value;
+        var selectedAnswer4 = document.querySelector('input[name="Q3"]:checked').value;
+  
+        var correctAnswer1 = catchQuestions.ship_attack_damage[0] !== 0 ? 'Planet A' : 'Planet B';
+        var correctAnswer2 = catchQuestions.ship_attack_damage[0] !== 0 ? 'Ship 1' : 'Ship 2';
+        var correctAnswer3 = catchQuestions.ship_attack_damage[1] !== 0 ? 'Planet B' : 'Planet C';
+        var correctAnswer4 = catchQuestions.ship_attack_damage[1] !== 0 ? 'Ship 2' : 'Ship 3';
+  
         catchResponses = {
-          ships: selectedShips,
-          planets: selectedPlanets
+          answer1: selectedAnswer1,
+          answer2: selectedAnswer2,
+          answer3: selectedAnswer3,
+          answer4: selectedAnswer4
         };
-
-        contingencies_correct = allCorrectShips && allCorrectPlanets;
-
+  
+        contingencies_correct = (
+          selectedAnswer1 === correctAnswer1 &&
+          selectedAnswer2 === correctAnswer2 &&
+          selectedAnswer3 === correctAnswer3 &&
+          selectedAnswer4 === correctAnswer4
+        );
+  
         if (contingencies_correct) {
           endTrial();
         } else {
@@ -304,12 +313,11 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       display_element.appendChild(modalOverlay);
     }
   
-  
     // Function to end the trial
     function endTrial() {
       var endTime = performance.now();
       var responseTime = endTime - startTime;
-
+  
       var trialData = {
         instruction_pages: JSON.stringify(instructionPages),
         catch_questions: JSON.stringify(catchQuestions),
@@ -318,7 +326,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         failed_submission_count: failedSubmissionCount,
         rt: responseTime
       };
-
+  
       display_element.innerHTML = '';
       jsPsych.finishTrial(trialData);
     }
@@ -326,6 +334,5 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     // Start the trial by showing the first instruction page
     showInstructionPage();
   };
-
   return plugin;
 })();
