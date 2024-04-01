@@ -1113,22 +1113,24 @@ timeline.push(cont_catch);
 
 
 // // // Phase3, ships
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-// timeline.push(valence_p2);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+timeline.push(valence_p2);
 
 
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
 // timeline.push(p1_q3_triangle); //rename
 // timeline.push(p1_q4_triangle); //rename
 
 
 //Debrief
 timeline.push(debrief_block);
-// timeline.push(contact_block); // disabled
 
-//Exit experiment (uncomment this when running live experiments)
+//Disabled blocks
+//timeline.push(contact_block); // disabled
+
+//Exit experiment (uncomment to hide JSON data at program end)
 // timeline.push(exit_experiment);
 
 // Run the experiment
