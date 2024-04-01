@@ -230,6 +230,7 @@ const valence_p1 = {
   stimulus_5: stim_list[2],
   stim_text_5: 'Planet C (right)',
   labels: valence_labels,
+  button_label: 'Continue',
   stimulus_height: inf_stim_height,
   slider_width: inf_slider_width,
   require_movement: false,
