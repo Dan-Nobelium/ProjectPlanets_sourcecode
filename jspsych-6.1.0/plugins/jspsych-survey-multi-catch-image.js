@@ -120,7 +120,6 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
       `;
       return pageHtml;
     }
-
     function createCatchQuestions() {
       var html = `
         <form id="jspsych-survey-multi-catch-form">
@@ -157,6 +156,18 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
           </div>
         </form>
       `;
+    
+      // Attach event listener to the back button
+      setTimeout(function() {
+        var backButton = document.getElementById('backButton');
+        if (backButton) {
+          backButton.addEventListener('click', function() {
+            console.log('Back button clicked');
+            previousPage();
+          });
+        }
+      }, 0);
+    
       return html;
     }
 
@@ -223,11 +234,7 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     function previousPage() {
       if (currentInstructionPage > 0) {
         currentInstructionPage--;
-        if (currentInstructionPage === instructionPages.length - 1) {
-          showCatchQuestions();
-        } else {
-          showInstructionPage();
-        }
+        showInstructionPage();
       }
     }
 
