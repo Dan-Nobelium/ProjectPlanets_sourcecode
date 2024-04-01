@@ -80,7 +80,19 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
         pretty_name: 'Allow keys',
         default: true,
         description: 'If true, the subject can use keyboard keys to navigate the pages.'
-      }
+      },
+      attack_text_1: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Attack Text',
+        default: null,
+        description: 'HTML-formatted string representing the attack text to display.'
+      },
+      attack_text_2: {
+        type: jsPsych.plugins.parameterType.HTML_STRING,
+        pretty_name: 'Attack Text',
+        default: null,
+        description: 'HTML-formatted string representing the attack text to display.'
+      },
     }
   };
 
@@ -211,7 +223,11 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
     function previousPage() {
       if (currentInstructionPage > 0) {
         currentInstructionPage--;
-        showInstructionPage();
+        if (currentInstructionPage === instructionPages.length - 1) {
+          showCatchQuestions();
+        } else {
+          showInstructionPage();
+        }
       }
     }
 

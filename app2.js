@@ -765,15 +765,16 @@ var cont_catch = {
     </div>
   </div>
   <p>Based on the information above, please answer the following questions:</p>
-    `
+    `,
   ],
+
   
   // Array of HTML strings representing the question prompts
   question_prompts: [
-    'Which planet leads to this attack?',
-    'Which ship leads to this attack?',
-    'Which planet leads to this attack?',
-    'Which ship leads to this attack?'
+    `Which planet leads to this attack? ${ship_outcome_1_unshielded}`,
+    `Which ship leads to this attack? ${ship_outcome_1_unshielded}`,
+    `Which planet leads to this attack? ${ship_outcome_2_unshielded}`,
+    `Which ship leads to this attack?  ${ship_outcome_2_unshielded}`,
   ],
   planet_options: stim_list,
   ship_option_1: ship_list[0],
