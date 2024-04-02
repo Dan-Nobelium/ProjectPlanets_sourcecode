@@ -1,8 +1,8 @@
-jsPsych.plugins['html-slider-triangle'] = (function() {
+jsPsych.plugins['html-slider-triplet'] = (function() {
   var plugin = {};
 
   plugin.info = {
-    name: 'html-slider-triangle',
+    name: 'html-slider-triplet',
     description: 'A plugin for creating a 3D triangle slider',
     parameters: {
       stimulus_all: {
