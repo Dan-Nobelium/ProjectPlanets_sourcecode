@@ -49,7 +49,6 @@ jsPsych.plugins['html-slider-triplet'] = (function() {
       }
     }
   };
-
   plugin.trial = function(display_element, trial) {
     var planetOrder = trial.stimulus_all;
     var planetColors = trial.planetColors;
@@ -148,21 +147,23 @@ jsPsych.plugins['html-slider-triplet'] = (function() {
   
       var startAngle = 0;
       for (var i = 0; i < data.length; i++) {
-        var endAngle = startAngle + data[i].value * 360;
+        if (data[i].value > 0) {
+          var endAngle = startAngle + data[i].value * 360;
   
-        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        var largeArcFlag = data[i].value > 0.5 ? 1 : 0;
-        var pathData = [
-          'M', center, center,
-          'L', center + radius * Math.cos(startAngle * Math.PI / 180), center + radius * Math.sin(startAngle * Math.PI / 180),
-          'A', radius, radius, 0, largeArcFlag, 1, center + radius * Math.cos(endAngle * Math.PI / 180), center + radius * Math.sin(endAngle * Math.PI / 180),
-          'Z'
-        ].join(' ');
-        path.setAttribute('d', pathData);
-        path.setAttribute('fill', data[i].color);
-        svg.appendChild(path);
+          var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          var largeArcFlag = data[i].value > 0.5 ? 1 : 0;
+          var pathData = [
+            'M', center, center,
+            'L', center + radius * Math.cos(startAngle * Math.PI / 180), center + radius * Math.sin(startAngle * Math.PI / 180),
+            'A', radius, radius, 0, largeArcFlag, 1, center + radius * Math.cos(endAngle * Math.PI / 180), center + radius * Math.sin(endAngle * Math.PI / 180),
+            'Z'
+          ].join(' ');
+          path.setAttribute('d', pathData);
+          path.setAttribute('fill', data[i].color);
+          svg.appendChild(path);
   
-        startAngle = endAngle;
+          startAngle = endAngle;
+        }
       }
     }
   
@@ -199,6 +200,9 @@ jsPsych.plugins['html-slider-triplet'] = (function() {
     continueButton.addEventListener('click', function() {
       end_trial();
     });
+  
+    // Initial pie chart update
+    updatePieChart();
   };
 
 return plugin;
