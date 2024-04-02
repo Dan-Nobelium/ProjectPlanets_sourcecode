@@ -1123,7 +1123,7 @@ timeline.push(p1_q4_triangle);
 
 
 //Debrief
-timeline.push(debrief_block);
+// timeline.push(debrief_block);
 
 //Disabled blocks
 //timeline.push(contact_block); // disabled
