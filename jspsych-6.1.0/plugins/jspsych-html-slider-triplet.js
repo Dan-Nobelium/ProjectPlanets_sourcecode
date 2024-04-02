@@ -68,8 +68,8 @@ jsPsych.plugins['html-slider-triplet'] = (function() {
                 <img src="${planet}" class="jspsych-html-slider-triplet-stimulus" style="height: ${trial.stimulus_height}px;"/>
                 <span style="margin-top: 10px;">Planet ${String.fromCharCode(65 + index)}</span>
               </div>
-              <input type="range" class="jspsych-html-slider-triplet-slider jspsych-slider" id="slider-${index}" min="0" max="100" value="${100 / planetOrder.length}" step="1" style="width: 100%;"/>
-              <span id="slider-value-${index}" class="jspsych-slider-value">${Math.round(100 / planetOrder.length)}%</span>
+              <input type="range" class="jspsych-html-slider-triplet-slider jspsych-slider" id="slider-${index}" min="0" max="100" value="33" step="1" style="width: 100%;"/>
+              <span id="slider-value-${index}" class="jspsych-slider-value">33%</span>
             </div>
           `).join('')}
         </div>
@@ -89,7 +89,7 @@ jsPsych.plugins['html-slider-triplet'] = (function() {
     display_element.innerHTML = html;
   
     // Initial state variables
-    var proportions = Array(planetOrder.length).fill(100 / planetOrder.length);
+    var proportions = Array(planetOrder.length).fill(33);
   
     // Get DOM elements
     var sliders = display_element.querySelectorAll('.jspsych-html-slider-triplet-slider');
@@ -98,10 +98,10 @@ jsPsych.plugins['html-slider-triplet'] = (function() {
   
     // Update slider value display and store proportions
     function updateSliderValue(index, value) {
+      value = Math.max(0, Math.min(100, value)); // Ensure value is between 0 and 100
       document.getElementById(`slider-value-${index}`).textContent = value + '%';
       proportions[index] = parseInt(value);
       updatePieChart();
-      enforceProportionSum();
     }
   
     // Event listeners for sliders
@@ -110,21 +110,6 @@ jsPsych.plugins['html-slider-triplet'] = (function() {
         updateSliderValue(index, this.value);
       });
     });
-  
-    // Function to enforce the sum of proportions to be 100%
-    function enforceProportionSum() {
-      var sum = proportions.reduce((a, b) => a + b, 0);
-      if (sum !== 100) {
-        var diff = 100 - sum;
-        var nonZeroIndices = proportions.map((p, i) => p > 0 ? i : -1).filter(i => i !== -1);
-        var adjustment = Math.round(diff / nonZeroIndices.length);
-        nonZeroIndices.forEach(i => {
-          proportions[i] += adjustment;
-          sliders[i].value = proportions[i];
-          updateSliderValue(i, proportions[i]);
-        });
-      }
-    }
   
     // Function to update the pie chart
     function updatePieChart() {
@@ -212,11 +197,7 @@ jsPsych.plugins['html-slider-triplet'] = (function() {
   
     // Event listener for the continue button
     continueButton.addEventListener('click', function() {
-      if (trial.require_movement && proportions.every(function(p) { return p === 100 / planetOrder.length; })) {
-        alert('Please adjust the sliders before continuing.');
-      } else {
-        end_trial();
-      }
+      end_trial();
     });
   };
 
