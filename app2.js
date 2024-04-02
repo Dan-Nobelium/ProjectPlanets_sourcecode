@@ -721,8 +721,13 @@ var p2_q4_triangle = {
 // 		if (i === nBlocks_p2-4) {
 
 var contingenciescorrect = false;
-
+// Define variables for the correct answers
+const correctPlanet1 = 'B';
+const correctShip1 = ship_list[1];
+const correctPlanet2 = 'C';
+const correctShip2 = ship_list[2];
 var cont_catch = {
+  
   type: 'survey-multi-catch-image',
   
   // Array of HTML strings representing the content for each instruction page
@@ -782,10 +787,10 @@ var cont_catch = {
   ship_option_2: ship_list[1],
   ship_option_3: ship_list[2],
   correct_answers: [
-    'B', // Planet B
-    ship_list[1], // Ship 3
-    'C', // Planet C
-    ship_list[0] // Ship 1
+    correctPlanet1,
+    correctShip1,
+    correctPlanet2,
+    correctShip2
   ],
   
   // Object representing the mapping between ships and planets
