@@ -737,7 +737,7 @@ var cont_catch = {
         <img src="${stim_list[0]}" class="jspsych-instructions-advanced-image">
         <p>Planet A: </p>
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <img src="${ship_list[0]}" class="jspsych-instructions-advanced-image">
+        <img src="${ship_list[1]}" class="jspsych-instructions-advanced-image">
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
         <div class="jspsych-instructions-advanced-outcome">${win_100_text }</div>
 
@@ -748,7 +748,7 @@ var cont_catch = {
         <img src="${stim_list[1]}" class="jspsych-instructions-advanced-image">
         <p>Planet B:</p>
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <img src="${ship_list[1]}" class="jspsych-instructions-advanced-image">
+        <img src="${ship_list[0]}" class="jspsych-instructions-advanced-image">
         <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
         <div class="jspsych-instructions-advanced-outcome">${ship_outcome_1_unshielded}</div>
 
@@ -784,9 +784,9 @@ var cont_catch = {
   ship_option_3: ship_list[2],
   correct_answers: [
     'B', // Planet B
-    ship_list[1], // Ship 3
+    ship_list[0], // Ship 3
     'C', // Planet C
-    ship_list[0] // Ship 1
+    ship_list[2] // Ship 1
   ],
   
   // Object representing the mapping between ships and planets
