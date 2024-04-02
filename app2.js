@@ -1116,8 +1116,6 @@ timeline.push(cont_catch);
 // Phase3, ships
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
 timeline.push(valence_p2);
-
-
 timeline.push(infer_p2_A);
 timeline.push(infer_p2_B);
 timeline.push(infer_p2_C);
