@@ -488,10 +488,12 @@ let planet_ship = {
           main_stimulus: stim_list[0],
           main_stimulus_height: main_stim_height,
           prompt: inference_prompt[0],
-          ship_outcome_1: ship_outcome_1_unshielded,
-          ship_outcome_2: ship_outcome_2_unshielded,
+          ship_outcome_1: win_100_text,
+          ship_outcome_2: ship_outcome_1_unshielded,
+          ship_outcome_3: ship_outcome_2_unshielded,
           stim_text_1: '',
           stim_text_2: '',
+          stim_text_3: '',
           stimulus_4: inf_img_p2_A[2].stimulus,
           stimulus_5: inf_img_p2_A[3].stimulus,
           stimulus_6: inf_img_p2_A[4].stimulus,
@@ -1085,18 +1087,18 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 // Phase 1, no ships
 // addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-timeline.push(valence_p1);
-timeline.push(infer_p1_A);
-timeline.push(infer_p1_B);
-timeline.push(infer_p1_C);
-timeline.push(p1_q3_triangle);
-timeline.push(p1_q4_triangle);
+// timeline.push(valence_p1);
+// timeline.push(infer_p1_A);
+// timeline.push(infer_p1_B);
+// timeline.push(infer_p1_C);
+// timeline.push(p1_q3_triangle);
+// timeline.push(p1_q4_triangle);
 
 
 // Phase2, ships
-timeline.push(phaseTwoInstructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-timeline.push(valence_p2);
+// timeline.push(phaseTwoInstructions);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// timeline.push(valence_p2);
 timeline.push(infer_p2_A);
 timeline.push(infer_p2_B);
 timeline.push(infer_p2_C);
