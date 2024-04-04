@@ -60,32 +60,24 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   // Helper functions
   // =================
 
-  // Get image position for a given index
+  // Get image position for a given index (updated for equilateral triangle)
   function getImagePosition(index, sliderWidth, sliderHeight, stimulusHeight) {
-    switch (index) {
-      case 0:
-        return `top: 0; left: 0; transform: translate(-50%, -${0 + stimulusHeight / 2}%);`;
-      case 1:
-        return `top: 0; right: 0; transform: translate(50%, -${0 + stimulusHeight / 2}%);`;
-      case 2:
-        return `bottom: 0; left: 50%; transform: translate(-50%, ${0 + stimulusHeight / 2}%);`;
-      default:
-        return '';
-    }
+    var angle = (index * 120 + 90) * Math.PI / 180;
+    var radius = sliderWidth / 2 - stimulusHeight / 2;
+    var x = sliderWidth / 2 + radius * Math.cos(angle);
+    var y = sliderHeight - radius * Math.sin(angle);
+
+    return `top: ${y}px; left: ${x}px; transform: translate(-50%, -50%);`;
   }
 
-  // Get label position for a given index
-  function getLabelPosition(index) {
-    switch (index) {
-      case 0:
-        return 'top: 0; left: 0; transform: translate(-50%, -100%);';
-      case 1:
-        return 'top: 0; right: 0; transform: translate(50%, -100%);';
-      case 2:
-        return 'bottom: 0; left: 50%; transform: translate(-50%, 100%);';
-      default:
-        return '';
-    }
+  // Get label position for a given index (updated for equilateral triangle)
+  function getLabelPosition(index, sliderWidth, sliderHeight) {
+    var angle = (index * 120 + 90) * Math.PI / 180;
+    var radius = sliderWidth / 2 * 0.8;
+    var x = sliderWidth / 2 + radius * Math.cos(angle);
+    var y = sliderHeight - radius * Math.sin(angle);
+
+    return `top: ${y}px; left: ${x}px; transform: translate(-50%, -50%);`;
   }
 
   // Get default proportion for a given index
@@ -110,10 +102,36 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     return `conic-gradient(${colorStops.join(', ')})`;
   }
 
+  // Get barycentric coordinates of a point inside the triangle (updated to handle non-equilateral triangles)
+  function getBarycentricCoordinates(x, y, x1, y1, x2, y2, x3, y3) {
+    var detT = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3);
+    var lambda1 = ((y2 - y3) * (x - x3) + (x3 - x2) * (y - y3)) / detT;
+    var lambda2 = ((y3 - y1) * (x - x3) + (x1 - x3) * (y - y3)) / detT;
+    var lambda3 = 1 - lambda1 - lambda2;
+    return [lambda1, lambda2, lambda3];
+  }
+
+  // Check if a point is inside the triangle
+  function isInsideTriangle(x, y, x1, y1, x2, y2, x3, y3) {
+    var [lambda1, lambda2, lambda3] = getBarycentricCoordinates(x, y, x1, y1, x2, y2, x3, y3);
+    return lambda1 >= 0 && lambda2 >= 0 && lambda3 >= 0;
+  }
+
   // Trial function
   // ==============
 
   plugin.trial = function(display_element, trial) {
+    // Parameter validation and error handling
+    if (!Array.isArray(trial.stimulus_all) || trial.stimulus_all.length !== 3) {
+      console.error('Error: stimulus_all should be an array of 3 image paths.');
+      return;
+    }
+
+    if (typeof trial.planetColors !== 'object' || Object.keys(trial.planetColors).length !== 3) {
+      console.error('Error: planetColors should be an object with 3 key-value pairs.');
+      return;
+    }
+
     var planetOrder = trial.stimulus_all;
 
     // HTML structure
@@ -129,18 +147,23 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
           <!-- Planet labels -->
           ${planetOrder.map((planet, index) => `
-            <div id="planet-${index}-label" style="position: absolute; ${getLabelPosition(index)}; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)} (${getDefaultProportion(index)}%)</div>
+            <div id="planet-${index}-label" style="position: absolute; ${getLabelPosition(index, trial.slider_width, trial.slider_height)}; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)} (${getDefaultProportion(index)}%)</div>
           `).join('')}
 
-          <!-- Triangle -->
-          <div id="jspsych-html-slider-triangle" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;"></div>
+          <!-- Equilateral Triangle -->
+          <div id="jspsych-html-slider-triangle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: ${trial.slider_width}px; height: ${trial.slider_height}px; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); background-color: #ddd;" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="33" aria-label="Triangle Slider" tabindex="0"></div>
 
           <!-- Handle -->
           <div id="jspsych-html-slider-triangle-handle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; background-color: #333; border-radius: 50%; cursor: pointer;"></div>
         </div>
 
         <!-- Pie chart -->
-        <div id="jspsych-html-slider-triangle-pie-chart" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 150px; height: 150px; border-radius: 50%; background-image: ${getPieChartGradient(trial.planetColors, planetOrder)}"></div>
+        <div id="jspsych-html-slider-triangle-pie-chart" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 150px; height: 150px; border-radius: 50%; background-image: ${getPieChartGradient(trial.planetColors, planetOrder)}">
+          <!-- Pie chart labels or legend -->
+          ${planetOrder.map((planet, index) => `
+            <div style="position: absolute; top: ${index * 33}%; left: 0; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)}</div>
+          `).join('')}
+        </div>
       </div>
 
       <!-- Continue button -->
@@ -191,10 +214,9 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
     // Calculate the coordinates of the triangle corners relative to the document
     var triangleRect = triangle.getBoundingClientRect();
-    var topLeftCorner = { x: triangleRect.left, y: triangleRect.top + triangleRect.height };
-    var topRightCorner = { x: triangleRect.right, y: triangleRect.top + triangleRect.height };
-    var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.top };
-
+    var topLeftCorner = { x: triangleRect.left, y: triangleRect.top };
+    var topRightCorner = { x: triangleRect.right, y: triangleRect.top };
+    var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.top + triangleRect.height };
 
     // Update handle position and proportions based on mouse position
     function updateHandlePosition(mouseX, mouseY) {
@@ -207,26 +229,54 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       proportions = updateProportions(x, y);
     }
 
-    // Update proportions and labels
-function updateProportions(x, y) {
-  var topProportion = (1 - y / triangleRect.height) * (1 - x / triangleRect.width) * 100;
-  var rightProportion = (1 - y / triangleRect.height) * (x / triangleRect.width) * 100;
-  var bottomProportion = (y / triangleRect.height) * 100;
+    // Update proportions and labels (updated to handle mouse outside the triangle)
+    function updateProportions(x, y) {
+      var x1 = trial.slider_width / 2;
+      var y1 = 0;
+      var x2 = 0;
+      var y2 = trial.slider_height;
+      var x3 = trial.slider_width;
+      var y3 = trial.slider_height;
 
-  proportions = [topProportion, rightProportion, bottomProportion];
+      if (isInsideTriangle(x, y, x1, y1, x2, y2, x3, y3)) {
+        var barycentricCoords = getBarycentricCoordinates(x, y, x1, y1, x2, y2, x3, y3);
+        var topProportion = barycentricCoords[0] * 100;
+        var leftProportion = barycentricCoords[1] * 100;
+        var rightProportion = barycentricCoords[2] * 100;
 
-  // Update the labels with the new proportions
-  planetOrder.forEach((planet, index) => {
-    var label = display_element.querySelector(`#planet-${index}-label`);
-    label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}%)`;
-  });
+        proportions = [topProportion, leftProportion, rightProportion];
 
-  // Update the pie chart rendering
-  pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
+        // Normalize proportions to sum up to 100%
+        var sum = proportions.reduce((a, b) => a + b, 0);
+        proportions = proportions.map(proportion => (proportion / sum) * 100);
+      } else {
+        // Mouse is outside the triangle, set default proportions
+        proportions = [33, 33, 34];
+      }
 
-  // Return the updated proportions array
-  return proportions;
-}
+      // Update the labels with the new proportions
+      planetOrder.forEach((planet, index) => {
+        var label = display_element.querySelector(`#planet-${index}-label`);
+        label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}%)`;
+      });
+
+      // Update the pie chart rendering
+      pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
+
+      // Return the updated proportions array
+      return proportions;
+    }
+
+    // Event listeners for window resizing
+    function handleResize() {
+      // Update triangle dimensions and positions
+      triangleRect = triangle.getBoundingClientRect();
+      topLeftCorner = { x: triangleRect.left, y: triangleRect.top };
+      topRightCorner = { x: triangleRect.right, y: triangleRect.top };
+      bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.top + triangleRect.height };
+    }
+
+    window.addEventListener('resize', handleResize);
 
     // Event listener for mousemove event on the triangle
     triangle.addEventListener('mousemove', function(event) {
@@ -267,6 +317,82 @@ function updateProportions(x, y) {
       isDragging = false;
     });
 
+    // Touch event handling
+    function handleTouchMove(event) {
+      if (event.touches.length === 1) {
+        var touch = event.touches[0];
+        var mouseX = touch.clientX;
+        var mouseY = touch.clientY;
+        updateHandlePosition(mouseX, mouseY);
+      }
+    }
+
+    function handleTouchStart(event) {
+      if (event.touches.length === 1) {
+        var touch = event.touches[0];
+        var mouseX = touch.clientX;
+        var mouseY = touch.clientY;
+        updateHandlePosition(mouseX, mouseY);
+        response.clicked = true;
+        var timestamp = performance.now();
+        response.timestamps.clicks.push(timestamp);
+        response.locations.clicks.push({
+          x: mouseX,
+          y: mouseY,
+          proportions: proportions
+        });
+      }
+    }
+
+    function handleTouchEnd(event) {
+      isDragging = false;
+    }
+
+    triangle.addEventListener('touchmove', handleTouchMove);
+    triangle.addEventListener('touchstart', handleTouchStart);
+    triangle.addEventListener('touchend', handleTouchEnd);
+
+    // Continue button visibility
+    function updateContinueButtonVisibility() {
+      if (response.clicked) {
+        continueButton.style.display = 'block';
+      } else {
+        continueButton.style.display = 'none';
+      }
+    }
+
+    triangle.addEventListener('mousedown', updateContinueButtonVisibility);
+    triangle.addEventListener('touchstart', updateContinueButtonVisibility);
+
+    // Keyboard navigation support
+    function handleKeyDown(event) {
+      var key = event.key;
+      var x = response.locations.clicks[response.locations.clicks.length - 1].x;
+      var y = response.locations.clicks[response.locations.clicks.length - 1].y;
+
+      switch (key) {
+        case 'ArrowUp':
+          y -= 10;
+          break;
+        case 'ArrowDown':
+          y += 10;
+          break;
+        case 'ArrowLeft':
+          x -= 10;
+          break;
+        case 'ArrowRight':
+          x += 10;
+          break;
+        default:
+          return;
+      }
+
+      updateHandlePosition(x, y);
+      event.preventDefault();
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
     // Function to end the trial
     var end_trial = function() {
       // Remove event listeners
@@ -274,6 +400,11 @@ function updateProportions(x, y) {
       triangle.removeEventListener('mousedown', updateHandlePosition);
       document.removeEventListener('mouseup', updateHandlePosition);
       triangle.removeEventListener('mouseleave', updateHandlePosition);
+      triangle.removeEventListener('touchmove', handleTouchMove);
+      triangle.removeEventListener('touchstart', handleTouchStart);
+      triangle.removeEventListener('touchend', handleTouchEnd);
+      document.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleResize);
 
       // Set the final proportions
       response.proportions = proportions;
