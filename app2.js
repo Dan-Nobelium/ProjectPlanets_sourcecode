@@ -637,7 +637,7 @@ var right_label = "";
 
 // Question 3
 var p1_q3_triangle = {
-  type: 'html-slider-triplet',
+  type: 'html-slider-triangle',
   prompt: "Reflecting back on what you did in the <b>most recent block</b>, <p>what proportion of your recent interactions were with each planet:",
   stimulus_all: stim_list,
   planetColors: planetColors,
@@ -1095,7 +1095,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
-// timeline.push(p1_q3_triangle);
+timeline.push(p1_q3_triangle);
 // timeline.push(p1_q4_triangle);
 
 
