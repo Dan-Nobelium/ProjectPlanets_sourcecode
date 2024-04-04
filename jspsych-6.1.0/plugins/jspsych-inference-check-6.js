@@ -21,6 +21,12 @@ jsPsych.plugins['inference-check-6'] = (function() {
         default: '',
         description: 'The HTML content for ship outcome 2'
       },
+      ship_outcome_3: {
+        type: jsPsych.plugins.parameterType.STRING,
+        pretty_name: 'Ship outcome 3',
+        default: '',
+        description: 'The HTML content for ship outcome 3'
+      },
       main_stimulus: {
         type: jsPsych.plugins.parameterType.IMAGE,
         pretty_name: 'Main stimulus',
