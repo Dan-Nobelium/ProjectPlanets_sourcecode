@@ -1,10 +1,10 @@
-//this plugin actually does 5 inference checks, but loads text variables for the first 2
-
 jsPsych.plugins['inference-check-6'] = (function() {
   var plugin = {};
 
+  // Preload the stimulus
   jsPsych.pluginAPI.registerPreload('inference-check-6', 'stimulus', 'image');
 
+  // Plugin info
   plugin.info = {
     name: 'inference-check-6',
     description: '',
@@ -182,11 +182,12 @@ jsPsych.plugins['inference-check-6'] = (function() {
     }
   }
 
+  // Trial function
   plugin.trial = function(display_element, trial) {
-
+    // Create the HTML for the trial
     var html = '<div id="jspsych-inference-check-6-wrapper" style="margin: 100px 0px;">';
 
-    // main stimulus
+    // Add the main stimulus
     html += '<div id="jspsych-inference-check-6-stimulus">';
     html += '<img src="'+trial.main_stimulus+'" style="';
     if(trial.main_stimulus_height !== null){
@@ -205,23 +206,23 @@ jsPsych.plugins['inference-check-6'] = (function() {
     html += '"></img>';
     html += '</div>';
 
-    // prompt
+    // Add the prompt
     if (trial.prompt !== null){
       html += trial.prompt + '<br><br><br><br>';
     }
 
-    // stimuli and sliders
-    for (var i = 1; i <= 5; i++) {
-      // ship outcome content for the first 2 stimuli
-      if (i <= 2) {
+    // Loop through the stimuli and sliders
+    for (var i = 1; i <= 6; i++) {
+      // Add the ship outcome content for the first 3 stimuli
+      if (i <= 3) {
         html += '<div id="jspsych-inference-check-6-stimulus">';
         html += trial['ship_outcome_' + i];
         html += '</div>';
       }
-      // image for the last 3 stimuli
+      // Add the image for the last 3 stimuli
       else {
         html += '<div id="jspsych-inference-check-6-stimulus">';
-        html += '<img src="'+trial['stimulus_' + (i+1)]+'" style="';
+        html += '<img src="'+trial['stimulus_' + i]+'" style="';
         if(trial.stimulus_height !== null){
           html += 'height:'+trial.stimulus_height+'px; '
           if(trial.stimulus_width == null && trial.maintain_aspect_ratio){
@@ -238,13 +239,13 @@ jsPsych.plugins['inference-check-6'] = (function() {
         html += '</div>';
       }
 
-      // stimulus text
-      if (trial['stim_text_' + (i <= 2 ? i : i+1)] !== null){
-        html += trial['stim_text_' + (i <= 2 ? i : i+1)];
+      // Add the stimulus text
+      if (trial['stim_text_' + i] !== null){
+        html += trial['stim_text_' + i];
       }
       html += '<br><br>';
 
-      // slider
+      // Add the slider
       if (trial.slider_text_top !== null){
         html += trial.slider_text_top;
       }
@@ -267,76 +268,90 @@ jsPsych.plugins['inference-check-6'] = (function() {
       html += '</div>';
       html += '</div>';
 
-      if (i < 5) {
+      // Add a separator between stimuli and sliders
+      if (i < 6) {
         html += '<br><br><br><hr><br><br><br>';
       }
     }
 
-    // add submit button
+    // Add the submit button
     html += '<button id="jspsych-inference-check-6-next" class="jspsych-btn" '+ (trial.require_movement ? "disabled" : "") + '>'+trial.button_label+'</button>';
 
-    display_element.innerHTML = html;
+    // Close the wrapper div
+    html += '</div>';
 
-    var response = {
-      rt: null,
-      responses: new Array(5).fill(null)
-    };
+// Display the HTML
+display_element.innerHTML = html;
 
-    if(trial.require_movement){
-      display_element.querySelector('#jspsych-inference-check-6-response-5').addEventListener('change', function(){
-        display_element.querySelector('#jspsych-inference-check-6-next').disabled = false;
-      })
-    }
+// Initialize the response object
+var response = {
+  rt: null,
+  responses: new Array(6).fill(null)
+};
 
-    display_element.querySelector('#jspsych-inference-check-6-next').addEventListener('click', function() {
-      // measure response time
-      var endTime = performance.now();
-      response.rt = endTime - startTime;
+// Disable the submit button if movement is required
+if(trial.require_movement){
+  display_element.querySelector('#jspsych-inference-check-6-response-6').addEventListener('change', function(){
+    display_element.querySelector('#jspsych-inference-check-6-next').disabled = false;
+  })
+}
 
-      // save responses
-      for (var i = 1; i <= 5; i++) {
-        response.responses[i - 1] = display_element.querySelector('#jspsych-inference-check-6-response-' + i).value;
-      }
+// Add event listener to the submit button
+display_element.querySelector('#jspsych-inference-check-6-next').addEventListener('click', function() {
+  // Measure the response time
+  var endTime = performance.now();
+  response.rt = endTime - startTime;
 
-      if(trial.response_ends_trial){
-        end_trial();
-      } else {
-        display_element.querySelector('#jspsych-inference-check-6-next').disabled = true;
-      }
+  // Save the responses
+  for (var i = 1; i <= 6; i++) {
+    response.responses[i - 1] = display_element.querySelector('#jspsych-inference-check-6-response-' + i).value;
+  }
 
-    });
+  // End the trial if response ends trial
+  if(trial.response_ends_trial){
+    end_trial();
+  } else {
+    // Disable the submit button after a response
+    display_element.querySelector('#jspsych-inference-check-6-next').disabled = true;
+  }
+});
 
-    function end_trial(){
+// Function to end the trial
+function end_trial(){
+  // Clear any remaining timeouts
+  jsPsych.pluginAPI.clearAllTimeouts();
 
-      jsPsych.pluginAPI.clearAllTimeouts();
-
-      // save data
-      var trialdata = {
-        "rt": response.rt,
-        "responses": JSON.stringify(response.responses)
-      };
-
-      display_element.innerHTML = '';
-
-      // next trial
-      jsPsych.finishTrial(trialdata);
-    }
-
-    if (trial.stimulus_duration !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
-        display_element.querySelector('#jspsych-inference-check-6-stimulus').style.visibility = 'hidden';
-      }, trial.stimulus_duration);
-    }
-
-    // end trial if trial_duration is set
-    if (trial.trial_duration !== null) {
-      jsPsych.pluginAPI.setTimeout(function() {
-        end_trial();
-      }, trial.trial_duration);
-    }
-
-    var startTime = performance.now();
+  // Prepare the trial data
+  var trialdata = {
+    "rt": response.rt,
+    "responses": JSON.stringify(response.responses)
   };
 
-  return plugin;
+  // Clear the display
+  display_element.innerHTML = '';
+
+  // Finish the trial and move to the next one
+  jsPsych.finishTrial(trialdata);
+}
+
+// Hide the stimulus if stimulus_duration is set
+if (trial.stimulus_duration !== null) {
+  jsPsych.pluginAPI.setTimeout(function() {
+    display_element.querySelector('#jspsych-inference-check-6-stimulus').style.visibility = 'hidden';
+  }, trial.stimulus_duration);
+}
+
+// End the trial if trial_duration is set
+if (trial.trial_duration !== null) {
+  jsPsych.pluginAPI.setTimeout(function() {
+    end_trial();
+  }, trial.trial_duration);
+}
+
+// Record the start time
+var startTime = performance.now();
+};
+
+// Return the plugin object
+return plugin;
 })();
