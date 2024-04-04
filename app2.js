@@ -217,18 +217,16 @@ var i = 1;
 
 
 const valence_p1 = {
-  type: 'valence-check-5',
+  type: 'valence-check-4',
   prompt: valence_q,
-  stimulus_1: ship_outcome_1_unshielded,
-  stim_text_1: '',
-  stimulus_2: ship_outcome_2_unshielded,
-  stim_text_2: '',
-  stimulus_3: stim_list[0],
-  stim_text_3: 'Planet A (left)',
-  stimulus_4: stim_list[1],
-  stim_text_4: 'Planet B (middle)',
-  stimulus_5: stim_list[2],
-  stim_text_5: 'Planet C (right)',
+  stimulus_1: 'img/win100.png',
+  stim_text_1: "Winning $100",
+  stimulus_2: stim_list[0],
+  stim_text_2: 'Planet A (left)',
+  stimulus_3: stim_list[1],
+  stim_text_3: 'Planet B (middle)',
+  stimulus_4: stim_list[2],
+  stim_text_4: 'Planet C (right)',
   labels: valence_labels,
   button_label: 'Continue',
   stimulus_height: inf_stim_height,
@@ -1075,18 +1073,18 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 
 // Induction //DONE
-timeline.push(fullscreen);
-timeline.push(consent_block);
-timeline.push(demographics_block);
-timeline.push(instructionCheckWithFeedback);
+// timeline.push(fullscreen);
+// timeline.push(consent_block);
+// timeline.push(demographics_block);
+// timeline.push(instructionCheckWithFeedback);
 
 // // Attention check //DONE
-timeline.push(cfi_block);
-timeline.push(htq_block);
-timeline.push(audit_block);
+// timeline.push(cfi_block);
+// timeline.push(htq_block);
+// timeline.push(audit_block);
 
 // Phase 1, no ships
-addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
 timeline.push(valence_p1);
 timeline.push(infer_p1_A);
 timeline.push(infer_p1_B);
