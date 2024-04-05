@@ -1,3 +1,4 @@
+//visually broken by barcentric
 jsPsych.plugins['html-slider-triangle'] = (function() {
   var plugin = {};
 
