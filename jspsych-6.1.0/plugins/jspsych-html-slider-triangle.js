@@ -68,31 +68,36 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   console.log('Top Vertex:', topVertex);
   console.log('Left Vertex:', leftVertex);
   console.log('Right Vertex:', rightVertex);
+
+  
   // Get image position for a given index (updated for flipped equilateral triangle)
 function getImagePosition(index, sliderWidth, sliderHeight, stimulusHeight) {
   var vertexX, vertexY;
 
   switch (index) {
     case 0: // Top vertex
-      vertexX = sliderWidth / 2;
-      vertexY = stimulusHeight / 2;
+      vertexX = sliderWidth / 3;
+      vertexY = 0;
       break;
     case 1: // Left vertex
-      vertexX = stimulusHeight / 2;
-      vertexY = sliderHeight - stimulusHeight / 2;
+      vertexX = 0;
+      vertexY = sliderHeight;
       break;
     case 2: // Right vertex
-      vertexX = sliderWidth - stimulusHeight / 2;
-      vertexY = sliderHeight - stimulusHeight / 2;
+      vertexX = sliderWidth;
+      vertexY = sliderHeight;
       break;
     default:
       vertexX = 0;
       vertexY = 0;
   }
 
-  console.log(`Planet ${String.fromCharCode(65 + index)} position: (${vertexX}, ${vertexY})`);
+  var x = vertexX;
+  var y = vertexY - stimulusHeight / 2; // Adjust for the planet height
 
-  return `top: ${vertexY}px; left: ${vertexX}px; transform: translate(-50%, -50%);`;
+  console.log(`Planet ${String.fromCharCode(65 + index)} position: (${x}, ${y})`);
+
+  return `top: ${y}px; left: ${x}px; transform: translate(-50%, -50%);`;
 }
 
 // Get label position for a given index (updated for flipped equilateral triangle)
@@ -105,12 +110,12 @@ function getLabelPosition(index, sliderWidth, sliderHeight, stimulusHeight) {
       vertexY = stimulusHeight;
       break;
     case 1: // Left vertex
-      vertexX = stimulusHeight;
-      vertexY = sliderHeight - stimulusHeight / 2;
+      vertexX = 0;
+      vertexY = sliderHeight;
       break;
     case 2: // Right vertex
-      vertexX = sliderWidth - stimulusHeight;
-      vertexY = sliderHeight - stimulusHeight / 2;
+      vertexX = sliderWidth;
+      vertexY = sliderHeight;
       break;
     default:
       vertexX = 0;
