@@ -69,23 +69,22 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   console.log('Left Vertex:', leftVertex);
   console.log('Right Vertex:', rightVertex);
 
-  
   // Get image position for a given index (updated for flipped equilateral triangle)
 function getImagePosition(index, sliderWidth, sliderHeight, stimulusHeight) {
   var vertexX, vertexY;
 
   switch (index) {
-    case 0: // Top vertex
-      vertexX = sliderWidth / 3;
-      vertexY = 0;
+    case 0: // Planet C (previously Top vertex)
+      vertexX = sliderWidth + 100;
+      vertexY = sliderHeight - 440;
       break;
     case 1: // Left vertex
-      vertexX = 0;
-      vertexY = sliderHeight;
+      vertexX = 450;
+      vertexY = sliderHeight + 300;
       break;
-    case 2: // Right vertex
-      vertexX = sliderWidth;
-      vertexY = sliderHeight;
+    case 2: // Planet A (previously Right vertex)
+      vertexX = sliderWidth / 30;
+      vertexY = -50;
       break;
     default:
       vertexX = 0;
@@ -99,30 +98,39 @@ function getImagePosition(index, sliderWidth, sliderHeight, stimulusHeight) {
 
   return `top: ${y}px; left: ${x}px; transform: translate(-50%, -50%);`;
 }
-
 // Get label position for a given index (updated for flipped equilateral triangle)
 function getLabelPosition(index, sliderWidth, sliderHeight, stimulusHeight) {
-  var vertexX, vertexY;
+  var planetX, planetY;
 
   switch (index) {
-    case 0: // Top vertex
-      vertexX = sliderWidth / 2;
-      vertexY = stimulusHeight;
+    case 0: // Planet A
+      planetX = 1000;
+      planetY = -165;
       break;
-    case 1: // Left vertex
-      vertexX = 0;
-      vertexY = sliderHeight;
+    case 1: // Planet B
+      planetX = 450;
+      planetY = 575;
       break;
-    case 2: // Right vertex
-      vertexX = sliderWidth;
-      vertexY = sliderHeight;
+    case 2: // Planet C
+      planetX = 30;
+      planetY = -175;
       break;
     default:
-      vertexX = 0;
-      vertexY = 0;
+      planetX = 0;
+      planetY = 0;
   }
 
-  return `top: ${vertexY}px; left: ${vertexX}px; transform: translateX(-50%);`;
+  var labelX, labelY;
+
+  if (index === 0 || index === 1) { // Planet A and Planet B
+    labelX = planetX;
+    labelY = planetY + 200; // Position the label 200 pixels below the planet
+  } else if (index === 2) { // Planet C
+    labelX = planetX;
+    labelY = planetY - 600; // Position the label 600 pixels above the planet
+  }
+
+  return `top: ${labelY}px; left: ${labelX}px; transform: translateX(-50%);`;
 }
 
   // Get default proportion for a given index
