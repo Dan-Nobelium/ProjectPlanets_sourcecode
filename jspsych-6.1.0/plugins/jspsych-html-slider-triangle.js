@@ -210,6 +210,8 @@ plugin.trial = function(display_element, trial) {
     planetColors: trial.planetColors
   };
 
+  
+
   // Record the start timestamp
   response.timestamps.start = performance.now();
 
