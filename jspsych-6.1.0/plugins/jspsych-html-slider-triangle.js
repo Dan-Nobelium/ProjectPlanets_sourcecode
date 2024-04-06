@@ -102,7 +102,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
     return {
       planetPosition: `top: ${y}px; left: ${x}px; transform: translate(-50%, -50%);`,
-      labelPosition: `top: ${labelY}px; left: ${labelX}px; transform: translateX(-50%);`
+      labelPosition: `top: ${labelY}px; left: ${labelX}px; transform: translateX(-50%); white-space: nowrap;`
     };
   }
 
