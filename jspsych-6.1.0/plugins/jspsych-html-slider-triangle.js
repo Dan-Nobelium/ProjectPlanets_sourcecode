@@ -69,69 +69,42 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   console.log('Left Vertex:', leftVertex);
   console.log('Right Vertex:', rightVertex);
 
-  // Get image position for a given index (updated for flipped equilateral triangle)
-function getImagePosition(index, sliderWidth, sliderHeight, stimulusHeight) {
-  var vertexX, vertexY;
+  // Get image and label position for a given index (updated for flipped equilateral triangle)
+  function getImageLabelPosition(index, sliderWidth, sliderHeight, stimulusHeight) {
+    var vertexX, vertexY;
 
-  switch (index) {
-    case 0: // Planet C (previously Top vertex)
-      vertexX = sliderWidth + 100;
-      vertexY = sliderHeight - 440;
-      break;
-    case 1: // Left vertex
-      vertexX = 450;
-      vertexY = sliderHeight + 300;
-      break;
-    case 2: // Planet A (previously Right vertex)
-      vertexX = sliderWidth / 30;
-      vertexY = -50;
-      break;
-    default:
-      vertexX = 0;
-      vertexY = 0;
+    switch (index) {
+      case 0: // Planet C (previously Top vertex)
+        vertexX = sliderWidth + 0;
+        vertexY = sliderHeight - 450;
+        break;
+      case 1: // Left vertex
+        vertexX = 450;
+        vertexY = sliderHeight + 300;
+        break;
+      case 2: // Planet A (previously Right vertex)
+        vertexX = sliderWidth / 30;
+        vertexY = -50;
+        break;
+      default:
+        vertexX = 0;
+        vertexY = 0;
+    }
+
+    var x = vertexX;
+    var y = vertexY - stimulusHeight / 2; // Adjust for the planet height
+
+    var labelX = x;
+    var labelY = y + stimulusHeight - 100; // Position the label 100 pixels below the planet
+
+    console.log(`Planet ${String.fromCharCode(65 + index)} position: (${x}, ${y})`);
+    console.log(`Planet ${String.fromCharCode(65 + index)} label position: (${labelX}, ${labelY})`);
+
+    return {
+      planetPosition: `top: ${y}px; left: ${x}px; transform: translate(-50%, -50%);`,
+      labelPosition: `top: ${labelY}px; left: ${labelX}px; transform: translateX(-50%);`
+    };
   }
-
-  var x = vertexX;
-  var y = vertexY - stimulusHeight / 2; // Adjust for the planet height
-
-  console.log(`Planet ${String.fromCharCode(65 + index)} position: (${x}, ${y})`);
-
-  return `top: ${y}px; left: ${x}px; transform: translate(-50%, -50%);`;
-}
-// Get label position for a given index (updated for flipped equilateral triangle)
-function getLabelPosition(index, sliderWidth, sliderHeight, stimulusHeight) {
-  var planetX, planetY;
-
-  switch (index) {
-    case 0: // Planet A
-      planetX = 1000;
-      planetY = -165;
-      break;
-    case 1: // Planet B
-      planetX = 450;
-      planetY = 575;
-      break;
-    case 2: // Planet C
-      planetX = 30;
-      planetY = -175;
-      break;
-    default:
-      planetX = 0;
-      planetY = 0;
-  }
-
-  var labelX, labelY;
-
-  if (index === 0 || index === 1) { // Planet A and Planet B
-    labelX = planetX;
-    labelY = planetY + 200; // Position the label 200 pixels below the planet
-  } else if (index === 2) { // Planet C
-    labelX = planetX;
-    labelY = planetY - 600; // Position the label 600 pixels above the planet
-  }
-
-  return `top: ${labelY}px; left: ${labelX}px; transform: translateX(-50%);`;
-}
 
   // Get default proportion for a given index
   function getDefaultProportion(index) {
@@ -193,15 +166,16 @@ function getLabelPosition(index, sliderWidth, sliderHeight, stimulusHeight) {
     var html = `
       <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
         <div id="jspsych-html-slider-triangle-stimulus" style="position: relative; width: 100%; height: 100%;">
-          <!-- Planet images -->
-          ${planetOrder.map((planet, index) => `
-            <img src="${planet}" style="position: absolute; ${getImagePosition(index, trial.slider_width, trial.slider_height, trial.stimulus_height)}; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-          `).join('')}
-
-          <!-- Planet labels -->
-          ${planetOrder.map((planet, index) => `
-            <div id="planet-${index}-label" style="position: absolute; ${getLabelPosition(index, trial.slider_width, trial.slider_height)}; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)} (${getDefaultProportion(index)}%)</div>
-          `).join('')}
+          <!-- Planet images and labels -->
+          ${planetOrder.map((planet, index) => {
+            const { planetPosition, labelPosition } = getImageLabelPosition(index, trial.slider_width, trial.slider_height, trial.stimulus_height);
+            return `
+              <div style="position: absolute;">
+                <img src="${planet}" style="position: absolute; ${planetPosition}; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
+                <div id="planet-${index}-label" style="position: absolute; ${labelPosition}; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)} (${getDefaultProportion(index)}%)</div>
+              </div>
+            `;
+          }).join('')}
 
           <!-- Equilateral Triangle -->
           <div id="jspsych-html-slider-triangle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: ${trial.slider_width}px; height: ${trial.slider_height}px; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="33" aria-label="Triangle Slider" tabindex="0"></div>
@@ -237,6 +211,7 @@ function getLabelPosition(index, sliderWidth, sliderHeight, stimulusHeight) {
     var pieChart = display_element.querySelector('#jspsych-html-slider-triangle-pie-chart');
     var continueButton = display_element.querySelector('#jspsych-html-slider-triangle-continue');
 
+
     // State variables
     // ===============
 
@@ -270,8 +245,6 @@ function getLabelPosition(index, sliderWidth, sliderHeight, stimulusHeight) {
     var topLeftCorner = { x: triangleRect.left, y: triangleRect.top };
     var topRightCorner = { x: triangleRect.right, y: triangleRect.top };
     var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.top + triangleRect.height };
-
-
 
     // Update handle position and proportions based on mouse position
     function updateHandlePosition(mouseX, mouseY) {
