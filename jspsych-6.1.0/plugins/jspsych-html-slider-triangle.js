@@ -95,7 +95,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     var y = vertexY - stimulusHeight / 2; // Adjust for the planet height
 
     var labelX = x;
-    var labelY = y + stimulusHeight - 100; // Position the label 100 pixels below the planet
+    var labelY = y + stimulusHeight - 110; // Position the label 100 pixels below the planet
 
     console.log(`Planet ${String.fromCharCode(65 + index)} position: (${x}, ${y})`);
     console.log(`Planet ${String.fromCharCode(65 + index)} label position: (${labelX}, ${labelY})`);
