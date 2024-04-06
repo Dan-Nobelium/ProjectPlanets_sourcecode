@@ -74,15 +74,15 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     var vertexX, vertexY;
 
     switch (index) {
-      case 0: // Planet C (previously Top vertex)
+      case 0: // Planet C (previously Top vertex) //MAKE THIS BOTTOM
         vertexX = sliderWidth + 0;
         vertexY = sliderHeight - 450;
         break;
-      case 1: // Left vertex
+      case 1: // Left vertex // MAKE THIS RIGHT
         vertexX = 450;
         vertexY = sliderHeight + 280;
         break;
-      case 2: // Planet A (previously Right vertex)
+      case 2: // Planet A (previously Right vertex) //MAKE THIS LEFT
         vertexX = sliderWidth / 30;
         vertexY = -50;
         break;
