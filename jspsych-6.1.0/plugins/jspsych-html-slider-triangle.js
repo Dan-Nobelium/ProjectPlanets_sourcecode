@@ -80,7 +80,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
         break;
       case 1: // Left vertex
         vertexX = 450;
-        vertexY = sliderHeight + 300;
+        vertexY = sliderHeight + 280;
         break;
       case 2: // Planet A (previously Right vertex)
         vertexX = sliderWidth / 30;
