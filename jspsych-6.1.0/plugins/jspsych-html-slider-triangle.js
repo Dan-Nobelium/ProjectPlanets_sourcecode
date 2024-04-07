@@ -72,19 +72,18 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   // Get image and label position for a given index (updated for flipped equilateral triangle)
   function getImageLabelPosition(index, sliderWidth, sliderHeight, stimulusHeight) {
     var vertexX, vertexY;
-
     switch (index) {
-      case 0: // Planet C (previously Top vertex) //MAKE THIS BOTTOM
-        vertexX = sliderWidth + 0;
-        vertexY = sliderHeight - 450;
+      case 0: // Planet A - LEFT VERTEX
+        vertexX = 0;
+        vertexY = 0;
         break;
-      case 1: // Left vertex // MAKE THIS RIGHT
-        vertexX = 450;
-        vertexY = sliderHeight + 280;
+      case 1: // Planet B - RIGHT VERTEX
+        vertexX = sliderWidth;
+        vertexY = 0;
         break;
-      case 2: // Planet A (previously Right vertex) //MAKE THIS LEFT
-        vertexX = sliderWidth / 30;
-        vertexY = -50;
+      case 2: // Planet C - BOTTOM VERTEX
+        vertexX = sliderWidth / 2;
+        vertexY = sliderHeight;
         break;
       default:
         vertexX = 0;
@@ -105,6 +104,8 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       labelPosition: `top: ${labelY}px; left: ${labelX}px; transform: translateX(-50%); white-space: nowrap;`
     };
   }
+
+  
 
   // Get default proportion for a given index
   function getDefaultProportion(index) {
