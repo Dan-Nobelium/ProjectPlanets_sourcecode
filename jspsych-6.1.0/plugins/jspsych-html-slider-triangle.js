@@ -173,7 +173,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
             return `
               <div style="position: absolute;">
                 <img src="${planet}" style="position: absolute; ${planetPosition}; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-                <div id="planet-${index}-label" style="position: absolute; ${labelPosition}; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)} (${getDefaultProportion(index)}%)</div>
+                <div id="planet-${index}-label" style="position: absolute; ${labelPosition}; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)} (${getDefaultProportion(index)}% of total)</div>
               </div>
             `;
           }).join('')}
@@ -254,8 +254,6 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
       proportions = updateProportions(x, y);
     }
-
-    // Update proportions and labels (updated for flipped equilateral triangle)
     function updateProportions(x, y) {
       var x1 = 0;
       var y1 = 0;
@@ -268,22 +266,22 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       var area1 = Math.abs((x - x1) * (y2 - y1) - (x2 - x1) * (y - y1)) / 2;
       var area2 = Math.abs((x - x2) * (y3 - y2) - (x3 - x2) * (y - y2)) / 2;
       var area3 = Math.abs((x - x3) * (y1 - y3) - (x1 - x3) * (y - y3)) / 2;
-
+    
       var bottomProportion = area1 / area * 100;
       var leftProportion = area2 / area * 100;
       var rightProportion = area3 / area * 100;
-
-      proportions = [leftProportion, rightProportion,bottomProportion,];
-
+    
+      proportions = [leftProportion, rightProportion, bottomProportion];
+    
       // Update the labels with the new proportions
       planetOrder.forEach((planet, index) => {
         var label = display_element.querySelector(`#planet-${index}-label`);
-        label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}%)`;
+        label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}% of total)`;
       });
-
+    
       // Update the pie chart rendering
       pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
-
+    
       // Return the updated proportions array
       return proportions;
     }
