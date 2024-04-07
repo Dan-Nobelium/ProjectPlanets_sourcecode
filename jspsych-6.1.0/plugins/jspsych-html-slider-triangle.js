@@ -72,23 +72,23 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   // Get image and label position for a given index (updated for flipped equilateral triangle)
   function getImageLabelPosition(index, sliderWidth, sliderHeight, stimulusHeight) {
     var vertexX, vertexY;
-  switch (index) {
-    case 0: // Planet A - LEFT VERTEX
-      vertexX = 0;
-      vertexY = -50;
-      break;
-    case 1: // Planet B - RIGHT VERTEX
-      vertexX = sliderWidth;
-      vertexY = -50;
-      break;
-    case 2: // Planet C - BOTTOM VERTEX
-      vertexX = sliderWidth / 2;
-      vertexY = sliderHeight + 260;
-      break;
-    default:
-      vertexX = 0;
-      vertexY = 0;
-  }
+    switch (index) {
+      case 0: // Planet A - LEFT VERTEX
+        vertexX = 0;
+        vertexY = -50;
+        break;
+      case 1: // Planet B - RIGHT VERTEX
+        vertexX = sliderWidth;
+        vertexY = -50;
+        break;
+      case 2: // Planet C - BOTTOM VERTEX
+        vertexX = sliderWidth / 2;
+        vertexY = sliderHeight + 260;
+        break;
+      default:
+        vertexX = 0;
+        vertexY = 0;
+    }
 
     var x = vertexX;
     var y = vertexY - stimulusHeight / 2; // Adjust for the planet height
@@ -104,8 +104,6 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       labelPosition: `top: ${labelY}px; left: ${labelX}px; transform: translateX(-50%); white-space: nowrap;`
     };
   }
-
-  
 
   // Get default proportion for a given index
   function getDefaultProportion(index) {
@@ -254,6 +252,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
       proportions = updateProportions(x, y);
     }
+
     function updateProportions(x, y) {
       var x1 = 0;
       var y1 = 0;
@@ -261,29 +260,73 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       var y2 = 0;
       var x3 = trial.slider_width / 2;
       var y3 = trial.slider_height;
-    
+
+      if (!isInsideTriangle(x, y, x1, y1, x2, y2, x3, y3)) {
+        // Clicked point is outside the triangle
+        var { closestX, closestY } = getClosestPointOnTriangleEdge(x, y, x1, y1, x2, y2, x3, y3);
+        x = closestX;
+        y = closestY;
+      }
+
       var area = Math.abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2;
       var area1 = Math.abs((x - x1) * (y2 - y1) - (x2 - x1) * (y - y1)) / 2;
       var area2 = Math.abs((x - x2) * (y3 - y2) - (x3 - x2) * (y - y2)) / 2;
       var area3 = Math.abs((x - x3) * (y1 - y3) - (x1 - x3) * (y - y3)) / 2;
-    
+
       var bottomProportion = area1 / area * 100;
       var leftProportion = area2 / area * 100;
       var rightProportion = area3 / area * 100;
-    
       proportions = [leftProportion, rightProportion, bottomProportion];
-    
+
       // Update the labels with the new proportions
       planetOrder.forEach((planet, index) => {
         var label = display_element.querySelector(`#planet-${index}-label`);
         label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}% of total)`;
       });
-    
+
       // Update the pie chart rendering
       pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
-    
+
       // Return the updated proportions array
       return proportions;
+    }
+
+    function getClosestPointOnTriangleEdge(x, y, x1, y1, x2, y2, x3, y3) {
+      var edges = [
+        { x1: x1, y1: y1, x2: x2, y2: y2 },
+        { x1: x2, y1: y2, x2: x3, y2: y3 },
+        { x1: x3, y1: y3, x2: x1, y2: y1 }
+      ];
+
+      var closestPoint = null;
+      var minDistance = Infinity;
+
+      edges.forEach(edge => {
+        var { closestX, closestY } = getClosestPointOnLineSegment(x, y, edge.x1, edge.y1, edge.x2, edge.y2);
+        var distance = getDistance(x, y, closestX, closestY);
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestPoint = { closestX, closestY };
+        }
+      });
+
+      return closestPoint;
+    }
+
+    function getClosestPointOnLineSegment(x, y, x1, y1, x2, y2) {
+      var dx = x2 - x1;
+      var dy = y2 - y1;
+      var t = ((x - x1) * dx + (y - y1) * dy) / (dx * dx + dy * dy);
+      t = Math.max(0, Math.min(1, t));
+      var closestX = x1 + t * dx;
+      var closestY = y1 + t * dy;
+      return { closestX, closestY };
+    }
+
+    function getDistance(x1, y1, x2, y2) {
+      var dx = x2 - x1;
+      var dy = y2 - y1;
+      return Math.sqrt(dx * dx + dy * dy);
     }
 
     // Event listeners for window resizing
@@ -321,6 +364,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
           y: mouseY,
           proportions: proportions
         });
+        event.preventDefault();
       }
     });
 
@@ -348,6 +392,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
     function handleTouchStart(event) {
       if (event.touches.length === 1) {
+        isDragging = true;
         var touch = event.touches[0];
         var mouseX = touch.clientX;
         var mouseY = touch.clientY;
@@ -360,6 +405,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
           y: mouseY,
           proportions: proportions
         });
+        event.preventDefault();
       }
     }
 
