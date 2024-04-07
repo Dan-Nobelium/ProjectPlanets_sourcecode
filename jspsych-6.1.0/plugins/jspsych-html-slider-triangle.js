@@ -72,23 +72,23 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   // Get image and label position for a given index (updated for flipped equilateral triangle)
   function getImageLabelPosition(index, sliderWidth, sliderHeight, stimulusHeight) {
     var vertexX, vertexY;
-    switch (index) {
-      case 0: // Planet A - LEFT VERTEX
-        vertexX = 0;
-        vertexY = 0;
-        break;
-      case 1: // Planet B - RIGHT VERTEX
-        vertexX = sliderWidth;
-        vertexY = 0;
-        break;
-      case 2: // Planet C - BOTTOM VERTEX
-        vertexX = sliderWidth / 2;
-        vertexY = sliderHeight;
-        break;
-      default:
-        vertexX = 0;
-        vertexY = 0;
-    }
+  switch (index) {
+    case 0: // Planet A - LEFT VERTEX
+      vertexX = 0;
+      vertexY = 0;
+      break;
+    case 1: // Planet B - RIGHT VERTEX
+      vertexX = sliderWidth;
+      vertexY = 0;
+      break;
+    case 2: // Planet C - BOTTOM VERTEX
+      vertexX = sliderWidth / 2;
+      vertexY = sliderHeight;
+      break;
+    default:
+      vertexX = 0;
+      vertexY = 0;
+  }
 
     var x = vertexX;
     var y = vertexY - stimulusHeight / 2; // Adjust for the planet height
@@ -113,7 +113,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   }
 
   // Get pie chart gradient based on planet colors and proportions
-  function getPieChartGradient(planetColors, planetOrder, proportions = [33, 33, 34]) {
+  function getPieChartGradient(planetColors, planetOrder, proportions = [33, 33, 33]) {
     var colorStops = [];
     var cumulativePercentage = 0;
 
@@ -260,13 +260,13 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
 
     // Update proportions and labels (updated for flipped equilateral triangle)
     function updateProportions(x, y) {
-      var x1 = trial.slider_width / 2;
-      var y1 = trial.slider_height;
-      var x2 = 0;
+      var x1 = 0;
+      var y1 = 0;
+      var x2 = trial.slider_width;
       var y2 = 0;
-      var x3 = trial.slider_width;
-      var y3 = 0;
-
+      var x3 = trial.slider_width / 2;
+      var y3 = trial.slider_height;
+    
       var area = Math.abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2;
       var area1 = Math.abs((x - x1) * (y2 - y1) - (x2 - x1) * (y - y1)) / 2;
       var area2 = Math.abs((x - x2) * (y3 - y2) - (x3 - x2) * (y - y2)) / 2;
@@ -276,7 +276,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       var leftProportion = area2 / area * 100;
       var rightProportion = area3 / area * 100;
 
-      proportions = [bottomProportion, leftProportion, rightProportion];
+      proportions = [leftProportion, rightProportion,bottomProportion,];
 
       // Update the labels with the new proportions
       planetOrder.forEach((planet, index) => {
