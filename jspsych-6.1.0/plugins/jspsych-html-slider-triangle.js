@@ -1,4 +1,3 @@
-
 jsPsych.plugins['html-slider-triangle'] = (function() {
   var plugin = {};
 
@@ -70,22 +69,22 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   console.log('Left Vertex:', leftVertex);
   console.log('Right Vertex:', rightVertex);
 
-  // Get image and label position for a given index (updated for new planet configuration)
+  // Get image and label position for a given index (updated for flipped equilateral triangle)
   function getImageLabelPosition(index, sliderWidth, sliderHeight, stimulusHeight) {
     var vertexX, vertexY;
 
     switch (index) {
-      case 0: // Planet A (left vertex)
-        vertexX = sliderWidth / 30;
+      case 0: // Planet C (previously Top vertex) //MAKE THIS BOTTOM
+        vertexX = sliderWidth + 0;
         vertexY = sliderHeight - 450;
         break;
-      case 1: // Planet B (right vertex)
-        vertexX = sliderWidth - 150;
-        vertexY = sliderHeight - 450;
-        break;
-      case 2: // Planet C (bottom/middle vertex)
-        vertexX = sliderWidth / 2;
+      case 1: // Left vertex // MAKE THIS RIGHT
+        vertexX = 450;
         vertexY = sliderHeight + 280;
+        break;
+      case 2: // Planet A (previously Right vertex) //MAKE THIS LEFT
+        vertexX = sliderWidth / 30;
+        vertexY = -50;
         break;
       default:
         vertexX = 0;
@@ -96,7 +95,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     var y = vertexY - stimulusHeight / 2; // Adjust for the planet height
 
     var labelX = x;
-    var labelY = y + stimulusHeight - 110; // Position the label 110 pixels below the planet
+    var labelY = y + stimulusHeight - 110; // Position the label 100 pixels below the planet
 
     console.log(`Planet ${String.fromCharCode(65 + index)} position: (${x}, ${y})`);
     console.log(`Planet ${String.fromCharCode(65 + index)} label position: (${labelX}, ${labelY})`);
@@ -159,10 +158,11 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       return;
     }
 
-    // Define the desired order of the planets
-    var planetOrder = [trial.stimulus_all[0], trial.stimulus_all[1], trial.stimulus_all[2]]; // Planet A, Planet B, Planet C
+    var planetOrder = trial.stimulus_all;
 
     // HTML structure
+    // =============
+
     var html = `
       <div id="jspsych-html-slider-triangle-wrapper" style="position: relative; width: ${trial.slider_width}px; height: ${trial.slider_height}px;">
         <div id="jspsych-html-slider-triangle-stimulus" style="position: relative; width: 100%; height: 100%;">
@@ -211,6 +211,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     var pieChart = display_element.querySelector('#jspsych-html-slider-triangle-pie-chart');
     var continueButton = display_element.querySelector('#jspsych-html-slider-triangle-continue');
 
+
     // State variables
     // ===============
 
@@ -245,7 +246,6 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     var topRightCorner = { x: triangleRect.right, y: triangleRect.top };
     var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.top + triangleRect.height };
 
-
     // Update handle position and proportions based on mouse position
     function updateHandlePosition(mouseX, mouseY) {
       var x = mouseX - triangleRect.left;
@@ -257,25 +257,25 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       proportions = updateProportions(x, y);
     }
 
-    // Update proportions and labels (updated for new planet configuration)
+    // Update proportions and labels (updated for flipped equilateral triangle)
     function updateProportions(x, y) {
-      var x1 = trial.slider_width / 30; // Planet A (left vertex)
-      var y1 = trial.slider_height - 450;
-      var x2 = trial.slider_width - 150; // Planet B (right vertex)
-      var y2 = trial.slider_height - 450;
-      var x3 = trial.slider_width / 2; // Planet C (bottom/middle vertex)
-      var y3 = trial.slider_height + 280;
+      var x1 = trial.slider_width / 2;
+      var y1 = trial.slider_height;
+      var x2 = 0;
+      var y2 = 0;
+      var x3 = trial.slider_width;
+      var y3 = 0;
 
+      var area = Math.abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2;
       var area1 = Math.abs((x - x1) * (y2 - y1) - (x2 - x1) * (y - y1)) / 2;
       var area2 = Math.abs((x - x2) * (y3 - y2) - (x3 - x2) * (y - y2)) / 2;
       var area3 = Math.abs((x - x3) * (y1 - y3) - (x1 - x3) * (y - y3)) / 2;
 
-      var totalArea = area1 + area2 + area3;
-      var proportion1 = area1 / totalArea * 100;
-      var proportion2 = area2 / totalArea * 100;
-      var proportion3 = area3 / totalArea * 100;
+      var bottomProportion = area1 / area * 100;
+      var leftProportion = area2 / area * 100;
+      var rightProportion = area3 / area * 100;
 
-      proportions = [proportion1, proportion2, proportion3];
+      proportions = [bottomProportion, leftProportion, rightProportion];
 
       // Update the labels with the new proportions
       planetOrder.forEach((planet, index) => {
@@ -390,30 +390,28 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     // Keyboard navigation support
     function handleKeyDown(event) {
       var key = event.key;
-      if (response.locations.clicks.length > 0) {
-        var x = response.locations.clicks[response.locations.clicks.length - 1].x;
-        var y = response.locations.clicks[response.locations.clicks.length - 1].y;
+      var x = response.locations.clicks[response.locations.clicks.length - 1].x;
+      var y = response.locations.clicks[response.locations.clicks.length - 1].y;
 
-        switch (key) {
-          case 'ArrowUp':
-            y -= 10;
-            break;
-          case 'ArrowDown':
-            y += 10;
-            break;
-          case 'ArrowLeft':
-            x -= 10;
-            break;
-          case 'ArrowRight':
-            x += 10;
-            break;
-          default:
-            return;
-        }
-
-        updateHandlePosition(x, y);
-        event.preventDefault();
+      switch (key) {
+        case 'ArrowUp':
+          y -= 10;
+          break;
+        case 'ArrowDown':
+          y += 10;
+          break;
+        case 'ArrowLeft':
+          x -= 10;
+          break;
+        case 'ArrowRight':
+          x += 10;
+          break;
+        default:
+          return;
       }
+
+      updateHandlePosition(x, y);
+      event.preventDefault();
     }
 
     document.addEventListener('keydown', handleKeyDown);
