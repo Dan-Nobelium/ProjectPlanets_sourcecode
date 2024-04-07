@@ -1,3 +1,4 @@
+
 jsPsych.plugins['html-slider-triangle'] = (function() {
   var plugin = {};
 
@@ -69,20 +70,20 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   console.log('Left Vertex:', leftVertex);
   console.log('Right Vertex:', rightVertex);
 
-  // Get image and label position for a given index (updated for flipped equilateral triangle)
+  // Get image and label position for a given index (updated for new planet configuration)
   function getImageLabelPosition(index, sliderWidth, sliderHeight, stimulusHeight) {
     var vertexX, vertexY;
 
     switch (index) {
-      case 0: // Planet A (Left vertex)
+      case 0: // Planet A (left vertex)
         vertexX = sliderWidth / 30;
-        vertexY = -50;
+        vertexY = sliderHeight - 450;
         break;
-      case 1: // Planet B (Right vertex)
+      case 1: // Planet B (right vertex)
         vertexX = sliderWidth - 150;
-        vertexY = -50;
+        vertexY = sliderHeight - 450;
         break;
-      case 2: // Planet C (Bottom vertex)
+      case 2: // Planet C (bottom/middle vertex)
         vertexX = sliderWidth / 2;
         vertexY = sliderHeight + 280;
         break;
@@ -95,7 +96,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     var y = vertexY - stimulusHeight / 2; // Adjust for the planet height
 
     var labelX = x;
-    var labelY = y + stimulusHeight - 110; // Position the label 20 pixels below the planet
+    var labelY = y + stimulusHeight - 110; // Position the label 110 pixels below the planet
 
     console.log(`Planet ${String.fromCharCode(65 + index)} position: (${x}, ${y})`);
     console.log(`Planet ${String.fromCharCode(65 + index)} label position: (${labelX}, ${labelY})`);
@@ -158,7 +159,8 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       return;
     }
 
-    var planetOrder = trial.stimulus_all;
+    // Define the desired order of the planets
+    var planetOrder = [trial.stimulus_all[0], trial.stimulus_all[1], trial.stimulus_all[2]]; // Planet A, Planet B, Planet C
 
     // HTML structure
     var html = `
@@ -170,27 +172,27 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
             return `
               <div style="position: absolute;">
                 <img src="${planet}" style="position: absolute; ${planetPosition}; width: ${trial.stimulus_height}px; height: ${trial.stimulus_height}px;"/>
-                <div id="planet-${index}-label" style="position: absolute; ${labelPosition}; color: ${trial.planetColors[planet]}; font-size: 14px;">Planet ${String.fromCharCode(65 + index)} (${getDefaultProportion(index)}%)</div>
+                <div id="planet-${index}-label" style="position: absolute; ${labelPosition}; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)} (${getDefaultProportion(index)}%)</div>
               </div>
             `;
           }).join('')}
-  
+
           <!-- Equilateral Triangle -->
           <div id="jspsych-html-slider-triangle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: ${trial.slider_width}px; height: ${trial.slider_height}px; clip-path: polygon(50% 100%, 0 0, 100% 0); background-color: #ddd;" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="33" aria-label="Triangle Slider" tabindex="0"></div>
-  
+
           <!-- Handle -->
           <div id="jspsych-html-slider-triangle-handle" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; background-color: #333; border-radius: 50%; cursor: pointer;"></div>
         </div>
-  
+
         <!-- Pie chart -->
         <div id="jspsych-html-slider-triangle-pie-chart" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 150px; height: 150px; border-radius: 50%; background-image: ${getPieChartGradient(trial.planetColors, planetOrder)}">
           <!-- Pie chart labels or legend -->
-          <div style="position: absolute; top: 0%; left: 0; color: ${trial.planetColors[planetOrder[0]]};">Planet A</div>
-          <div style="position: absolute; top: 33%; left: 0; color: ${trial.planetColors[planetOrder[1]]};">Planet B</div>
-          <div style="position: absolute; top: 66%; left: 0; color: ${trial.planetColors[planetOrder[2]]};">Planet C</div>
+          ${planetOrder.map((planet, index) => `
+            <div style="position: absolute; top: ${index * 33}%; left: 0; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)}</div>
+          `).join('')}
         </div>
       </div>
-  
+
       <!-- Continue button -->
       <button id="jspsych-html-slider-triangle-continue" class="jspsych-btn" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);">Continue</button>
     `;
@@ -230,7 +232,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       locations: {
         clicks: [],
       },
-      stimulus_all: planetOrder, // Store the planetOrder instead of trial.stimulus_all
+      stimulus_all: trial.stimulus_all,
       planetColors: trial.planetColors
     };
 
@@ -243,6 +245,7 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     var topRightCorner = { x: triangleRect.right, y: triangleRect.top };
     var bottomCorner = { x: triangleRect.left + triangleRect.width / 2, y: triangleRect.top + triangleRect.height };
 
+
     // Update handle position and proportions based on mouse position
     function updateHandlePosition(mouseX, mouseY) {
       var x = mouseX - triangleRect.left;
@@ -254,38 +257,38 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
       proportions = updateProportions(x, y);
     }
 
-  // Update proportions and labels (updated for new planet positions)
-  function updateProportions(x, y) {
-    var x1 = trial.slider_width / 30; // Planet A (Left)
-    var y1 = -50;
-    var x2 = trial.slider_width - 150; // Planet B (Right)
-    var y2 = -50;
-    var x3 = trial.slider_width / 2; // Planet C (Bottom)
-    var y3 = trial.slider_height - 120;
+    // Update proportions and labels (updated for new planet configuration)
+    function updateProportions(x, y) {
+      var x1 = trial.slider_width / 30; // Planet A (left vertex)
+      var y1 = trial.slider_height - 450;
+      var x2 = trial.slider_width - 150; // Planet B (right vertex)
+      var y2 = trial.slider_height - 450;
+      var x3 = trial.slider_width / 2; // Planet C (bottom/middle vertex)
+      var y3 = trial.slider_height + 280;
 
-    var area1 = Math.abs((x - x1) * (y2 - y1) - (x2 - x1) * (y - y1)) / 2;
-    var area2 = Math.abs((x - x2) * (y3 - y2) - (x3 - x2) * (y - y2)) / 2;
-    var area3 = Math.abs((x - x3) * (y1 - y3) - (x1 - x3) * (y - y3)) / 2;
+      var area1 = Math.abs((x - x1) * (y2 - y1) - (x2 - x1) * (y - y1)) / 2;
+      var area2 = Math.abs((x - x2) * (y3 - y2) - (x3 - x2) * (y - y2)) / 2;
+      var area3 = Math.abs((x - x3) * (y1 - y3) - (x1 - x3) * (y - y3)) / 2;
 
-    var totalArea = area1 + area2 + area3;
-    var leftProportion = area1 / totalArea * 100;
-    var rightProportion = area2 / totalArea * 100;
-    var bottomProportion = area3 / totalArea * 100;
+      var totalArea = area1 + area2 + area3;
+      var proportion1 = area1 / totalArea * 100;
+      var proportion2 = area2 / totalArea * 100;
+      var proportion3 = area3 / totalArea * 100;
 
-    proportions = [leftProportion, rightProportion, bottomProportion];
+      proportions = [proportion1, proportion2, proportion3];
 
-    // Update the labels with the new proportions
-    planetOrder.forEach((planet, index) => {
-      var label = display_element.querySelector(`#planet-${index}-label`);
-      label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}%)`;
-    });
+      // Update the labels with the new proportions
+      planetOrder.forEach((planet, index) => {
+        var label = display_element.querySelector(`#planet-${index}-label`);
+        label.textContent = `Planet ${String.fromCharCode(65 + index)} (${Math.round(proportions[index])}%)`;
+      });
 
-    // Update the pie chart rendering
-    pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
+      // Update the pie chart rendering
+      pieChart.style.backgroundImage = getPieChartGradient(trial.planetColors, planetOrder, proportions);
 
-    // Return the updated proportions array
-    return proportions;
-  }
+      // Return the updated proportions array
+      return proportions;
+    }
 
     // Event listeners for window resizing
     function handleResize() {
@@ -387,28 +390,30 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
     // Keyboard navigation support
     function handleKeyDown(event) {
       var key = event.key;
-      var x = response.locations.clicks[response.locations.clicks.length - 1].x;
-      var y = response.locations.clicks[response.locations.clicks.length - 1].y;
+      if (response.locations.clicks.length > 0) {
+        var x = response.locations.clicks[response.locations.clicks.length - 1].x;
+        var y = response.locations.clicks[response.locations.clicks.length - 1].y;
 
-      switch (key) {
-        case 'ArrowUp':
-          y -= 10;
-          break;
-        case 'ArrowDown':
-          y += 10;
-          break;
-        case 'ArrowLeft':
-          x -= 10;
-          break;
-        case 'ArrowRight':
-          x += 10;
-          break;
-        default:
-          return;
+        switch (key) {
+          case 'ArrowUp':
+            y -= 10;
+            break;
+          case 'ArrowDown':
+            y += 10;
+            break;
+          case 'ArrowLeft':
+            x -= 10;
+            break;
+          case 'ArrowRight':
+            x += 10;
+            break;
+          default:
+            return;
+        }
+
+        updateHandlePosition(x, y);
+        event.preventDefault();
       }
-
-      updateHandlePosition(x, y);
-      event.preventDefault();
     }
 
     document.addEventListener('keydown', handleKeyDown);
