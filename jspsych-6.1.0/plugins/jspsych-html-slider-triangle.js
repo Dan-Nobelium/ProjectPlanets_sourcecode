@@ -75,15 +75,15 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
   switch (index) {
     case 0: // Planet A - LEFT VERTEX
       vertexX = 0;
-      vertexY = 0;
+      vertexY = -50;
       break;
     case 1: // Planet B - RIGHT VERTEX
       vertexX = sliderWidth;
-      vertexY = 0;
+      vertexY = -50;
       break;
     case 2: // Planet C - BOTTOM VERTEX
       vertexX = sliderWidth / 2;
-      vertexY = sliderHeight;
+      vertexY = sliderHeight + 260;
       break;
     default:
       vertexX = 0;
@@ -188,9 +188,6 @@ jsPsych.plugins['html-slider-triangle'] = (function() {
         <!-- Pie chart -->
         <div id="jspsych-html-slider-triangle-pie-chart" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); width: 150px; height: 150px; border-radius: 50%; background-image: ${getPieChartGradient(trial.planetColors, planetOrder)}">
           <!-- Pie chart labels or legend -->
-          ${planetOrder.map((planet, index) => `
-            <div style="position: absolute; top: ${index * 33}%; left: 0; color: ${trial.planetColors[planet]};">Planet ${String.fromCharCode(65 + index)}</div>
-          `).join('')}
         </div>
       </div>
 
