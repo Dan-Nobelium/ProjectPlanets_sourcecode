@@ -936,18 +936,19 @@ function ship_attack(choice) {
     updateStatus('ship',statusmsg,statusclr)
 
     
-    // Create a new div element for the ship outcome message
-    var shipOutcomeDiv = document.createElement('div');
-    shipOutcomeDiv.id = 'ship-outcome-text';
-    shipOutcomeDiv.innerHTML = statusmsg;
-  
-    // Apply CSS styles to the ship outcome div
-    shipOutcomeDiv.style.fontFamily = 'Arial';
-    shipOutcomeDiv.style.fontSize = '36px';
-    shipOutcomeDiv.style.color = statusclr;
-    shipOutcomeDiv.style.textAlign = 'center';
-    shipOutcomeDiv.style.fontWeight = 'bold';
-    shipOutcomeDiv.style.marginTop = '20px';
+ // Create a new div element for the ship outcome message
+var shipOutcomeDiv = document.createElement('div');
+shipOutcomeDiv.id = 'ship-outcome-text';
+shipOutcomeDiv.style.visibility = 'hidden'; // Initially hide the element
+shipOutcomeDiv.style.fontFamily = 'Arial';
+shipOutcomeDiv.style.fontSize = '36px';
+shipOutcomeDiv.style.color = 'black'; // Set an initial color (will be updated later)
+shipOutcomeDiv.style.textAlign = 'center';
+shipOutcomeDiv.style.fontWeight = 'bold';
+shipOutcomeDiv.style.marginTop = '20px';
+
+// Append the ship outcome div to the display element
+display_element.appendChild(shipOutcomeDiv);
   
   
     // Log details
