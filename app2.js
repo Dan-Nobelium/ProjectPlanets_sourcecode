@@ -734,43 +734,42 @@ var cont_catch = {
   pages: [
     '<p>Local intel has determined where the pirates are coming from!<br>Click Next to view this intel.</p>',
     `
-    <div class="jspsych-instructions-advanced-container">
-    <div class="jspsych-instructions-advanced-row">
-      <div class="jspsych-instructions-advanced-cell">
-
-        <img src="${stim_list[0]}" class="jspsych-instructions-advanced-image">
-        <p>Planet A: </p>
-        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <img src="${ship_list[1]}" class="jspsych-instructions-advanced-image">
-        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <div class="jspsych-instructions-advanced-outcome">${win_100_text }</div>
-
+      <div class="jspsych-instructions-advanced-container">
+        <div class="jspsych-instructions-advanced-row">
+          <div class="jspsych-instructions-advanced-cell">
+            <p>Your signals to the left planet have been attracting neutral ships (Ship: Type 2).</p>
+            <img src="${stim_list[0]}" class="jspsych-instructions-advanced-image">
+            <p>Planet A: </p>
+            <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+            <img src="${ship_list[1]}" class="jspsych-instructions-advanced-image">
+            <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+            <div class="jspsych-instructions-advanced-outcome">${win_100_text}</div>
+          </div>
+        </div>
+        <div class="jspsych-instructions-advanced-row">
+          <div class="jspsych-instructions-advanced-cell">
+            <p>Your signals to the middle planet have been attracting pirate ships (Ship: Type 1), that have been stealing your points!</p>
+            <img src="${stim_list[1]}" class="jspsych-instructions-advanced-image">
+            <p>Planet B:</p>
+            <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+            <img src="${ship_list[0]}" class="jspsych-instructions-advanced-image">
+            <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+            <div class="jspsych-instructions-advanced-outcome">${ship_outcome_1_unshielded}</div>
+          </div>
+        </div>
+        <div class="jspsych-instructions-advanced-row">
+          <div class="jspsych-instructions-advanced-cell">
+            <p>Your signals to the right planet have been attracting pirate ships (Ship: Type 3), that have been stealing your points!</p>
+            <img src="${stim_list[2]}" class="jspsych-instructions-advanced-image">
+            <p>Planet C: </p>
+            <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+            <img src="${ship_list[2]}" class="jspsych-instructions-advanced-image">
+            <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
+            <div class="jspsych-instructions-advanced-outcome">${ship_outcome_2_unshielded}</div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="jspsych-instructions-advanced-row">
-      <div class="jspsych-instructions-advanced-cell">
-        <img src="${stim_list[1]}" class="jspsych-instructions-advanced-image">
-        <p>Planet B:</p>
-        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <img src="${ship_list[0]}" class="jspsych-instructions-advanced-image">
-        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <div class="jspsych-instructions-advanced-outcome">${ship_outcome_1_unshielded}</div>
-
-      </div>
-    </div>
-    <div class="jspsych-instructions-advanced-row">
-      <div class="jspsych-instructions-advanced-cell">
-        <img src="${stim_list[2]}" class="jspsych-instructions-advanced-image">
-        <p>Planet C: </p>
-        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <img src="${ship_list[2]}" class="jspsych-instructions-advanced-image">
-        <img src="img/arrow.jpg" class="jspsych-instructions-advanced-image">
-        <div class="jspsych-instructions-advanced-outcome">${ship_outcome_2_unshielded}</div>
-        <p> </p>
-      </div>
-    </div>
-  </div>
-  <p>Based on the information above, please answer the following questions:</p>
+      <p>Based on the information above, please answer the following questions:</p>
     `,
   ],
 
@@ -1095,7 +1094,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(infer_p1_A);
 // timeline.push(infer_p1_B);
 // timeline.push(infer_p1_C);
-timeline.push(p1_q3_triangle);
+// timeline.push(p1_q3_triangle);
 // timeline.push(p1_q4_triangle);
 
 
@@ -1113,7 +1112,7 @@ timeline.push(p1_q3_triangle);
 // timeline.push(p1_q4_triangle);
 
 // // // Phase3, contingencies
-// timeline.push(cont_catch);
+timeline.push(cont_catch);
 // 
 
 // // Phase3, ships
