@@ -918,14 +918,14 @@ function ship_attack(choice) {
             console.log("INDEX 0, no damage");
             break;
         case 1:
-          statusmsg = trial.ship_outcome_1_unshielded;
+          statusmsg = trial.ship_outcome_1_unshielded + appliedDamage;
           statusclr = 'red';
-          console.log("INDEX 0, no damage");
+          console.log("INDEX 1, 100 damage");
           break;
         case 2:
-          statusmsg = trial.ship_outcome_2_unshielded;
+          statusmsg = trial.ship_outcome_2_unshielded + appliedDamage;
           statusclr = 'darkorange';
-          console.log("INDEX 1, 100 damage");
+          console.log("INDEX 2, 0.2 damage");
           break;
       }
     } else if (shield_activated) {
