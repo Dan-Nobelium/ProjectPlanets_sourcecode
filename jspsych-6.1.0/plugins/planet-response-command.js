@@ -913,19 +913,19 @@ function ship_attack(choice) {
       choice = Number(choice);
       switch (choice) {
         case 0:
+            statusmsg = ''
+            statusclr = '';
+            console.log("INDEX 0, no damage");
+            break;
+        case 1:
           statusmsg = trial.ship_outcome_1_unshielded;
           statusclr = 'red';
           console.log("INDEX 0, no damage");
           break;
-        case 1:
+        case 2:
           statusmsg = trial.ship_outcome_2_unshielded;
           statusclr = 'darkorange';
           console.log("INDEX 1, 100 damage");
-          break;
-        case 2:
-          statusmsg = trial.ship_outcome_3_unshielded;
-          statusclr = 'green';
-          console.log("INDEX 2, IV 20% damage");
           break;
       }
     } else if (shield_activated) {
