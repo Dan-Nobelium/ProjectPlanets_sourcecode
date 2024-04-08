@@ -716,7 +716,7 @@ function show_ship(choice) {
     shipAtTxt.style.visibility = 'visible'
     var attack_int_id = setInterval(attframe,1000)
     var attack_countdown = trial.ship_attack_time/1000
-    shipAtTxt.innerHTML = 'Encounter imminent ' + attack_countdown + ' s' //Show first frame
+    shipAtTxt.innerHTML = 'Encounter imminent ' + attack_countdown + ' ' //Show first frame
     function attframe() {
         if (attack_countdown <= 0) {
             clearInterval(attack_int_id);
@@ -877,75 +877,111 @@ function activate_shields(){
     
 }
 
-
-function ship_attack(choice){
-    //Disable button if no response
-    if (shield_activated==null){
-        shield_activated = false
-        response.ships.rt_shield_activated.push(null);
+function ship_attack(choice) {
+    // Disable button if no response
+    if (shield_activated == null) {
+      shield_activated = false;
+      response.ships.rt_shield_activated.push(null);
     }
-
-    //Log shield response
-    response.ships.shield_activated.push(shield_activated)
-
+  
+    // Log shield response
+    response.ships.shield_activated.push(shield_activated);
+    console.log("Shield activated:", shield_activated);
+  
     // Calculate damage based on the attacking ship's index and the ship_attack_damage parameter
     const damageTypes = trial.ship_attack_damage;
-      const appliedDamage = typeof damageTypes[choice] === 'number' ? damageTypes[choice] :
-          damageTypes[choice](trial.data.points);
-
-    /**
-     * Apply points loss depending on the choice and the shield activation
-     */
+    const appliedDamage = typeof damageTypes[choice] === 'number' ? damageTypes[choice] :
+      damageTypes[choice](trial.data.points);
+    console.log("Applied damage:", appliedDamage);
+  
+    // Apply points loss depending on the choice and the shield activation
     if (!shield_activated) {
-        // Subtract the calculated damage from the points
-        if (typeof appliedDamage === 'number' && appliedDamage % 1 !== 0) {
-          trial.data.points *= 1 - appliedDamage;
-        } else {
-          trial.data.points -= appliedDamage;
-        }
-    
-        //Update score
-        updateScore(trial.data.points)
-
-        //Update status
-        var statusmsg = 'Engaged for: <b>-' + appliedDamage + ' points</b>'
-        var statusclr = 'grey' //some shade of red - optionally make this green/orange/red for tiers of damage for each damage level
+      // Subtract the calculated damage from the points
+      if (typeof appliedDamage === 'number' && appliedDamage % 1 !== 0) {
+        trial.data.points *= 1 - appliedDamage;
+      } else {
+        trial.data.points -= appliedDamage;
+      }
+  
+      // Update score
+      updateScore(trial.data.points);
+  
+      // Update status and log specific messages based on the attacking ship's index
+      var statusmsg;
+      var statusclr;
+      console.log("choice" + choice);
+      choice = Number(choice);
+      switch (choice) {
+        case 0:
+          statusmsg = trial.ship_outcome_1_unshielded;
+          statusclr = 'red';
+          console.log("INDEX 0, no damage");
+          break;
+        case 1:
+          statusmsg = trial.ship_outcome_2_unshielded;
+          statusclr = 'darkorange';
+          console.log("INDEX 1, 100 damage");
+          break;
+        case 2:
+          statusmsg = trial.ship_outcome_3_unshielded;
+          statusclr = 'green';
+          console.log("INDEX 2, IV 20% damage");
+          break;
+      }
     } else if (shield_activated) {
-        var statusmsg = 'Shield successfully deflected attack'
-        var statusclr = '#05BF00'
+      var statusmsg = trial.ship_outcome_3_shielded;
+      var statusclr = 'yellow';
+      console.log("Ship attack message (shielded):", statusmsg);
     }
     updateStatus('ship',statusmsg,statusclr)
 
-    //log details
-    var time_outcome = performance.now()-start_time
-    response.ships.outcome.push(-appliedDamage)
-    response.ships.time_outcome.push(time_outcome)
-    // Also update a single list of outcomes for easier tracking of each change in score
-    response.all_outcomes.outcome.push(-appliedDamage)
-    response.all_outcomes.time_outcome.push(time_outcome)
-    // Finally, update total
-    response.all_outcomes.total.push(trial.data.points)
-
-    //Visually disable button
-    var shieldDiv = display_element.querySelector('#ship-shield-text')
-    //shieldDiv.style.opacity = .5
-    var shieldButton = display_element.querySelector('#ship-shield-button')
-    if (!shield_activated){
-        shieldButton.style.opacity = .5
-        shieldButton.style.backgroundColor = ''
-        shieldButton.style.color = 'green'
-    }
-
-    //Reset ship
-    setTimeout(function(){
-        reset_ship()
-    },trial.feedback_duration)//trial.reset_ship_wait
-
     
-    // Print hostil IDX to console
-    // console.log("Hostile IDX:", choice);
-}
-
+    // Create a new div element for the ship outcome message
+    var shipOutcomeDiv = document.createElement('div');
+    shipOutcomeDiv.id = 'ship-outcome-text';
+    shipOutcomeDiv.innerHTML = statusmsg;
+  
+    // Apply CSS styles to the ship outcome div
+    shipOutcomeDiv.style.fontFamily = 'Arial';
+    shipOutcomeDiv.style.fontSize = '36px';
+    shipOutcomeDiv.style.color = statusclr;
+    shipOutcomeDiv.style.textAlign = 'center';
+    shipOutcomeDiv.style.fontWeight = 'bold';
+    shipOutcomeDiv.style.marginTop = '20px';
+  
+  
+    // Log details
+    var time_outcome = performance.now() - start_time;
+    response.ships.outcome.push(-appliedDamage);
+    response.ships.time_outcome.push(time_outcome);
+    // Also update a single list of outcomes for easier tracking of each change in score
+    response.all_outcomes.outcome.push(-appliedDamage);
+    response.all_outcomes.time_outcome.push(time_outcome);
+    // Finally, update total
+    response.all_outcomes.total.push(trial.data.points);
+    console.log("Updated total points:", trial.data.points);
+  
+    // Visually disable button
+    var shieldDiv = display_element.querySelector('#ship-shield-text');
+    var shieldButton = display_element.querySelector('#ship-shield-button');
+    if (!shield_activated) {
+      shieldButton.style.opacity = '.5';
+      shieldButton.style.backgroundColor = '';
+      shieldButton.style.color = 'green';
+    }
+  
+    // Reset ship
+    setTimeout(function() {
+      reset_ship();
+      // Remove the ship outcome div when resetting the ship
+      if (shipOutcomeDiv.parentNode === display_element) {
+        display_element.removeChild(shipOutcomeDiv);
+      }
+    }, trial.feedback_duration);
+  
+    // Print hostile IDX to console
+    console.log("Hostile IDX:", choice);
+  }
 
 // function to end trial when it is time
 function end_trial() {
