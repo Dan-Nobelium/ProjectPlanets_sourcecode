@@ -620,9 +620,9 @@ function proceed_trade(choice){
     }
     if (trade_success){
         //Add and display reward
-        var displayScore = trial.rewards[choice]
-        var statusmsg = 'Success! <br> <b>+' + displayScore + ' points </b>'
-        var statusclr = '#05BF00' //some shade of green
+        var displayScore = trial.rewards[choice];
+        var statusmsg = win_100_text + displayScore + ' points';
+        console.log("Trade success message:", statusmsg);
 
     } else {
         //Display some fail state
@@ -1005,7 +1005,7 @@ function end_trial() {
             "ship_attack_time": trial.ship_attack_time,
             "ship_attack_damage": trial.ship_attack_damage,
             "shield_charging_time": trial.shield_charging_time,
-            //"shield_success": trial.shield_success,
+            "shield_success": trial.shield_success,
             "probability_shield": trial.probability_shield,
             "shield_prevent_trading": trial.shield_prevent_trading,
             "shield_cost_toggle": trial.shield_cost_toggle,
