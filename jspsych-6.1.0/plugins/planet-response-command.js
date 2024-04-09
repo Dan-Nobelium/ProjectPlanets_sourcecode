@@ -737,6 +737,7 @@ function show_ship(choice) {
     shieldBoxDiv.innerHTML = '<div class="ship" id="ship-shield-text"></div>' +
         '<div class="ship" id="ship-shield-button"></div>' +
         '<div class="ship" id="ship-shield-charger"></div>';
+        
     //Style the text div
     var shieldTxtDiv = display_element.querySelector('#ship-shield-text');
     shieldTxtDiv.innerHTML = 'CHARGING SHIELD';
@@ -748,7 +749,6 @@ function show_ship(choice) {
 
     //Style the button
     var shieldButton = display_element.querySelector('#ship-shield-button');
-    //shieldButton.style.borderRadius = "10px"
     shieldButton.style.border = "2px solid green"
     shieldButton.draggable = false
     shieldButton.style.position = 'relative';
@@ -910,43 +910,46 @@ function ship_attack(choice) {
       function formatShipOutcomeText(outcomeText, damageText) {
         return outcomeText + '<span style="font-weight: bold;font-size: 36px; color: inherit;">-$' + damageText + '</span>';
       }
-      
       // Update status and log specific messages based on the attacking ship's index
-      var statusmsg;
-      var statusclr;
-      console.log("choice" + choice);
-      choice = Number(choice);
-      switch (choice) {
-        case 0:
-          statusmsg = '';
-          statusclr = '';
-          console.log("INDEX 0, no damage");
-          break;
-        case 1:
-          statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
-          statusclr = 'red';
-          console.log("INDEX 1, 100 damage");
-          break;
-        case 2:
-          statusmsg = formatShipOutcomeText(trial.ship_outcome_2_unshielded, appliedDamage);
-          statusclr = 'darkorange';
-          console.log("INDEX 2, 0.2 damage");
-          break;
-      }
-    } else if (shield_activated) {
-      statusmsg = formatShipOutcomeText(trial.ship_outcome_3_shielded, appliedDamage);
-      var statusclr = 'yellow';
-      console.log("Ship attack message (shielded):", statusmsg);
-    }
-    updateStatus('ship', statusmsg, statusclr);
+var statusmsg;
+var statusclr;
+console.log("choice" + choice);
+choice = Number(choice);
+switch (choice) {
+  case 0:
+    statusmsg = '';
+    statusclr = '';
+    console.log("INDEX 0, no damage");
+    break;
+  case 1:
+    statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
+    statusclr = 'red';
+    console.log("INDEX 1, 100 damage");
+    break;
+  case 2:
+    statusmsg = formatShipOutcomeText(trial.ship_outcome_2_unshielded, appliedDamage);
+    statusclr = 'darkorange';
+    console.log("INDEX 2, 0.2 damage");
+    break;
+}
+} else if (shield_activated) {
+  statusmsg = formatShipOutcomeText(trial.ship_outcome_3_shielded, appliedDamage);
+  var statusclr = 'yellow';
+  console.log("Ship attack message (shielded):", statusmsg);
+}
 
-    // Get the existing ship outcome div
-    var shipOutcomeDiv = display_element.querySelector('#ship-outcome-text');
+// Clear the content of the ship status text div
+var shipStatusText = display_element.querySelector('#ship-status-text');
+shipStatusText.innerHTML = '';
 
-    // Update the content and styling of the ship outcome div
-    shipOutcomeDiv.innerHTML = statusmsg;
-    shipOutcomeDiv.style.color = statusclr;
-    shipOutcomeDiv.style.visibility = 'visible';
+// Get the existing ship outcome div
+var shipOutcomeDiv = display_element.querySelector('#ship-outcome-text');
+
+// Update the content and styling of the ship outcome div
+shipOutcomeDiv.innerHTML = statusmsg;
+shipOutcomeDiv.style.color = statusclr;
+shipOutcomeDiv.style.visibility = 'visible';
+shipOutcomeDiv.style.marginTop = '- 100px';
 
       // Show the ship outcome div
   shipOutcomeDiv.style.display = 'block';
