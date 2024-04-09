@@ -336,8 +336,8 @@ plugin.trial = function(display_element, trial)
                 html += trial.prompt[i];
                 html += '</div>'
             }
-//Add signal box
-html += '<div class="clickid planet-signal-box" id="planet-signal-box-' + i + '" style="position:absolute; top:100px;"></div> ';
+            //Add signal box
+            html += '<div class="clickid planet-signal-box" id="planet-signal-box-' + i + '" style="position:absolute; top:100px;"></div> ';
             //Add select ring divs
             html += '<img class="planet-select" id="planet-select-' + i + '"> ';
             //End planet div
@@ -495,11 +495,12 @@ shipPlaceholder.innerHTML = '<div id="ship-img-div" ' +
         selectring.src = trial.stimulus_select;
         selectring.style.visibility = 'hidden';
         selectring.style.position = 'absolute';
-        selectring.style.top = planetRect.top + 'px';
-        selectring.style.left = planetRect.left + 'px';
-        selectring.style.width = planetRect.width + 'px';
-        selectring.style.height = planetRect.height + 'px';
+        selectring.style.top = (planetRect.top+ 10) + 'px';
+        selectring.style.left = (planetRect.left - 3) + 'px';
+        selectring.style.width = (planetRect.width + 10) + 'px';
+        selectring.style.height = (planetRect.height + 10) + 'px';
         selectring.style.zIndex = '0';
+        
     }
 
     // function to handle procedure following a valid planet-choice response
@@ -779,20 +780,18 @@ function show_ship(choice) {
     },trial.shield_charging_time)
     //Charging box animation
     var int_steps = 5; //ms
-    var charge_int_id = setInterval(chargeframe, int_steps);
-    var chgwidth = 0
-    var charge_nsteps = trial.shield_charging_time / int_steps
-    var charge_stepwidth = buttonrect.width / charge_nsteps
-    function chargeframe() {
-        if (shieldChgDiv.getBoundingClientRect().width > buttonrect.width) {
-            clearInterval(charge_int_id);
-        } else {
-            chgwidth += charge_stepwidth
-            //console.log('frame')
-            shieldChgDiv.style.width = chgwidth + 'px'
-            /* code to change the element style */
-        }
+  var charge_int_id = setInterval(chargeframe, int_steps);
+var chgwidth = 0;
+var charge_nsteps = trial.shield_charging_time / int_steps;
+var charge_stepwidth = buttonrect.width / charge_nsteps;
+function chargeframe() {
+    if (shieldChgDiv.getBoundingClientRect().width > buttonrect.width) {
+        clearInterval(charge_int_id);
+    } else {
+        chgwidth += charge_stepwidth;
+        shieldChgDiv.style.width = chgwidth + 'px';
     }
+}
 
     //Start timer for ship to attack and timeout
     setTimeout(function(){
