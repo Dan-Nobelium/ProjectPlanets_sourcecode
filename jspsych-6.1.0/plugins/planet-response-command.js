@@ -416,9 +416,6 @@ shipPlaceholder.innerHTML = '<div id="ship-img-div" ' +
 
     // Create shield elements and append them to the shield placeholder
     var shieldPlaceholder = display_element.querySelector('#shield-placeholder');
-    shieldPlaceholder.innerHTML = '<div class="ship" id="ship-shield-text"></div>' +
-        '<div class="ship" id="ship-shield-button"></div>' +
-        '<div class="ship" id="ship-shield-charger"></div>';
 
     updateScore(trial.data.points)
 
@@ -739,42 +736,55 @@ function show_ship(choice) {
         '<div class="ship" id="ship-shield-charger"></div>';
         
     //Style the text div
-    var shieldTxtDiv = display_element.querySelector('#ship-shield-text');
+    var shieldTxtDiv = shieldPlaceholder.querySelector('#ship-shield-text');
+    if (!shieldTxtDiv) {
+        shieldTxtDiv = document.createElement('div');
+        shieldTxtDiv.id = 'ship-shield-text';
+        shieldTxtDiv.className = 'ship';
+        shieldPlaceholder.appendChild(shieldTxtDiv);
+    }
     shieldTxtDiv.innerHTML = 'CHARGING SHIELD';
     shieldTxtDiv.style.fontSize = "25px";
     shieldTxtDiv.style.color = 'green';
     shieldTxtDiv.style.position = 'relative';
     shieldTxtDiv.style.top = '100px';
-    logIDonMouseDown(shieldTxtDiv)
+    logIDonMouseDown(shieldTxtDiv);
 
-    //Style the button
-    var shieldButton = display_element.querySelector('#ship-shield-button');
-    shieldButton.style.border = "2px solid green"
-    shieldButton.draggable = false
+    var shieldButton = shieldPlaceholder.querySelector('#ship-shield-button');
+    if (!shieldButton) {
+        shieldButton = document.createElement('div');
+        shieldButton.id = 'ship-shield-button';
+        shieldButton.className = 'ship';
+        shieldPlaceholder.appendChild(shieldButton);
+    }
+    shieldButton.style.border = "2px solid green";
+    shieldButton.draggable = false;
     shieldButton.style.position = 'relative';
     shieldButton.style.top = '100px';
     shieldButton.style.fontSize = "40px";
     shieldButton.style.height = '50px';
     shieldButton.style.lineHeight = '50px';
     shieldButton.style.zIndex = '10';
-    //shieldButton.style.verticalAlign = 'middle';
-    logIDonMouseDown(shieldButton)
+    logIDonMouseDown(shieldButton);
 
-    //Style the charger div
-    var shieldChgDiv = display_element.querySelector('#ship-shield-charger');
+    var shieldChgDiv = shieldPlaceholder.querySelector('#ship-shield-charger');
+    if (!shieldChgDiv) {
+        shieldChgDiv = document.createElement('div');
+        shieldChgDiv.id = 'ship-shield-charger';
+        shieldChgDiv.className = 'ship';
+        shieldPlaceholder.appendChild(shieldChgDiv);
+    }
     shieldChgDiv.style.color = 'green';
     shieldChgDiv.style.backgroundColor = 'green';
-    //shieldChgDiv.style.borderRadius = "10px"
-    shieldChgDiv.style.border = "2px solid green"
-    shieldChgDiv.draggable = false
-    //Get button location and move chgdiv there
-    var buttonrect = shieldButton.getBoundingClientRect()
+    shieldChgDiv.style.border = "2px solid green";
+    shieldChgDiv.draggable = false;
+    var buttonrect = shieldButton.getBoundingClientRect();
     shieldChgDiv.style.position = 'absolute';
     shieldChgDiv.style.top = buttonrect.top + 1 + 'px';
     shieldChgDiv.style.left = buttonrect.left + 1 + 'px';
     shieldChgDiv.style.height = buttonrect.height - 5 + 'px';
-    shieldChgDiv.style.width = 0 //buttonrect.width - 5 + 'px';
-    shieldChgDiv.style.opacity = .5
+    shieldChgDiv.style.width = 0;
+    shieldChgDiv.style.opacity = .5;
     shieldButton.style.zIndex = '1';
 
     //Set shield charging timer and animation
@@ -824,6 +834,7 @@ function proceed_shield(choice){
     var shieldButton = display_element.querySelector('#ship-shield-button');
     // Log shield state
     response.ships.shield_available.push(shield_success)
+
     //Update display
     if (shield_success){
         shieldTxtDiv.innerHTML = 'SHIELD AVAILABLE'
@@ -910,52 +921,45 @@ function ship_attack(choice) {
       function formatShipOutcomeText(outcomeText, damageText) {
         return outcomeText + '<span style="font-weight: bold;font-size: 36px; color: inherit;">-$' + damageText + '</span>';
       }
+      
       // Update status and log specific messages based on the attacking ship's index
-var statusmsg;
-var statusclr;
-console.log("choice" + choice);
-choice = Number(choice);
-switch (choice) {
-  case 0:
-    statusmsg = '';
-    statusclr = '';
-    console.log("INDEX 0, no damage");
-    break;
-  case 1:
-    statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
-    statusclr = 'red';
-    console.log("INDEX 1, 100 damage");
-    break;
-  case 2:
-    statusmsg = formatShipOutcomeText(trial.ship_outcome_2_unshielded, appliedDamage);
-    statusclr = 'darkorange';
-    console.log("INDEX 2, 0.2 damage");
-    break;
-}
-} else if (shield_activated) {
-  statusmsg = formatShipOutcomeText(trial.ship_outcome_3_shielded, appliedDamage);
-  var statusclr = 'yellow';
-  console.log("Ship attack message (shielded):", statusmsg);
-}
+      var statusmsg;
+      var statusclr;
+      console.log("choice" + choice);
+      choice = Number(choice);
+      switch (choice) {
+        case 0:
+          statusmsg = '';
+          statusclr = '';
+          console.log("INDEX 0, no damage");
+          break;
+        case 1:
+          statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
+          statusclr = 'red';
+          console.log("INDEX 1, 100 damage");
+          break;
+        case 2:
+          statusmsg = formatShipOutcomeText(trial.ship_outcome_2_unshielded, appliedDamage);
+          statusclr = 'darkorange';
+          console.log("INDEX 2, 0.2 damage");
+          break;
+      }
+    } else if (shield_activated) {
+      statusmsg = formatShipOutcomeText(trial.ship_outcome_3_shielded, appliedDamage);
+      var statusclr = 'yellow';
+      console.log("Ship attack message (shielded):", statusmsg);
+    }
+    updateStatus('ship', statusmsg, statusclr);
 
-// Clear the content of the ship status text div
-var shipStatusText = display_element.querySelector('#ship-status-text');
-shipStatusText.innerHTML = '';
+    // Get the existing ship outcome div
+    var shipOutcomeDiv = display_element.querySelector('#ship-outcome-text');
 
-// Get the existing ship outcome div
-var shipOutcomeDiv = display_element.querySelector('#ship-outcome-text');
+    // Update the content and styling of the ship outcome div
+    shipOutcomeDiv.innerHTML = statusmsg;
+    shipOutcomeDiv.style.color = statusclr;
+    shipOutcomeDiv.style.visibility = 'visible';
 
-// Update the content and styling of the ship outcome div
-shipOutcomeDiv.innerHTML = statusmsg;
-shipOutcomeDiv.style.color = statusclr;
-shipOutcomeDiv.style.visibility = 'visible';
-shipOutcomeDiv.style.marginTop = '- 100px';
-
-      // Show the ship outcome div
-  shipOutcomeDiv.style.display = 'block';
-  setTimeout(function() {
-    shipOutcomeDiv.style.opacity = '1';
-  }, 0);
+    
   
     // Log details
     var time_outcome = performance.now() - start_time;
