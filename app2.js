@@ -40,7 +40,7 @@ const planetColors = {
 let block_number = 0;
 let trial_number = 0;
 let points = 0;
-const block_duration = 180 * 500; // in milliseconds (3 mins)
+const block_duration = 180 * 100; // in milliseconds (3 mins)
 const iti = 1000;
 const inf_stim_height = 80;
 const inf_slider_width = 500;
@@ -337,7 +337,7 @@ var phaseTwoInstructions = {
 
 // define task blocks with ships
 let planet_ship = {
-  type: 'planet-response-command',
+  type: 'planet-response-command-ship',
   show_ship: true,
   ship_hostile_idx: planet_side,
   prompt: planet_labels,
@@ -1102,7 +1102,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 // Phase2, ships
 // timeline.push(phaseTwoInstructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 // timeline.push(valence_p2);
 // timeline.push(infer_p2_A);
 // timeline.push(infer_p2_B);
@@ -1117,13 +1117,13 @@ addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 // timeline.push(cont_catch);
 
 // // Phase3, ships
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
 
 
 //Debrief
