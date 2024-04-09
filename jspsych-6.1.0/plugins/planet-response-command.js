@@ -904,35 +904,39 @@ function ship_attack(choice) {
   
       // Update score
       updateScore(trial.data.points);
-  
-      // Update status and log specific messages based on the attacking ship's index
-      var statusmsg;
-      var statusclr;
-      console.log("choice" + choice);
-      choice = Number(choice);
-      switch (choice) {
-        case 0:
-            statusmsg = ''
-            statusclr = '';
-            console.log("INDEX 0, no damage");
-            break;
-        case 1:
-          statusmsg = trial.ship_outcome_1_unshielded + appliedDamage;
-          statusclr = 'red';
-          console.log("INDEX 1, 100 damage");
-          break;
-        case 2:
-          statusmsg = trial.ship_outcome_2_unshielded + appliedDamage;
-          statusclr = 'darkorange';
-          console.log("INDEX 2, 0.2 damage");
-          break;
-      }
-    } else if (shield_activated) {
-      var statusmsg = trial.ship_outcome_3_shielded;
-      var statusclr = 'yellow';
-      console.log("Ship attack message (shielded):", statusmsg);
+      
+      function formatShipOutcomeText(outcomeText, damageText) {
+        return outcomeText + '<span style="font-weight: bold;font-size: 36px; color: inherit;">-$' + damageText + '</span>';
     }
-    updateStatus('ship',statusmsg,statusclr)
+// Update status and log specific messages based on the attacking ship's index
+var statusmsg;
+var statusclr;
+console.log("choice" + choice);
+choice = Number(choice);
+switch (choice) {
+    case 0:
+        statusmsg = '';
+        statusclr = '';
+        console.log("INDEX 0, no damage");
+        break;
+    case 1:
+        statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
+        statusclr = 'red';
+        console.log("INDEX 1, 100 damage");
+        break;
+        //when m,aking this + you will need to change the formatShipOutcomeText, which appens -$ by default
+    case 2:
+        statusmsg = formatShipOutcomeText(trial.ship_outcome_2_unshielded, appliedDamage);
+        statusclr = 'darkorange';
+        console.log("INDEX 2, 0.2 damage");
+        break;
+}
+} else if (shield_activated) {
+    statusmsg = formatShipOutcomeText(trial.ship_outcome_3_shielded, appliedDamage);
+    var statusclr = 'yellow';
+    console.log("Ship attack message (shielded):", statusmsg);
+}
+updateStatus('ship', statusmsg, statusclr);
 
     
  // Create a new div element for the ship outcome message

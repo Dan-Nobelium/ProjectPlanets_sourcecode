@@ -40,7 +40,7 @@ const planetColors = {
 let block_number = 0;
 let trial_number = 0;
 let points = 0;
-const block_duration = 180 * 200; // in milliseconds (3 mins)
+const block_duration = 180 * 500; // in milliseconds (3 mins)
 const iti = 1000;
 const inf_stim_height = 80;
 const inf_slider_width = 500;
@@ -59,8 +59,8 @@ let nBlocks_p3 = 1;
 let planet_labels = ['Planet A','Planet B','Planet C'];
 let ship_attack_damage = [0, 100, 0.2];
 const win_100_text = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: #05BF00;'>Success +$</p>";
-const ship_outcome_1_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: red; -webkit-text-stroke: 0.5px black;'>Attack! -$</p>";
-const ship_outcome_2_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: darkorange; -webkit-text-stroke: 0.5px yellow;'>Attack! -$</p>";
+const ship_outcome_1_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: red; -webkit-text-stroke: 0.5px black;'>Attack! </p>";
+const ship_outcome_2_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: darkorange; -webkit-text-stroke: 0.5px yellow;'>Attack! </p>";
 const ship_outcome_3_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: green;'>Bonus! +$</p>";
 const ship_outcome_3_shielded = "<p style='font-family: Arial; font-size: 36px; color: yellow;'>Shield prevented a bonus</p>";
 
