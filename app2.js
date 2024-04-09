@@ -62,7 +62,8 @@ const win_100_text = "<p style='font-family: Arial; font-weight: bold; font-size
 const ship_outcome_1_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: red; -webkit-text-stroke: 0.5px black;'>Attack! </p>";
 const ship_outcome_2_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: darkorange; -webkit-text-stroke: 0.5px yellow;'>Attack! </p>";
 const ship_outcome_3_unshielded = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: green;'>Bonus! +$</p>";
-const ship_outcome_3_shielded = "<p style='font-family: Arial; font-size: 36px; color: yellow;'>Shield prevented a bonus</p>";
+const ship_outcome_3_shielded = "<p style='font-family: Arial; font-size: 36px; color: yellow;'></p>";
+// const ship_outcome_3_shielded = "<p style='font-family: Arial; font-size: 36px; color: yellow;'>Shield prevented a bonus</p>";
 
 // manipulate response-ship Rft rate
 if (group[0].includes("0.1")) {
@@ -1091,17 +1092,17 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(audit_block);
 
 // Phase 1, no ships
-addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-timeline.push(valence_p1);
-timeline.push(infer_p1_A);
-timeline.push(infer_p1_B);
-timeline.push(infer_p1_C);
-timeline.push(p1_q3_triangle);
-timeline.push(p1_q4_triangle);
+// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+// timeline.push(valence_p1);
+// timeline.push(infer_p1_A);
+// timeline.push(infer_p1_B);
+// timeline.push(infer_p1_C);
+// timeline.push(p1_q3_triangle);
+// timeline.push(p1_q4_triangle);
 
 
-// Phase2, ships
-timeline.push(phaseTwoInstructions);
+// // Phase2, ships
+// timeline.push(phaseTwoInstructions);
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
 timeline.push(valence_p2);
 timeline.push(infer_p2_A);

@@ -296,6 +296,10 @@ plugin.trial = function(display_element, trial)
     display_element.style.color = "green"
 
     
+    function formatShipOutcomeText(outcomeText, damageText) {
+        return outcomeText + '<span style="font-weight: bold;font-size: 36px; color: inherit;">-$' + damageText + '</span>';
+      }
+
     // Create general div structure: Planet Row | Command Info
     if (Array.isArray(trial.stimulus)){
         for (var i = 0; i < trial.stimulus.length; i ++){
@@ -923,9 +927,7 @@ function ship_attack(choice) {
       // Update score
       updateScore(trial.data.points);
       
-      function formatShipOutcomeText(outcomeText, damageText) {
-        return outcomeText + '<span style="font-weight: bold;font-size: 36px; color: inherit;">-$' + damageText + '</span>';
-      }
+
       
       // Update status and log specific messages based on the attacking ship's index
       var statusmsg;
@@ -954,8 +956,8 @@ break;
 }
 } else if (shield_activated) {
 statusmsg = formatShipOutcomeText(trial.ship_outcome_3_shielded, appliedDamage);
-var statusclr = 'yellow';
-console.log("Ship attack message (shielded):", statusmsg);
+var statusclr = 'black';
+// console.log("Ship attack message (shielded):", statusmsg);
 }
 updateStatus('ship', statusmsg, statusclr);
 
