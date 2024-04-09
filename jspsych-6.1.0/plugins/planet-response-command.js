@@ -49,7 +49,7 @@ jsPsych.plugins["planet-response-command"] = (function() {
 			prompt: {
 				type: jsPsych.plugins.parameterType.STRING,
 				pretty_name: 'Prompt',
-				default: ['Planet A','Planet B','Planet C'], //stup for 3 planets
+				default: ['Planet A','Planet B','Planet C'], //setup for 3 planets
 				array: true,
 				description: 'Any content here will be displayed under the option.'
 			},
@@ -350,9 +350,11 @@ plugin.trial = function(display_element, trial)
     html += '<div class="clickid" id="total-score-box"></div>'
     html += '<div id="ship-placeholder"></div>'
     html += '<div id="shield-placeholder"></div>'
+    html += '<div id="ship-outcome-text" class="ship-outcome" style="display: none; opacity: 0;"></div>'
     html += '</div>'
     html += '</div>'
 
+    
     //Render basic div structure
     display_element.innerHTML = html;
 
@@ -361,6 +363,7 @@ var gameContainer = display_element.querySelector('#game-container');
 gameContainer.style.display = 'grid';
 gameContainer.style.gridTemplateColumns = '5fr 1fr'; // Allocate 2/3 width to planet row and 1/3 to command info
 gameContainer.style.gridGap = '400px';
+
 
     // Position planets and command info elements in the grid
     var planetsDiv = display_element.querySelector('#planet-row');
@@ -875,7 +878,6 @@ function activate_shields(){
     shieldTxt.innerHTML = shieldTxtStr
     
 }
-
 function ship_attack(choice) {
     // Disable button if no response
     if (shield_activated == null) {
@@ -907,52 +909,50 @@ function ship_attack(choice) {
       
       function formatShipOutcomeText(outcomeText, damageText) {
         return outcomeText + '<span style="font-weight: bold;font-size: 36px; color: inherit;">-$' + damageText + '</span>';
+      }
+      
+      // Update status and log specific messages based on the attacking ship's index
+      var statusmsg;
+      var statusclr;
+      console.log("choice" + choice);
+      choice = Number(choice);
+      switch (choice) {
+        case 0:
+          statusmsg = '';
+          statusclr = '';
+          console.log("INDEX 0, no damage");
+          break;
+        case 1:
+          statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
+          statusclr = 'red';
+          console.log("INDEX 1, 100 damage");
+          break;
+        case 2:
+          statusmsg = formatShipOutcomeText(trial.ship_outcome_2_unshielded, appliedDamage);
+          statusclr = 'darkorange';
+          console.log("INDEX 2, 0.2 damage");
+          break;
+      }
+    } else if (shield_activated) {
+      statusmsg = formatShipOutcomeText(trial.ship_outcome_3_shielded, appliedDamage);
+      var statusclr = 'yellow';
+      console.log("Ship attack message (shielded):", statusmsg);
     }
-// Update status and log specific messages based on the attacking ship's index
-var statusmsg;
-var statusclr;
-console.log("choice" + choice);
-choice = Number(choice);
-switch (choice) {
-    case 0:
-        statusmsg = '';
-        statusclr = '';
-        console.log("INDEX 0, no damage");
-        break;
-    case 1:
-        statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
-        statusclr = 'red';
-        console.log("INDEX 1, 100 damage");
-        break;
-        //when m,aking this + you will need to change the formatShipOutcomeText, which appens -$ by default
-    case 2:
-        statusmsg = formatShipOutcomeText(trial.ship_outcome_2_unshielded, appliedDamage);
-        statusclr = 'darkorange';
-        console.log("INDEX 2, 0.2 damage");
-        break;
-}
-} else if (shield_activated) {
-    statusmsg = formatShipOutcomeText(trial.ship_outcome_3_shielded, appliedDamage);
-    var statusclr = 'yellow';
-    console.log("Ship attack message (shielded):", statusmsg);
-}
-updateStatus('ship', statusmsg, statusclr);
+    updateStatus('ship', statusmsg, statusclr);
 
-    
- // Create a new div element for the ship outcome message
-var shipOutcomeDiv = document.createElement('div');
-shipOutcomeDiv.id = 'ship-outcome-text';
-shipOutcomeDiv.style.visibility = 'hidden'; // Initially hide the element
-shipOutcomeDiv.style.fontFamily = 'Arial';
-shipOutcomeDiv.style.fontSize = '36px';
-shipOutcomeDiv.style.color = 'black'; // Set an initial color (will be updated later)
-shipOutcomeDiv.style.textAlign = 'center';
-shipOutcomeDiv.style.fontWeight = 'bold';
-shipOutcomeDiv.style.marginTop = '20px';
+    // Get the existing ship outcome div
+    var shipOutcomeDiv = display_element.querySelector('#ship-outcome-text');
 
-// Append the ship outcome div to the display element
-display_element.appendChild(shipOutcomeDiv);
-  
+    // Update the content and styling of the ship outcome div
+    shipOutcomeDiv.innerHTML = statusmsg;
+    shipOutcomeDiv.style.color = statusclr;
+    shipOutcomeDiv.style.visibility = 'visible';
+
+      // Show the ship outcome div
+  shipOutcomeDiv.style.display = 'block';
+  setTimeout(function() {
+    shipOutcomeDiv.style.opacity = '1';
+  }, 0);
   
     // Log details
     var time_outcome = performance.now() - start_time;
@@ -977,10 +977,8 @@ display_element.appendChild(shipOutcomeDiv);
     // Reset ship
     setTimeout(function() {
       reset_ship();
-      // Remove the ship outcome div when resetting the ship
-      if (shipOutcomeDiv.parentNode === display_element) {
-        display_element.removeChild(shipOutcomeDiv);
-      }
+      // Hide the ship outcome div when resetting the ship
+      shipOutcomeDiv.style.visibility = 'hidden';
     }, trial.feedback_duration);
   
     // Print hostile IDX to console
