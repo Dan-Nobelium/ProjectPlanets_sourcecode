@@ -611,59 +611,94 @@ function proceed_trade(choice){
         }
         return outStr
     }
+// Run trade
+if (trial.trade_balance){
+    var tradeBalOut = balanceSuccess(trade_orderbase,trade_log,trade_read,choice,true,'trade')
+    trade_success = tradeBalOut[0];
+    trade_log = tradeBalOut[1];
+    trade_read = tradeBalOut[2];
+} else {
+    trade_success = Math.random() < trial.probability_trade[choice]
+}
 
-    // Run trade
-    if (trial.trade_balance){
-        var tradeBalOut = balanceSuccess(trade_orderbase,trade_log,trade_read,choice,true,'trade')
-        trade_success = tradeBalOut[0];
-        trade_log = tradeBalOut[1];
-        trade_read = tradeBalOut[2];
-    } else {
-        trade_success = Math.random() < trial.probability_trade[choice]
-    }
+console.log("Trade success:", trade_success);
 
-    console.log("Trade success:", trade_success);
+if (trade_success){
+    //Add and display reward
+    var displayScore = trial.rewards[choice];
+    var statusmsg = win_100_text + displayScore + ' points';
+    console.log("Trade success message:", statusmsg);
 
-    if (trade_success){
-        //Add and display reward
-        var displayScore = trial.rewards[choice];
-        var statusmsg = win_100_text + displayScore + ' points';
-        console.log("Trade success message:", statusmsg);
+} else {
+    //Display some fail state
+    var displayScore = 0;
+    var statusmsg = 'Trade attempt failed'
+    var statusclr = 'yellow'
+    console.log("Trade failure message:", statusmsg);
+}
 
-    } else {
-        //Display some fail state
-        var displayScore = 0;
-        var statusmsg = 'Trade attempt failed'
-        var statusclr = 'yellow'
-        console.log("Trade failure message:", statusmsg);
-    }
+//Check time and disable planets if final_action was flagged previously
+checkTimeExceed()
 
-    //Check time and disable planets if final_action was flagged previously
-    checkTimeExceed()
+// Skip ship-related code if show_ship is false
+if (!trial.show_ship) {
+    // Wait before showing outcome
+    setTimeout(function(){
+        //Compute total points
+        trial.data.points += displayScore
+        //Hide signal image
+        document.querySelector('#planet-signal-img-'+choice).style.visibility = 'hidden'
+        updateScore(trial.data.points)
+        updateStatus(choice,statusmsg,statusclr)
 
-    var show_ship_check = false
-    var show_ship_samp = Math.random()
-    if (trial.ship_balance){
-        var shipBalOut = balanceSuccess(ship_orderbase,ship_log,ship_read,choice,true,'ship')
-        show_ship_check = shipBalOut[0];
-        ship_log = shipBalOut[1];
-        ship_read = shipBalOut[2];
-    } else {
-        if (show_ship_samp < trial.probability_ship[choice]){
-            show_ship_check = true
-        }
-    }
-    console.log("Show ship check:", show_ship_check);
-    console.log("Show ship sample:", show_ship_samp);
+        // Log response details
+        var time_outcome = performance.now()-start_time
+        response.planets.outcome.push(displayScore)
+        response.planets.time_outcome.push(time_outcome)
+        // Also update a single list of outcomes for easier tracking of each change in score
+        response.all_outcomes.outcome.push(displayScore)
+        response.all_outcomes.time_outcome.push(time_outcome)
+        // Finally, update running total
+        response.all_outcomes.total.push(trial.data.points)
 
-    // Start timer for ship
-    if (trial.show_ship && show_ship_check){
+        console.log("Outcome:", displayScore);
+        console.log("Outcome time:", time_outcome);
+        console.log("Total points:", trial.data.points);
+
+        //reset planets after short delay
         setTimeout(function(){
-            if (!shipVisible){
-                show_ship(choice);
-            }
-        },trial.show_ship_delay);				
+            reset_planet(planet,choice)
+        }, trial.feedback_duration)
+    }, trial.signal_time)
+
+    return; // Exit the function if show_ship is false
+}
+
+// Ship-related code
+var show_ship_check = false
+var show_ship_samp = Math.random()
+if (trial.ship_balance){
+    var shipBalOut = balanceSuccess(ship_orderbase,ship_log,ship_read,choice,true,'ship')
+    show_ship_check = shipBalOut[0];
+    ship_log = shipBalOut[1];
+    ship_read = shipBalOut[2];
+} else {
+    if (show_ship_samp < trial.probability_ship[choice]){
+        show_ship_check = true
     }
+}
+console.log("Show ship check:", show_ship_check);
+console.log("Show ship sample:", show_ship_samp);
+
+// Start timer for ship
+if (show_ship_check){
+    setTimeout(function(){
+        if (!shipVisible){
+            show_ship(choice);
+        }
+    },trial.show_ship_delay);
+}
+
 
     // Wait before showing outcome
     setTimeout(function(){
