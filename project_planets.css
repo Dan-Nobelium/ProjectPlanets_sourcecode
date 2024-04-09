@@ -16,7 +16,7 @@
 .ship-shield-bar-fill {
     height: 100%;
     background-color: green;
-    animation: shieldChargeBar 2s linear forwards;
+    animation: shieldChargeBar 6s linear forwards;
 }
 
 @keyframes shieldChargeBar {
@@ -32,7 +32,6 @@
     margin-bottom: 10px;
     font-size: 18px;
     font-weight: bold;
-    animation: shieldChargeText 2s linear forwards;
 }
 
 @keyframes shieldChargeText {
