@@ -653,7 +653,7 @@ var p1_q3_triangle = {
 
 // Question 4
 var p1_q4_triangle = {
-  type: 'html-slider-triplet',
+  type: 'html-slider-triangle',
   prompt: "To maximise your points in the <b>previous block</b>, <p>what proportion of interactions would you allocate for each planet?",
   stimulus_all: stim_list,
   planetColors: planetColors,
@@ -669,7 +669,7 @@ var p1_q4_triangle = {
 
 // Question 3
 var p2_q3_triangle = {
-  type: 'html-slider-triplet',
+  type: 'html-slider-triangle',
   prompt: "Reflecting back on what you did in the <b>most recent block</b>, <p>what proportion of your recent interactions were with each planet:",
   stimulus_left: stim_list[0],
   stimulus_right: stim_list[1],
@@ -686,7 +686,7 @@ var p2_q3_triangle = {
 
 // Question 4
 var p2_q4_triangle = {
-  type: 'html-slider-triplet',
+  type: 'html-slider-triangle',
   prompt: "To maximise your points in the <b>previous block</b>, <p>what proportion of interactions would you allocate for each planet?",
   stimulus_left: stim_list[0],
   stimulus_right: stim_list[1],
@@ -1092,29 +1092,29 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 // Phase 1, no ships
 addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-// timeline.push(valence_p1);
-// timeline.push(infer_p1_A);
-// timeline.push(infer_p1_B);
-// timeline.push(infer_p1_C);
-// timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
+timeline.push(valence_p1);
+timeline.push(infer_p1_A);
+timeline.push(infer_p1_B);
+timeline.push(infer_p1_C);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
 
 
 // Phase2, ships
-// timeline.push(phaseTwoInstructions);
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(infer_p2_ship1);
-// timeline.push(infer_p2_ship2);
-// timeline.push(infer_p2_ship3);
-// timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
+timeline.push(phaseTwoInstructions);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(infer_p2_ship1);
+timeline.push(infer_p2_ship2);
+timeline.push(infer_p2_ship3);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
 
 // // // Phase3, contingencies
-// timeline.push(cont_catch);
+timeline.push(cont_catch);
 
 // // Phase3, ships
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
