@@ -686,209 +686,154 @@ function proceed_trade(choice){
 
 
 
+// Function to update the state of the shield
+var shield_start_time = null;
+var shield_success = null; // Initialize shield_success as null
 
-// function to show ship img and subsequent procedure
-function show_ship(choice) {
-    //Put stuff into the ship divs
-    var shipImgDiv = display_element.querySelector('#ship-img-div');
-    shipImgDiv.style.visibility = 'visible'; // Update visibility to visible when the ship is activated
-    // ...
-    shipImgDiv.innerHTML = '<img src="' + trial.ship_stimulus[choice] +  '" ' +
-        'id="ship-img" ' +
-        'class="ship"' +
-        'height="' + trial.ship_height +'" ' +
-        'width="' + trial.ship_width +'" ' +
-        'style="position:relative; top:0px; border: 0px; visibility:visible;z-index:11;" ' +
-        'draggable="false" ' +
-        '> '
-    shipVisible = true
-    var shipImg = display_element.querySelector('#ship-img');
-    logIDonMouseDown(shipImg)
-
-    var shipStatTxt = display_element.querySelector('#ship-status-text');
-    shipStatTxt.style.fontSize = '25px'
-    shipStatTxt.style.color = 'red'
-    shipStatTxt.style.visibility = 'visible'
-    logIDonMouseDown(shipStatTxt)
-
-    var shipAtTxt = display_element.querySelector('#ship-attack-text');
-    shipAtTxt.style.fontSize = '25px'
-    shipAtTxt.style.color = 'red'
-    shipAtTxt.style.visibility = 'visible'
-    var attack_int_id = setInterval(attframe,1000)
-    var attack_countdown = trial.ship_attack_time/1000
-    shipAtTxt.innerHTML = 'Encounter imminent ' + attack_countdown + ' ' //Show first frame
-    function attframe() {
-        if (attack_countdown <= 0) {
-            clearInterval(attack_int_id);
-        } else {
-            attack_countdown --
-            shipAtTxt.innerHTML = 'Encounter imminent ' + attack_countdown + ' s'
-        }
-    }
-    logIDonMouseDown(shipAtTxt)
-
-    
-
-    var shieldBoxDiv = display_element.querySelector('#shield-placeholder');
-    shieldBoxDiv.innerHTML = '<div class="ship" id="ship-shield-text"></div>' +
-        '<div class="ship" id="ship-shield-button"></div>' +
-        '<div class="ship" id="ship-shield-charger"></div>';
-        
-    //Style the text div
-    var shieldTxtDiv = shieldPlaceholder.querySelector('#ship-shield-text');
-    if (!shieldTxtDiv) {
-        shieldTxtDiv = document.createElement('div');
-        shieldTxtDiv.id = 'ship-shield-text';
-        shieldTxtDiv.className = 'ship';
-        shieldPlaceholder.appendChild(shieldTxtDiv);
-    }
-    shieldTxtDiv.innerHTML = 'CHARGING SHIELD';
-    shieldTxtDiv.style.fontSize = "25px";
-    shieldTxtDiv.style.color = 'green';
-    shieldTxtDiv.style.position = 'relative';
-    shieldTxtDiv.style.top = '100px';
-    logIDonMouseDown(shieldTxtDiv);
-
-    var shieldButton = shieldPlaceholder.querySelector('#ship-shield-button');
-    if (!shieldButton) {
-        shieldButton = document.createElement('div');
-        shieldButton.id = 'ship-shield-button';
-        shieldButton.className = 'ship';
-        shieldPlaceholder.appendChild(shieldButton);
-    }
-    shieldButton.style.border = "2px solid green";
-    shieldButton.draggable = false;
-    shieldButton.style.position = 'relative';
-    shieldButton.style.top = '100px';
-    shieldButton.style.fontSize = "40px";
-    shieldButton.style.height = '50px';
-    shieldButton.style.lineHeight = '50px';
-    shieldButton.style.zIndex = '10';
-    logIDonMouseDown(shieldButton);
-
-    var shieldChgDiv = shieldPlaceholder.querySelector('#ship-shield-charger');
-    if (!shieldChgDiv) {
-        shieldChgDiv = document.createElement('div');
-        shieldChgDiv.id = 'ship-shield-charger';
-        shieldChgDiv.className = 'ship';
-        shieldPlaceholder.appendChild(shieldChgDiv);
-    }
-    shieldChgDiv.style.color = 'green';
-    shieldChgDiv.style.backgroundColor = 'green';
-    shieldChgDiv.style.border = "2px solid green";
-    shieldChgDiv.draggable = false;
-    var buttonrect = shieldButton.getBoundingClientRect();
-    shieldChgDiv.style.position = 'absolute';
-    shieldChgDiv.style.top = buttonrect.top + 1 + 'px';
-    shieldChgDiv.style.left = buttonrect.left + 1 + 'px';
-    shieldChgDiv.style.height = buttonrect.height - 5 + 'px';
-    shieldChgDiv.style.width = 0;
-    shieldChgDiv.style.opacity = .5;
-    shieldButton.style.zIndex = '1';
-
-    //Set shield charging timer and animation
-    setTimeout(function(){
-        proceed_shield(choice);
-    },trial.shield_charging_time)
-    //Charging box animation
-    var int_steps = 5; //ms
-  var charge_int_id = setInterval(chargeframe, int_steps);
-var chgwidth = 0;
-var charge_nsteps = trial.shield_charging_time / int_steps;
-var charge_stepwidth = buttonrect.width / charge_nsteps;
-function chargeframe() {
-    if (shieldChgDiv.getBoundingClientRect().width > buttonrect.width) {
-        clearInterval(charge_int_id);
-    } else {
-        chgwidth += charge_stepwidth;
-        shieldChgDiv.style.width = chgwidth + 'px';
-    }
-}
-
-    //Start timer for ship to attack and timeout
-    setTimeout(function(){
-        ship_attack(choice)
-    },trial.ship_attack_time)
-
-    //log ship appearance details
-    response.ships.type.push(choice)
-    response.ships.time_appear.push(performance.now() - start_time)
-}
-
-// function to update state of shield
-var shield_start_time = null
-function proceed_shield(choice){
+function proceed_shield(choice) {
     if (trial.shield_balance) {
-        var shieldBalOut = balanceSuccess(shield_orderbase,shield_log,shield_read,choice,true,'shield')
+        var shieldBalOut = balanceSuccess(shield_orderbase, shield_log, shield_read, choice, true, 'shield');
         shield_success = shieldBalOut[0];
         shield_log = shieldBalOut[1];
         shield_read = shieldBalOut[2];
     } else {
         // Run shield gamble
-        shield_success = Math.random() < trial.probability_shield[choice]
+        shield_success = Math.random() < trial.probability_shield[choice];
     }
-    
-    //Define elements
-    var shieldTxtDiv = display_element.querySelector('#ship-shield-text');
-    var shieldButton = display_element.querySelector('#ship-shield-button');
-    // Log shield state
-    response.ships.shield_available.push(shield_success)
 
-    //Update display
-    if (shield_success){
-        shieldTxtDiv.innerHTML = 'SHIELD AVAILABLE'
-        shieldButton.innerHTML = 'ACTIVATE!'
-        var shieldButton = display_element.querySelector('#ship-shield-button')
-        var conditionStr = 'shield_activated==null'
-        var styleDef = ['background-color: ;','color: green;'];
-        var styleChange = ['background-color: green;','color: black;'];
-        var result = activate_shields;
-        var clickOnMouseDown = false;
-        cond_click(shieldButton,result,conditionStr,styleDef,styleChange,clickOnMouseDown)
+    // Update the shield UI based on shield availability
+    updateShieldUI(shield_success);
+
+    // Log shield state
+    response.ships.shield_available.push(shield_success);
+
+    if (shield_success) {
         shield_start_time = performance.now();
-    } else {
-        shieldTxtDiv.innerHTML = 'SHIELD UNAVAILABLE'
-        shieldButton.innerHTML = 'NO SHIELD'
-        shieldButton.style.opacity = '.5'
     }
 }
+
+function createShieldHTML() {
+    var shieldBoxDiv = display_element.querySelector('#shield-placeholder');
+    shieldBoxDiv.innerHTML = `
+        <div class="ship-shield">
+            <div class="ship-shield-text" id="ship-shield-text"></div>
+            <div class="ship-shield-bar">
+                <div class="ship-shield-bar-fill" id="ship-shield-bar-fill"></div>
+            </div>
+        </div>
+        <div class="ship" id="ship-shield-button"></div>
+    `;
+}
+
+function updateShieldUI(shield_success) {
+    var shieldTxtDiv = display_element.querySelector('.ship-shield-text');
+    var shieldButton = display_element.querySelector('#ship-shield-button');
+
+    if (shield_success) {
+        shieldTxtDiv.textContent = 'SHIELD AVAILABLE';
+        shieldButton.textContent = 'ACTIVATE!';
+        shieldButton.style.opacity = '1';
+        shieldButton.addEventListener('click', activateShield);
+    } else {
+        shieldTxtDiv.textContent = 'SHIELD UNAVAILABLE';
+        shieldButton.textContent = 'NO SHIELD';
+        shieldButton.style.opacity = '0.5';
+    }
+}
+
 // Handle activation of shields
-function activate_shields(){
-    //Log data
+function activateShield() {
+    // Log data
     var end_time = performance.now();
     var rt = end_time - shield_start_time;
     shield_activated = true;
-    response.ships.rt_shield_activated.push(rt); //logging of activation state will be performed at time of ship attack
+    response.ships.rt_shield_activated.push(rt); // Logging of activation state will be performed at the time of ship attack
 
-    //Modify Shieldbutton text
-    var shieldButton = display_element.querySelector('#ship-shield-button')
-    shieldButton.innerHTML = 'ACTIVE'
-    shieldButton.style.color = '#1eff19'
-    shieldButton.style.backgroundColor = '#196d17'
+    // Update shield text and button
+    var shieldTxtDiv = display_element.querySelector('.ship-shield-text');
+    var shieldButton = display_element.querySelector('#ship-shield-button');
+    shieldTxtDiv.textContent = 'SHIELD ACTIVATED';
+    shieldButton.textContent = 'ACTIVE';
+    shieldButton.style.color = '#1eff19';
+    shieldButton.style.backgroundColor = '#196d17';
 
-    //Add cost if specified
-    var shieldTxt = display_element.querySelector('#ship-shield-text')
-    var shieldTxtStr = 'Shield activated'
-    if (trial.shield_cost_toggle){
-        shieldTxtStr = 'Shield cost: -' + trial.shield_cost_amount + ' points'
-        
-        trial.data.points -= trial.shield_cost_amount				
-        //Update score
-        updateScore(trial.data.points)
+    // Add cost if specified
+    var shieldTxtStr = 'Shield activated';
+    if (trial.shield_cost_toggle) {
+        shieldTxtStr = 'Shield cost: -' + trial.shield_cost_amount + ' points';
+        trial.data.points -= trial.shield_cost_amount;
 
-        //log details
-        var time_outcome = performance.now()-start_time
-        response.all_outcomes.outcome.push(-trial.shield_cost_amount)
-        response.all_outcomes.time_outcome.push(time_outcome)
-        // Finally, update total
-        response.all_outcomes.total.push(trial.data.points)
-        //Xian todo 240620: Think about whether it makes sense to log the shield cost in
-        // the all_outcomes data or its own var, or whether it's needed at all?
+        // Update score
+        updateScore(trial.data.points);
+
+        // Log details
+        var time_outcome = performance.now() - start_time;
+        response.all_outcomes.outcome.push(-trial.shield_cost_amount);
+        response.all_outcomes.time_outcome.push(time_outcome);
+        response.all_outcomes.total.push(trial.data.points);
     }
-    shieldTxt.innerHTML = shieldTxtStr
-    
+    shieldTxtDiv.textContent = shieldTxtStr;
 }
+
+// function to show ship img and subsequent procedure
+// Function to show the ship image and subsequent procedure
+
+function show_ship(choice) {
+    // Put stuff into the ship divs
+    var shipImgDiv = display_element.querySelector('#ship-img-div');
+    shipImgDiv.style.visibility = 'visible'; // Update visibility to visible when the ship is activated
+    // ...
+    shipImgDiv.innerHTML = '<img src="' + trial.ship_stimulus[choice] + '" ' +
+        'id="ship-img" ' +
+        'class="ship"' +
+        'height="' + trial.ship_height + '" ' +
+        'width="' + trial.ship_width + '" ' +
+        'style="position:relative; top:0px; border: 0px; visibility:visible;z-index:11;" ' +
+        'draggable="false" ' +
+        '> ';
+    shipVisible = true;
+    var shipImg = display_element.querySelector('#ship-img');
+    logIDonMouseDown(shipImg);
+
+    var shipStatTxt = display_element.querySelector('#ship-status-text');
+    shipStatTxt.style.fontSize = '25px';
+    shipStatTxt.style.color = 'red';
+    shipStatTxt.style.visibility = 'visible';
+    logIDonMouseDown(shipStatTxt);
+
+    var shipAtTxt = display_element.querySelector('#ship-attack-text');
+    shipAtTxt.style.fontSize = '25px';
+    shipAtTxt.style.color = 'red';
+    shipAtTxt.style.visibility = 'visible';
+    var attack_int_id = setInterval(attframe, 1000);
+    var attack_countdown = trial.ship_attack_time / 1000;
+    shipAtTxt.innerHTML = 'Encounter imminent ' + attack_countdown + ' '; // Show first frame
+    function attframe() {
+        if (attack_countdown <= 0) {
+            clearInterval(attack_int_id);
+        } else {
+            attack_countdown--;
+            shipAtTxt.innerHTML = 'Encounter imminent ' + attack_countdown + ' s';
+        }
+    }
+    logIDonMouseDown(shipAtTxt);
+
+    // Create the shield HTML structure
+    createShieldHTML();
+
+    // Update the shield UI based on shield availability
+    updateShieldUI(shield_success);
+
+    // Start timer for ship to attack and timeout
+    setTimeout(function() {
+        ship_attack(choice);
+    }, trial.ship_attack_time);
+
+    // Log ship appearance details
+    response.ships.type.push(choice);
+    response.ships.time_appear.push(performance.now() - start_time);
+}
+
 function ship_attack(choice) {
     // Disable button if no response
     if (shield_activated == null) {
@@ -1241,30 +1186,35 @@ function reset_planet(planet,choice){
         }
     }
 }
-function reset_ship(){
-    //Function to reset ship div
-    //Hide ship div
-    var shipEls = display_element.getElementsByClassName('ship')
-    for (var i = 0; i < shipEls.length; i++){
-        shipEls[i].style.visibility = 'hidden'
+// Function to reset the ship div
+function reset_ship() {
+    // Hide ship div
+    var shipEls = display_element.getElementsByClassName('ship');
+    for (var i = 0; i < shipEls.length; i++) {
+        shipEls[i].style.visibility = 'hidden';
     }
-    shipVisible = false
-    //Clear ship status text
+    shipVisible = false;
+    // Clear ship status text
     var shipStatTxt = display_element.querySelector('#ship-status-text');
-    shipStatTxt.innerHTML = ''
-    //Reset shield
-    var shieldButton = display_element.querySelector('#ship-shield-button')
-    shieldButton.style.opacity = 1.
-    shieldButton.style.backgroundColor = ''
-    shieldButton.style.color = 'green'
-    shieldButton.innerHTML = ''
-    shield_activated = null
+    shipStatTxt.innerHTML = '';
+    // Reset shield
+    var shieldDiv = display_element.querySelector('.ship-shield');
+    var shieldTxtDiv = display_element.querySelector('.ship-shield-text');
+    var shieldButton = display_element.querySelector('#ship-shield-button');
+    var shieldBar = display_element.querySelector('#ship-shield-bar-fill');
+    shieldDiv.style.visibility = 'hidden'; // Hide the shield div
+    shieldTxtDiv.textContent = '';
+    shieldButton.textContent = '';
+    shieldButton.style.opacity = 1;
+    shieldButton.style.backgroundColor = '';
+    shieldButton.style.color = 'green';
+    shieldBar.style.width = '0%'; // Reset the shield bar width
+    shield_activated = null;
 
-    //Check if can end block
-    if (check_end()){
-        end_trial()
+    // Check if can end block
+    if (check_end()) {
+        end_trial();
     }
-
 }
 function checkTimeExceed(){
     // Check if time exceeded, and if so, disable choices

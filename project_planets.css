@@ -1,0 +1,45 @@
+/* Shield styles */
+.ship-shield {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ship-shield-bar {
+    width: 200px; /* Adjust this value to set the desired width of the charging bar */
+    height: 20px;
+    background-color: #ccc;
+    position: relative;
+    overflow: hidden;
+}
+
+.ship-shield-bar-fill {
+    height: 100%;
+    background-color: green;
+    animation: shieldChargeBar 2s linear forwards;
+}
+
+@keyframes shieldChargeBar {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+.ship-shield-text {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    animation: shieldChargeText 2s linear forwards;
+}
+
+@keyframes shieldChargeText {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
