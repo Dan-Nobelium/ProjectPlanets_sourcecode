@@ -1081,7 +1081,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 
 // Induction //DONE
-// timeline.push(fullscreen);
+timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
 // timeline.push(instructionCheckWithFeedback);
