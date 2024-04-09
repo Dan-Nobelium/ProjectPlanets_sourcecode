@@ -774,6 +774,7 @@ function activateShield() {
     shieldButton.textContent = 'ACTIVE';
     shieldButton.style.color = '#1eff19';
     shieldButton.style.backgroundColor = '#196d17';
+    
 
     // Add cost if specified
     var shieldTxtStr = 'Shield activated';
@@ -881,6 +882,7 @@ function ship_attack(choice) {
         trial.data.points *= 1 - appliedDamage;
       } else {
         trial.data.points -= appliedDamage;
+
       }
   
       // Update score
@@ -1221,38 +1223,36 @@ end_trial()
 }
 }
 }
-// Function to reset the ship div
 function reset_ship() {
-// Hide ship div
-var shipEls = display_element.getElementsByClassName('ship');
-for (var i = 0; i < shipEls.length; i++) {
-shipEls[i].style.visibility = 'hidden';
-}
-shipVisible = false;
-// Clear ship status text
-var shipStatTxt = display_element.querySelector('#ship-status-text');
-shipStatTxt.innerHTML = '';
-// Reset shield
-var shieldDiv = display_element.querySelector('.ship-shield');
-var shieldTxtDiv = display_element.querySelector('.ship-shield-text');
-var shieldButton = display_element.querySelector('#ship-shield-button');
-var shieldBar = display_element.querySelector('#ship-shield-bar-fill');
-shieldDiv.style.visibility = 'hidden'; // Hide the shield div
-shieldTxtDiv.textContent = '';
-shieldButton.textContent = '';
-shieldButton.style.opacity = 1;
-shieldButton.style.backgroundColor = '';
-shieldButton.style.color = 'green';
-shieldBar.style.width = '0%'; // Reset the shield bar width
-shield_activated = null;
+    // Hide ship div
+    var shipEls = display_element.getElementsByClassName('ship');
+    for (var i = 0; i < shipEls.length; i++) {
+        shipEls[i].style.visibility = 'hidden';
+    }
+    shipVisible = false;
+    // Clear ship status text
+    var shipStatTxt = display_element.querySelector('#ship-status-text');
+    shipStatTxt.innerHTML = '';
+    // Reset shield
+    var shieldDiv = display_element.querySelector('.ship-shield');
+    var shieldTxtDiv = display_element.querySelector('.ship-shield-text');
+    var shieldButton = display_element.querySelector('#ship-shield-button');
+    var shieldBar = display_element.querySelector('#ship-shield-bar-fill');
+    shieldDiv.style.visibility = 'hidden'; // Hide the shield div
+    shieldTxtDiv.textContent = '';
+    shieldButton.textContent = 'ACTIVATE!'; // Reset shield button text
+    shieldButton.style.opacity = 1;
+    shieldButton.style.backgroundColor = '';
+    shieldButton.style.color = 'green';
+    shieldBar.style.width = '0%'; // Reset the shield bar width
+    shield_activated = null;
 
-console.log("Ship reset");
+    console.log("Ship reset");
 
-// Check if can end block
-if (check_end()) {
-    end_trial();
-}
-
+    // Check if can end block
+    if (check_end()) {
+        end_trial();
+    }
 }
 function checkTimeExceed(){
 // Check if time exceeded, and if so, disable choices
