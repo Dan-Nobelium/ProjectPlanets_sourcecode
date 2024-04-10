@@ -495,9 +495,9 @@ let planet_ship = {
           stim_text_1: '',
           stim_text_2: '',
           stim_text_3: '',
-          stimulus_4: inf_img_p2_A[2].stimulus,
-          stimulus_5: inf_img_p2_A[3].stimulus,
-          stimulus_6: inf_img_p2_A[4].stimulus,
+          stimulus_4: val_img_p2[5].stimulus,
+          stimulus_5: val_img_p2[6].stimulus,
+          stimulus_6: val_img_p2[7].stimulus,
           slider_text_top: contingency_q[0],
           labels_top: contingency_labels,
           stimulus_height: inf_stim_height,
@@ -519,9 +519,9 @@ let planet_ship = {
           stim_text_1: '',
           stim_text_2: '',
           stim_text_3: '',
-          stimulus_4: inf_img_p2_A[2].stimulus,
-          stimulus_5: inf_img_p2_A[3].stimulus,
-          stimulus_6: inf_img_p2_A[4].stimulus,
+          stimulus_4: val_img_p2[5].stimulus,
+          stimulus_5: val_img_p2[6].stimulus,
+          stimulus_6: val_img_p2[7].stimulus,
           stim_text_4: inf_img_p2_A[2].text,
           stim_text_5: inf_img_p2_A[3].text,
           stim_text_6: inf_img_p2_A[4].text,
@@ -550,9 +550,9 @@ let planet_ship = {
           stimulus_4: inf_img_p2_A[2].stimulus,
           stimulus_5: inf_img_p2_A[3].stimulus,
           stimulus_6: inf_img_p2_A[4].stimulus,
-          stim_text_4: inf_img_p2_A[2].text,
-          stim_text_5: inf_img_p2_A[3].text,
-          stim_text_6: inf_img_p2_A[4].text,
+          stimulus_4: val_img_p2[5].stimulus,
+          stimulus_5: val_img_p2[6].stimulus,
+          stimulus_6: val_img_p2[7].stimulus,
           slider_text_top: contingency_q[2],
           labels_top: contingency_labels,
           stimulus_height: inf_stim_height,
@@ -1081,7 +1081,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 
 // Induction //DONE
-timeline.push(fullscreen);
+// timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
 // timeline.push(instructionCheckWithFeedback);
@@ -1092,19 +1092,19 @@ timeline.push(fullscreen);
 // timeline.push(audit_block);
 
 // Phase 1, no ships
-addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-timeline.push(valence_p1);
-timeline.push(infer_p1_A);
-timeline.push(infer_p1_B);
-timeline.push(infer_p1_C);
-timeline.push(p1_q3_triangle);
-timeline.push(p1_q4_triangle);
+// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+// timeline.push(valence_p1);
+// timeline.push(infer_p1_A);
+// timeline.push(infer_p1_B);
+// timeline.push(infer_p1_C);
+// timeline.push(p1_q3_triangle);
+// timeline.push(p1_q4_triangle);
 
 
 // Phase2, ships
-timeline.push(phaseTwoInstructions);
-addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-timeline.push(valence_p2);
+// timeline.push(phaseTwoInstructions);
+// addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
+// timeline.push(valence_p2);
 timeline.push(infer_p2_A);
 timeline.push(infer_p2_B);
 timeline.push(infer_p2_C);
