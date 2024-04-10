@@ -785,11 +785,19 @@ function updateShieldUI(shield_success) {
         shieldButton.style.opacity = '1';
         shieldButton.addEventListener('click', activateShield);
 
+        // Add green rectangle over the shield button
+        shieldButton.style.border = '2px solid #1eff19';
+        shieldButton.style.boxShadow = '0 0 5px #1eff19';
+
         console.log("Shield UI updated: SHIELD AVAILABLE");
     } else {
         shieldTxtDiv.textContent = 'SHIELD UNAVAILABLE';
         shieldButton.textContent = 'NO SHIELD';
         shieldButton.style.opacity = '1';
+
+        // Remove green rectangle from the shield button
+        shieldButton.style.border = 'none';
+        shieldButton.style.boxShadow = 'none';
 
         console.log("Shield UI updated: SHIELD UNAVAILABLE");
     }
