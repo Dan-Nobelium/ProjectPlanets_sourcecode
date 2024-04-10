@@ -747,12 +747,10 @@ var cont_catch = {
               <p>Planet A:</p>
               <img src="img/arrow.jpg" style="width: 100px; height: 100px; object-fit: contain; margin-right: 10px;">
               <img src="${ship_list[1]}" style="width: 100px; height: 100px; object-fit: contain; margin-right: 10px;">
-              <img src="img/arrow.jpg" style="width: 100px; height: 100px; object-fit: contain; margin-right: 10px;">
-              <div style="margin-top: 5px;">${win_100_text}</div>
             </div>
           </div>
           <div style="display: flex; flex-direction: column; align-items: center;">
-            <p>Your signals to the middle planet have been attracting pirate ships, that have been stealing your points!</p>
+            <p>Your signals to the middle planet have been attracting pirate ships, that have been stealing <b>lots of</b> your points!</p>
             <div style="display: flex; flex-direction: row; align-items: center;">
               <img src="${stim_list[1]}" style="width: 100px; height: 100px; object-fit: contain; margin-right: 10px;">
               <p>Planet B:</p>
@@ -763,7 +761,7 @@ var cont_catch = {
             </div>
           </div>
           <div style="display: flex; flex-direction: column; align-items: center;">
-            <p>Your signals to the right planet have been attracting pirate ships, that have been stealing your points!</p>
+            <p>Your signals to the right planet have been attracting pirate ships, that have been stealing <b>some of</b> of your points!</p>
             <div style="display: flex; flex-direction: row; align-items: center;">
               <img src="${stim_list[2]}" style="width: 100px; height: 100px; object-fit: contain; margin-right: 10px;">
               <p>Planet C:</p>
@@ -1084,7 +1082,7 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 
 // Induction //DONE
-// timeline.push(fullscreen);
+timeline.push(fullscreen);
 // timeline.push(consent_block);
 // timeline.push(demographics_block);
 // timeline.push(instructionCheckWithFeedback);
@@ -1095,39 +1093,39 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // timeline.push(audit_block);
 
 // Phase 1, no ships
-// addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
-// timeline.push(valence_p1);
-// timeline.push(infer_p1_A);
-// timeline.push(infer_p1_B);
-// timeline.push(infer_p1_C);
-// timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
+addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
+timeline.push(valence_p1);
+timeline.push(infer_p1_A);
+timeline.push(infer_p1_B);
+timeline.push(infer_p1_C);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
 
 
 // Phase2, ships
-// timeline.push(phaseTwoInstructions);
+timeline.push(phaseTwoInstructions);
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(infer_p2_ship1);
-// timeline.push(infer_p2_ship2);
-// timeline.push(infer_p2_ship3);
-// timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(infer_p2_ship1);
+timeline.push(infer_p2_ship2);
+timeline.push(infer_p2_ship3);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
 
 // // // Phase3, contingencies
-// timeline.push(cont_catch);
+timeline.push(cont_catch);
 
 // // Phase3, ships
-// addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
+addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
 
 
 //Debrief
