@@ -896,8 +896,18 @@ function show_ship(choice) {
     console.log("Ship appeared:", choice);
     console.log("Ship appearance time:", performance.now() - start_time);
 }
-
-function ship_attack(choice) {
+function formatShipOutcomeText(outcomeText, damageText) {
+    if (typeof damageText === 'number' && damageText % 1 !== 0) {
+      // If damageText is a float, convert it to a percentage
+      const percentage = (damageText * 100).toFixed(0);
+      return outcomeText + '<span style="font-weight: bold;font-size: 36px; color: inherit;">-' + percentage + '%</span>';
+    } else {
+      // If damageText is an integer, display it as is
+      return outcomeText + '<span style="font-weight: bold;font-size: 36px; color: inherit;">-$' + damageText + '</span>';
+    }
+  }
+  
+  function ship_attack(choice) {
     // Disable button if no response
     if (shield_activated == null) {
       shield_activated = false;
@@ -921,14 +931,11 @@ function ship_attack(choice) {
         trial.data.points *= 1 - appliedDamage;
       } else {
         trial.data.points -= appliedDamage;
-
       }
   
       // Update score
       updateScore(trial.data.points);
-      
-
-      
+  
       // Update status and log specific messages based on the attacking ship's index
       var statusmsg;
       var statusclr;
@@ -939,67 +946,62 @@ function ship_attack(choice) {
           statusmsg = '';
           statusclr = '';
           console.log("INDEX 0, no damage");
-
-
-
-break;
-case 1:
-statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
-statusclr = 'red';
-console.log("INDEX 1, 100 damage");
-break;
-case 2:
-statusmsg = formatShipOutcomeText(trial.ship_outcome_2_unshielded, appliedDamage);
-statusclr = 'darkorange';
-console.log("INDEX 2, 0.2 damage");
-break;
-}
-} else if (shield_activated) {
-statusmsg = formatShipOutcomeText(trial.ship_outcome_3_shielded, appliedDamage);
-var statusclr = 'black';
-// console.log("Ship attack message (shielded):", statusmsg);
-}
-updateStatus('ship', statusmsg, statusclr);
-
-// Get the existing ship outcome div
-var shipOutcomeDiv = display_element.querySelector('#ship-outcome-text');
-
-// Update the content and styling of the ship outcome div
-shipOutcomeDiv.innerHTML = statusmsg;
-shipOutcomeDiv.style.color = statusclr;
-shipOutcomeDiv.style.visibility = 'visible';
-
-// Log details
-var time_outcome = performance.now() - start_time;
-response.ships.outcome.push(-appliedDamage);
-response.ships.time_outcome.push(time_outcome);
-// Also update a single list of outcomes for easier tracking of each change in score
-response.all_outcomes.outcome.push(-appliedDamage);
-response.all_outcomes.time_outcome.push(time_outcome);
-// Finally, update total
-response.all_outcomes.total.push(trial.data.points);
-console.log("Updated total points:", trial.data.points);
-
-// Visually disable button
-var shieldDiv = display_element.querySelector('#ship-shield-text');
-var shieldButton = display_element.querySelector('#ship-shield-button');
-if (!shield_activated) {
-  shieldButton.style.opacity = '.5';
-  shieldButton.style.backgroundColor = '';
-  shieldButton.style.color = 'green';
-}
-
-// Reset ship
-setTimeout(function() {
-  reset_ship();
-  // Hide the ship outcome div when resetting the ship
-  shipOutcomeDiv.style.visibility = 'hidden';
-}, trial.feedback_duration);
-
-// Print hostile IDX to console
-console.log("Hostile IDX:", choice);
-
-}
+          break;
+        case 1:
+          statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
+          statusclr = 'red';
+          console.log("INDEX 1, damage:", appliedDamage);
+          break;
+        case 2:
+          statusmsg = formatShipOutcomeText(trial.ship_outcome_2_unshielded, appliedDamage);
+          statusclr = 'darkorange';
+          console.log("INDEX 2, damage:", appliedDamage);
+          break;
+      }
+    } else if (shield_activated) {
+      statusmsg = formatShipOutcomeText(trial.ship_outcome_3_shielded, appliedDamage);
+      var statusclr = 'black';
+    }
+    updateStatus('ship', statusmsg, statusclr);
+  
+    // Get the existing ship outcome div
+    var shipOutcomeDiv = display_element.querySelector('#ship-outcome-text');
+  
+    // Update the content and styling of the ship outcome div
+    shipOutcomeDiv.innerHTML = statusmsg;
+    shipOutcomeDiv.style.color = statusclr;
+    shipOutcomeDiv.style.visibility = 'visible';
+  
+    // Log details
+    var time_outcome = performance.now() - start_time;
+    response.ships.outcome.push(-appliedDamage);
+    response.ships.time_outcome.push(time_outcome);
+    // Also update a single list of outcomes for easier tracking of each change in score
+    response.all_outcomes.outcome.push(-appliedDamage);
+    response.all_outcomes.time_outcome.push(time_outcome);
+    // Finally, update total
+    response.all_outcomes.total.push(trial.data.points);
+    console.log("Updated total points:", trial.data.points);
+  
+    // Visually disable button
+    var shieldDiv = display_element.querySelector('#ship-shield-text');
+    var shieldButton = display_element.querySelector('#ship-shield-button');
+    if (!shield_activated) {
+      shieldButton.style.opacity = '.5';
+      shieldButton.style.backgroundColor = '';
+      shieldButton.style.color = 'green';
+    }
+  
+    // Reset ship
+    setTimeout(function() {
+      reset_ship();
+      // Hide the ship outcome div when resetting the ship
+      shipOutcomeDiv.style.visibility = 'hidden';
+    }, trial.feedback_duration);
+  
+    // Print hostile IDX to console
+    console.log("Hostile IDX:", choice);
+  }
 
 // function to end trial when it is time
 function end_trial() {
