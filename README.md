@@ -1,9 +1,6 @@
 # Planets Task
 
 Planets Task is a JavaScript-based application for conducting studies related to decision-making and probability. In this task, participants interact with a simulated environment where they can click on planets to receive probabilistic rewards and encounter various events like pirate attacks.
-This README is substantially outdated due to a rewrite
-
-
 
 ## Installation
 
@@ -13,21 +10,18 @@ This project does not require any specific package manager for installation. Sim
 
 Here's how you can use the Planets Task in your project:
 
-
-
-```javascript
 // Include the planet-response.js or planet-responseELife.js in your HTML file
 // Configure the parameters as per your study's requirement
 
 // Example configuration:
 var config = {
-    stimulus: ['img/planet1.png', 'img/planet2.png'], // array of planet image files
-    stimulus_height: 200, // height of planet images
-    stimulus_width: 200, // width of planet images
-    // ... other parameters
+stimulus: ['img/planet1.png', 'img/planet2.png'], // array of planet image files
+stimulus_height: 200, // height of planet images
+stimulus_width: 200, // width of planet images
+// ... 
 };
-```
-Table of Contents
+
+## Table of Contents
 
     Installation
     Usage
@@ -40,22 +34,7 @@ Table of Contents
     Contributing
     License
 
-Installation
-
-    Clone the repository:
-
-git clone https://github.com/your-username/planets-and-pirates.git
-
-Navigate to the project directory:
-
-    cd planets-and-pirates
-
-    Open the index2.html file in a web browser to run the game.
-
-Usage
-
-To start the game, open the index2.html file in a web browser. The game will begin with an introduction and instructions. Follow the on-screen prompts to progress through the game.
-File Structure
+## File Structure
 
 The project has the following file structure:
 
@@ -68,41 +47,18 @@ planets-and-pirates/
 │   │   └── jspsych.css
 │   ├── jspsych.js
 │   └── plugins/
-│       ├── jspsych-fullscreen.js
-│       ├── jspsych-html-button-response.js
-│       ├── jspsych-html-slider-triangle.js (?)
-│       ├── jspsych-image-keyboard-response.js
-│       ├── jspsych-inference-check-1.js
-│       ├── jspsych-inference-check-4.js (?)
-│       ├── jspsych-inference-check-5.js (?)
-│       ├── jspsych-instructions-advanced.js (?)
-│       ├── jspsych-instructions.js
-│       ├── jspsych-survey-html-form.js
-│       ├── jspsych-survey-likert-catch.js (?)
-│       ├── jspsych-survey-likert.js
-│       ├── jspsych-survey-multi-catch-image.js
-│       ├── jspsych-survey-multi-catch.js (?)
-│       ├── jspsych-survey-multi-choice.js
-│       ├── jspsych-survey-text.js
-│       ├── jspsych-valence-check-3.js
-│       ├── jspsych-valence-check-4.js
-│       ├── jspsych-valence-check-5.js (?)
-│       ├── jspsych-valence-check-6.js (?)
-│       ├── jspsych-valence-check-8.js (?)
-│       └── planet-response.js
 └── img/
-    └── (image files)
 
-    app2.js: The main JavaScript file containing the game logic and experiment structure.
-    index2.html: The HTML file that serves as the entry point for the game.
-    text.js: A JavaScript file containing text content used in the game.
-    jspsych-6.1.0/: Directory containing the jsPsych library files.
-        css/: Directory containing the jsPsych CSS file.
-        jspsych.js: The core jsPsych library file.
-        plugins/: Directory containing jsPsych plugin files.
-    img/: Directory containing image files used in the game.
+app2.js: The main JavaScript file containing the game logic and experiment structure.
+index2.html: The HTML file that serves as the entry point for the game.
+text.js: A JavaScript file containing text content used in the game.
+jspsych-6.1.0/: Directory containing the jsPsych library files.
+    css/: Directory containing the jsPsych CSS file.
+    jspsych.js: The core jsPsych library file.
+    plugins/: Directory containing jsPsych plugin files.
+img/: Directory containing image files used in the game.
 
-Dependencies
+## Dependencies
 
 The game relies on the following dependencies:
 
@@ -110,7 +66,8 @@ The game relies on the following dependencies:
     jQuery: A JavaScript library for DOM manipulation and event handling.
 
 The necessary files for these dependencies are included in the project repository.
-Configuration
+
+## Configuration
 
 The game can be configured by modifying the variables and parameters in the app2.js file. Some notable configuration options include:
 
@@ -123,7 +80,8 @@ The game can be configured by modifying the variables and parameters in the app2
     probability_shield: The probability of successful shield activation for each planet.
 
 Please refer to the comments in the app2.js file for a complete list of configuration options.
-Experiment Structure
+
+## Experiment Structure
 
 The experiment consists of multiple phases and blocks. The main phases are:
 
@@ -133,7 +91,8 @@ The experiment consists of multiple phases and blocks. The main phases are:
     Phase 3: Participants are informed about the contingencies between planets and ships.
 
 Each phase consists of multiple blocks, and each block contains a specified number of trials. The experiment timeline is constructed dynamically based on the configuration options.
-Custom Plugins
+
+## Custom Plugins
 
 The game utilizes several custom jsPsych plugins to implement specific functionality. These plugins are located in the jspsych-6.1.0/plugins/ directory. Some notable custom plugins include:
 
@@ -168,7 +127,8 @@ The game utilizes several custom jsPsych plugins to implement specific functiona
         Function: Presents multiple-choice questions with images and handles instruction looping and error catching.
 
 Please refer to the respective plugin files for more details on their functionality and parameters.
-Utility Functions
+
+## Utility Functions
 
 The app2.js file contains several utility functions that are used throughout the game. These functions perform tasks such as adding blocks to the timeline, initializing variables for balanced probability arrays, and shuffling arrays.
 
@@ -179,25 +139,34 @@ Some notable utility functions include:
     shuffleArray: Shuffles the elements of an array randomly.
 
 Please refer to the comments in the app2.js file for more details on each utility function.
-Contributing
+
+## Contributing
 
 Contributions to the Planets and Pirates game are welcome! If you find any bugs, have suggestions for improvements, or want to add new features, please open an issue or submit a pull request on the GitHub repository.
 
 When contributing, please adhere to the existing code style and conventions. Make sure to test your changes thoroughly before submitting a pull request.
-License
+
+## License
 
 The Planets and Pirates game is open-source software licensed under the MIT License. You are free to use, modify, and distribute the game as per the terms of the license.
 
-### Contribution
+## Contribution
 
-Contributions to the Planets Task project are welcome. If you have suggestions or improvements, please open an issue first to discuss what you would like to change. Ensure any pull requests update the necessary documentation and adhere to the existing code structure.
-Authors
+### Contact
 
+If you have any questions, suggestions, or feedback regarding the Planets Task, please feel free to contact the project maintainer:
+
+    Daniel Noble (daniel.nobelium@gmail.com)
+
+### Acknowledgments
+
+We would like to acknowledge the contributions of the following individuals to the Planets Task project:
+
+    Dr. Philip Jean-Richard Dit Bressel
+    Josh de Leeuw
     Jessica C. Lee
     Shi Xian Liew
 
 ### License
 
-This projects license is indeterminite, please open an issue to learn more.
-
-triangle selector: https://jsfiddle.net/r12cqz7b/
+The Project Planets Task is open-source software licensed under the MIT License. You are free to use, modify, and distribute the project in accordance with the terms and conditions of the license.
