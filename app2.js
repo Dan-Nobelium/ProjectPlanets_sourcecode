@@ -1083,14 +1083,14 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 
 // Induction //DONE
 timeline.push(fullscreen);
-// timeline.push(consent_block);
-// timeline.push(demographics_block);
-// timeline.push(instructionCheckWithFeedback);
+timeline.push(consent_block);
+timeline.push(demographics_block);
+timeline.push(instructionCheckWithFeedback);
 
-// // Attention check //DONE
-// timeline.push(cfi_block);
-// timeline.push(htq_block);
-// timeline.push(audit_block);
+// Attention check //DONE
+timeline.push(cfi_block);
+timeline.push(htq_block);
+timeline.push(audit_block);
 
 // Phase 1, no ships
 addBlocksToTimeline(timeline, planet_noship, nBlocks_p1, nTrialspBlk);
@@ -1135,7 +1135,7 @@ timeline.push(p1_q4_triangle);
 //timeline.push(contact_block); // disabled
 
 //Exit experiment (uncomment to hide JSON data at program end)
-// timeline.push(exit_experiment);
+timeline.push(exit_experiment);
 
 // Run the experiment
 {
