@@ -914,7 +914,6 @@ function formatShipOutcomeText(outcomeText, damageText) {
       return outcomeText + '<span style="font-weight: bold;font-size: 36px; color: inherit;">-$' + damageText + '</span>';
     }
   }
-  
   function ship_attack(choice) {
     // Disable button if no response
     if (shield_activated == null) {
@@ -935,41 +934,33 @@ function formatShipOutcomeText(outcomeText, damageText) {
     // Apply points loss depending on the choice and the shield activation
     if (!shield_activated) {
       // Subtract the calculated damage from the points
+      const initialPoints = trial.data.points; // Store the initial points before damage
       if (typeof appliedDamage === 'number' && appliedDamage % 1 !== 0) {
-        trial.data.points *= 1 - appliedDamage;
+        const pointsLost = Math.round(trial.data.points * appliedDamage);
+        trial.data.points -= pointsLost;
+        statusmsg = `<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: darkorange; -webkit-text-stroke: 0.5px yellow;'>Attack! -$${pointsLost}</p>`;
+        statusclr = 'darkorange';
+        console.log("INDEX 2, points lost:", pointsLost);
       } else {
         trial.data.points -= appliedDamage;
+        statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
+        statusclr = 'red';
+        console.log("INDEX 1, damage:", appliedDamage);
       }
+      const pointsDifference = initialPoints - trial.data.points; // Calculate the points difference
+      console.log("Initial points:", initialPoints);
+      console.log("Updated points:", trial.data.points);
+      console.log("Points difference:", pointsDifference);
+      console.log("Status message:", statusmsg);
   
       // Update score
       updateScore(trial.data.points);
-  
-      // Update status and log specific messages based on the attacking ship's index
-      var statusmsg;
-      var statusclr;
-      console.log("choice" + choice);
-      choice = Number(choice);
-      switch (choice) {
-        case 0:
-          statusmsg = '';
-          statusclr = '';
-          console.log("INDEX 0, no damage");
-          break;
-        case 1:
-          statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
-          statusclr = 'red';
-          console.log("INDEX 1, damage:", appliedDamage);
-          break;
-        case 2:
-          statusmsg = formatShipOutcomeText(trial.ship_outcome_2_unshielded, appliedDamage);
-          statusclr = 'darkorange';
-          console.log("INDEX 2, damage:", appliedDamage);
-          break;
-      }
     } else if (shield_activated) {
       statusmsg = formatShipOutcomeText(trial.ship_outcome_3_shielded, appliedDamage);
-      var statusclr = 'black';
+      statusclr = 'black';
+      console.log("Status message:", statusmsg);
     }
+  
     updateStatus('ship', statusmsg, statusclr);
   
     // Get the existing ship outcome div
