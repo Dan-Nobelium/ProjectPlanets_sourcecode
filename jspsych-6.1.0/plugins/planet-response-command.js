@@ -956,20 +956,26 @@ function formatShipOutcomeText(outcomeText, damageText) {
       // Update score
       updateScore(trial.data.points);
     } else if (shield_activated) {
-      statusmsg = formatShipOutcomeText(trial.ship_outcome_3_shielded, appliedDamage);
-      statusclr = 'black';
-      console.log("Status message:", statusmsg);
-    }
-  
-    updateStatus('ship', statusmsg, statusclr);
-  
-    // Get the existing ship outcome div
-    var shipOutcomeDiv = display_element.querySelector('#ship-outcome-text');
-  
-    // Update the content and styling of the ship outcome div
-    shipOutcomeDiv.innerHTML = statusmsg;
-    shipOutcomeDiv.style.color = statusclr;
-    shipOutcomeDiv.style.visibility = 'visible';
+        console.log("Shield activated, setting status message");
+        statusmsg = trial.ship_outcome_3_shielded;
+        statusclr = 'grey';
+        console.log("Status message:", statusmsg);
+        console.log("Status color:", statusclr);
+      }
+    
+      console.log("Updating ship status");
+      updateStatus('ship', statusmsg, statusclr);
+    
+      // Get the existing ship outcome div
+      var shipOutcomeDiv = display_element.querySelector('#ship-outcome-text');
+      console.log("Ship outcome div:", shipOutcomeDiv);
+    
+      // Update the content and styling of the ship outcome div
+      console.log("Updating ship outcome div content");
+      shipOutcomeDiv.innerHTML = statusmsg;
+      shipOutcomeDiv.style.color = statusclr;
+      shipOutcomeDiv.style.display = 'block'; // Add this line to make the element visible
+      shipOutcomeDiv.style.visibility = 'visible';
   
     // Log details
     var time_outcome = performance.now() - start_time;
@@ -985,7 +991,10 @@ function formatShipOutcomeText(outcomeText, damageText) {
     // Visually disable button
     var shieldDiv = display_element.querySelector('#ship-shield-text');
     var shieldButton = display_element.querySelector('#ship-shield-button');
+    console.log("Shield div:", shieldDiv);
+    console.log("Shield button:", shieldButton);
     if (!shield_activated) {
+      console.log("Shield not activated, disabling button");
       shieldButton.style.opacity = '.5';
       shieldButton.style.backgroundColor = '';
       shieldButton.style.color = 'green';
