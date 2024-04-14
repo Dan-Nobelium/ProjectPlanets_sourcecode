@@ -336,7 +336,7 @@ plugin.trial = function(display_element, trial)
             
             //show planet names below the planet
             if (trial.prompt !== null) {
-                html += '<div class="clickid planet-prompt" id="planet-prompt-' + i + '" style="position:relative;">'
+                html += '<div class="clickid planet-prompt" id="planet-prompt-' + i + '" style="position:relative; font-size: 24px;">'
                 html += trial.prompt[i];
                 html += '</div>'
             }
