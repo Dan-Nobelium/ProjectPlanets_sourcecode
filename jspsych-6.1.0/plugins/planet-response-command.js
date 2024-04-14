@@ -932,31 +932,33 @@ function formatShipOutcomeText(outcomeText, damageText) {
       damageTypes[choice](trial.data.points);
     console.log("Applied damage:", appliedDamage);
   
-    // Apply points loss depending on the choice and the shield activation
-    if (!shield_activated) {
-      // Subtract the calculated damage from the points
-      const initialPoints = trial.data.points; // Store the initial points before damage
-      if (typeof appliedDamage === 'number' && appliedDamage % 1 !== 0) {
-        const pointsLost = Math.round(trial.data.points * appliedDamage);
-        trial.data.points -= pointsLost;
-        statusmsg = `<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: darkorange; -webkit-text-stroke: 0.5px yellow;'>Attack! -$${pointsLost}</p>`;
-        statusclr = 'darkorange';
-        console.log("INDEX 2, points lost:", pointsLost);
-      } else {
-        trial.data.points -= appliedDamage;
-        statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
-        statusclr = 'red';
-        console.log("INDEX 1, damage:", appliedDamage);
-      }
-      const pointsDifference = initialPoints - trial.data.points; // Calculate the points difference
-      console.log("Initial points:", initialPoints);
-      console.log("Updated points:", trial.data.points);
-      console.log("Points difference:", pointsDifference);
-      console.log("Status message:", statusmsg);
+    // Check if the applied damage is not equal to 0 before proceeding with the attack
+    if (appliedDamage !== 0) {
+      // Apply points loss depending on the choice and the shield activation
+      if (!shield_activated) {
+        // Subtract the calculated damage from the points
+        const initialPoints = trial.data.points; // Store the initial points before damage
+        if (typeof appliedDamage === 'number' && appliedDamage % 1 !== 0) {
+          const pointsLost = Math.round(trial.data.points * appliedDamage);
+          trial.data.points -= pointsLost;
+          statusmsg = `<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: darkorange; -webkit-text-stroke: 0.5px yellow;'>Attack! -$${pointsLost}</p>`;
+          statusclr = 'darkorange';
+          console.log("INDEX 2, points lost:", pointsLost);
+        } else {
+          trial.data.points -= appliedDamage;
+          statusmsg = formatShipOutcomeText(trial.ship_outcome_1_unshielded, appliedDamage);
+          statusclr = 'red';
+          console.log("INDEX 1, damage:", appliedDamage);
+        }
+        const pointsDifference = initialPoints - trial.data.points; // Calculate the points difference
+        console.log("Initial points:", initialPoints);
+        console.log("Updated points:", trial.data.points);
+        console.log("Points difference:", pointsDifference);
+        console.log("Status message:", statusmsg);
   
-      // Update score
-      updateScore(trial.data.points);
-    } else if (shield_activated) {
+        // Update score
+        updateScore(trial.data.points);
+      } else if (shield_activated) {
         console.log("Shield activated, setting status message");
         statusmsg = trial.ship_outcome_3_shielded;
         statusclr = 'grey';
@@ -975,8 +977,9 @@ function formatShipOutcomeText(outcomeText, damageText) {
       console.log("Updating ship outcome div content");
       shipOutcomeDiv.innerHTML = statusmsg;
       shipOutcomeDiv.style.color = statusclr;
-      shipOutcomeDiv.style.display = 'block'; // Add this line to make the element visible
+      shipOutcomeDiv.style.display = 'block';
       shipOutcomeDiv.style.visibility = 'visible';
+    }
   
     // Log details
     var time_outcome = performance.now() - start_time;
@@ -1011,6 +1014,9 @@ function formatShipOutcomeText(outcomeText, damageText) {
     // Print hostile IDX to console
     console.log("Hostile IDX:", choice);
   }
+
+
+
 // function to end trial when it is time
 function end_trial() {
 setTimeout(function(){
