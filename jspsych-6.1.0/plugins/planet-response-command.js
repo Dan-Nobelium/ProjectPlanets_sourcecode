@@ -914,6 +914,7 @@ function formatShipOutcomeText(outcomeText, damageText) {
       return outcomeText + '<span style="font-weight: bold;font-size: 36px; color: inherit;">-$' + damageText + '</span>';
     }
   }
+
   function ship_attack(choice) {
     // Disable button if no response
     if (shield_activated == null) {
@@ -1010,7 +1011,6 @@ function formatShipOutcomeText(outcomeText, damageText) {
     // Print hostile IDX to console
     console.log("Hostile IDX:", choice);
   }
-
 // function to end trial when it is time
 function end_trial() {
 setTimeout(function(){
