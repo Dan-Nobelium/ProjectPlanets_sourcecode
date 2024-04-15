@@ -35,30 +35,33 @@ const planetColors = {
   'img/planet_b.png': 'blue',
 };
 
+// Independent Variables Definition
+const probability_trade = [[.5], [.5], [.5]];
+const probability_shield = [[.5], [.5], [.5]];
+let ship_attack_damage = [0, 100, 0.2];
+ship_attack_damage = jsPsych.randomization.shuffle(ship_attack_damage); //randomises the order of the ship damage array (ship_attack_damage)
+const block_duration = 180 * 500; // in milliseconds (3 mins) // sets the length of planet-response trials.
 
 // Global Variables Definition
 let block_number = 0;
 let trial_number = 0;
 let points = 0;
-const block_duration = 180 * 500; // in milliseconds (3 mins)
 const iti = 1000;
 const inf_stim_height = 80;
 const inf_slider_width = 500;
 const main_stim_height = 250;
 const feedback_duration = 2500;
 const rf_ship_delay = 1500;
-const probability_trade = [[.5], [.5], [.5]];
-const probability_shield = [[.5], [.5], [.5]];
+var probability_ship = [[1],[1],[1]]; 
 const reset_planet_wait_const = 1000;
 const ship_attack_time_const = 6000;
 const shield_charging_time_const = (ship_attack_time_const / 2);
 const nBlocks_p1 = 1;
 let nBlocks_p2 = 1;
 let nBlocks_p3 = 1;
-//let ship_attack_damage_index = [0(non-attack), fixed 100pts,25%]
 let planet_labels = ['Planet A','Planet B','Planet C'];
-let ship_attack_damage = [0, 100, 0.2];
-ship_attack_damage = jsPsych.randomization.shuffle(ship_attack_damage);
+
+
 
 //ship attack variable labels
 const win_100_text = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: #05BF00;'>Success +$100</p>";
@@ -74,8 +77,6 @@ const ship_outcome_3_shielded = "<p style='font-family: Arial; font-size: 36px; 
 // } else if (group[0].includes("0.4")) {
 //   var probability_ship = [[0.4],[0.4],[0.4]];
 // } else (console.error("ERROR: group is not defined as 0.1 or 0.4"))
-
-var probability_ship = [[1],[1],[1]]; 
 
 // // manipulate early/late instruction by block sizes of phase 2/3
 // if (group[0].includes("early")) {
