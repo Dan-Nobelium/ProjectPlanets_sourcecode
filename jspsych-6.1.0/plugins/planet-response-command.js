@@ -334,12 +334,12 @@ plugin.trial = function(display_element, trial)
             html +='></img>'
             ;
             
-            //show planet names below the planet
-            if (trial.prompt !== null) {
-                html += '<div class="clickid planet-prompt" id="planet-prompt-' + i + '" style="position:relative;">'
-                html += trial.prompt[i];
-                html += '</div>'
-            }
+        //show planet names below the planet
+        if (trial.prompt !== null) {
+            html += '<div class="clickid planet-prompt" id="planet-prompt-' + i + '" style="position:relative; font-size: 24px;">'
+            html += trial.prompt[i];
+            html += '</div>'
+        }
             //Add signal box
             html += '<div class="clickid planet-signal-box" id="planet-signal-box-' + i + '" style="position:absolute; top:100px;"></div> ';
             //Add select ring divs

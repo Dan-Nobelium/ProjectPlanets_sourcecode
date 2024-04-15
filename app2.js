@@ -58,6 +58,7 @@ let nBlocks_p3 = 1;
 //let ship_attack_damage_index = [0(non-attack), fixed 100pts,25%]
 let planet_labels = ['Planet A','Planet B','Planet C'];
 let ship_attack_damage = [0, 100, 0.2];
+ship_attack_damage = jsPsych.randomization.shuffle(ship_attack_damage);
 
 //ship attack variable labels
 const win_100_text = "<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: #05BF00;'>Success +$100</p>";
@@ -67,12 +68,12 @@ const ship_outcome_3_unshielded = "<p style='font-family: Arial; font-weight: bo
 const ship_outcome_3_shielded = "<p style='font-family: Arial; font-size: 36px; color: grey;'>Shield successfully deflected attack</p>";
 // const ship_outcome_3_shielded = "<p style='font-family: Arial; font-size: 36px; color: yellow;'>Shield prevented a bonus</p>";
 
-// manipulate response-ship Rft rate
-if (group[0].includes("0.1")) {
-  var probability_ship = [[0.1],[0.1],[0.1]]; 
-} else if (group[0].includes("0.4")) {
-  var probability_ship = [[0.4],[0.4],[0.4]];
-} else (console.error("ERROR: group is not defined as 0.1 or 0.4"))
+// // manipulate response-ship Rft rate
+// if (group[0].includes("0.1")) {
+//   var probability_ship = [[0.1],[0.1],[0.1]]; 
+// } else if (group[0].includes("0.4")) {
+//   var probability_ship = [[0.4],[0.4],[0.4]];
+// } else (console.error("ERROR: group is not defined as 0.1 or 0.4"))
 
 var probability_ship = [[1],[1],[1]]; 
 
@@ -1107,18 +1108,18 @@ let timeline = []; // This is the master timeline, the experiment runs sequentia
 // // Phase2, ships
 // timeline.push(phaseTwoInstructions);
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p2, nTrialspBlk);
-// timeline.push(valence_p2);
-// timeline.push(infer_p2_A);
-// timeline.push(infer_p2_B);
-// timeline.push(infer_p2_C);
-// timeline.push(infer_p2_ship1);
-// timeline.push(infer_p2_ship2);
-// timeline.push(infer_p2_ship3);
-// timeline.push(p1_q3_triangle);
-// timeline.push(p1_q4_triangle);
+timeline.push(valence_p2);
+timeline.push(infer_p2_A);
+timeline.push(infer_p2_B);
+timeline.push(infer_p2_C);
+timeline.push(infer_p2_ship1);
+timeline.push(infer_p2_ship2);
+timeline.push(infer_p2_ship3);
+timeline.push(p1_q3_triangle);
+timeline.push(p1_q4_triangle);
 
 // // // Phase3, contingencies
-// timeline.push(cont_catch);
+timeline.push(cont_catch);
 
 // // Phase3, ships
 addBlocksToTimeline(timeline, planet_ship, nBlocks_p3, nTrialspBlk);
