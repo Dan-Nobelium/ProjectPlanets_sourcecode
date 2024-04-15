@@ -41,6 +41,7 @@ const probability_shield = [[.5], [.5], [.5]];
 let ship_attack_damage = [0, 100, 0.2];
 ship_attack_damage = jsPsych.randomization.shuffle(ship_attack_damage); //randomises the order of the ship damage array (ship_attack_damage)
 const block_duration = 180 * 500; // in milliseconds (3 mins) // sets the length of planet-response trials.
+var probability_ship = [[1],[1],[1]]; //how likely is there to be a ship for each planet, [1,1,1] means 100% of clicks will result in a ship.
 
 // Global Variables Definition
 let block_number = 0;
@@ -52,7 +53,7 @@ const inf_slider_width = 500;
 const main_stim_height = 250;
 const feedback_duration = 2500;
 const rf_ship_delay = 1500;
-var probability_ship = [[1],[1],[1]]; 
+
 const reset_planet_wait_const = 1000;
 const ship_attack_time_const = 6000;
 const shield_charging_time_const = (ship_attack_time_const / 2);
