@@ -1,7 +1,6 @@
 /**
- * Adapted from jspsych-image-button-response
- * Original author: Josh de Leeuw
- *
+ * Adapted from jspsych-image-button-response, and planet response by Legacy author: Josh de Leeuw
+ *Planet-response-command was developed by Daniel Noble
  * plugin for displaying a stimulus and getting a mouseclick response (in the indexed order of displayed images)
  *
  * documentation: docs.jspsych.org
@@ -281,6 +280,49 @@ jsPsych.plugins["planet-response-command"] = (function() {
 	}
 }
 
+
+// CSS styles
+var cssString = `
+/* Shield styles */
+.ship-shield {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.ship-shield-bar {
+    width: 200px; /* Adjust this value to set the desired width of the charging bar */
+    height: 20px;
+    background-color: #ccc;
+    position: relative;
+    overflow: hidden;
+}
+.ship-shield-bar-fill {
+    height: 100%;
+    background-color: green;
+    animation: shieldChargeBar 6s linear forwards;
+}
+@keyframes shieldChargeBar {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
+}
+.ship-shield-text {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+@keyframes shieldChargeText {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+`;
 
 plugin.trial = function(display_element, trial) 
 {
