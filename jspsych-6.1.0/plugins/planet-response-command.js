@@ -336,7 +336,7 @@ plugin.trial = function(display_element, trial)
             
             //show planet names below the planet
             if (trial.prompt !== null) {
-                html += '<div class="clickid planet-prompt" id="planet-prompt-' + i + '" style="position:relative; font-size: 24px;">'
+                html += '<div class="clickid planet-prompt" id="planet-prompt-' + i + '" style="position:relative;">'
                 html += trial.prompt[i];
                 html += '</div>'
             }
@@ -351,11 +351,10 @@ plugin.trial = function(display_element, trial)
 
     html += '</div>'
     html += '<div id="command-info">'
-    html += '<div id="command-info">'
     html += '<div class="clickid" id="total-score-box"></div>'
     html += '<div id="ship-placeholder"></div>'
-    html += '<div id="shield-placeholder" style="margin-top: 50px;"></div>'
-    html += '<div id="ship-outcome-container" class="ship-outcome" style="display: none; opacity: 0; height: 80px; position: absolute;"></div>'
+    html += '<div id="shield-placeholder"></div>'
+    html += '<div id="ship-outcome-text" class="ship-outcome" style="display: none; opacity: 0;"></div>'
     html += '</div>'
     html += '</div>'
 
@@ -970,16 +969,16 @@ function formatShipOutcomeText(outcomeText, damageText) {
       console.log("Updating ship status");
       updateStatus('ship', statusmsg, statusclr);
     
-// Get the ship outcome container
-var shipOutcomeContainer = display_element.querySelector('#ship-outcome-container');
-console.log("Ship outcome container:", shipOutcomeContainer);
-
-// Update the content and styling of the ship outcome container
-console.log("Updating ship outcome container content");
-shipOutcomeContainer.innerHTML = statusmsg;
-shipOutcomeContainer.style.color = statusclr;
-shipOutcomeContainer.style.display = 'block';
-shipOutcomeContainer.style.opacity = '1';
+      // Get the existing ship outcome div
+      var shipOutcomeDiv = display_element.querySelector('#ship-outcome-text');
+      console.log("Ship outcome div:", shipOutcomeDiv);
+    
+      // Update the content and styling of the ship outcome div
+      console.log("Updating ship outcome div content");
+      shipOutcomeDiv.innerHTML = statusmsg;
+      shipOutcomeDiv.style.color = statusclr;
+      shipOutcomeDiv.style.display = 'block';
+      shipOutcomeDiv.style.visibility = 'visible';
     }
   
     // Log details
@@ -1008,11 +1007,8 @@ shipOutcomeContainer.style.opacity = '1';
     // Reset ship
     setTimeout(function() {
       reset_ship();
-      // Hide the ship outcome container when resetting the ship
-      shipOutcomeContainer.style.opacity = '0';
-      setTimeout(function() {
-        shipOutcomeContainer.style.display = 'none';
-      }, 500); // Delay hiding the container to allow for the opacity transition
+      // Hide the ship outcome div when resetting the ship
+      shipOutcomeDiv.style.visibility = 'hidden';
     }, trial.feedback_duration);
   
     // Print hostile IDX to console
@@ -1128,17 +1124,18 @@ scoreDiv.innerHTML = 'Total points: ' + points
 }
 
 function updateStatus(choice,msg,color){
-    //Update planet status with some message and in some colour
-    if(choice=='ship'){
-      // Do not update the ship status text with the attack text
-      return;
-    } else {
-      var statusDiv = display_element.querySelector('#planet-score-box-'+choice)
-      statusDiv.innerHTML = msg
-      statusDiv.style.color = color
-      console.log("Updated status:", msg);
-    }
-  }
+//Update planet status with some message and in some colour
+if(choice=='ship'){
+var statusDiv = display_element.querySelector('#ship-status-text')
+} else {
+var statusDiv = display_element.querySelector('#planet-score-box-'+choice)
+}
+statusDiv.innerHTML = msg
+statusDiv.style.color = color
+
+console.log("Updated status:", msg);
+
+}
 
 // Track mouse events
 function getPositions(ev) {
