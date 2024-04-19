@@ -129,16 +129,16 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
             <div class="jspsych-survey-multi-catch-options">
               ${index === 1 || index === 3 ? `
                 <div class="option-container">
-                  <img src="${trial.ship_option_1}" class="option-image">
-                  <input type="radio" name="Q${index}" value="${trial.ship_option_1}" required>
+                  <img src="${trial.ship_stimulus[0]}" class="option-image">
+                  <input type="radio" name="Q${index}" value="${trial.ship_stimulus[0]}" required>
                 </div>
                 <div class="option-container">
-                  <img src="${trial.ship_option_2}" class="option-image">
-                  <input type="radio" name="Q${index}" value="${trial.ship_option_2}" required>
+                  <img src="${trial.ship_stimulus[1]}" class="option-image">
+                  <input type="radio" name="Q${index}" value="${trial.ship_stimulus[1]}" required>
                 </div>
                 <div class="option-container">
-                  <img src="${trial.ship_option_3}" class="option-image">
-                  <input type="radio" name="Q${index}" value="${trial.ship_option_3}" required>
+                  <img src="${trial.ship_stimulus[2]}" class="option-image">
+                  <input type="radio" name="Q${index}" value="${trial.ship_stimulus[2]}" required>
                 </div>
               ` : `
                 ${trial.planet_options.map((planet, planetIndex) => `
@@ -156,6 +156,17 @@ jsPsych.plugins['survey-multi-catch-image'] = (function() {
           </div>
         </form>
       `;
+    
+      // Log the ship options and their relative planets
+      console.log('Ship Options:');
+      console.log('Ship 1:', trial.ship_stimulus[0]);
+      console.log('Ship 2:', trial.ship_stimulus[1]);
+      console.log('Ship 3:', trial.ship_stimulus[2]);
+    
+      console.log('Planet Options:');
+      trial.planet_options.forEach((planet, index) => {
+        console.log(`Planet ${String.fromCharCode(65 + index)}:`, planet);
+      });
     
       // Attach event listener to the back button
       setTimeout(function() {
