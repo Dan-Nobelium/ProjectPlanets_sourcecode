@@ -39,7 +39,7 @@ const planetColors = {
 const probability_trade = [[.5], [.5], [.5]];
 const probability_shield = [[.5], [.5], [.5]];
 let ship_attack_damage = [0, 100, 0.2];
-// ship_attack_damage = jsPsych.randomization.shuffle(ship_attack_damage); //randomises the order of the ship damage array (ship_attack_damage)
+ship_attack_damage = jsPsych.randomization.shuffle(ship_attack_damage); //randomises the order of the ship damage array (ship_attack_damage)
 const block_duration = 180 * 10; // in milliseconds (3 mins) // sets the length of planet-response trials.
 var probability_ship = [[1],[1],[1]]; //how likely is there to be a ship for each planet, [1,1,1] means 100% of clicks will result in a ship.
 

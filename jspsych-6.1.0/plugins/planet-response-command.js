@@ -962,7 +962,7 @@ function formatShipOutcomeText(outcomeText, damageText) {
     }
   }
 
-  function ship_attack(choice) {
+ function ship_attack(choice) {
     // Disable button if no response
     if (shield_activated == null) {
       shield_activated = false;
@@ -988,7 +988,7 @@ function formatShipOutcomeText(outcomeText, damageText) {
         if (typeof appliedDamage === 'number' && appliedDamage % 1 !== 0) {
           const pointsLost = Math.round(trial.data.points * appliedDamage);
           trial.data.points -= pointsLost;
-          statusmsg = `<p style='font-family: Arial; font-weight: bold; font-size: 36px; color: darkorange; -webkit-text-stroke: 0.5px yellow;'>Attack! -$${pointsLost}</p>`;
+          statusmsg = formatShipOutcomeText(trial.ship_outcome_2_unshielded, appliedDamage);
           statusclr = 'darkorange';
           console.log("INDEX 2, points lost:", pointsLost);
         } else {
@@ -1061,7 +1061,6 @@ function formatShipOutcomeText(outcomeText, damageText) {
     // Print hostile IDX to console
     console.log("Hostile IDX:", choice);
   }
-
 
 
 // function to end trial when it is time
