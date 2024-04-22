@@ -18,7 +18,7 @@ var config = {
 stimulus: ['img/planet1.png', 'img/planet2.png'], // array of planet image files
 stimulus_height: 200, // height of planet images
 stimulus_width: 200, // width of planet images
-// ... 
+// ...  
 };
 
 ## Table of Contents
