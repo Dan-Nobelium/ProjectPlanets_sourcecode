@@ -21,7 +21,7 @@ stimulus_width: 200, // width of planet images
 // ...  
 };
 
-## Table of Contents
+## Table of Contents 
 
     Installation
     Usage
