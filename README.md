@@ -4,7 +4,7 @@ Planets Task is a JavaScript-based application for conducting studies related to
 
 ## Installation
 
-This project does not require any specific package manager for installation. Simply clone the repository from the code repo and include the JavaScript files in your project as needed.
+This project does not require any specific package manager for installation. Simply clone the repository from the code repo and include the JavaScript files in your project as needed. 
 
 ## Usage
 
